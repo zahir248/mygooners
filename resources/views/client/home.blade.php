@@ -286,18 +286,6 @@
         </div>
     </section>
 
-    <!-- Newsletter Section -->
-    <section class="bg-gradient-to-r from-gray-900 to-gray-800 rounded-2xl p-8 md:p-12 text-center">
-        <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Stay Updated</h2>
-        <p class="text-gray-300 text-lg mb-8 max-w-2xl mx-auto">
-            Get the latest Arsenal news, transfer updates, and exclusive content delivered straight to your inbox.
-        </p>
-        <form class="max-w-md mx-auto flex flex-col sm:flex-row gap-4">
-            <input type="email" placeholder="Enter your email" class="flex-1 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-red-500 focus:border-transparent">
-            <button type="submit" class="bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded-lg font-medium transition-colors">
-                Subscribe
-            </button>
-        </form>
-    </section>
+
 </div>
 @endsection 
