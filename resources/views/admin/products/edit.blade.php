@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Edit Product')
+@section('title', 'Edit Produk')
 
 @section('content')
     <div class="py-6">
@@ -12,7 +12,7 @@
                         <li>
                             <div>
                                 <a href="{{ route('admin.products.index') }}" class="text-gray-400 hover:text-gray-500">
-                                    Products
+                                    Produk
                                 </a>
                             </div>
                         </li>
@@ -28,8 +28,8 @@
                 </nav>
                 <div class="flex items-center justify-between">
                     <div>
-                        <h1 class="text-2xl font-bold text-gray-900">Edit Product</h1>
-                        <p class="mt-1 text-sm text-gray-600">Update your Arsenal merchandise product</p>
+                        <h1 class="text-2xl font-bold text-gray-900">Edit Produk</h1>
+                        <p class="mt-1 text-sm text-gray-600">Kemaskini produk barangan Arsenal anda</p>
                     </div>
                     <div class="flex space-x-3">
                         <a href="{{ route('shop.show', $product->id) }}" 
@@ -38,7 +38,7 @@
                             <svg class="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
                             </svg>
-                            Preview
+                            Pratonton
                         </a>
                     </div>
                 </div>
@@ -57,7 +57,7 @@
                             </div>
                             <div class="ml-5 w-0 flex-1">
                                 <dl>
-                                    <dt class="text-sm font-medium text-gray-500 truncate">Total Views</dt>
+                                    <dt class="text-sm font-medium text-gray-500 truncate">Jumlah Tontonan</dt>
                                     <dd class="text-lg font-medium text-gray-900">{{ number_format($product->views_count ?? 0) }}</dd>
                                 </dl>
                             </div>
@@ -75,8 +75,8 @@
                             </div>
                             <div class="ml-5 w-0 flex-1">
                                 <dl>
-                                    <dt class="text-sm font-medium text-gray-500 truncate">Created</dt>
-                                    <dd class="text-lg font-medium text-gray-900">{{ $product->created_at?->format('M j, Y') ?? 'N/A' }}</dd>
+                                    <dt class="text-sm font-medium text-gray-500 truncate">Dicipta</dt>
+                                    <dd class="text-lg font-medium text-gray-900">{{ $product->created_at?->format('j M Y') ?? 'T/A' }}</dd>
                                 </dl>
                             </div>
                         </div>
@@ -93,8 +93,8 @@
                             </div>
                             <div class="ml-5 w-0 flex-1">
                                 <dl>
-                                    <dt class="text-sm font-medium text-gray-500 truncate">Stock</dt>
-                                    <dd class="text-lg font-medium text-gray-900">{{ $product->stock_quantity ?? 0 }} units</dd>
+                                    <dt class="text-sm font-medium text-gray-500 truncate">Stok</dt>
+                                    <dd class="text-lg font-medium text-gray-900">{{ $product->stock_quantity ?? 0 }} unit</dd>
                                 </dl>
                             </div>
                         </div>
@@ -109,14 +109,14 @@
                 
                 <div class="bg-white shadow-sm rounded-lg overflow-hidden">
                     <div class="px-6 py-4 border-b border-gray-200">
-                        <h3 class="text-lg font-medium text-gray-900">Product Information</h3>
+                        <h3 class="text-lg font-medium text-gray-900">Maklumat Produk</h3>
                     </div>
                     
                     <div class="p-6 space-y-6">
                         <!-- Title -->
                         <div>
                             <label for="title" class="block text-sm font-medium text-gray-700 mb-2">
-                                Product Title *
+                                Tajuk Produk *
                             </label>
                             <input type="text" 
                                    id="title" 
@@ -133,7 +133,7 @@
                         <!-- Description -->
                         <div>
                             <label for="description" class="block text-sm font-medium text-gray-700 mb-2">
-                                Product Description *
+                                Deskripsi Produk *
                             </label>
                             <textarea id="description" 
                                       name="description" 
@@ -148,7 +148,7 @@
                         <!-- Category -->
                         <div>
                             <label for="category" class="block text-sm font-medium text-gray-700 mb-2">
-                                Category *
+                                Kategori *
                             </label>
                             <select id="category" 
                                     name="category" 
@@ -169,7 +169,7 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
                                 <label for="price" class="block text-sm font-medium text-gray-700 mb-2">
-                                    Regular Price (£) *
+                                    Harga Biasa (£) *
                                 </label>
                                 <input type="number" 
                                        id="price" 
@@ -185,8 +185,8 @@
                             </div>
                             <div>
                                 <label for="sale_price" class="block text-sm font-medium text-gray-700 mb-2">
-                                    Sale Price (£)
-                                    <span class="text-gray-500 text-xs">(optional)</span>
+                                    Harga Jualan (£)
+                                    <span class="text-gray-500 text-xs">(pilihan)</span>
                                 </label>
                                 <input type="number" 
                                        id="sale_price" 
@@ -201,158 +201,166 @@
                             </div>
                         </div>
 
-                        <!-- Stock Quantity -->
+                        <!-- Stock and SKU -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label for="stock_quantity" class="block text-sm font-medium text-gray-700 mb-2">
+                                    Kuantiti Stok *
+                                </label>
+                                <input type="number" 
+                                       id="stock_quantity" 
+                                       name="stock_quantity" 
+                                       value="{{ old('stock_quantity', $product->stock_quantity) }}"
+                                       min="0"
+                                       required
+                                       class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500">
+                                @error('stock_quantity')
+                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                @enderror
+                            </div>
+                            <div>
+                                <label for="sku" class="block text-sm font-medium text-gray-700 mb-2">
+                                    SKU
+                                    <span class="text-gray-500 text-xs">(pilihan)</span>
+                                </label>
+                                <input type="text" 
+                                       id="sku" 
+                                       name="sku" 
+                                       value="{{ old('sku', $product->sku) }}"
+                                       maxlength="100"
+                                       class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500">
+                                @error('sku')
+                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <!-- Images -->
                         <div>
-                            <label for="stock_quantity" class="block text-sm font-medium text-gray-700 mb-2">
-                                Stock Quantity *
+                            <label for="images" class="block text-sm font-medium text-gray-700 mb-2">
+                                URL Imej Produk
+                                <span class="text-gray-500 text-xs">(satu per baris, maksimum 5)</span>
                             </label>
-                            <input type="number" 
-                                   id="stock_quantity" 
-                                   name="stock_quantity" 
-                                   value="{{ old('stock_quantity', $product->stock_quantity) }}"
-                                   min="0"
-                                   required
-                                   class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500">
-                            @error('stock_quantity')
+                            <textarea id="images" 
+                                      name="images" 
+                                      rows="5" 
+                                      placeholder="https://example.com/image1.jpg&#10;https://example.com/image2.jpg"
+                                      class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500">{{ old('images', is_array($product->images) ? implode("\n", $product->images) : '') }}</textarea>
+                            <p class="mt-1 text-sm text-gray-500">Masukkan URL imej, satu per baris. Imej pertama akan menjadi imej utama.</p>
+                            @error('images')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
                         </div>
 
-                        <!-- Tags -->
-                        <div>
-                            <label for="tags" class="block text-sm font-medium text-gray-700 mb-2">
-                                Tags
-                                <span class="text-gray-500 text-xs">(comma-separated)</span>
-                            </label>
-                            <input type="text" 
-                                   id="tags" 
-                                   name="tags" 
-                                   value="{{ old('tags', is_array($product->tags) ? implode(', ', $product->tags) : '') }}"
-                                   class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500">
-                            @error('tags')
-                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                            @enderror
+                        <!-- Product Status -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label for="status" class="block text-sm font-medium text-gray-700 mb-2">
+                                    Status Produk *
+                                </label>
+                                <select id="status" 
+                                        name="status" 
+                                        required
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500">
+                                    <option value="active" {{ old('status', $product->status) == 'active' ? 'selected' : '' }}>Aktif</option>
+                                    <option value="inactive" {{ old('status', $product->status) == 'inactive' ? 'selected' : '' }}>Tidak Aktif</option>
+                                    <option value="draft" {{ old('status', $product->status) == 'draft' ? 'selected' : '' }}>Draf</option>
+                                </select>
+                                @error('status')
+                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            <!-- Featured Product -->
+                            <div class="flex items-center mt-8">
+                                <input type="checkbox" 
+                                       id="is_featured" 
+                                       name="is_featured" 
+                                       value="1"
+                                       {{ old('is_featured', $product->is_featured) ? 'checked' : '' }}
+                                       class="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300 rounded">
+                                <label for="is_featured" class="ml-2 block text-sm text-gray-900">
+                                    Tandakan sebagai produk pilihan
+                                </label>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Product Settings -->
+                <!-- SEO Settings -->
                 <div class="bg-white shadow-sm rounded-lg overflow-hidden">
                     <div class="px-6 py-4 border-b border-gray-200">
-                        <h3 class="text-lg font-medium text-gray-900">Product Settings</h3>
+                        <h3 class="text-lg font-medium text-gray-900">Tetapan SEO</h3>
+                        <p class="text-sm text-gray-500">Pilihan: Kustomkan maklumat meta untuk enjin carian</p>
                     </div>
                     
                     <div class="p-6 space-y-6">
-                        <!-- Status -->
+                        <!-- Meta Title -->
                         <div>
-                            <label for="status" class="block text-sm font-medium text-gray-700 mb-2">
-                                Status *
+                            <label for="meta_title" class="block text-sm font-medium text-gray-700 mb-2">
+                                Tajuk Meta
                             </label>
-                            <select id="status" 
-                                    name="status" 
-                                    required
-                                    class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500">
-                                <option value="draft" {{ old('status', $product->status) == 'draft' ? 'selected' : '' }}>Draft</option>
-                                <option value="active" {{ old('status', $product->status) == 'active' ? 'selected' : '' }}>Active</option>
-                                <option value="inactive" {{ old('status', $product->status) == 'inactive' ? 'selected' : '' }}>Inactive</option>
-                            </select>
-                            @error('status')
+                            <input type="text" 
+                                   id="meta_title" 
+                                   name="meta_title" 
+                                   value="{{ old('meta_title', $product->meta_title) }}"
+                                   maxlength="60"
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500"
+                                   placeholder="Tajuk SEO tersuai (lalai kepada tajuk produk)">
+                            <p class="mt-1 text-sm text-gray-500">Disyorkan: 50-60 aksara</p>
+                            @error('meta_title')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
                         </div>
 
-                        <!-- Featured Product -->
-                        <div class="flex items-center">
-                            <input id="is_featured" 
-                                   name="is_featured" 
-                                   type="checkbox" 
-                                   value="1"
-                                   {{ old('is_featured', $product->is_featured) ? 'checked' : '' }}
-                                   class="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300 rounded">
-                            <label for="is_featured" class="ml-2 block text-sm text-gray-900">
-                                Featured Product
-                                <span class="text-gray-500 text-xs block">Feature this product on the homepage</span>
+                        <!-- Meta Description -->
+                        <div>
+                            <label for="meta_description" class="block text-sm font-medium text-gray-700 mb-2">
+                                Deskripsi Meta
                             </label>
+                            <textarea id="meta_description" 
+                                      name="meta_description" 
+                                      rows="3" 
+                                      maxlength="160"
+                                      class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500"
+                                      placeholder="Deskripsi SEO tersuai (lalai kepada deskripsi produk)">{{ old('meta_description', $product->meta_description) }}</textarea>
+                            <p class="mt-1 text-sm text-gray-500">Disyorkan: 150-160 aksara</p>
+                            @error('meta_description')
+                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <!-- Keywords -->
+                        <div>
+                            <label for="keywords" class="block text-sm font-medium text-gray-700 mb-2">
+                                Kata Kunci
+                            </label>
+                            <input type="text" 
+                                   id="keywords" 
+                                   name="keywords" 
+                                   value="{{ old('keywords', $product->keywords) }}"
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500"
+                                   placeholder="arsenal, jersi, barangan, merchandise">
+                            <p class="mt-1 text-sm text-gray-500">Pilihan: Masukkan kata kunci yang berkaitan dipisahkan dengan koma</p>
+                            @error('keywords')
+                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
                         </div>
                     </div>
                 </div>
 
                 <!-- Form Actions -->
-                <div class="flex items-center justify-between pt-6">
+                <div class="flex justify-end space-x-3">
                     <a href="{{ route('admin.products.index') }}" 
-                       class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-medium py-2 px-4 rounded-md transition-colors">
-                        Cancel
+                       class="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                        Batal
                     </a>
-                    <div class="flex space-x-3">
-                        <button type="submit" 
-                                class="bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-6 rounded-md transition-colors">
-                            Update Product
-                        </button>
-                    </div>
-                </div>
-            </form>
-
-            <!-- Danger Zone -->
-            <div class="mt-10 bg-white shadow-sm rounded-lg overflow-hidden border border-red-200">
-                <div class="px-6 py-4 border-b border-red-200 bg-red-50">
-                    <h3 class="text-lg font-medium text-red-900">Danger Zone</h3>
-                </div>
-                <div class="p-6">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <h4 class="text-sm font-medium text-gray-900">Delete Product</h4>
-                            <p class="text-sm text-gray-500">Once you delete a product, there is no going back. Please be certain.</p>
-                        </div>
-                        <button type="button" 
-                                onclick="deleteProduct({{ $product->id }})"
-                                class="bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-md transition-colors">
-                            Delete Product
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Delete Confirmation Modal -->
-    <div id="deleteModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden z-50">
-        <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
-            <div class="mt-3 text-center">
-                <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100">
-                    <svg class="h-6 w-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
-                    </svg>
-                </div>
-                <h3 class="text-lg font-medium text-gray-900 mt-2">Delete Product</h3>
-                <div class="mt-2 px-7 py-3">
-                    <p class="text-sm text-gray-500">
-                        Are you sure you want to delete this product? This action cannot be undone.
-                    </p>
-                </div>
-                <div class="items-center px-4 py-3">
-                    <form id="deleteForm" method="POST" class="inline">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="px-4 py-2 bg-red-600 text-white text-base font-medium rounded-md shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 mr-2">
-                            Delete
-                        </button>
-                    </form>
-                    <button onclick="closeDeleteModal()" class="px-4 py-2 bg-gray-300 text-gray-800 text-base font-medium rounded-md shadow-sm hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-300">
-                        Cancel
+                    <button type="submit" 
+                            class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                        Kemaskini Produk
                     </button>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
-
-    <script>
-        function deleteProduct(productId) {
-            document.getElementById('deleteForm').action = `/admin/products/${productId}`;
-            document.getElementById('deleteModal').classList.remove('hidden');
-        }
-
-        function closeDeleteModal() {
-            document.getElementById('deleteModal').classList.add('hidden');
-        }
-    </script>
 @endsection 

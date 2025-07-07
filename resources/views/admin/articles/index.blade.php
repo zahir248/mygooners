@@ -1,12 +1,12 @@
 @extends('layouts.admin')
 
-@section('title', 'Articles Management')
+@section('title', 'Pengurusan Artikel')
 
 @section('header')
     <div class="sm:flex sm:items-center sm:justify-between">
         <div>
-            <h1 class="text-2xl font-bold text-gray-900">Articles Management</h1>
-            <p class="mt-2 text-sm text-gray-700">Manage all Arsenal news articles and blog posts</p>
+            <h1 class="text-2xl font-bold text-gray-900">Pengurusan Artikel</h1>
+            <p class="mt-2 text-sm text-gray-700">Urus semua artikel berita dan catatan blog Arsenal</p>
         </div>
         <div class="mt-4 sm:mt-0">
             <a href="{{ route('admin.articles.create') }}" 
@@ -14,7 +14,7 @@
                 <svg class="-ml-1 mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                 </svg>
-                Create Article
+                Cipta Artikel
             </a>
         </div>
     </div>
@@ -43,11 +43,11 @@
 <div class="bg-white shadow rounded-lg mb-6">
     <div class="px-6 py-4 border-b border-gray-200">
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-            <h3 class="text-lg font-medium text-gray-900 mb-4 sm:mb-0">Filter Articles</h3>
+            <h3 class="text-lg font-medium text-gray-900 mb-4 sm:mb-0">Tapis Artikel</h3>
             <div class="flex flex-col sm:flex-row gap-4">
                 <!-- Search -->
                 <div class="relative">
-                    <input type="text" placeholder="Search articles..." 
+                    <input type="text" placeholder="Cari artikel..." 
                            class="pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-red-500 focus:border-red-500 sm:text-sm">
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                         <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -58,19 +58,19 @@
                 
                 <!-- Status Filter -->
                 <select class="border border-gray-300 rounded-md px-3 py-2 focus:ring-red-500 focus:border-red-500 sm:text-sm">
-                    <option value="">All Statuses</option>
-                    <option value="published">Published</option>
-                    <option value="draft">Draft</option>
+                    <option value="">Semua Status</option>
+                    <option value="published">Diterbitkan</option>
+                    <option value="draft">Draf</option>
                 </select>
                 
                 <!-- Category Filter -->
                 <select class="border border-gray-300 rounded-md px-3 py-2 focus:ring-red-500 focus:border-red-500 sm:text-sm">
-                    <option value="">All Categories</option>
-                    <option value="transfer-news">Transfer News</option>
-                    <option value="match-reports">Match Reports</option>
-                    <option value="training">Training</option>
-                    <option value="womens-team">Women's Team</option>
-                    <option value="analysis">Analysis</option>
+                    <option value="">Semua Kategori</option>
+                    <option value="transfer-news">Berita Pemindahan</option>
+                    <option value="match-reports">Laporan Perlawanan</option>
+                    <option value="training">Latihan</option>
+                    <option value="womens-team">Pasukan Wanita</option>
+                    <option value="analysis">Analisis</option>
                 </select>
             </div>
         </div>
@@ -81,7 +81,7 @@
 <div class="bg-white shadow overflow-hidden sm:rounded-lg">
     <div class="px-6 py-4 border-b border-gray-200">
         <h3 class="text-lg font-medium text-gray-900">
-            Articles ({{ $articles->count() }})
+            Artikel ({{ $articles->count() }})
         </h3>
     </div>
     
@@ -91,22 +91,22 @@
                 <thead class="bg-gray-50">
                     <tr>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Article
+                            Artikel
                         </th>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Category
+                            Kategori
                         </th>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             Status
                         </th>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Views
+                            Tontonan
                         </th>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Date
+                            Tarikh
                         </th>
                         <th scope="col" class="relative px-6 py-3">
-                            <span class="sr-only">Actions</span>
+                            <span class="sr-only">Tindakan</span>
                         </th>
                     </tr>
                 </thead>
@@ -135,12 +135,12 @@
                                             </p>
                                             @if($article->is_featured)
                                                 <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                                                    Featured
+                                                    Utama
                                                 </span>
                                             @endif
                                         </div>
                                         <p class="text-sm text-gray-500 line-clamp-2">
-                                            Article ID: #{{ $article->id }} • {{ $article->slug }}
+                                            ID Artikel: #{{ $article->id }} • {{ $article->slug }}
                                         </p>
                                     </div>
                                 </div>
@@ -156,14 +156,14 @@
                                         <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
                                             <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
                                         </svg>
-                                        Published
+                                        Diterbitkan
                                     </span>
                                 @else
                                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
                                         <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
                                             <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd"></path>
                                         </svg>
-                                        Draft
+                                        Draf
                                     </span>
                                 @endif
                             </td>
@@ -178,7 +178,7 @@
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                 <div>
-                                    <div class="font-medium">{{ $article->published_at ? $article->published_at->format('M j, Y') : 'Unpublished' }}</div>
+                                    <div class="font-medium">{{ $article->published_at ? $article->published_at->format('M j, Y') : 'Tidak Diterbitkan' }}</div>
                                     <div class="text-xs">{{ $article->updated_at->format('g:i A') }}</div>
                                 </div>
                             </td>

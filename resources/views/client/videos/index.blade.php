@@ -1,16 +1,16 @@
 @extends('layouts.app')
 
-@section('title', 'Arsenal Video Gallery - MyGooners')
-@section('meta_description', 'Watch the latest Arsenal videos, podcasts, match analysis, and exclusive content from the MyGooners community.')
+@section('title', 'Galeri Video Arsenal - MyGooners')
+@section('meta_description', 'Tonton video Arsenal terkini, podcast, analisis perlawanan, dan kandungan eksklusif dari komuniti MyGooners.')
 
 @section('content')
 <!-- Hero Section -->
 <div class="bg-gradient-to-r from-red-600 to-red-700 text-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div class="text-center">
-            <h1 class="text-4xl md:text-5xl font-bold mb-4">Arsenal Video Gallery</h1>
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">Galeri Video Arsenal</h1>
             <p class="text-xl text-red-100 max-w-3xl mx-auto">
-                Watch exclusive Arsenal content, match analysis, podcasts, and community videos from fellow Gooners
+                Tonton kandungan Arsenal eksklusif, analisis perlawanan, podcast, dan video komuniti dari sesama Gooners
             </p>
         </div>
     </div>
@@ -26,7 +26,7 @@
                     <input type="text" 
                            name="search" 
                            value="{{ $search }}" 
-                           placeholder="Search videos..." 
+                           placeholder="Cari video..." 
                            class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent">
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                         <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -43,7 +43,7 @@
             <div class="flex flex-wrap gap-2">
                 <a href="{{ route('videos.index') }}" 
                    class="px-4 py-2 rounded-full text-sm font-medium transition-colors {{ !$category ? 'bg-arsenal text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' }}">
-                    All Categories
+                    Semua Kategori
                 </a>
                 @foreach($categories as $cat)
                     <a href="{{ route('videos.index', ['category' => strtolower(str_replace(' ', '-', $cat))]) }}" 
@@ -83,7 +83,7 @@
                                     {{ $featuredVideo->category }}
                                 </span>
                                 <span class="bg-yellow-400 text-gray-900 px-3 py-1 rounded-full text-sm font-bold ml-3">
-                                    FEATURED
+                                    UTAMA
                                 </span>
                             </div>
                             <h2 class="text-3xl font-bold text-gray-900 mb-4">
@@ -106,7 +106,7 @@
                                         <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path>
                                         <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"></path>
                                     </svg>
-                                    {{ number_format($featuredVideo->views_count) }} views
+                                    {{ number_format($featuredVideo->views_count) }} tontonan
                                     <span class="mx-2">•</span>
                                     <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
                                         <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path>
@@ -115,7 +115,7 @@
                                 </div>
                                 <a href="{{ route('videos.show', $featuredVideo->slug) }}" 
                                    class="bg-arsenal hover:bg-arsenal text-white px-6 py-2 rounded-lg font-medium transition-colors">
-                                    Watch Full Video
+                                    Tonton Video Penuh
                                 </a>
                             </div>
                         </div>
@@ -158,7 +158,7 @@
                         @if($video->is_featured)
                             <div class="absolute top-4 right-4">
                                 <span class="bg-yellow-400 text-gray-900 px-2 py-1 rounded-full text-xs font-bold">
-                                    FEATURED
+                                    UTAMA
                                 </span>
                             </div>
                         @endif
@@ -203,7 +203,7 @@
         <!-- Load More / Pagination -->
         <div class="mt-12 text-center">
             <button class="bg-arsenal hover:bg-arsenal text-white px-8 py-3 rounded-lg font-medium transition-colors">
-                Load More Videos
+                Muat Lebih Banyak Video
             </button>
         </div>
     @else
@@ -212,18 +212,18 @@
             <svg class="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
             </svg>
-            <h3 class="text-xl font-medium text-gray-900 mb-2">No videos found</h3>
+            <h3 class="text-xl font-medium text-gray-900 mb-2">Tiada video dijumpai</h3>
             <p class="text-gray-600 mb-6">
                 @if($search)
-                    No videos match your search for "{{ $search }}"
+                    Tiada video sepadan dengan carian anda untuk "{{ $search }}"
                 @elseif($category)
-                    No videos found in the "{{ $category }}" category
+                    Tiada video dijumpai dalam kategori "{{ $category }}"
                 @else
-                    No videos have been uploaded yet
+                    Tiada video telah dimuat naik lagi
                 @endif
             </p>
             <a href="{{ route('videos.index') }}" class="text-red-600 hover:text-red-700 font-medium">
-                ← View all videos
+                ← Lihat semua video
             </a>
         </div>
     @endif
@@ -233,8 +233,8 @@
 <div class="bg-gray-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div class="text-center mb-12">
-            <h2 class="text-3xl font-bold text-gray-900 mb-4">Video Gallery Stats</h2>
-            <p class="text-gray-600">Community-driven Arsenal content</p>
+            <h2 class="text-3xl font-bold text-gray-900 mb-4">Statistik Galeri Video</h2>
+            <p class="text-gray-600">Kandungan Arsenal dipacu komuniti</p>
         </div>
         
         <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
@@ -245,7 +245,7 @@
                     </svg>
                 </div>
                 <h3 class="text-2xl font-bold text-gray-900 mb-2">{{ $videos->count() }}+</h3>
-                <p class="text-gray-600">Total Videos</p>
+                <p class="text-gray-600">Jumlah Video</p>
             </div>
             
             <div class="text-center">
@@ -256,7 +256,7 @@
                     </svg>
                 </div>
                 <h3 class="text-2xl font-bold text-gray-900 mb-2">{{ number_format($videos->sum('views_count')) }}+</h3>
-                <p class="text-gray-600">Total Views</p>
+                <p class="text-gray-600">Jumlah Tontonan</p>
             </div>
             
             <div class="text-center">
@@ -266,7 +266,7 @@
                     </svg>
                 </div>
                 <h3 class="text-2xl font-bold text-gray-900 mb-2">{{ count($categories) }}</h3>
-                <p class="text-gray-600">Categories</p>
+                <p class="text-gray-600">Kategori</p>
             </div>
             
             <div class="text-center">
@@ -276,7 +276,7 @@
                     </svg>
                 </div>
                 <h3 class="text-2xl font-bold text-gray-900 mb-2">{{ $videos->where('is_featured', true)->count() }}</h3>
-                <p class="text-gray-600">Featured Videos</p>
+                <p class="text-gray-600">Video Utama</p>
             </div>
         </div>
     </div>

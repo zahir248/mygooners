@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Users Management')
+@section('title', 'Pengurusan Pengguna')
 
 @section('content')
     <div class="py-6">
@@ -9,15 +9,15 @@
             <div class="mb-6">
                 <div class="flex items-center justify-between">
                     <div>
-                        <h1 class="text-2xl font-bold text-gray-900">Users Management</h1>
-                        <p class="mt-1 text-sm text-gray-600">Manage community members and their permissions</p>
+                        <h1 class="text-2xl font-bold text-gray-900">Pengurusan Pengguna</h1>
+                        <p class="mt-1 text-sm text-gray-600">Urus ahli komuniti dan kebenaran mereka</p>
                     </div>
                     <div class="flex space-x-3">
                         <span class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
                             <svg class="mr-2 h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM9 9a2 2 0 11-4 0 2 2 0 014 0z"></path>
                             </svg>
-                            {{ $users->count() }} Users
+                            {{ $users->count() }} Pengguna
                         </span>
                     </div>
                 </div>
@@ -37,7 +37,7 @@
                             </div>
                             <div class="ml-5 w-0 flex-1">
                                 <dl>
-                                    <dt class="text-sm font-medium text-gray-500 truncate">Active Users</dt>
+                                    <dt class="text-sm font-medium text-gray-500 truncate">Pengguna Aktif</dt>
                                     <dd class="text-lg font-medium text-gray-900">{{ $users->where('status', 'active')->count() }}</dd>
                                 </dl>
                             </div>
@@ -57,7 +57,7 @@
                             </div>
                             <div class="ml-5 w-0 flex-1">
                                 <dl>
-                                    <dt class="text-sm font-medium text-gray-500 truncate">Pending Users</dt>
+                                    <dt class="text-sm font-medium text-gray-500 truncate">Pengguna Menunggu</dt>
                                     <dd class="text-lg font-medium text-gray-900">{{ $users->where('status', 'pending')->count() }}</dd>
                                 </dl>
                             </div>
@@ -77,7 +77,7 @@
                             </div>
                             <div class="ml-5 w-0 flex-1">
                                 <dl>
-                                    <dt class="text-sm font-medium text-gray-500 truncate">Verified Users</dt>
+                                    <dt class="text-sm font-medium text-gray-500 truncate">Pengguna Disahkan</dt>
                                     <dd class="text-lg font-medium text-gray-900">{{ $users->where('is_verified', true)->count() }}</dd>
                                 </dl>
                             </div>
@@ -97,7 +97,7 @@
                             </div>
                             <div class="ml-5 w-0 flex-1">
                                 <dl>
-                                    <dt class="text-sm font-medium text-gray-500 truncate">Admins</dt>
+                                    <dt class="text-sm font-medium text-gray-500 truncate">Admin</dt>
                                     <dd class="text-lg font-medium text-gray-900">{{ $users->whereIn('role', ['admin', 'super_admin'])->count() }}</dd>
                                 </dl>
                             </div>
@@ -111,21 +111,21 @@
                 <div class="bg-white shadow-sm rounded-lg p-4">
                     <form method="GET" action="{{ route('admin.users.index') }}" class="flex flex-wrap gap-4">
                         <div class="flex-1 min-w-64">
-                            <label for="search" class="block text-sm font-medium text-gray-700 mb-1">Search</label>
+                            <label for="search" class="block text-sm font-medium text-gray-700 mb-1">Cari</label>
                             <input type="text" 
                                    id="search" 
                                    name="search" 
                                    value="{{ request('search') }}"
-                                   placeholder="Search users..." 
+                                   placeholder="Cari pengguna..." 
                                    class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500">
                         </div>
                         <div class="w-48">
-                            <label for="role" class="block text-sm font-medium text-gray-700 mb-1">Role</label>
+                            <label for="role" class="block text-sm font-medium text-gray-700 mb-1">Peranan</label>
                             <select id="role" 
                                     name="role" 
                                     class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500">
-                                <option value="">All Roles</option>
-                                <option value="user" {{ request('role') == 'user' ? 'selected' : '' }}>User</option>
+                                <option value="">Semua Peranan</option>
+                                <option value="user" {{ request('role') == 'user' ? 'selected' : '' }}>Pengguna</option>
                                 <option value="admin" {{ request('role') == 'admin' ? 'selected' : '' }}>Admin</option>
                                 <option value="super_admin" {{ request('role') == 'super_admin' ? 'selected' : '' }}>Super Admin</option>
                             </select>
@@ -135,26 +135,26 @@
                             <select id="status" 
                                     name="status" 
                                     class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500">
-                                <option value="">All Status</option>
-                                <option value="active" {{ request('status') == 'active' ? 'selected' : '' }}>Active</option>
-                                <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending</option>
-                                <option value="suspended" {{ request('status') == 'suspended' ? 'selected' : '' }}>Suspended</option>
+                                <option value="">Semua Status</option>
+                                <option value="active" {{ request('status') == 'active' ? 'selected' : '' }}>Aktif</option>
+                                <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Menunggu</option>
+                                <option value="suspended" {{ request('status') == 'suspended' ? 'selected' : '' }}>Digantung</option>
                             </select>
                         </div>
                         <div class="w-32">
-                            <label for="verified" class="block text-sm font-medium text-gray-700 mb-1">Verified</label>
+                            <label for="verified" class="block text-sm font-medium text-gray-700 mb-1">Disahkan</label>
                             <select id="verified" 
                                     name="verified" 
                                     class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500">
-                                <option value="">All</option>
-                                <option value="1" {{ request('verified') == '1' ? 'selected' : '' }}>Verified</option>
-                                <option value="0" {{ request('verified') == '0' ? 'selected' : '' }}>Unverified</option>
+                                <option value="">Semua</option>
+                                <option value="1" {{ request('verified') == '1' ? 'selected' : '' }}>Disahkan</option>
+                                <option value="0" {{ request('verified') == '0' ? 'selected' : '' }}>Tidak Disahkan</option>
                             </select>
                         </div>
                         <div class="flex items-end">
                             <button type="submit" 
                                     class="px-4 py-2 bg-red-600 text-white text-sm font-medium rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
-                                Filter
+                                Tapis
                             </button>
                         </div>
                     </form>
@@ -168,14 +168,14 @@
                         <table class="min-w-full divide-y divide-gray-200">
                             <thead class="bg-gray-50">
                                 <tr>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User</th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Role</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Pengguna</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Peranan</th>
                                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Trust Score</th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Services</th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Last Login</th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Joined</th>
-                                    <th scope="col" class="relative px-6 py-3"><span class="sr-only">Actions</span></th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Skor Kepercayaan</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Perkhidmatan</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Log Masuk Terakhir</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Menyertai</th>
+                                    <th scope="col" class="relative px-6 py-3"><span class="sr-only">Tindakan</span></th>
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">

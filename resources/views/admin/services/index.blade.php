@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Services Management')
+@section('title', 'Pengurusan Perkhidmatan')
 
 @section('content')
     <div class="py-6">
@@ -9,15 +9,15 @@
             <div class="mb-6">
                 <div class="flex items-center justify-between">
                     <div>
-                        <h1 class="text-2xl font-bold text-gray-900">Services Management</h1>
-                        <p class="mt-1 text-sm text-gray-600">Review and manage marketplace services</p>
+                        <h1 class="text-2xl font-bold text-gray-900">Pengurusan Perkhidmatan</h1>
+                        <p class="mt-1 text-sm text-gray-600">Semak dan urus perkhidmatan pasaran</p>
                     </div>
                     <div class="flex space-x-3">
                         <span class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
                             <svg class="mr-2 h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4"></path>
                             </svg>
-                            {{ $services->count() }} Services
+                            {{ $services->count() }} Perkhidmatan
                         </span>
                     </div>
                 </div>
@@ -28,12 +28,12 @@
                 <div class="bg-white shadow-sm rounded-lg p-4">
                     <form method="GET" action="{{ route('admin.services.index') }}" class="flex flex-wrap gap-4">
                         <div class="flex-1 min-w-64">
-                            <label for="search" class="block text-sm font-medium text-gray-700 mb-1">Search</label>
+                            <label for="search" class="block text-sm font-medium text-gray-700 mb-1">Cari</label>
                             <input type="text" 
                                    id="search" 
                                    name="search" 
                                    value="{{ request('search') }}"
-                                   placeholder="Search services..." 
+                                   placeholder="Cari perkhidmatan..." 
                                    class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500">
                         </div>
                         <div class="w-48">
@@ -41,29 +41,29 @@
                             <select id="status" 
                                     name="status" 
                                     class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500">
-                                <option value="">All Status</option>
-                                <option value="active" {{ request('status') == 'active' ? 'selected' : '' }}>Active</option>
-                                <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending</option>
-                                <option value="rejected" {{ request('status') == 'rejected' ? 'selected' : '' }}>Rejected</option>
+                                <option value="">Semua Status</option>
+                                <option value="active" {{ request('status') == 'active' ? 'selected' : '' }}>Aktif</option>
+                                <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Menunggu</option>
+                                <option value="rejected" {{ request('status') == 'rejected' ? 'selected' : '' }}>Ditolak</option>
                             </select>
                         </div>
                         <div class="w-48">
-                            <label for="category" class="block text-sm font-medium text-gray-700 mb-1">Category</label>
+                            <label for="category" class="block text-sm font-medium text-gray-700 mb-1">Kategori</label>
                             <select id="category" 
                                     name="category" 
                                     class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500">
-                                <option value="">All Categories</option>
-                                <option value="Coaching" {{ request('category') == 'Coaching' ? 'selected' : '' }}>Coaching</option>
-                                <option value="Transport" {{ request('category') == 'Transport' ? 'selected' : '' }}>Transport</option>
-                                <option value="Authentication" {{ request('category') == 'Authentication' ? 'selected' : '' }}>Authentication</option>
-                                <option value="Photography" {{ request('category') == 'Photography' ? 'selected' : '' }}>Photography</option>
-                                <option value="Entertainment" {{ request('category') == 'Entertainment' ? 'selected' : '' }}>Entertainment</option>
+                                <option value="">Semua Kategori</option>
+                                <option value="Coaching" {{ request('category') == 'Coaching' ? 'selected' : '' }}>Jurulatih</option>
+                                <option value="Transport" {{ request('category') == 'Transport' ? 'selected' : '' }}>Pengangkutan</option>
+                                <option value="Authentication" {{ request('category') == 'Authentication' ? 'selected' : '' }}>Pengesahan</option>
+                                <option value="Photography" {{ request('category') == 'Photography' ? 'selected' : '' }}>Fotografi</option>
+                                <option value="Entertainment" {{ request('category') == 'Entertainment' ? 'selected' : '' }}>Hiburan</option>
                             </select>
                         </div>
                         <div class="flex items-end">
                             <button type="submit" 
                                     class="px-4 py-2 bg-red-600 text-white text-sm font-medium rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
-                                Filter
+                                Tapis
                             </button>
                         </div>
                     </form>
@@ -77,14 +77,14 @@
                         <table class="min-w-full divide-y divide-gray-200">
                             <thead class="bg-gray-50">
                                 <tr>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Service</th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Provider</th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Perkhidmatan</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Penyedia</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kategori</th>
                                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Trust Score</th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Views</th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Created</th>
-                                    <th scope="col" class="relative px-6 py-3"><span class="sr-only">Actions</span></th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Skor Kepercayaan</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tontonan</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Dicipta</th>
+                                    <th scope="col" class="relative px-6 py-3"><span class="sr-only">Tindakan</span></th>
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
@@ -123,7 +123,7 @@
                                                         <svg class="mr-1 h-3 w-3" fill="currentColor" viewBox="0 0 20 20">
                                                             <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
                                                         </svg>
-                                                        Verified
+                                                        Disahkan
                                                     </span>
                                                 @endif
                                             </div>
@@ -136,15 +136,15 @@
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             @if($service->status === 'active')
                                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                                    Active
+                                                    Aktif
                                                 </span>
                                             @elseif($service->status === 'pending')
                                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                                                    Pending Review
+                                                    Menunggu Semakan
                                                 </span>
                                             @elseif($service->status === 'rejected')
                                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
-                                                    Rejected
+                                                    Ditolak
                                                 </span>
                                             @endif
                                         </td>
@@ -170,12 +170,12 @@
                                             {{ number_format($service->views_count) }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                            {{ $service->created_at->format('M j, Y') }}
+                                            {{ $service->created_at->format('j M Y') }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
                                             <a href="{{ route('admin.services.show', $service->id) }}" 
                                                class="text-red-600 hover:text-red-900 font-medium">
-                                                View
+                                                Lihat
                                             </a>
                                             
                                             @if($service->status === 'pending')
@@ -183,16 +183,16 @@
                                                     @csrf
                                                     <button type="submit" 
                                                             class="text-green-600 hover:text-green-900 font-medium"
-                                                            onclick="return confirm('Are you sure you want to approve this service?')">
-                                                        Approve
+                                                            onclick="return confirm('Adakah anda pasti mahu meluluskan perkhidmatan ini?')">
+                                                        Luluskan
                                                     </button>
                                                 </form>
                                                 <form method="POST" action="{{ route('admin.services.reject', $service->id) }}" class="inline">
                                                     @csrf
                                                     <button type="submit" 
                                                             class="text-yellow-600 hover:text-yellow-900 font-medium"
-                                                            onclick="return confirm('Are you sure you want to reject this service?')">
-                                                        Reject
+                                                            onclick="return confirm('Adakah anda pasti mahu menolak perkhidmatan ini?')">
+                                                        Tolak
                                                     </button>
                                                 </form>
                                             @endif
@@ -200,7 +200,7 @@
                                             <button type="button" 
                                                     onclick="deleteService({{ $service->id }})"
                                                     class="text-red-600 hover:text-red-900 font-medium">
-                                                Delete
+                                                Padam
                                             </button>
                                         </td>
                                     </tr>
@@ -214,8 +214,8 @@
                     <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0V6a2 2 0 012 2v6a2 2 0 01-2 2H8a2 2 0 01-2-2V8a2 2 0 012-2h8z"></path>
                     </svg>
-                    <h3 class="mt-2 text-sm font-medium text-gray-900">No services found</h3>
-                    <p class="mt-1 text-sm text-gray-500">No services match your current filter criteria.</p>
+                    <h3 class="mt-2 text-sm font-medium text-gray-900">Tiada perkhidmatan dijumpai</h3>
+                    <p class="mt-1 text-sm text-gray-500">Tiada perkhidmatan yang sepadan dengan kriteria penapis semasa.</p>
                 </div>
             @endif
         </div>
@@ -230,10 +230,10 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
                     </svg>
                 </div>
-                <h3 class="text-lg font-medium text-gray-900 mt-2">Delete Service</h3>
+                <h3 class="text-lg font-medium text-gray-900 mt-2">Padam Perkhidmatan</h3>
                 <div class="mt-2 px-7 py-3">
                     <p class="text-sm text-gray-500">
-                        Are you sure you want to delete this service? This action cannot be undone.
+                        Adakah anda pasti mahu memadam perkhidmatan ini? Tindakan ini tidak boleh dibatalkan.
                     </p>
                 </div>
                 <div class="items-center px-4 py-3">
@@ -241,11 +241,11 @@
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="px-4 py-2 bg-red-600 text-white text-base font-medium rounded-md shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 mr-2">
-                            Delete
+                            Padam
                         </button>
                     </form>
                     <button onclick="closeDeleteModal()" class="px-4 py-2 bg-gray-300 text-gray-800 text-base font-medium rounded-md shadow-sm hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-300">
-                        Cancel
+                        Batal
                     </button>
                 </div>
             </div>

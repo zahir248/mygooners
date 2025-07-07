@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>Request Admin Access - MyGooners</title>
-    <meta name="description" content="Request admin access to MyGooners admin panel">
+    <title>Minta Akses Admin - MyGooners</title>
+    <meta name="description" content="Minta akses admin ke panel admin MyGooners">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -56,10 +56,10 @@
                 </div>
             </div>
             <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
-                Request admin access
+                Minta akses admin
             </h2>
             <p class="mt-2 text-center text-sm text-gray-600">
-                Apply for MyGooners administration privileges
+                Memohon keistimewaan pentadbiran MyGooners
             </p>
         </div>
 
@@ -75,7 +75,7 @@
                         </div>
                         <div class="ml-3">
                             <p class="text-sm text-blue-700">
-                                Admin access requests are reviewed manually. You'll be contacted once your application is processed.
+                                Permintaan akses admin disemak secara manual. Anda akan dihubungi setelah permohonan anda diproses.
                             </p>
                         </div>
                     </div>
@@ -84,7 +84,7 @@
                 <!-- Validation Errors -->
                 @if ($errors->any())
                     <div class="mb-4">
-                        <div class="font-medium text-red-600 mb-2">{{ __('Please fix the following errors:') }}</div>
+                        <div class="font-medium text-red-600 mb-2">{{ __('Sila betulkan kesilapan berikut:') }}</div>
                         <ul class="text-sm text-red-600 bg-red-50 border border-red-200 rounded p-3 space-y-1">
                             @foreach ($errors->all() as $error)
                                 <li>{{ $error }}</li>
@@ -99,7 +99,7 @@
                     <!-- Name -->
                     <div>
                         <label for="name" class="block text-sm font-medium text-gray-700">
-                            Full name <span class="text-red-500">*</span>
+                            Nama penuh <span class="text-red-500">*</span>
                         </label>
                         <div class="mt-1">
                             <input id="name" 
@@ -116,7 +116,7 @@
                     <!-- Email Address -->
                     <div>
                         <label for="email" class="block text-sm font-medium text-gray-700">
-                            Email address <span class="text-red-500">*</span>
+                            Alamat emel <span class="text-red-500">*</span>
                         </label>
                         <div class="mt-1">
                             <input id="email" 
@@ -133,7 +133,7 @@
                     <!-- Password -->
                     <div>
                         <label for="password" class="block text-sm font-medium text-gray-700">
-                            Password <span class="text-red-500">*</span>
+                            Kata laluan <span class="text-red-500">*</span>
                         </label>
                         <div class="mt-1">
                             <input id="password" 
@@ -149,7 +149,7 @@
                     <!-- Confirm Password -->
                     <div>
                         <label for="password_confirmation" class="block text-sm font-medium text-gray-700">
-                            Confirm password <span class="text-red-500">*</span>
+                            Sahkan kata laluan <span class="text-red-500">*</span>
                         </label>
                         <div class="mt-1">
                             <input id="password_confirmation" 
@@ -165,18 +165,18 @@
                     <!-- Role/Position -->
                     <div>
                         <label for="position" class="block text-sm font-medium text-gray-700">
-                            Requested role/position
+                            Peranan/jawatan yang diminta
                         </label>
                         <div class="mt-1">
                             <select id="position" 
                                     name="position" 
                                     class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-admin-500 focus:border-admin-500 sm:text-sm transition-all">
-                                <option value="">Select a role</option>
-                                <option value="content_moderator" {{ old('position') == 'content_moderator' ? 'selected' : '' }}>Content Moderator</option>
-                                <option value="user_moderator" {{ old('position') == 'user_moderator' ? 'selected' : '' }}>User Moderator</option>
-                                <option value="service_reviewer" {{ old('position') == 'service_reviewer' ? 'selected' : '' }}>Service Reviewer</option>
-                                <option value="product_manager" {{ old('position') == 'product_manager' ? 'selected' : '' }}>Product Manager</option>
-                                <option value="admin" {{ old('position') == 'admin' ? 'selected' : '' }}>Administrator</option>
+                                <option value="">Pilih peranan</option>
+                                <option value="content_moderator" {{ old('position') == 'content_moderator' ? 'selected' : '' }}>Moderator Kandungan</option>
+                                <option value="user_moderator" {{ old('position') == 'user_moderator' ? 'selected' : '' }}>Moderator Pengguna</option>
+                                <option value="service_reviewer" {{ old('position') == 'service_reviewer' ? 'selected' : '' }}>Penyemak Perkhidmatan</option>
+                                <option value="product_manager" {{ old('position') == 'product_manager' ? 'selected' : '' }}>Pengurus Produk</option>
+                                <option value="admin" {{ old('position') == 'admin' ? 'selected' : '' }}>Pentadbir</option>
                             </select>
                         </div>
                     </div>
@@ -184,14 +184,14 @@
                     <!-- Reason -->
                     <div>
                         <label for="reason" class="block text-sm font-medium text-gray-700">
-                            Why do you need admin access?
+                            Mengapa anda memerlukan akses admin?
                         </label>
                         <div class="mt-1">
                             <textarea id="reason" 
                                       name="reason" 
                                       rows="3"
                                       class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-admin-500 focus:border-admin-500 sm:text-sm transition-all"
-                                      placeholder="Explain your background and why you need administrative access...">{{ old('reason') }}</textarea>
+                                      placeholder="Terangkan latar belakang anda dan mengapa anda memerlukan akses pentadbiran...">{{ old('reason') }}</textarea>
                         </div>
                     </div>
 
@@ -206,10 +206,10 @@
                         </div>
                         <div class="ml-3 text-sm">
                             <label for="terms" class="font-medium text-gray-700">
-                                I agree to the admin terms and conditions <span class="text-red-500">*</span>
+                                Saya bersetuju dengan terma dan syarat admin <span class="text-red-500">*</span>
                             </label>
                             <p class="text-gray-500">
-                                I understand that admin privileges come with responsibility and will be used appropriately.
+                                Saya faham bahawa keistimewaan admin datang dengan tanggungjawab dan akan digunakan dengan sewajarnya.
                             </p>
                         </div>
                     </div>
@@ -223,7 +223,7 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
                                 </svg>
                             </span>
-                            Submit admin access request
+                            Hantar permintaan akses admin
                         </button>
                     </div>
                 </form>
@@ -235,7 +235,7 @@
                             <div class="w-full border-t border-gray-300"></div>
                         </div>
                         <div class="relative flex justify-center text-sm">
-                            <span class="px-2 bg-white text-gray-500">Already have admin access?</span>
+                            <span class="px-2 bg-white text-gray-500">Sudah mempunyai akses admin?</span>
                         </div>
                     </div>
                 </div>
@@ -244,7 +244,7 @@
                 <div class="mt-6 text-center">
                     <p class="text-sm text-gray-600">
                         <a href="{{ route('admin.login') }}" class="font-medium text-admin-600 hover:text-admin-500 transition-colors">
-                            Sign in to admin panel
+                            Log masuk ke panel admin
                         </a>
                     </p>
                 </div>
@@ -252,7 +252,7 @@
                 <!-- Back to Site -->
                 <div class="mt-4 text-center">
                     <a href="{{ route('home') }}" class="text-sm text-gray-500 hover:text-gray-700 transition-colors">
-                        ← Back to MyGooners
+                        ← Kembali ke MyGooners
                     </a>
                 </div>
             </div>

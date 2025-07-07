@@ -28,11 +28,11 @@
 <div class="bg-gray-50 border-b border-gray-200">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
         <nav class="flex items-center space-x-2 text-sm text-gray-600">
-            <a href="{{ route('home') }}" class="hover:text-red-600 transition-colors">Home</a>
+            <a href="{{ route('home') }}" class="hover:text-red-600 transition-colors">Utama</a>
             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
             </svg>
-            <a href="{{ route('services.index') }}" class="hover:text-red-600 transition-colors">Services</a>
+            <a href="{{ route('services.index') }}" class="hover:text-red-600 transition-colors">Perkhidmatan</a>
             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
             </svg>
@@ -58,7 +58,7 @@
                                 <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
                                 </svg>
-                                VERIFIED PROVIDER
+                                PENYEDIA DISAHKAN
                             </span>
                         </div>
                     @endif
@@ -88,7 +88,7 @@
                             <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path>
                             <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"></path>
                         </svg>
-                        {{ number_format($service->views_count) }} views
+                        {{ number_format($service->views_count) }} tontonan
                     </div>
                 </div>
                 <h1 class="text-4xl font-bold text-gray-900 mb-4">{{ $service->title }}</h1>
@@ -104,17 +104,17 @@
                             <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
                         </svg>
                         <span class="font-medium text-gray-900">{{ number_format($service->trust_score, 1) }}</span>
-                        <span class="text-gray-500 ml-1">({{ $reviews->count() }} reviews)</span>
+                        <span class="text-gray-500 ml-1">({{ $reviews->count() }} ulasan)</span>
                     </div>
                     <div class="text-sm text-gray-500">
-                        Listed {{ $service->created_at->diffForHumans() }}
+                        Disenarai {{ $service->created_at->diffForHumans() }}
                     </div>
                 </div>
             </div>
 
             <!-- Service Description -->
             <div class="bg-white rounded-xl shadow-lg p-8 mb-8">
-                <h2 class="text-2xl font-bold text-gray-900 mb-4">About This Service</h2>
+                <h2 class="text-2xl font-bold text-gray-900 mb-4">Mengenai Perkhidmatan Ini</h2>
                 <div class="prose max-w-none text-gray-700 leading-relaxed">
                     {{ $service->description }}
                 </div>
@@ -136,7 +136,7 @@
             <!-- Reviews Section -->
             <div class="bg-white rounded-xl shadow-lg p-8 mb-8">
                 <div class="flex items-center justify-between mb-6">
-                    <h2 class="text-2xl font-bold text-gray-900">Customer Reviews</h2>
+                    <h2 class="text-2xl font-bold text-gray-900">Ulasan Pelanggan</h2>
                     <div class="flex items-center space-x-2">
                         <div class="flex items-center">
                             @for($i = 1; $i <= 5; $i++)
@@ -146,7 +146,7 @@
                             @endfor
                         </div>
                         <span class="text-lg font-semibold text-gray-900">{{ number_format($service->trust_score, 1) }}</span>
-                        <span class="text-gray-500">({{ $reviews->count() }} reviews)</span>
+                        <span class="text-gray-500">({{ $reviews->count() }} ulasan)</span>
                     </div>
                 </div>
 
@@ -178,7 +178,7 @@
 
                 <div class="mt-6 pt-6 border-t border-gray-200">
                     <button class="text-red-600 hover:text-red-700 font-medium">
-                        View All Reviews →
+                        Lihat Semua Ulasan →
                     </button>
                 </div>
             </div>
@@ -190,7 +190,7 @@
             <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
                 <div class="text-center mb-6">
                     <div class="text-3xl font-bold text-red-600 mb-2">{{ $service->pricing }}</div>
-                    <p class="text-gray-600">Starting price</p>
+                    <p class="text-gray-600">Harga permulaan</p>
                 </div>
 
                 <!-- Provider Info -->
@@ -205,7 +205,7 @@
                                 <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
                                 </svg>
-                                Verified Provider
+                                Penyedia Disahkan
                             </div>
                         @endif
                         <div class="flex items-center text-sm text-gray-500">
@@ -220,17 +220,17 @@
 
                 <div class="space-y-3 mb-6">
                     <button class="w-full bg-arsenal hover:bg-arsenal text-white py-3 px-4 rounded-lg font-medium transition-colors">
-                        Contact Provider
+                        Hubungi Penyedia
                     </button>
                     <button class="w-full border border-gray-300 text-gray-700 py-3 px-4 rounded-lg font-medium hover:bg-gray-50 transition-colors">
-                        Send Message
+                        Hantar Mesej
                     </button>
                 </div>
 
                 <!-- Provider Bio -->
                 @if($service->user->bio)
                     <div class="pt-6 border-t border-gray-200">
-                        <h4 class="font-semibold text-gray-900 mb-2">About the Provider</h4>
+                        <h4 class="font-semibold text-gray-900 mb-2">Mengenai Penyedia</h4>
                         <p class="text-sm text-gray-600 leading-relaxed">{{ $service->user->bio }}</p>
                     </div>
                 @endif
@@ -238,7 +238,7 @@
 
             <!-- Share Options -->
             <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
-                <h3 class="font-bold text-gray-900 mb-4">Share This Service</h3>
+                <h3 class="font-bold text-gray-900 mb-4">Kongsi Perkhidmatan Ini</h3>
                 <div class="flex space-x-3">
                     <button onclick="shareOnFacebook()" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 px-3 rounded-lg text-sm font-medium transition-colors">
                         Facebook
@@ -251,21 +251,21 @@
                     </button>
                 </div>
                 <button onclick="copyToClipboard()" class="w-full mt-3 border border-gray-300 text-gray-700 py-2 px-3 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors">
-                    Copy Link
+                    Salin Pautan
                 </button>
             </div>
 
             <!-- Report/Safety -->
             <div class="bg-white rounded-xl shadow-lg p-6">
-                <h3 class="font-bold text-gray-900 mb-4">Safety First</h3>
+                <h3 class="font-bold text-gray-900 mb-4">Keselamatan Dahulu</h3>
                 <div class="space-y-3 text-sm text-gray-600">
-                    <p>• Always meet in public places</p>
-                    <p>• Verify provider credentials</p>
-                    <p>• Use platform messaging initially</p>
-                    <p>• Report suspicious activity</p>
+                    <p>• Sentiasa bertemu di tempat awam</p>
+                    <p>• Sahkan kelayakan penyedia</p>
+                    <p>• Gunakan sistem mesej platform dahulu</p>
+                    <p>• Laporkan aktiviti yang mencurigakan</p>
                 </div>
                 <button class="w-full mt-4 text-red-600 hover:text-red-700 text-sm font-medium">
-                    Report This Listing
+                    Laporkan Penyenaraian Ini
                 </button>
             </div>
         </div>
@@ -274,8 +274,8 @@
     <!-- Related Services -->
     <div class="mt-16">
         <div class="mb-8">
-            <h2 class="text-3xl font-bold text-gray-900 mb-2">Similar Services</h2>
-            <p class="text-gray-600">Other services you might be interested in</p>
+            <h2 class="text-3xl font-bold text-gray-900 mb-2">Perkhidmatan Serupa</h2>
+            <p class="text-gray-600">Perkhidmatan lain yang mungkin anda minati</p>
         </div>
         
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -293,7 +293,7 @@
                         @if($relatedService->is_verified)
                             <div class="absolute top-4 right-4">
                                 <span class="bg-green-100 text-green-600 px-2 py-1 rounded-full text-xs font-bold">
-                                    VERIFIED
+                                    DISAHKAN
                                 </span>
                             </div>
                         @endif

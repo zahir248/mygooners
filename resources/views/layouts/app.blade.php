@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>@yield('title', 'MyGooners - Arsenal Fan Community')</title>
-    <meta name="description" content="@yield('meta_description', 'The ultimate Arsenal fan community featuring latest news, videos, services marketplace, and exclusive merchandise.')">
+    <title>@yield('title', 'MyGooners - Komuniti Peminat Arsenal')</title>
+    <meta name="description" content="@yield('meta_description', 'Komuniti peminat Arsenal terbaik yang menampilkan berita terkini, video, pasaran perkhidmatan, dan barangan eksklusif.')"
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -125,19 +125,19 @@
                     <!-- Desktop Navigation -->
                     <nav class="hidden md:flex space-x-8">
                         <a href="{{ route('home') }}" class="text-gray-900 hover:text-red-600 px-3 py-2 text-sm font-medium transition-colors {{ request()->routeIs('home') ? 'text-red-600 border-b-2 border-red-600' : '' }}">
-                            Home
+                            Utama
                         </a>
                         <a href="{{ route('blog.index') }}" class="text-gray-900 hover:text-red-600 px-3 py-2 text-sm font-medium transition-colors {{ request()->routeIs('blog.*') ? 'text-red-600 border-b-2 border-red-600' : '' }}">
-                            Blog
+                            Berita
                         </a>
                         <a href="{{ route('videos.index') }}" class="text-gray-900 hover:text-red-600 px-3 py-2 text-sm font-medium transition-colors {{ request()->routeIs('videos.*') ? 'text-red-600 border-b-2 border-red-600' : '' }}">
-                            Videos
+                            Video
                         </a>
                         <a href="{{ route('services.index') }}" class="text-gray-900 hover:text-red-600 px-3 py-2 text-sm font-medium transition-colors {{ request()->routeIs('services.*') ? 'text-red-600 border-b-2 border-red-600' : '' }}">
-                            Services
+                            Perkhidmatan
                         </a>
                         <a href="{{ route('shop.index') }}" class="text-gray-900 hover:text-red-600 px-3 py-2 text-sm font-medium transition-colors {{ request()->routeIs('shop.*') ? 'text-red-600 border-b-2 border-red-600' : '' }}">
-                            Shop
+                            Kedai
                         </a>
                     </nav>
 
@@ -149,7 +149,7 @@
                                 <input type="text" 
                                        name="search" 
                                        value="{{ request('search') }}" 
-                                       placeholder="Search..." 
+                                       placeholder="Cari..." 
                                        class="w-64 pl-10 pr-4 py-2 border border-gray-300 rounded-full focus:ring-2 focus:ring-red-500 focus:border-transparent">
                                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                     <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -167,20 +167,20 @@
                                     <span class="ml-2 text-gray-700 font-medium">{{ auth()->user()->name }}</span>
                                 </button>
                                 <div x-show="open" @click.away="open = false" x-cloak class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
-                                    <a href="{{ route('dashboard') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Dashboard</a>
+                                    <a href="{{ route('dashboard') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Panel Kawalan</a>
                                     <form method="POST" action="{{ route('logout') }}">
                                         @csrf
-                                        <button type="submit" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Sign out</button>
+                                        <button type="submit" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Log Keluar</button>
                                     </form>
                                 </div>
                             </div>
                         @else
                             <div class="flex space-x-2">
                                 <a href="{{ route('login') }}" class="text-gray-700 hover:text-red-600 px-3 py-2 text-sm font-medium transition-colors">
-                                    Sign in
+                                    Log Masuk
                                 </a>
                                 <a href="{{ route('register') }}" class="bg-red-600 text-white hover:bg-red-700 px-4 py-2 rounded-md text-sm font-medium transition-colors">
-                                    Join Us
+                                    Sertai Kami
                                 </a>
                             </div>
                         @endauth
@@ -200,11 +200,11 @@
                 <!-- Mobile Navigation -->
                 <div x-data="{ open: false }" x-show="open" @click.away="open = false" x-cloak class="md:hidden border-t border-gray-200 py-4">
                     <div class="space-y-1">
-                        <a href="{{ route('home') }}" class="block px-3 py-2 text-base font-medium text-gray-900 hover:text-red-600 hover:bg-gray-50">Home</a>
-                        <a href="{{ route('blog.index') }}" class="block px-3 py-2 text-base font-medium text-gray-900 hover:text-red-600 hover:bg-gray-50">Blog</a>
-                        <a href="{{ route('videos.index') }}" class="block px-3 py-2 text-base font-medium text-gray-900 hover:text-red-600 hover:bg-gray-50">Videos</a>
-                        <a href="{{ route('services.index') }}" class="block px-3 py-2 text-base font-medium text-gray-900 hover:text-red-600 hover:bg-gray-50">Services</a>
-                        <a href="{{ route('shop.index') }}" class="block px-3 py-2 text-base font-medium text-gray-900 hover:text-red-600 hover:bg-gray-50">Shop</a>
+                        <a href="{{ route('home') }}" class="block px-3 py-2 text-base font-medium text-gray-900 hover:text-red-600 hover:bg-gray-50">Utama</a>
+                        <a href="{{ route('blog.index') }}" class="block px-3 py-2 text-base font-medium text-gray-900 hover:text-red-600 hover:bg-gray-50">Berita</a>
+                        <a href="{{ route('videos.index') }}" class="block px-3 py-2 text-base font-medium text-gray-900 hover:text-red-600 hover:bg-gray-50">Video</a>
+                        <a href="{{ route('services.index') }}" class="block px-3 py-2 text-base font-medium text-gray-900 hover:text-red-600 hover:bg-gray-50">Perkhidmatan</a>
+                        <a href="{{ route('shop.index') }}" class="block px-3 py-2 text-base font-medium text-gray-900 hover:text-red-600 hover:bg-gray-50">Kedai</a>
                     </div>
                 </div>
             </div>
@@ -261,29 +261,29 @@
                                 <span class="ml-2 text-xl font-bold">MyGooners</span>
                             </div>
                             <p class="text-gray-300 text-sm">
-                                The ultimate Arsenal fan community featuring latest news, videos, services marketplace, and exclusive merchandise.
+                                Komuniti peminat Arsenal terbaik yang menampilkan berita terkini, video, pasaran perkhidmatan, dan barangan eksklusif.
                             </p>
                         </div>
                         
                         <div>
-                            <h3 class="text-lg font-semibold mb-4">Content</h3>
+                            <h3 class="text-lg font-semibold mb-4">Kandungan</h3>
                             <ul class="space-y-2 text-sm">
-                                <li><a href="{{ route('blog.index') }}" class="text-gray-300 hover:text-white transition-colors">Latest News</a></li>
-                                <li><a href="{{ route('videos.index') }}" class="text-gray-300 hover:text-white transition-colors">Video Podcasts</a></li>
-                                <li><a href="{{ route('blog.category', 'match-reports') }}" class="text-gray-300 hover:text-white transition-colors">Match Reports</a></li>
-                                <li><a href="{{ route('blog.category', 'transfer-news') }}" class="text-gray-300 hover:text-white transition-colors">Transfer News</a></li>
+                                <li><a href="{{ route('blog.index') }}" class="text-gray-300 hover:text-white transition-colors">Berita Terkini</a></li>
+                                <li><a href="{{ route('videos.index') }}" class="text-gray-300 hover:text-white transition-colors">Podcast Video</a></li>
+                                <li><a href="{{ route('blog.category', 'match-reports') }}" class="text-gray-300 hover:text-white transition-colors">Laporan Perlawanan</a></li>
+                                <li><a href="{{ route('blog.category', 'transfer-news') }}" class="text-gray-300 hover:text-white transition-colors">Berita Pemindahan</a></li>
                             </ul>
                         </div>
                         
                         <div>
-                            <h3 class="text-lg font-semibold mb-4">Community</h3>
+                            <h3 class="text-lg font-semibold mb-4">Komuniti</h3>
                             <ul class="space-y-2 text-sm">
-                                <li><a href="{{ route('services.index') }}" class="text-gray-300 hover:text-white transition-colors">Services</a></li>
-                                <li><a href="{{ route('shop.index') }}" class="text-gray-300 hover:text-white transition-colors">Shop</a></li>
-                                <li><a href="{{ route('register') }}" class="text-gray-300 hover:text-white transition-colors">Join Community</a></li>
+                                <li><a href="{{ route('services.index') }}" class="text-gray-300 hover:text-white transition-colors">Perkhidmatan</a></li>
+                                <li><a href="{{ route('shop.index') }}" class="text-gray-300 hover:text-white transition-colors">Kedai</a></li>
+                                <li><a href="{{ route('register') }}" class="text-gray-300 hover:text-white transition-colors">Sertai Komuniti</a></li>
                             </ul>
                             
-                            <h3 class="text-lg font-semibold mb-4 mt-8">Connect</h3>
+                            <h3 class="text-lg font-semibold mb-4 mt-8">Berhubung</h3>
                             <div class="flex space-x-4">
                                 <a href="#" class="text-gray-300 hover:text-white transition-colors">
                                     <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
@@ -306,21 +306,21 @@
                     
                     <!-- Right Side - Newsletter Section -->
                     <div class="lg:w-96 lg:pl-8">
-                        <h3 class="text-2xl font-bold text-white mb-2">Stay in the Loop, Gooner!</h3>
-                        <p class="text-gray-300 mb-6">Get the latest Arsenal news, exclusive content, and community updates delivered straight to your inbox.</p>
+                        <h3 class="text-2xl font-bold text-white mb-2">Kekal Terkini, Gooner!</h3>
+                        <p class="text-gray-300 mb-6">Dapatkan berita Arsenal terkini, kandungan eksklusif, dan kemas kini komuniti terus ke peti mel anda.</p>
                         
                         <form class="space-y-4" action="#" method="POST">
                             @csrf
                             <div>
                                 <input type="email" 
                                        name="email" 
-                                       placeholder="Enter your email address" 
+                                       placeholder="Masukkan alamat emel anda" 
                                        required
                                        class="w-full px-4 py-3 rounded-lg border border-gray-600 bg-gray-800 text-white placeholder-gray-400 focus:ring-2 focus:ring-red-600 focus:border-transparent transition-all">
                             </div>
                             <button type="submit" 
                                     class="w-full bg-red-600 hover:bg-red-700 text-white font-semibold px-6 py-3 rounded-lg transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-red-600 focus:ring-offset-2 focus:ring-offset-gray-900">
-                                Subscribe
+                                Langgan
                             </button>
                         </form>
                         
@@ -329,19 +329,19 @@
                                 <svg class="w-4 h-4 text-red-500 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
                                 </svg>
-                                Latest news
+                                Berita terkini
                             </div>
                             <div class="flex items-center">
                                 <svg class="w-4 h-4 text-red-500 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
                                 </svg>
-                                Exclusive content
+                                Kandungan eksklusif
                             </div>
                             <div class="flex items-center">
                                 <svg class="w-4 h-4 text-red-500 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
                                 </svg>
-                                No spam, unsubscribe anytime
+                                Tiada spam, berhenti melanggan bila-bila masa
                             </div>
                         </div>
                     </div>
@@ -349,7 +349,7 @@
                 
                 <div class="border-t border-gray-800 mt-8 pt-8 text-center">
                     <p class="text-gray-400 text-sm">
-                        © {{ date('Y') }} MyGooners. All rights reserved. Built with ❤️ for Arsenal fans.
+                        © {{ date('Y') }} MyGooners. Hak cipta terpelihara. Dibina dengan ❤️ untuk peminat Arsenal.
                     </p>
                 </div>
             </div>

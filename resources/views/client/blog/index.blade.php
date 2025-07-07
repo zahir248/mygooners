@@ -1,16 +1,16 @@
 @extends('layouts.app')
 
-@section('title', 'Arsenal News & Blog - MyGooners')
-@section('meta_description', 'Stay up to date with the latest Arsenal news, match reports, transfer updates, and in-depth analysis from the MyGooners community.')
+@section('title', 'Berita & Blog Arsenal - MyGooners')
+@section('meta_description', 'Kekal terkini dengan berita Arsenal terkini, laporan perlawanan, kemas kini pemindahan, dan analisis mendalam dari komuniti MyGooners.')
 
 @section('content')
 <!-- Hero Section -->
 <div class="bg-gradient-to-r from-red-600 to-red-700 text-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div class="text-center">
-            <h1 class="text-4xl md:text-5xl font-bold mb-4">Arsenal News & Analysis</h1>
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">Berita & Analisis Arsenal</h1>
             <p class="text-xl text-red-100 max-w-3xl mx-auto">
-                Get the latest Arsenal news, match reports, transfer updates, and in-depth analysis from fellow Gooners
+                Dapatkan berita Arsenal terkini, laporan perlawanan, kemas kini pemindahan, dan analisis mendalam dari sesama Gooners
             </p>
         </div>
     </div>
@@ -26,7 +26,7 @@
                     <input type="text" 
                            name="search" 
                            value="{{ $search }}" 
-                           placeholder="Search articles..." 
+                           placeholder="Cari artikel..." 
                            class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent">
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                         <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -43,7 +43,7 @@
             <div class="flex flex-wrap gap-2">
                 <a href="{{ route('blog.index') }}" 
                    class="px-4 py-2 rounded-full text-sm font-medium transition-colors {{ !$category ? 'bg-arsenal text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' }}">
-                    All Categories
+                    Semua Kategori
                 </a>
                 @foreach($categories as $cat)
                     <a href="{{ route('blog.category', strtolower(str_replace(' ', '-', $cat))) }}" 
@@ -76,7 +76,7 @@
                                     {{ $featuredArticle->category }}
                                 </span>
                                 <span class="bg-yellow-400 text-gray-900 px-3 py-1 rounded-full text-sm font-bold ml-3">
-                                    FEATURED
+                                    UTAMA
                                 </span>
                             </div>
                             <h2 class="text-3xl font-bold text-gray-900 mb-4">
@@ -99,11 +99,11 @@
                                         <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path>
                                         <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"></path>
                                     </svg>
-                                    {{ number_format($featuredArticle->views_count) }} views
+                                    {{ number_format($featuredArticle->views_count) }} tontonan
                                 </div>
                                 <a href="{{ route('blog.show', $featuredArticle->slug) }}" 
                                    class="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg font-medium transition-colors">
-                                    Read Article
+                                    Baca Artikel
                                 </a>
                             </div>
                         </div>
@@ -128,7 +128,7 @@
                         @if($article->is_featured)
                             <div class="absolute top-4 right-4">
                                 <span class="bg-yellow-400 text-gray-900 px-2 py-1 rounded-full text-xs font-bold">
-                                    FEATURED
+                                    UTAMA
                                 </span>
                             </div>
                         @endif
@@ -179,7 +179,7 @@
         <!-- Load More / Pagination -->
         <div class="mt-12 text-center">
             <button class="bg-arsenal hover:bg-arsenal text-white px-8 py-3 rounded-lg font-medium transition-colors">
-                Load More Articles
+                Muat Lebih Banyak Artikel
             </button>
         </div>
     @else
@@ -188,18 +188,18 @@
             <svg class="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
             </svg>
-            <h3 class="text-xl font-medium text-gray-900 mb-2">No articles found</h3>
+            <h3 class="text-xl font-medium text-gray-900 mb-2">Tiada artikel dijumpai</h3>
             <p class="text-gray-600 mb-6">
                 @if($search)
-                    No articles match your search for "{{ $search }}"
+                    Tiada artikel sepadan dengan carian anda untuk "{{ $search }}"
                 @elseif($category)
-                    No articles found in the "{{ $category }}" category
+                    Tiada artikel dijumpai dalam kategori "{{ $category }}"
                 @else
-                    No articles have been published yet
+                    Tiada artikel telah diterbitkan lagi
                 @endif
             </p>
             <a href="{{ route('blog.index') }}" class="text-red-600 hover:text-red-700 font-medium">
-                ← View all articles
+                ← Lihat semua artikel
             </a>
         </div>
     @endif

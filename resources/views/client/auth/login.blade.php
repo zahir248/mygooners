@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Sign In - MyGooners')
+@section('title', 'Log Masuk - MyGooners')
 
 @section('content')
 <div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
@@ -12,10 +12,10 @@
                 </div>
             </div>
             <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
-                Sign in to your account
+                Log masuk ke akaun anda
             </h2>
             <p class="mt-2 text-center text-sm text-gray-600">
-                Welcome back to the Arsenal community
+                Selamat kembali ke komuniti Arsenal
             </p>
         </div>
         
@@ -24,7 +24,7 @@
             
             <div class="rounded-md shadow-sm -space-y-px">
                 <div>
-                    <label for="email" class="sr-only">Email address</label>
+                    <label for="email" class="sr-only">Alamat emel</label>
                     <input id="email" 
                            name="email" 
                            type="email" 
@@ -32,21 +32,21 @@
                            required 
                            value="{{ old('email') }}"
                            class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-red-500 focus:border-red-500 focus:z-10 sm:text-sm @error('email') border-red-500 @enderror" 
-                           placeholder="Email address">
+                           placeholder="Alamat emel">
                     @error('email')
                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                     @enderror
                 </div>
                 
                 <div>
-                    <label for="password" class="sr-only">Password</label>
+                    <label for="password" class="sr-only">Kata laluan</label>
                     <input id="password" 
                            name="password" 
                            type="password" 
                            autocomplete="current-password" 
                            required 
                            class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-red-500 focus:border-red-500 focus:z-10 sm:text-sm @error('password') border-red-500 @enderror" 
-                           placeholder="Password">
+                           placeholder="Kata laluan">
                     @error('password')
                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                     @enderror
@@ -60,13 +60,13 @@
                            type="checkbox" 
                            class="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300 rounded">
                     <label for="remember" class="ml-2 block text-sm text-gray-900">
-                        Remember me
+                        Ingat saya
                     </label>
                 </div>
 
                 <div class="text-sm">
                     <a href="#" class="font-medium text-red-600 hover:text-red-500">
-                        Forgot your password?
+                        Lupa kata laluan?
                     </a>
                 </div>
             </div>
@@ -79,15 +79,15 @@
                             <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"></path>
                         </svg>
                     </span>
-                    Sign in
+                    Log Masuk
                 </button>
             </div>
 
             <div class="text-center">
                 <p class="text-sm text-gray-600">
-                    Don't have an account? 
+                    Tidak mempunyai akaun? 
                     <a href="{{ route('register') }}" class="font-medium text-red-600 hover:text-red-500">
-                        Join the Gooners community
+                        Sertai komuniti Gooners
                     </a>
                 </p>
             </div>

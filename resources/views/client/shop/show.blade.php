@@ -29,11 +29,11 @@
 <div class="bg-gray-50 border-b border-gray-200">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
         <nav class="flex items-center space-x-2 text-sm text-gray-600">
-            <a href="{{ route('home') }}" class="hover:text-red-600 transition-colors">Home</a>
+            <a href="{{ route('home') }}" class="hover:text-red-600 transition-colors">Utama</a>
             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
             </svg>
-            <a href="{{ route('shop.index') }}" class="hover:text-red-600 transition-colors">Shop</a>
+            <a href="{{ route('shop.index') }}" class="hover:text-red-600 transition-colors">Kedai</a>
             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
             </svg>
@@ -69,7 +69,7 @@
                     @endif
                     @if($product->is_featured)
                         <span class="bg-yellow-400 text-gray-900 px-4 py-2 rounded-full text-sm font-bold">
-                            FEATURED
+                            UTAMA
                         </span>
                     @endif
                 </div>
@@ -77,7 +77,7 @@
                 @if($product->stock_quantity <= 5)
                     <div class="absolute bottom-4 left-4">
                         <span class="bg-orange-500 text-white px-4 py-2 rounded-full text-sm font-medium">
-                            Only {{ $product->stock_quantity }} left in stock
+                            Hanya {{ $product->stock_quantity }} tinggal dalam stok
                         </span>
                     </div>
                 @endif
@@ -111,7 +111,7 @@
                             <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path>
                             <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"></path>
                         </svg>
-                        {{ number_format($product->views_count) }} views
+                        {{ number_format($product->views_count) }} tontonan
                     </div>
                 </div>
                 
@@ -127,8 +127,8 @@
                         @endfor
                     </div>
                     <span class="text-lg font-semibold text-gray-900">{{ number_format($product->average_rating, 1) }}</span>
-                    <span class="text-gray-500">({{ $product->reviews_count }} reviews)</span>
-                    <a href="#reviews" class="text-red-600 hover:text-red-700 font-medium">Read Reviews</a>
+                    <span class="text-gray-500">({{ $product->reviews_count }} ulasan)</span>
+                    <a href="#reviews" class="text-red-600 hover:text-red-700 font-medium">Baca Ulasan</a>
                 </div>
 
                 <!-- Price -->
@@ -137,7 +137,7 @@
                         <span class="text-4xl font-bold text-red-600">£{{ number_format($product->sale_price, 2) }}</span>
                         <span class="text-2xl text-gray-500 line-through">£{{ number_format($product->price, 2) }}</span>
                         <span class="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm font-bold">
-                            Save £{{ number_format($product->price - $product->sale_price, 2) }}
+                            Jimat £{{ number_format($product->price - $product->sale_price, 2) }}
                         </span>
                     @else
                         <span class="text-4xl font-bold text-gray-900">£{{ number_format($product->price, 2) }}</span>
@@ -147,7 +147,7 @@
 
             <!-- Product Description -->
             <div class="mb-8">
-                <h3 class="text-xl font-semibold text-gray-900 mb-3">Description</h3>
+                <h3 class="text-xl font-semibold text-gray-900 mb-3">Penerangan</h3>
                 <div class="prose text-gray-700 leading-relaxed">
                     {{ $product->description }}
                 </div>
@@ -156,7 +156,7 @@
             <!-- Size Selection (if applicable) -->
             @if(isset($product->sizes) && count($product->sizes) > 0)
                 <div class="mb-6">
-                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Size</h3>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Saiz</h3>
                     <div class="grid grid-cols-6 gap-2">
                         @foreach($product->sizes as $size)
                             <button class="border border-gray-300 hover:border-red-500 hover:text-red-600 py-2 px-4 rounded-lg text-center font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent">
@@ -171,7 +171,7 @@
             <div class="mb-8">
                 <div class="flex items-center space-x-4 mb-4">
                     <div>
-                        <label for="quantity" class="block text-sm font-medium text-gray-700 mb-2">Quantity</label>
+                        <label for="quantity" class="block text-sm font-medium text-gray-700 mb-2">Kuantiti</label>
                         <select id="quantity" class="border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-transparent">
                             @for($i = 1; $i <= min($product->stock_quantity, 10); $i++)
                                 <option value="{{ $i }}">{{ $i }}</option>
@@ -180,9 +180,9 @@
                     </div>
                     <div class="text-sm text-gray-600">
                         @if($product->stock_quantity > 0)
-                            <span class="text-green-600 font-medium">✓ In Stock ({{ $product->stock_quantity }} available)</span>
+                            <span class="text-green-600 font-medium">✓ Dalam Stok ({{ $product->stock_quantity }} tersedia)</span>
                         @else
-                            <span class="text-red-600 font-medium">✗ Out of Stock</span>
+                            <span class="text-red-600 font-medium">✗ Kehabisan Stok</span>
                         @endif
                     </div>
                 </div>
@@ -190,14 +190,14 @@
                 <div class="space-y-3">
                     @if($product->stock_quantity > 0)
                         <button class="w-full bg-arsenal hover:bg-arsenal text-white py-4 px-6 rounded-lg font-bold text-lg transition-colors">
-                            Add to Cart
+                            Tambah ke Troli
                         </button>
                         <button class="w-full border-2 border-red-600 text-red-600 hover:bg-red-600 hover:text-white py-4 px-6 rounded-lg font-bold text-lg transition-colors">
-                            Buy Now
+                            Beli Sekarang
                         </button>
                     @else
                         <button class="w-full bg-gray-300 text-gray-600 py-4 px-6 rounded-lg font-bold text-lg cursor-not-allowed">
-                            Out of Stock
+                            Kehabisan Stok
                         </button>
                         <button class="w-full border-2 border-gray-300 text-gray-600 py-4 px-6 rounded-lg font-bold text-lg">
                             Notify When Available
@@ -224,7 +224,7 @@
                     </div>
                     <div class="flex items-center">
                         <svg class="w-5 h-5 text-green-600 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.293l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13a1 1 0 102 0V9.414l1.293 1.293a1 1 0 001.414-1.414z" clip-rule="evenodd"></path>
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.293l-3-3a1 1 0 00-1.414-1.414l-3 3a1 1 0 001.414 1.414L9 9.414V13a1 1 0 102 0V9.414l1.293 1.293a1 1 0 001.414-1.414z" clip-rule="evenodd"></path>
                         </svg>
                         30-Day Returns
                     </div>
@@ -283,7 +283,7 @@
                         @endfor
                     </div>
                     <span class="text-2xl font-bold text-gray-900">{{ number_format($product->average_rating, 1) }}</span>
-                    <span class="text-gray-500">({{ $product->reviews_count }} reviews)</span>
+                    <span class="text-gray-500">({{ $product->reviews_count }} ulasan)</span>
                 </div>
             </div>
 

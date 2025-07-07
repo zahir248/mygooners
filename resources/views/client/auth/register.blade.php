@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Join Us - MyGooners')
+@section('title', 'Sertai Kami - MyGooners')
 
 @section('content')
 <div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
@@ -12,10 +12,10 @@
                 </div>
             </div>
             <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
-                Join the Arsenal community
+                Sertai komuniti Arsenal
             </h2>
             <p class="mt-2 text-center text-sm text-gray-600">
-                Become part of the MyGooners family
+                Menjadi sebahagian daripada keluarga MyGooners
             </p>
         </div>
         
@@ -24,7 +24,7 @@
             
             <div class="space-y-4">
                 <div>
-                    <label for="name" class="block text-sm font-medium text-gray-700">Full Name</label>
+                    <label for="name" class="block text-sm font-medium text-gray-700">Nama Penuh</label>
                     <input id="name" 
                            name="name" 
                            type="text" 
@@ -32,14 +32,14 @@
                            required 
                            value="{{ old('name') }}"
                            class="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm @error('name') border-red-500 @enderror" 
-                           placeholder="Your full name">
+                           placeholder="Nama penuh anda">
                     @error('name')
                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                     @enderror
                 </div>
                 
                 <div>
-                    <label for="email" class="block text-sm font-medium text-gray-700">Email Address</label>
+                    <label for="email" class="block text-sm font-medium text-gray-700">Alamat Emel</label>
                     <input id="email" 
                            name="email" 
                            type="email" 
@@ -47,35 +47,35 @@
                            required 
                            value="{{ old('email') }}"
                            class="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm @error('email') border-red-500 @enderror" 
-                           placeholder="your@email.com">
+                           placeholder="emel@anda.com">
                     @error('email')
                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                     @enderror
                 </div>
                 
                 <div>
-                    <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                    <label for="password" class="block text-sm font-medium text-gray-700">Kata Laluan</label>
                     <input id="password" 
                            name="password" 
                            type="password" 
                            autocomplete="new-password" 
                            required 
                            class="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm @error('password') border-red-500 @enderror" 
-                           placeholder="Choose a strong password">
+                           placeholder="Pilih kata laluan yang kuat">
                     @error('password')
                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                     @enderror
                 </div>
                 
                 <div>
-                    <label for="password_confirmation" class="block text-sm font-medium text-gray-700">Confirm Password</label>
+                    <label for="password_confirmation" class="block text-sm font-medium text-gray-700">Sahkan Kata Laluan</label>
                     <input id="password_confirmation" 
                            name="password_confirmation" 
                            type="password" 
                            autocomplete="new-password" 
                            required 
                            class="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm" 
-                           placeholder="Confirm your password">
+                           placeholder="Sahkan kata laluan anda">
                 </div>
             </div>
 
@@ -86,10 +86,10 @@
                        required
                        class="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300 rounded">
                 <label for="terms" class="ml-2 block text-sm text-gray-900">
-                    I agree to the 
-                    <a href="#" class="text-red-600 hover:text-red-500 font-medium">Terms of Service</a> 
-                    and 
-                    <a href="#" class="text-red-600 hover:text-red-500 font-medium">Privacy Policy</a>
+                    Saya bersetuju dengan 
+                    <a href="#" class="text-red-600 hover:text-red-500 font-medium">Syarat Perkhidmatan</a> 
+                    dan 
+                    <a href="#" class="text-red-600 hover:text-red-500 font-medium">Dasar Privasi</a>
                 </label>
             </div>
 
@@ -101,15 +101,15 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
                         </svg>
                     </span>
-                    Create Account
+                    Cipta Akaun
                 </button>
             </div>
 
             <div class="text-center">
                 <p class="text-sm text-gray-600">
-                    Already have an account? 
+                    Sudah mempunyai akaun? 
                     <a href="{{ route('login') }}" class="font-medium text-red-600 hover:text-red-500">
-                        Sign in here
+                        Log masuk di sini
                     </a>
                 </p>
             </div>

@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'MyGooners - Arsenal Fan Community')
-@section('meta_description', 'The ultimate Arsenal fan community featuring latest news, videos, services marketplace, and exclusive merchandise. Join thousands of Gooners worldwide.')
+@section('title', 'MyGooners - Komuniti Peminat Arsenal')
+@section('meta_description', 'Komuniti peminat Arsenal terbaik yang menampilkan berita terkini, video, pasaran perkhidmatan, dan barangan eksklusif. Sertai ribuan Gooners di seluruh dunia.')
 
 @section('content')
 <!-- Hero Section -->
@@ -9,17 +9,17 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div class="text-center">
             <h1 class="text-4xl md:text-6xl font-bold mb-6">
-                Welcome to <span class="text-yellow-300">MyGooners</span>
+                Selamat Datang ke <span class="text-yellow-300">MyGooners</span>
             </h1>
             <p class="text-xl md:text-2xl mb-8 text-red-100 max-w-3xl mx-auto">
-                The ultimate Arsenal fan community featuring the latest news, exclusive videos, trusted services, and authentic merchandise.
+                Komuniti peminat Arsenal terbaik yang menampilkan berita terkini, video eksklusif, perkhidmatan dipercayai, dan barangan tulen.
             </p>
             <div class="flex flex-col sm:flex-row justify-center gap-4">
                 <a href="{{ route('blog.index') }}" class="bg-white text-red-600 hover:bg-gray-100 px-8 py-3 rounded-lg font-semibold text-lg transition-colors">
-                    Latest News
+                    Berita Terkini
                 </a>
                 <a href="{{ route('register') }}" class="border-2 border-white text-white hover:bg-white hover:text-red-600 px-8 py-3 rounded-lg font-semibold text-lg transition-colors">
-                    Join Community
+                    Sertai Komuniti
                 </a>
             </div>
         </div>
@@ -44,7 +44,7 @@
                         @if($article->is_featured)
                             <div class="absolute top-4 right-4">
                                 <span class="bg-yellow-400 text-gray-900 px-3 py-1 rounded-full text-sm font-bold">
-                                    FEATURED
+                                    UTAMA
                                 </span>
                             </div>
                         @endif
@@ -69,10 +69,10 @@
                                     <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path>
                                     <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"></path>
                                 </svg>
-                                {{ number_format($article->views_count) }} views
+                                {{ number_format($article->views_count) }} tontonan
                             </div>
                             <a href="{{ route('blog.show', $article->slug) }}" class="text-red-600 hover:text-red-700 font-medium">
-                                Read More →
+                                Baca Lagi →
                             </a>
                         </div>
                     </div>
@@ -85,7 +85,7 @@
             <!-- Featured Video -->
             <div class="bg-white rounded-xl shadow-lg overflow-hidden">
                 <div class="p-4 border-b border-gray-200">
-                    <h3 class="text-lg font-bold text-gray-900">Featured Video</h3>
+                    <h3 class="text-lg font-bold text-gray-900">Video Utama</h3>
                 </div>
                 <div class="relative">
                     <img src="{{ $featuredVideo->thumbnail }}" alt="{{ $featuredVideo->title }}" class="w-full h-48 object-cover">
@@ -109,7 +109,7 @@
                     <p class="text-gray-600 text-sm mb-3">{{ Str::limit($featuredVideo->description, 100) }}</p>
                     <div class="flex items-center justify-between text-sm text-gray-500">
                         <span>{{ $featuredVideo->published_at->diffForHumans() }}</span>
-                        <span>{{ number_format($featuredVideo->views_count) }} views</span>
+                        <span>{{ number_format($featuredVideo->views_count) }} tontonan</span>
                     </div>
                 </div>
             </div>
@@ -117,7 +117,7 @@
             <!-- Recent Articles List -->
             <div class="bg-white rounded-xl shadow-lg overflow-hidden">
                 <div class="p-4 border-b border-gray-200">
-                    <h3 class="text-lg font-bold text-gray-900">Recent Articles</h3>
+                    <h3 class="text-lg font-bold text-gray-900">Artikel Terkini</h3>
                 </div>
                 <div class="divide-y divide-gray-200">
                     @foreach($featuredArticles->skip(1)->take(3) as $article)
@@ -142,7 +142,7 @@
                 </div>
                 <div class="p-4 bg-gray-50">
                     <a href="{{ route('blog.index') }}" class="text-red-600 hover:text-red-700 font-medium text-sm">
-                        View All Articles →
+                        Lihat Semua Artikel →
                     </a>
                 </div>
             </div>
@@ -153,11 +153,11 @@
     <section class="mb-16">
         <div class="flex items-center justify-between mb-8">
             <div>
-                <h2 class="text-3xl font-bold text-gray-900 mb-2">Trusted Services</h2>
-                <p class="text-gray-600">Connect with verified Arsenal fans offering quality services</p>
+                <h2 class="text-3xl font-bold text-gray-900 mb-2">Perkhidmatan Dipercayai</h2>
+                <p class="text-gray-600">Berhubung dengan peminat Arsenal yang disahkan menawarkan perkhidmatan berkualiti</p>
             </div>
             <a href="{{ route('services.index') }}" class="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
-                View All Services
+                Lihat Semua Perkhidmatan
             </a>
         </div>
         
@@ -179,7 +179,7 @@
                                             <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
                                                 <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
                                             </svg>
-                                            Verified
+                                            Disahkan
                                         </span>
                                     @endif
                                 </div>
@@ -219,11 +219,11 @@
     <section class="mb-16">
         <div class="flex items-center justify-between mb-8">
             <div>
-                <h2 class="text-3xl font-bold text-gray-900 mb-2">Popular Products</h2>
-                <p class="text-gray-600">Get the latest Arsenal merchandise and exclusive items</p>
+                <h2 class="text-3xl font-bold text-gray-900 mb-2">Produk Popular</h2>
+                <p class="text-gray-600">Dapatkan barangan Arsenal terkini dan item eksklusif</p>
             </div>
             <a href="{{ route('shop.index') }}" class="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
-                View All Products
+                Lihat Semua Produk
             </a>
         </div>
         
@@ -235,21 +235,21 @@
                         @if($product->sale_price)
                             <div class="absolute top-2 left-2">
                                 <span class="bg-red-600 text-white px-2 py-1 rounded-full text-xs font-bold">
-                                    SALE
+                                    JUALAN
                                 </span>
                             </div>
                         @endif
                         @if($product->is_featured)
                             <div class="absolute top-2 right-2">
                                 <span class="bg-yellow-400 text-gray-900 px-2 py-1 rounded-full text-xs font-bold">
-                                    FEATURED
+                                    UTAMA
                                 </span>
                             </div>
                         @endif
                         @if($product->stock_quantity <= 5)
                             <div class="absolute bottom-2 left-2">
                                 <span class="bg-orange-500 text-white px-2 py-1 rounded-full text-xs font-medium">
-                                    Only {{ $product->stock_quantity }} left
+                                    Hanya {{ $product->stock_quantity }} lagi
                                 </span>
                             </div>
                         @endif
@@ -277,7 +277,7 @@
                                 @endif
                             </div>
                             <a href="{{ route('shop.show', $product->slug) }}" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-                                View Item
+                                Lihat Item
                             </a>
                         </div>
                     </div>

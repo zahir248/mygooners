@@ -38,7 +38,7 @@
                             <svg class="flex-shrink-0 h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
                                 <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
                             </svg>
-                            <span class="sr-only">Home</span>
+                            <span class="sr-only">Utama</span>
                         </a>
                     </div>
                 </li>
@@ -47,7 +47,7 @@
                         <svg class="flex-shrink-0 h-5 w-5 text-gray-300" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
                         </svg>
-                        <a href="{{ route('blog.index') }}" class="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700">Blog</a>
+                        <a href="{{ route('blog.index') }}" class="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700">Berita</a>
                     </div>
                 </li>
                 <li>
@@ -87,7 +87,7 @@
                     </span>
                     @if($article->is_featured)
                         <span class="bg-yellow-400 text-gray-900 px-3 py-1 rounded-full text-sm font-bold ml-3">
-                            FEATURED
+                            UTAMA
                         </span>
                     @endif
                 </div>
@@ -104,9 +104,9 @@
                         <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path>
                         <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"></path>
                     </svg>
-                    {{ number_format($article->views_count) }} views
+                    {{ number_format($article->views_count) }} tontonan
                     <span class="mx-2">•</span>
-                    <span>{{ ceil(str_word_count(strip_tags($article->content)) / 200) }} min read</span>
+                    <span>{{ ceil(str_word_count(strip_tags($article->content)) / 200) }} min baca</span>
                 </div>
             </div>
         </div>
@@ -153,7 +153,7 @@
 
             <!-- Social Sharing -->
             <div class="mt-8 pt-8 border-t border-gray-200">
-                <h3 class="text-sm font-medium text-gray-900 mb-4">Share this article</h3>
+                <h3 class="text-sm font-medium text-gray-900 mb-4">Kongsi artikel ini</h3>
                 <div class="flex space-x-4">
                     <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(url()->current()) }}" 
                        target="_blank"
@@ -193,8 +193,8 @@
     <div class="bg-gray-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
             <div class="text-center mb-12">
-                <h2 class="text-3xl font-bold text-gray-900 mb-4">Related Articles</h2>
-                <p class="text-gray-600">More stories from the Arsenal community</p>
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">Artikel Berkaitan</h2>
+                <p class="text-gray-600">Lebih banyak cerita dari komuniti Arsenal</p>
             </div>
             
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -233,7 +233,7 @@
             <div class="text-center mt-12">
                 <a href="{{ route('blog.index') }}" 
                    class="bg-arsenal hover:bg-arsenal text-white px-8 py-3 rounded-lg font-medium transition-colors">
-                    View All Articles
+                    Lihat Semua Artikel
                 </a>
             </div>
         </div>

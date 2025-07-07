@@ -1,11 +1,11 @@
 @extends('layouts.admin')
 
-@section('title', 'Dashboard - MyGooners Admin')
+@section('title', 'Panel Kawalan - MyGooners Admin')
 
 @push('breadcrumbs')
     <span class="text-gray-500">Admin</span>
     <span class="text-gray-300">/</span>
-    <span class="text-gray-900 font-medium">Dashboard</span>
+    <span class="text-gray-900 font-medium">Panel Kawalan</span>
 @endpush
 
 @section('content')
@@ -13,8 +13,8 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <!-- Page header -->
         <div class="mb-8">
-            <h1 class="text-2xl font-bold text-gray-900">Dashboard</h1>
-            <p class="mt-2 text-sm text-gray-600">Welcome back! Here's what's happening with your MyGooners community.</p>
+            <h1 class="text-2xl font-bold text-gray-900">Panel Kawalan</h1>
+            <p class="mt-2 text-sm text-gray-600">Selamat kembali! Inilah yang berlaku dengan komuniti MyGooners anda.</p>
         </div>
 
         <!-- Stats Grid -->
@@ -32,7 +32,7 @@
                         </div>
                         <div class="ml-5 w-0 flex-1">
                             <dl>
-                                <dt class="text-sm font-medium text-gray-500 truncate">Total Users</dt>
+                                <dt class="text-sm font-medium text-gray-500 truncate">Jumlah Pengguna</dt>
                                 <dd class="text-lg font-medium text-gray-900">{{ $stats['total_users'] ?? 0 }}</dd>
                             </dl>
                         </div>
@@ -53,7 +53,7 @@
                         </div>
                         <div class="ml-5 w-0 flex-1">
                             <dl>
-                                <dt class="text-sm font-medium text-gray-500 truncate">Published Articles</dt>
+                                <dt class="text-sm font-medium text-gray-500 truncate">Artikel Diterbitkan</dt>
                                 <dd class="text-lg font-medium text-gray-900">{{ $stats['published_articles'] ?? 0 }}</dd>
                             </dl>
                         </div>
@@ -74,7 +74,7 @@
                         </div>
                         <div class="ml-5 w-0 flex-1">
                             <dl>
-                                <dt class="text-sm font-medium text-gray-500 truncate">Active Services</dt>
+                                <dt class="text-sm font-medium text-gray-500 truncate">Perkhidmatan Aktif</dt>
                                 <dd class="text-lg font-medium text-gray-900">{{ $stats['active_services'] ?? 0 }}</dd>
                             </dl>
                         </div>
@@ -95,7 +95,7 @@
                         </div>
                         <div class="ml-5 w-0 flex-1">
                             <dl>
-                                <dt class="text-sm font-medium text-gray-500 truncate">Total Products</dt>
+                                <dt class="text-sm font-medium text-gray-500 truncate">Jumlah Produk</dt>
                                 <dd class="text-lg font-medium text-gray-900">{{ $stats['total_products'] ?? 0 }}</dd>
                             </dl>
                         </div>
@@ -109,7 +109,7 @@
             <!-- Recent Activity -->
             <div class="bg-white shadow-sm rounded-lg">
                 <div class="px-6 py-4 border-b border-gray-200">
-                    <h3 class="text-lg font-medium text-gray-900">Recent Activity</h3>
+                    <h3 class="text-lg font-medium text-gray-900">Aktiviti Terkini</h3>
                 </div>
                 <div class="px-6 py-4">
                     <div class="flow-root">
@@ -130,10 +130,10 @@
                                             </div>
                                             <div class="min-w-0 flex-1 pt-1.5 flex justify-between space-x-4">
                                                 <div>
-                                                    <p class="text-sm text-gray-500">{{ $item['description'] ?? 'Activity item' }}</p>
+                                                    <p class="text-sm text-gray-500">{{ $item['description'] ?? 'Item aktiviti' }}</p>
                                                 </div>
                                                 <div class="text-right text-sm whitespace-nowrap text-gray-500">
-                                                    <time>{{ $item['time'] ?? 'Just now' }}</time>
+                                                    <time>{{ $item['time'] ?? 'Baru saja' }}</time>
                                                 </div>
                                             </div>
                                         </div>
@@ -144,7 +144,7 @@
                                     <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                     </svg>
-                                    <p class="mt-2">No recent activity</p>
+                                    <p class="mt-2">Tiada aktiviti terkini</p>
                                 </li>
                             @endforelse
                         </ul>
@@ -155,7 +155,7 @@
             <!-- Quick Actions -->
             <div class="bg-white shadow-sm rounded-lg">
                 <div class="px-6 py-4 border-b border-gray-200">
-                    <h3 class="text-lg font-medium text-gray-900">Quick Actions</h3>
+                    <h3 class="text-lg font-medium text-gray-900">Tindakan Pantas</h3>
                 </div>
                 <div class="px-6 py-4">
                     <div class="grid grid-cols-1 gap-4">
@@ -172,10 +172,10 @@
                             <div class="mt-8">
                                 <h3 class="text-lg font-medium text-gray-900">
                                     <span class="absolute inset-0" aria-hidden="true"></span>
-                                    Create Article
+                                    Cipta Artikel
                                 </h3>
                                 <p class="mt-2 text-sm text-gray-500">
-                                    Write and publish new Arsenal news and analysis
+                                    Tulis dan terbitkan berita Arsenal dan analisis baharu
                                 </p>
                             </div>
                         </a>
@@ -193,36 +193,10 @@
                             <div class="mt-8">
                                 <h3 class="text-lg font-medium text-gray-900">
                                     <span class="absolute inset-0" aria-hidden="true"></span>
-                                    Manage Users
+                                    Urus Pengguna
                                 </h3>
                                 <p class="mt-2 text-sm text-gray-500">
-                                    View and moderate community members
-                                </p>
-                            </div>
-                        </a>
-
-                        <!-- Review Services -->
-                        <a href="{{ route('admin.services.index') }}" 
-                           class="relative group bg-white p-6 focus-within:ring-2 focus-within:ring-inset focus-within:ring-yellow-500 rounded-lg border border-gray-200 hover:border-yellow-300 transition-colors">
-                            <div class="flex items-center">
-                                <span class="rounded-lg inline-flex p-3 bg-yellow-50 text-yellow-600 ring-4 ring-white">
-                                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                    </svg>
-                                </span>
-                                @if(isset($stats['pending_services']) && $stats['pending_services'] > 0)
-                                    <span class="ml-3 bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
-                                        {{ $stats['pending_services'] }} pending
-                                    </span>
-                                @endif
-                            </div>
-                            <div class="mt-8">
-                                <h3 class="text-lg font-medium text-gray-900">
-                                    <span class="absolute inset-0" aria-hidden="true"></span>
-                                    Review Services
-                                </h3>
-                                <p class="mt-2 text-sm text-gray-500">
-                                    Approve and manage marketplace services
+                                    Lihat dan moderasi ahli komuniti
                                 </p>
                             </div>
                         </a>

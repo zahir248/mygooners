@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Create Product')
+@section('title', 'Cipta Produk')
 
 @section('content')
     <div class="py-6">
@@ -12,7 +12,7 @@
                         <li>
                             <div>
                                 <a href="{{ route('admin.products.index') }}" class="text-gray-400 hover:text-gray-500">
-                                    Products
+                                    Produk
                                 </a>
                             </div>
                         </li>
@@ -21,13 +21,13 @@
                                 <svg class="flex-shrink-0 h-5 w-5 text-gray-300" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
                                     <path d="M5.555 17.776l8-16 .894.448-8 16-.894-.448z"></path>
                                 </svg>
-                                <span class="ml-4 text-sm font-medium text-gray-500">Create Product</span>
+                                <span class="ml-4 text-sm font-medium text-gray-500">Cipta Produk</span>
                             </div>
                         </li>
                     </ol>
                 </nav>
-                <h1 class="text-2xl font-bold text-gray-900 mt-2">Create New Product</h1>
-                <p class="mt-1 text-sm text-gray-600">Add a new Arsenal merchandise product to your store</p>
+                <h1 class="text-2xl font-bold text-gray-900 mt-2">Cipta Produk Baru</h1>
+                <p class="mt-1 text-sm text-gray-600">Tambah produk barangan Arsenal baru ke kedai anda</p>
             </div>
 
             <!-- Form -->
@@ -36,14 +36,14 @@
                 
                 <div class="bg-white shadow-sm rounded-lg overflow-hidden">
                     <div class="px-6 py-4 border-b border-gray-200">
-                        <h3 class="text-lg font-medium text-gray-900">Product Information</h3>
+                        <h3 class="text-lg font-medium text-gray-900">Maklumat Produk</h3>
                     </div>
                     
                     <div class="p-6 space-y-6">
                         <!-- Title -->
                         <div>
                             <label for="title" class="block text-sm font-medium text-gray-700 mb-2">
-                                Product Title *
+                                Tajuk Produk *
                             </label>
                             <input type="text" 
                                    id="title" 
@@ -52,7 +52,7 @@
                                    required
                                    maxlength="255"
                                    class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500"
-                                   placeholder="Enter product title">
+                                   placeholder="Masukkan tajuk produk">
                             @error('title')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
@@ -61,14 +61,14 @@
                         <!-- Description -->
                         <div>
                             <label for="description" class="block text-sm font-medium text-gray-700 mb-2">
-                                Product Description *
+                                Penerangan Produk *
                             </label>
                             <textarea id="description" 
                                       name="description" 
                                       rows="4" 
                                       required
                                       class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500"
-                                      placeholder="Enter detailed product description">{{ old('description') }}</textarea>
+                                      placeholder="Masukkan penerangan produk yang terperinci">{{ old('description') }}</textarea>
                             @error('description')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
@@ -77,13 +77,13 @@
                         <!-- Category -->
                         <div>
                             <label for="category" class="block text-sm font-medium text-gray-700 mb-2">
-                                Category *
+                                Kategori *
                             </label>
                             <select id="category" 
                                     name="category" 
                                     required
                                     class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500">
-                                <option value="">Select a category</option>
+                                <option value="">Pilih kategori</option>
                                 @foreach($categories as $category)
                                     <option value="{{ $category }}" {{ old('category') == $category ? 'selected' : '' }}>
                                         {{ $category }}
@@ -99,7 +99,7 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
                                 <label for="price" class="block text-sm font-medium text-gray-700 mb-2">
-                                    Regular Price (£) *
+                                    Harga Biasa (£) *
                                 </label>
                                 <input type="number" 
                                        id="price" 
@@ -116,8 +116,8 @@
                             </div>
                             <div>
                                 <label for="sale_price" class="block text-sm font-medium text-gray-700 mb-2">
-                                    Sale Price (£)
-                                    <span class="text-gray-500 text-xs">(optional)</span>
+                                    Harga Jualan (£)
+                                    <span class="text-gray-500 text-xs">(pilihan)</span>
                                 </label>
                                 <input type="number" 
                                        id="sale_price" 
@@ -136,7 +136,7 @@
                         <!-- Stock Quantity -->
                         <div>
                             <label for="stock_quantity" class="block text-sm font-medium text-gray-700 mb-2">
-                                Stock Quantity *
+                                Kuantiti Stok *
                             </label>
                             <input type="number" 
                                    id="stock_quantity" 
@@ -154,8 +154,8 @@
                         <!-- Image URL -->
                         <div>
                             <label for="image_url" class="block text-sm font-medium text-gray-700 mb-2">
-                                Product Image URL
-                                <span class="text-gray-500 text-xs">(optional)</span>
+                                URL Imej Produk
+                                <span class="text-gray-500 text-xs">(pilihan)</span>
                             </label>
                             <input type="url" 
                                    id="image_url" 
@@ -172,14 +172,14 @@
                         <div>
                             <label for="tags" class="block text-sm font-medium text-gray-700 mb-2">
                                 Tags
-                                <span class="text-gray-500 text-xs">(comma-separated)</span>
+                                <span class="text-gray-500 text-xs">(dipisahkan koma)</span>
                             </label>
                             <input type="text" 
                                    id="tags" 
                                    name="tags" 
                                    value="{{ old('tags') }}"
                                    class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500"
-                                   placeholder="arsenal, jersey, official, 2024">
+                                   placeholder="arsenal, jersi, rasmi, 2024">
                             @error('tags')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
@@ -190,7 +190,7 @@
                 <!-- Product Settings -->
                 <div class="bg-white shadow-sm rounded-lg overflow-hidden">
                     <div class="px-6 py-4 border-b border-gray-200">
-                        <h3 class="text-lg font-medium text-gray-900">Product Settings</h3>
+                        <h3 class="text-lg font-medium text-gray-900">Tetapan Produk</h3>
                     </div>
                     
                     <div class="p-6 space-y-6">
@@ -203,9 +203,9 @@
                                     name="status" 
                                     required
                                     class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500">
-                                <option value="draft" {{ old('status') == 'draft' ? 'selected' : '' }}>Draft</option>
-                                <option value="active" {{ old('status', 'active') == 'active' ? 'selected' : '' }}>Active</option>
-                                <option value="inactive" {{ old('status') == 'inactive' ? 'selected' : '' }}>Inactive</option>
+                                <option value="draft" {{ old('status') == 'draft' ? 'selected' : '' }}>Draf</option>
+                                <option value="active" {{ old('status', 'active') == 'active' ? 'selected' : '' }}>Aktif</option>
+                                <option value="inactive" {{ old('status') == 'inactive' ? 'selected' : '' }}>Tidak Aktif</option>
                             </select>
                             @error('status')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -221,8 +221,8 @@
                                    {{ old('is_featured') ? 'checked' : '' }}
                                    class="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300 rounded">
                             <label for="is_featured" class="ml-2 block text-sm text-gray-900">
-                                Featured Product
-                                <span class="text-gray-500 text-xs block">Feature this product on the homepage</span>
+                                Produk Utama
+                                <span class="text-gray-500 text-xs block">Paparkan produk ini di halaman utama</span>
                             </label>
                         </div>
                     </div>
@@ -231,16 +231,16 @@
                 <!-- SEO Settings -->
                 <div class="bg-white shadow-sm rounded-lg overflow-hidden">
                     <div class="px-6 py-4 border-b border-gray-200">
-                        <h3 class="text-lg font-medium text-gray-900">SEO Settings</h3>
-                        <p class="text-sm text-gray-600">Optional settings to improve search engine visibility</p>
+                        <h3 class="text-lg font-medium text-gray-900">Tetapan SEO</h3>
+                        <p class="text-sm text-gray-600">Tetapan pilihan untuk meningkatkan keterlihatan enjin carian</p>
                     </div>
                     
                     <div class="p-6 space-y-6">
                         <!-- Meta Title -->
                         <div>
                             <label for="meta_title" class="block text-sm font-medium text-gray-700 mb-2">
-                                Meta Title
-                                <span id="meta_title_count" class="text-gray-500 text-xs">(0/60 characters)</span>
+                                Tajuk Meta
+                                <span id="meta_title_count" class="text-gray-500 text-xs">(0/60 aksara)</span>
                             </label>
                             <input type="text" 
                                    id="meta_title" 
@@ -248,7 +248,7 @@
                                    value="{{ old('meta_title') }}"
                                    maxlength="60"
                                    class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500"
-                                   placeholder="SEO-friendly title for search engines">
+                                   placeholder="Tajuk mesra SEO untuk enjin carian">
                             @error('meta_title')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
@@ -257,15 +257,15 @@
                         <!-- Meta Description -->
                         <div>
                             <label for="meta_description" class="block text-sm font-medium text-gray-700 mb-2">
-                                Meta Description
-                                <span id="meta_description_count" class="text-gray-500 text-xs">(0/160 characters)</span>
+                                Penerangan Meta
+                                <span id="meta_description_count" class="text-gray-500 text-xs">(0/160 aksara)</span>
                             </label>
                             <textarea id="meta_description" 
                                       name="meta_description" 
                                       rows="3" 
                                       maxlength="160"
                                       class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500"
-                                      placeholder="Brief description for search engine results">{{ old('meta_description') }}</textarea>
+                                      placeholder="Penerangan ringkas untuk hasil enjin carian">{{ old('meta_description') }}</textarea>
                             @error('meta_description')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
@@ -277,20 +277,20 @@
                 <div class="flex items-center justify-between pt-6">
                     <a href="{{ route('admin.products.index') }}" 
                        class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-medium py-2 px-4 rounded-md transition-colors">
-                        Cancel
+                        Batal
                     </a>
                     <div class="flex space-x-3">
                         <button type="submit" 
                                 name="action" 
                                 value="draft"
                                 class="bg-gray-600 hover:bg-gray-700 text-white font-medium py-2 px-4 rounded-md transition-colors">
-                            Save as Draft
+                            Simpan sebagai Draf
                         </button>
                         <button type="submit" 
                                 name="action" 
                                 value="publish"
                                 class="bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-6 rounded-md transition-colors">
-                            Create Product
+                            Cipta Produk
                         </button>
                     </div>
                 </div>
