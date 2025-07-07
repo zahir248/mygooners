@@ -188,8 +188,6 @@
     </article>
 </div>
 
-@endif
-
 <!-- Related Articles -->
 @if($relatedArticles->count() > 0)
     <div class="bg-gray-50">
