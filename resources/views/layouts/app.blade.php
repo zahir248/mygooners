@@ -359,5 +359,230 @@
     <!-- Scripts -->
     <script src="//unpkg.com/alpinejs" defer></script>
     @stack('scripts')
+
+    <!-- FAQ Chatbot -->
+    <div x-data="faqChatbot()" class="fixed bottom-6 right-6 z-50">
+        <!-- Floating Button -->
+        <button @click="toggleChat()" 
+                class="bg-red-600 hover:bg-red-700 text-white rounded-full p-4 shadow-lg transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+                :class="{ 'rotate-45': isOpen }">
+            <svg x-show="!isOpen" class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.477 8-10 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.477-8 10-8s10 3.582 10 8z"></path>
+            </svg>
+            <svg x-show="isOpen" class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+        </button>
+
+        <!-- Chat Interface -->
+        <div x-show="isOpen" 
+             x-transition:enter="transition ease-out duration-300"
+             x-transition:enter-start="opacity-0 transform scale-95"
+             x-transition:enter-end="opacity-100 transform scale-100"
+             x-transition:leave="transition ease-in duration-200"
+             x-transition:leave-start="opacity-100 transform scale-100"
+             x-transition:leave-end="opacity-0 transform scale-95"
+             class="absolute bottom-20 right-0 w-80 bg-white rounded-lg shadow-xl border border-gray-200 overflow-hidden">
+            
+            <!-- Chat Header -->
+            <div class="bg-red-600 text-white p-4">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-2">
+                        <div class="w-8 h-8 bg-red-500 rounded-full flex items-center justify-center">
+                            <span class="text-sm font-bold">MG</span>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold">MyGooners Assistant</h3>
+                            <p class="text-xs text-red-100">Tanya saya apa-apa!</p>
+                        </div>
+                    </div>
+                    <button @click="toggleChat()" class="text-red-100 hover:text-white">
+                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Chat Messages -->
+            <div class="h-64 overflow-y-auto p-4 space-y-3" x-ref="messageContainer">
+                <!-- Welcome Message -->
+                <div class="flex items-start space-x-2">
+                    <div class="w-6 h-6 bg-red-600 rounded-full flex items-center justify-center flex-shrink-0">
+                        <span class="text-xs text-white font-bold">MG</span>
+                    </div>
+                    <div class="bg-gray-100 rounded-lg p-3 max-w-xs">
+                        <p class="text-sm">Halo! Saya adalah pembantu MyGooners. Saya boleh membantu anda dengan soalan tentang Arsenal, laman web ini, atau apa-apa sahaja! Apa yang anda ingin tahu?</p>
+                    </div>
+                </div>
+
+                <!-- Dynamic Messages -->
+                <template x-for="message in messages" :key="message.id">
+                    <div class="flex items-start space-x-2" :class="message.type === 'user' ? 'justify-end' : ''">
+                        <div x-show="message.type === 'bot'" class="w-6 h-6 bg-red-600 rounded-full flex items-center justify-center flex-shrink-0">
+                            <span class="text-xs text-white font-bold">MG</span>
+                        </div>
+                        <div class="rounded-lg p-3 max-w-xs"
+                             :class="message.type === 'user' ? 'bg-red-600 text-white' : 'bg-gray-100'">
+                            <p class="text-sm" x-text="message.content"></p>
+                        </div>
+                    </div>
+                </template>
+
+                <!-- Typing Indicator -->
+                <div x-show="isTyping" class="flex items-start space-x-2">
+                    <div class="w-6 h-6 bg-red-600 rounded-full flex items-center justify-center flex-shrink-0">
+                        <span class="text-xs text-white font-bold">MG</span>
+                    </div>
+                    <div class="bg-gray-100 rounded-lg p-3">
+                        <div class="flex space-x-1">
+                            <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+                            <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 0.1s"></div>
+                            <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 0.2s"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="p-3 border-t border-gray-200">
+                <div class="text-xs text-gray-500 mb-2">Soalan Popular:</div>
+                <div class="flex flex-wrap gap-2">
+                    <button @click="sendQuickMessage('Bagaimana nak join komuniti?')" 
+                            class="px-3 py-1 bg-gray-100 hover:bg-gray-200 text-xs rounded-full transition-colors">
+                        Join komuniti
+                    </button>
+                    <button @click="sendQuickMessage('Bagaimana nak beli barang?')" 
+                            class="px-3 py-1 bg-gray-100 hover:bg-gray-200 text-xs rounded-full transition-colors">
+                        Beli barang
+                    </button>
+                    <button @click="sendQuickMessage('Tentang Arsenal')" 
+                            class="px-3 py-1 bg-gray-100 hover:bg-gray-200 text-xs rounded-full transition-colors">
+                        Tentang Arsenal
+                    </button>
+                </div>
+            </div>
+
+            <!-- Chat Input -->
+            <div class="p-4 border-t border-gray-200">
+                <div class="flex space-x-2">
+                    <input type="text" 
+                           x-model="currentMessage"
+                           @keydown.enter="sendMessage()"
+                           placeholder="Taip mesej anda..."
+                           class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent text-sm">
+                    <button @click="sendMessage()" 
+                            :disabled="!currentMessage.trim()"
+                            class="bg-red-600 hover:bg-red-700 disabled:bg-gray-400 text-white px-4 py-2 rounded-lg transition-colors">
+                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FAQ Chatbot Script -->
+    <script>
+        function faqChatbot() {
+            return {
+                isOpen: false,
+                messages: [],
+                currentMessage: '',
+                isTyping: false,
+                
+                faqData: {
+                    'join komuniti': 'Untuk menyertai komuniti MyGooners, klik butang "Sertai Kami" di bahagian atas laman web dan daftar akaun baru. Selepas pendaftaran, anda boleh mengambil bahagian dalam perbincangan dan mengakses kandungan eksklusif!',
+                    'beli barang': 'Untuk membeli barang, lawati bahagian "Kedai" di menu utama. Anda akan menemui pelbagai barangan Arsenal dan produk komuniti. Pastikan anda log masuk untuk proses pembelian yang lancar.',
+                    'tentang arsenal': 'Arsenal FC adalah kelab bola sepak terkenal dari London yang bermain di Premier League. Mereka dikenali sebagai "The Gunners" dan mempunyai sejarah yang kaya dengan 13 kejuaraan liga dan 14 Piala FA.',
+                    'perkhidmatan': 'MyGooners menawarkan pelbagai perkhidmatan termasuk analisis perlawanan, podcast eksklusif, dan platform untuk peminat berkongsi pandangan. Lawati bahagian "Perkhidmatan" untuk maklumat lanjut.',
+                    'berita': 'Dapatkan berita Arsenal terkini di bahagian "Berita" laman web kami. Kami menyediakan laporan perlawanan, berita pemindahan pemain, dan analisis mendalam tentang prestasi pasukan.',
+                    'video': 'Tonton video dan podcast eksklusif di bahagian "Video". Kami ada kandungan seperti ulasan perlawanan, temubual pemain, dan analisis taktik yang menarik.',
+                    'help': 'Saya boleh membantu dengan soalan tentang:\n• Cara menyertai komuniti\n• Membeli barangan\n• Maklumat tentang Arsenal\n• Navigasi laman web\n• Perkhidmatan yang tersedia\n\nApa yang anda ingin tahu?'
+                },
+                
+                toggleChat() {
+                    this.isOpen = !this.isOpen;
+                    if (this.isOpen) {
+                        this.$nextTick(() => {
+                            this.scrollToBottom();
+                        });
+                    }
+                },
+                
+                sendMessage() {
+                    if (!this.currentMessage.trim()) return;
+                    
+                    // Add user message
+                    this.messages.push({
+                        id: Date.now(),
+                        type: 'user',
+                        content: this.currentMessage
+                    });
+                    
+                    const userMessage = this.currentMessage.toLowerCase();
+                    this.currentMessage = '';
+                    
+                    // Show typing indicator
+                    this.isTyping = true;
+                    this.scrollToBottom();
+                    
+                    // Simulate bot response delay
+                    setTimeout(() => {
+                        this.isTyping = false;
+                        
+                        // Find appropriate response
+                        let response = this.getBotResponse(userMessage);
+                        
+                        this.messages.push({
+                            id: Date.now(),
+                            type: 'bot',
+                            content: response
+                        });
+                        
+                        this.scrollToBottom();
+                    }, 1000);
+                },
+                
+                sendQuickMessage(message) {
+                    this.currentMessage = message;
+                    this.sendMessage();
+                },
+                
+                getBotResponse(message) {
+                    // Check for keywords in the message
+                    for (let keyword in this.faqData) {
+                        if (message.includes(keyword)) {
+                            return this.faqData[keyword];
+                        }
+                    }
+                    
+                    // Default responses for common patterns
+                    if (message.includes('halo') || message.includes('hello') || message.includes('hi')) {
+                        return 'Halo! Selamat datang ke MyGooners. Bagaimana saya boleh membantu anda hari ini?';
+                    }
+                    
+                    if (message.includes('terima kasih') || message.includes('thank you')) {
+                        return 'Sama-sama! Saya sentiasa di sini untuk membantu. Ada lagi yang anda ingin tahu?';
+                    }
+                    
+                    if (message.includes('bye') || message.includes('selamat tinggal')) {
+                        return 'Selamat tinggal! Jangan lupa untuk kembali lagi ke MyGooners. COYG! 🔴';
+                    }
+                    
+                    // Default response
+                    return 'Maaf, saya tidak faham soalan anda. Boleh cuba tanya dengan cara yang lain? Atau pilih dari soalan popular di bawah. Saya boleh membantu dengan maklumat tentang Arsenal, cara guna laman web ini, atau soalan am lain!';
+                },
+                
+                scrollToBottom() {
+                    this.$nextTick(() => {
+                        const container = this.$refs.messageContainer;
+                        container.scrollTop = container.scrollHeight;
+                    });
+                }
+            }
+        }
+    </script>
 </body>
 </html> 
