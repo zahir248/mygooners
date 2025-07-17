@@ -49,9 +49,16 @@
             <!-- Service Images -->
             <div class="mb-8">
                 <div class="relative h-96 rounded-xl overflow-hidden bg-gray-200 mb-4">
-                    <img src="{{ $service->images[0] }}" 
-                         alt="{{ $service->title }}" 
-                         class="w-full h-full object-cover">
+                    @if($service->images && is_array($service->images) && count($service->images) > 0)
+                        <img src={{ route('service.image', ['filename' => basename($service->images[0])]) }}" 
+                             alt="{{ $service->title }}" 
+                             class="w-full h-full object-cover">
+                    @else
+                        <div class="w-full h-full bg-gray-200 flex items-center justify-center">
+                            <svg class="w-16 h-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586.58622 0 012.8280L166m-2-2l1.586.58622 0 012.828 0L2014m-6-6h0.01M6 20h12a2 20 002-2V6a2 20 00-2-2H6a2 2 00-22220                   </svg>
+                        </div>
+                    @endif
                     @if($service->is_verified)
                         <div class="absolute top-4 right-4">
                             <span class="bg-green-100 text-green-600 px-3 py-2 rounded-full text-sm font-bold flex items-center">
@@ -66,9 +73,9 @@
                 
                 @if(count($service->images) > 1)
                     <div class="grid grid-cols-4 gap-2">
-                        @foreach(array_slice($service->images, 1, 4) as $image)
+                        @foreach(array_slice($service->images, 1) as $image)
                             <div class="aspect-square rounded-lg overflow-hidden bg-gray-200">
-                                <img src="{{ $image }}" 
+                                <img src={{ route('service.image', ['filename' => basename($image)]) }}" 
                                      alt="{{ $service->title }}" 
                                      class="w-full h-full object-cover hover:scale-105 transition-transform cursor-pointer">
                             </div>
@@ -189,7 +196,7 @@
             <!-- Contact Card -->
             <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
                 <div class="text-center mb-6">
-                    <div class="text-3xl font-bold text-red-600 mb-2">{{ $service->pricing }}</div>
+                    <div class="text-3xl font-bold text-red-600 mb-2">RM {{ $service->pricing }}</div>
                     <p class="text-gray-600">Harga permulaan</p>
                 </div>
 
@@ -282,9 +289,16 @@
             @foreach($relatedServices as $relatedService)
                 <div class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow overflow-hidden">
                     <div class="relative h-48">
-                        <img src="{{ $relatedService->images[0] }}" 
-                             alt="{{ $relatedService->title }}" 
-                             class="w-full h-full object-cover">
+                        @if($relatedService->images && is_array($relatedService->images) && count($relatedService->images) > 0)
+                            <img src={{ route('service.image', ['filename' => basename($relatedService->images[0])]) }}" 
+                                 alt="{{ $relatedService->title }}" 
+                                 class="w-full h-full object-cover">
+                        @else
+                            <div class="w-full h-full bg-gray-200 flex items-center justify-center">
+                                <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586.58622 0 012.8280L166m-2-2l1.586.58622 0 012.828 0L2014m-6-6h01M6 20h12a220 002-2V6a22002                   </svg>
+                            </div>
+                        @endif
                         <div class="absolute top-4 left-4">
                             <span class="bg-red-600 text-white px-3 py-1 rounded-full text-sm font-medium">
                                 {{ $relatedService->category }}
@@ -306,7 +320,7 @@
                         </h3>
                         <p class="text-gray-600 mb-4">{{ Str::limit($relatedService->description, 100) }}</p>
                         <div class="flex items-center justify-between">
-                            <div class="text-lg font-bold text-red-600">{{ $relatedService->pricing }}</div>
+                            <div class="text-lg font-bold text-red-600">RM {{ $relatedService->pricing }}</div>
                             <div class="flex items-center text-sm">
                                 <svg class="w-4 h-4 mr-1 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
                                     <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>

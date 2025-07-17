@@ -211,8 +211,14 @@
                                     </span>
                                 @endif
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                {{ number_format($video->views_count) }}
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                <div class="flex items-center">
+                                    <svg class="w-4 h-4 mr-1 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path>
+                                        <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    {{ number_format($video->views_count) }}
+                                </div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                 {{ $video->created_at->format('d/m/Y H:i') }}
@@ -248,8 +254,33 @@
         </div>
 
         <!-- Pagination -->
-        <div class="px-6 py-4 border-t border-gray-200">
-            {{ $videos->appends(request()->query())->links() }}
+        <div class="bg-white px-6 py-3 border-t border-gray-200">
+            <div class="flex items-center justify-between">
+                <div class="text-sm text-gray-700">
+                    Showing <span class="font-medium">{{ $videos->firstItem() ?? 0 }}</span> to <span class="font-medium">{{ $videos->lastItem() ?? 0 }}</span> of <span class="font-medium">{{ $videos->total() }}</span> results
+                </div>
+                <div class="flex space-x-2">
+                    @if($videos->onFirstPage())
+                        <button class="px-3 py-1 border border-gray-300 rounded-md text-sm text-gray-500 bg-gray-50 cursor-not-allowed">
+                            Previous
+                        </button>
+                    @else
+                        <a href="{{ $videos->previousPageUrl() }}" class="px-3 py-1 border border-gray-300 rounded-md text-sm text-gray-700 bg-white hover:bg-gray-50">
+                            Previous
+                        </a>
+                    @endif
+                    
+                    @if($videos->hasMorePages())
+                        <a href="{{ $videos->nextPageUrl() }}" class="px-3 py-1 border border-gray-300 rounded-md text-sm text-gray-700 bg-white hover:bg-gray-50">
+                            Next
+                        </a>
+                    @else
+                        <button class="px-3 py-1 border border-gray-300 rounded-md text-sm text-gray-500 bg-gray-50 cursor-not-allowed">
+                            Next
+                        </button>
+                    @endif
+                </div>
+            </div>
         </div>
     @else
         <div class="text-center py-12">

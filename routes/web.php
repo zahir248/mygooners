@@ -90,9 +90,16 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     // Services Management
     Route::prefix('services')->group(function () {
         Route::get('/', [AdminServiceController::class, 'index'])->name('admin.services.index');
+        Route::get('/pending', [AdminServiceController::class, 'pending'])->name('admin.services.pending');
+        Route::get('/create', [AdminServiceController::class, 'create'])->name('admin.services.create');
+        Route::post('/', [AdminServiceController::class, 'store'])->name('admin.services.store');
+        Route::get('/{id}/edit', [AdminServiceController::class, 'edit'])->name('admin.services.edit');
+        Route::put('/{id}', [AdminServiceController::class, 'update'])->name('admin.services.update');
         Route::get('/{id}', [AdminServiceController::class, 'show'])->name('admin.services.show');
         Route::post('/{id}/approve', [AdminServiceController::class, 'approve'])->name('admin.services.approve');
         Route::post('/{id}/reject', [AdminServiceController::class, 'reject'])->name('admin.services.reject');
+        Route::post('/{id}/toggle-status', [AdminServiceController::class, 'toggleStatus'])->name('admin.services.toggle-status');
+        Route::patch('/{id}/update-status', [AdminServiceController::class, 'updateStatus'])->name('admin.services.update-status');
         Route::delete('/{id}', [AdminServiceController::class, 'destroy'])->name('admin.services.destroy');
     });
     
@@ -147,3 +154,12 @@ Route::get('/video-thumbnail/{filename}', function ($filename) {
     }
     return response()->file($path);
 })->where('filename', '.*')->name('video.thumbnail');
+
+// Serve service images directly from storage
+Route::get('/service-image/{filename}', function ($filename) {
+    $path = storage_path('app/public/services/' . $filename);
+    if (!file_exists($path)) {
+        abort(404);
+    }
+    return response()->file($path);
+})->name('service.image');

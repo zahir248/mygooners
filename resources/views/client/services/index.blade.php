@@ -143,9 +143,16 @@
                 <div class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group">
                     <!-- Service Image -->
                     <div class="relative h-48 overflow-hidden">
-                        <img src="{{ $service->images[0] }}" 
-                             alt="{{ $service->title }}" 
-                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                        @if($service->images && is_array($service->images) && count($service->images) > 0)
+                            <img src="{{ route('service.image', ['filename' => basename($service->images[0])]) }}" 
+                                 alt="{{ $service->title }}" 
+                                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                        @else
+                            <div class="w-full h-full bg-gray-200 flex items-center justify-center">
+                                <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586.58622 0 012.8280L166m-2-2l1.586.58622 0 012.828 0L2014m-6-6h0.01M6 20h12a2 20 002-2V6a2 20 00-2-2H6a2 2 00-22220                   </svg>
+                            </div>
+                        @endif
                         <div class="absolute top-4 left-4">
                             <span class="bg-red-600 text-white px-3 py-1 rounded-full text-sm font-medium">
                                 {{ $service->category }}
@@ -172,7 +179,7 @@
                                 </a>
                             </h3>
                             <div class="text-right">
-                                <div class="text-lg font-bold text-red-600">{{ $service->pricing }}</div>
+                                <div class="text-lg font-bold text-red-600">RM {{ $service->pricing }}</div>
                             </div>
                         </div>
 
