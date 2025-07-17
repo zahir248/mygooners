@@ -8,6 +8,11 @@
     <title>@yield('title', 'Panel Admin - MyGooners')</title>
     <meta name="description" content="Panel Admin MyGooners - Urus kandungan komuniti peminat Arsenal, pengguna, dan perkhidmatan.">
 
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
+    <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
+    <link rel="apple-touch-icon" href="{{ asset('favicon.png') }}">
+
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=inter:300,400,500,600,700" rel="stylesheet" />
