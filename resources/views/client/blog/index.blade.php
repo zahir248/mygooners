@@ -66,9 +66,17 @@
                 <div class="bg-white rounded-xl shadow-lg overflow-hidden">
                     <div class="md:flex">
                         <div class="md:w-1/2">
-                            <img src="{{ $featuredArticle->cover_image }}" 
+                                                    @if($featuredArticle->cover_image)
+                            <img src="{{ route('article.image', basename($featuredArticle->cover_image)) }}" 
                                  alt="{{ $featuredArticle->title }}" 
                                  class="w-full h-64 md:h-full object-cover">
+                        @else
+                            <div class="w-full h-64 md:h-full bg-gray-200 flex items-center justify-center">
+                                <svg class="w-16 h-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                </svg>
+                            </div>
+                        @endif
                         </div>
                         <div class="md:w-1/2 p-8">
                             <div class="flex items-center mb-4">
@@ -117,9 +125,17 @@
             @foreach($articles->skip($articles->first() && $articles->first()->is_featured && !$search && !$category ? 1 : 0) as $article)
                 <article class="bg-white rounded-xl shadow-lg overflow-hidden group hover:shadow-xl transition-shadow">
                     <div class="relative">
-                        <img src="{{ $article->cover_image }}" 
+                        @if($article->cover_image)
+                            <img src="{{ route('article.image', basename($article->cover_image)) }}" 
                              alt="{{ $article->title }}" 
                              class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300">
+                        @else
+                            <div class="w-full h-48 bg-gray-200 flex items-center justify-center">
+                                <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                </svg>
+                            </div>
+                        @endif
                         <div class="absolute top-4 left-4">
                             <span class="bg-red-600 text-white px-3 py-1 rounded-full text-sm font-medium">
                                 {{ $article->category }}
@@ -176,12 +192,12 @@
             @endforeach
         </div>
 
-        <!-- Load More / Pagination -->
-        <div class="mt-12 text-center">
-            <button class="bg-arsenal hover:bg-arsenal text-white px-8 py-3 rounded-lg font-medium transition-colors">
-                Muat Lebih Banyak Artikel
-            </button>
+        <!-- Pagination -->
+        @if($articles->hasPages())
+            <div class="mt-12">
+                {{ $articles->appends(request()->query())->links() }}
         </div>
+        @endif
     @else
         <!-- No Articles Found -->
         <div class="text-center py-16">

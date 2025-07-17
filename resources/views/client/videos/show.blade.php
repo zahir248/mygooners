@@ -9,7 +9,7 @@
     <meta property="og:url" content="{{ url()->current() }}">
     <meta property="og:title" content="{{ $video->title }}">
     <meta property="og:description" content="{{ $video->description }}">
-    <meta property="og:image" content="{{ $video->thumbnail }}">
+    <meta property="og:image" content="{{ $video->thumbnail ? route('video.thumbnail', $video->thumbnail) : 'https://img.youtube.com/vi/' . $video->youtube_video_id . '/maxresdefault.jpg' }}">
     <meta property="og:video" content="https://www.youtube.com/watch?v={{ $video->youtube_video_id }}">
 
     <!-- Twitter -->
@@ -17,7 +17,7 @@
     <meta property="twitter:url" content="{{ url()->current() }}">
     <meta property="twitter:title" content="{{ $video->title }}">
     <meta property="twitter:description" content="{{ $video->description }}">
-    <meta property="twitter:image" content="{{ $video->thumbnail }}">
+    <meta property="twitter:image" content="{{ $video->thumbnail ? route('video.thumbnail', $video->thumbnail) : 'https://img.youtube.com/vi/' . $video->youtube_video_id . '/maxresdefault.jpg' }}">
     <meta property="twitter:player" content="https://www.youtube.com/embed/{{ $video->youtube_video_id }}">
     <meta property="twitter:player:width" content="560">
     <meta property="twitter:player:height" content="315">
@@ -209,9 +209,17 @@
                                 <a href="{{ route('videos.show', $relatedVideo->slug) }}" class="block">
                                     <div class="flex space-x-3">
                                         <div class="relative flex-shrink-0">
-                                            <img src="{{ $relatedVideo->thumbnail }}" 
-                                                 alt="{{ $relatedVideo->title }}" 
-                                                 class="w-20 h-14 object-cover rounded">
+                                                                        @if($relatedVideo->thumbnail)
+                                <img src="{{ route('video.thumbnail', $relatedVideo->thumbnail) }}" 
+                                     alt="{{ $relatedVideo->title }}" 
+                                     class="w-20 h-14 object-cover rounded"
+                                     onerror="this.onerror=null; this.src='https://img.youtube.com/vi/{{ $relatedVideo->youtube_video_id }}/maxresdefault.jpg';">
+                            @else
+                                <img src="https://img.youtube.com/vi/{{ $relatedVideo->youtube_video_id }}/maxresdefault.jpg" 
+                                     alt="{{ $relatedVideo->title }}" 
+                                     class="w-20 h-14 object-cover rounded"
+                                     onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'w-20 h-14 bg-gray-200 flex items-center justify-center rounded\'><svg class=\'h-6 w-6 text-gray-400\' fill=\'none\' stroke=\'currentColor\' viewBox=\'0 0 24 24\'><path stroke-linecap=\'round\' stroke-linejoin=\round\' stroke-width=\'2\' d=\'M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z\'></path></svg></div>';">
+                            @endif
                                             <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center rounded">
                                                 <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
                                                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path>

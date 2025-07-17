@@ -129,9 +129,17 @@
             @foreach($videos->skip($videos->first() && $videos->first()->is_featured && !$search && !$category ? 1 : 0) as $video)
                 <div class="bg-white rounded-xl shadow-lg overflow-hidden group hover:shadow-xl transition-shadow">
                     <div class="relative">
-                        <img src="{{ $video->thumbnail }}" 
-                             alt="{{ $video->title }}" 
-                             class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300">
+                        @if($video->thumbnail)
+                            <img src="{{ route('video.thumbnail', $video->thumbnail) }}" 
+                                 alt="{{ $video->title }}" 
+                                 class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                                 onerror="this.onerror=null; this.src='https://img.youtube.com/vi/{{ $video->youtube_video_id }}/maxresdefault.jpg';">
+                        @else
+                            <img src="https://img.youtube.com/vi/{{ $video->youtube_video_id }}/maxresdefault.jpg" 
+                                 alt="{{ $video->title }}" 
+                                 class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                                 onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'w-full h-48 bg-gray-200 flex items-center justify-center group-hover:scale-105 transition-transform duration-300\'><svg class=\'h-12 w-12 text-gray-400\' fill=\'none\' stroke=\'currentColor\' viewBox=\'0 0 24 24\'><path stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'2\' d=\'M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z\'></path></svg></div>';">
+                        @endif
                         
                         <!-- Play Button Overlay -->
                         <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center group-hover:bg-opacity-60 transition-all">
@@ -200,12 +208,12 @@
             @endforeach
         </div>
 
-        <!-- Load More / Pagination -->
-        <div class="mt-12 text-center">
-            <button class="bg-arsenal hover:bg-arsenal text-white px-8 py-3 rounded-lg font-medium transition-colors">
-                Muat Lebih Banyak Video
-            </button>
-        </div>
+        <!-- Pagination -->
+        @if($videos->hasPages())
+            <div class="mt-12">
+                {{ $videos->appends(request()->query())->links() }}
+            </div>
+        @endif
     @else
         <!-- No Videos Found -->
         <div class="text-center py-16">

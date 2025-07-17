@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class Article extends Model
 {
@@ -22,6 +23,7 @@ class Article extends Model
         'published_at',
         'meta_title',
         'meta_description',
+        'keywords',
         'views_count',
         'status'
     ];
@@ -45,5 +47,48 @@ class Article extends Model
     public function getRouteKeyName()
     {
         return 'slug';
+    }
+
+    public function getCoverImageUrlAttribute()
+    {
+        if ($this->cover_image) {
+            // Check if file exists in storage
+            if (Storage::disk('public')->exists($this->cover_image)) {
+                return Storage::disk('public')->url($this->cover_image);
+            }
+            
+            // If file doesn't exist, log it but don't clear the path automatically
+            \Log::warning('Cover image file not found', [
+                'article_id' => $this->id,
+                'cover_image_path' => $this->cover_image,
+                'storage_exists' => Storage::disk('public')->exists($this->cover_image),
+                'full_path' => storage_path('app/public/' . $this->cover_image)
+            ]);
+        }
+        return null;
+    }
+
+    /**
+     * Get formatted date in Malaysian format
+     */
+    public function getFormattedDateAttribute()
+    {
+        return $this->created_at ? $this->created_at->format('j M Y') : 'Tidak Diketahui';
+    }
+
+    /**
+     * Get formatted time in Malaysian format
+     */
+    public function getFormattedTimeAttribute()
+    {
+        return $this->created_at ? $this->created_at->format('H:i') : 'Tidak Diketahui';
+    }
+
+    /**
+     * Get formatted published date in Malaysian format
+     */
+    public function getFormattedPublishedDateAttribute()
+    {
+        return $this->published_at ? $this->published_at->format('j M Y') : 'Tidak Diterbitkan';
     }
 } 

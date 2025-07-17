@@ -102,6 +102,27 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Published Videos -->
+            <div class="bg-white overflow-hidden shadow-sm rounded-lg">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <div class="w-8 h-8 bg-purple-600 rounded-md flex items-center justify-center">
+                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="ml-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 truncate">Video Diterbitkan</dt>
+                                <dd class="text-lg font-medium text-gray-900">{{ $stats['published_videos'] ?? 0 }}</dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- Two-column layout -->
@@ -197,6 +218,27 @@
                                 </h3>
                                 <p class="mt-2 text-sm text-gray-500">
                                     Lihat dan moderasi ahli komuniti
+                                </p>
+                            </div>
+                        </a>
+
+                        <!-- Create Video -->
+                        <a href="{{ route('admin.videos.create') }}" 
+                           class="relative group bg-white p-6 focus-within:ring-2 focus-within:ring-inset focus-within:ring-purple-500 rounded-lg border border-gray-200 hover:border-purple-300 transition-colors">
+                            <div>
+                                <span class="rounded-lg inline-flex p-3 bg-purple-50 text-purple-600 ring-4 ring-white">
+                                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                                    </svg>
+                                </span>
+                            </div>
+                            <div class="mt-8">
+                                <h3 class="text-lg font-medium text-gray-900">
+                                    <span class="absolute inset-0" aria-hidden="true"></span>
+                                    Tambah Video
+                                </h3>
+                                <p class="mt-2 text-sm text-gray-500">
+                                    Muat naik video Arsenal dan kandungan multimedia
                                 </p>
                             </div>
                         </a>

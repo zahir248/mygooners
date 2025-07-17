@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\ArticleController as AdminArticleController;
 use App\Http\Controllers\Admin\ServiceController as AdminServiceController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
+use App\Http\Controllers\Admin\VideoController as AdminVideoController;
 
 // Home Page
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -114,4 +115,35 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
         Route::post('/{id}/activate', [AdminUserController::class, 'activate'])->name('admin.users.activate');
         Route::delete('/{id}', [AdminUserController::class, 'destroy'])->name('admin.users.destroy');
     });
+    
+    // Videos Management
+    Route::prefix('videos')->group(function () {
+        Route::get('/', [AdminVideoController::class, 'index'])->name('admin.videos.index');
+        Route::get('/create', [AdminVideoController::class, 'create'])->name('admin.videos.create');
+        Route::post('/', [AdminVideoController::class, 'store'])->name('admin.videos.store');
+        Route::get('/{id}/edit', [AdminVideoController::class, 'edit'])->name('admin.videos.edit');
+        Route::put('/{id}', [AdminVideoController::class, 'update'])->name('admin.videos.update');
+        Route::delete('/{id}', [AdminVideoController::class, 'destroy'])->name('admin.videos.destroy');
+    });
 });
+
+// Serve article images directly from storage
+Route::get('/article-image/{filename}', function ($filename) {
+    $path = storage_path('app/public/articles/' . $filename);
+    if (!file_exists($path)) {
+        abort(404);
+    }
+    return response()->file($path);
+})->name('article.image');
+
+// Serve video thumbnails directly from storage
+Route::get('/video-thumbnail/{filename}', function ($filename) {
+    $path = storage_path('app/public/' . $filename);
+    if (!file_exists($path)) {
+        $path = storage_path('app/public/videos/' . $filename);
+    }
+    if (!file_exists($path)) {
+        abort(404);
+    }
+    return response()->file($path);
+})->where('filename', '.*')->name('video.thumbnail');

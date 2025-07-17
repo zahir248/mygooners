@@ -14,16 +14,14 @@ class AdminController extends Controller
 {
     public function dashboard()
     {
-        // Sample dashboard statistics
+        // Real dashboard statistics
         $stats = [
-            'total_articles' => 15,
-            'total_services' => 8,
-            'total_products' => 12,
-            'total_videos' => 6,
-            'total_users' => 245,
-            'pending_services' => 3,
-            'low_stock_products' => 2,
-            'new_registrations_today' => 5,
+            'total_users' => User::count(),
+            'published_articles' => Article::where('status', 'published')->count(),
+            'active_services' => Service::where('status', 'approved')->count(),
+            'total_products' => Product::count(),
+            'published_videos' => Video::where('status', 'published')->count(),
+            'pending_services' => Service::where('status', 'pending')->count(),
         ];
 
         // Recent activity
