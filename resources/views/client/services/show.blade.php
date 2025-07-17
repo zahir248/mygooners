@@ -50,7 +50,7 @@
             <div class="mb-8">
                 <div class="relative h-96 rounded-xl overflow-hidden bg-gray-200 mb-4">
                     @if($service->images && is_array($service->images) && count($service->images) > 0)
-                        <img src={{ route('service.image', ['filename' => basename($service->images[0])]) }}" 
+                        <img src="{{ route('service.image', ['filename' => basename($service->images[0])]) }}" 
                              alt="{{ $service->title }}" 
                              class="w-full h-full object-cover">
                     @else
@@ -75,7 +75,7 @@
                     <div class="grid grid-cols-4 gap-2">
                         @foreach(array_slice($service->images, 1) as $image)
                             <div class="aspect-square rounded-lg overflow-hidden bg-gray-200">
-                                <img src={{ route('service.image', ['filename' => basename($image)]) }}" 
+                                <img src="{{ route('service.image', ['filename' => basename($image)]) }}" 
                                      alt="{{ $service->title }}" 
                                      class="w-full h-full object-cover hover:scale-105 transition-transform cursor-pointer">
                             </div>
@@ -290,7 +290,7 @@
                 <div class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow overflow-hidden">
                     <div class="relative h-48">
                         @if($relatedService->images && is_array($relatedService->images) && count($relatedService->images) > 0)
-                            <img src={{ route('service.image', ['filename' => basename($relatedService->images[0])]) }}" 
+                            <img src="{{ route('service.image', ['filename' => basename($relatedService->images[0])]) }}" 
                                  alt="{{ $relatedService->title }}" 
                                  class="w-full h-full object-cover">
                         @else
