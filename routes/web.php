@@ -184,3 +184,12 @@ Route::get('/product-image/{filename}', function ($filename) {
     }
     return response()->file($path);
 })->name('product.image');
+
+// Serve variation images directly from storage
+Route::get('/variation-image/{filename}', function ($filename) {
+    $path = storage_path('app/public/variations/' . $filename);
+    if (!file_exists($path)) {
+        abort(404);
+    }
+    return response()->file($path);
+})->name('variation.image');

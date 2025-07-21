@@ -156,7 +156,7 @@
                         <div id="current-images" class="flex flex-wrap gap-4">
                             @foreach($product->images as $index => $img)
                                 <div class="relative group cursor-move" data-image-index="{{ $index }}">
-                                    <img src="{{ Storage::url($img) }}" 
+                                    <img src="{{ route('product.image', basename($img)) }}" 
                                          alt="Gambar Produk" 
                                          class="h-24 w-36 object-cover rounded-lg border border-gray-300">
                                     <button type="button" 
@@ -259,7 +259,7 @@
                                     <h6 class="text-sm font-medium text-gray-700 mb-2">Gambar Varian:</h6>
                                     <div class="flex flex-wrap gap-2">
                                         @foreach($variation->images as $image)
-                                            <img src="{{ Storage::url($image) }}" 
+                                            <img src="{{ route('variation.image', basename($image)) }}" 
                                                  alt="Gambar Varian" 
                                                  class="h-16 w-20 object-cover rounded border border-gray-300">
                                         @endforeach

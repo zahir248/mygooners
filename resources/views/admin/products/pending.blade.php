@@ -46,7 +46,7 @@
                                     <div class="flex items-start space-x-3">
                                         <div class="flex-shrink-0 h-16 w-24">
                                             @if($product->images && count($product->images) > 0)
-                                                <img class="h-16 w-24 rounded-lg object-cover" src="{{ Storage::url($product->images[0]) }}" alt="{{ $product->title }}">
+                                                <img class="h-16 w-24 rounded-lg object-cover" src="{{ route('product.image', basename($product->images[0])) }}" alt="{{ $product->title }}">
                                             @else
                                                 <div class="h-16 w-24 rounded-lg bg-gray-200 flex items-center justify-center">
                                                     <svg class="h-8 w-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">

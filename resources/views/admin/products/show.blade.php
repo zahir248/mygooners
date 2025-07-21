@@ -111,7 +111,7 @@
                             <div class="mb-6">
                                 <div class="grid grid-cols-1 gap-4">
                                     <div class="aspect-w-16 aspect-h-9">
-                                        <img src="{{ Storage::url($product->images[0]) }}" 
+                                        <img src="{{ route('product.image', basename($product->images[0])) }}" 
                                              alt="{{ $product->title }}" 
                                              class="w-full h-64 object-cover rounded-lg">
                                     </div>
@@ -372,7 +372,7 @@
                             <div class="grid grid-cols-2 gap-2">
                                 @foreach(array_slice($product->images, 1) as $image)
                                     <div class="aspect-w-1 aspect-h-1">
-                                        <img src="{{ Storage::url($image) }}" 
+                                        <img src="{{ route('product.image', basename($image)) }}" 
                                              alt="{{ $product->title }}" 
                                              class="w-full h-20 object-cover rounded-lg">
                                     </div>
