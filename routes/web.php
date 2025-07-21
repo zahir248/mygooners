@@ -193,3 +193,8 @@ Route::get('/variation-image/{filename}', function ($filename) {
     }
     return response()->file($path);
 })->name('variation.image');
+
+// Fallback route for 404 errors
+Route::fallback(function () {
+    return response()->view('errors.404', [], 404);
+});
