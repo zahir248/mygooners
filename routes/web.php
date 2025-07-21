@@ -106,11 +106,23 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     // Products Management
     Route::prefix('products')->group(function () {
         Route::get('/', [AdminProductController::class, 'index'])->name('admin.products.index');
+        Route::get('/pending', [AdminProductController::class, 'pending'])->name('admin.products.pending');
         Route::get('/create', [AdminProductController::class, 'create'])->name('admin.products.create');
         Route::post('/', [AdminProductController::class, 'store'])->name('admin.products.store');
+        Route::get('/{id}', [AdminProductController::class, 'show'])->name('admin.products.show');
         Route::get('/{id}/edit', [AdminProductController::class, 'edit'])->name('admin.products.edit');
         Route::put('/{id}', [AdminProductController::class, 'update'])->name('admin.products.update');
+        Route::post('/{id}/approve', [AdminProductController::class, 'approve'])->name('admin.products.approve');
+        Route::post('/{id}/reject', [AdminProductController::class, 'reject'])->name('admin.products.reject');
+        Route::post('/{id}/toggle-status', [AdminProductController::class, 'toggleStatus'])->name('admin.products.toggle-status');
+        Route::patch('/{id}/update-status', [AdminProductController::class, 'updateStatus'])->name('admin.products.update-status');
+        Route::post('/{id}/toggle-featured', [AdminProductController::class, 'toggleFeatured'])->name('admin.products.toggle-featured');
         Route::delete('/{id}', [AdminProductController::class, 'destroy'])->name('admin.products.destroy');
+        
+        // Variation management
+        Route::get('/variations/{variationId}/edit', [AdminProductController::class, 'getVariationForEdit'])->name('admin.products.variations.edit');
+        Route::delete('/variations/{variationId}', [AdminProductController::class, 'deleteVariation'])->name('admin.products.variations.destroy');
+        Route::put('/variations/{variationId}', [AdminProductController::class, 'updateVariation'])->name('admin.products.variations.update');
     });
     
     // Users Management
@@ -163,3 +175,12 @@ Route::get('/service-image/{filename}', function ($filename) {
     }
     return response()->file($path);
 })->name('service.image');
+
+// Serve product images directly from storage
+Route::get('/product-image/{filename}', function ($filename) {
+    $path = storage_path('app/public/products/' . $filename);
+    if (!file_exists($path)) {
+        abort(404);
+    }
+    return response()->file($path);
+})->name('product.image');

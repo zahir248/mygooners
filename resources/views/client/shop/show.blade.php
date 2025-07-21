@@ -7,7 +7,9 @@
 <!-- Open Graph Meta Tags -->
 <meta property="og:title" content="{{ $product->title }} - Arsenal Shop">
 <meta property="og:description" content="{{ $product->description }}">
-<meta property="og:image" content="{{ $product->images[0] }}">
+@if($product->images && count($product->images) > 0)
+<meta property="og:image" content="{{ Storage::url($product->images[0]) }}">
+@endif
 <meta property="og:type" content="product">
 <meta property="og:url" content="{{ request()->url() }}">
 <meta property="og:site_name" content="MyGooners">
@@ -18,13 +20,28 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="{{ $product->title }} - Arsenal Shop">
 <meta name="twitter:description" content="{{ $product->description }}">
-<meta name="twitter:image" content="{{ $product->images[0] }}">
+@if($product->images && count($product->images) > 0)
+<meta name="twitter:image" content="{{ Storage::url($product->images[0]) }}">
+@endif
 
 <!-- Additional Meta Tags -->
 <meta name="keywords" content="Arsenal, {{ implode(', ', $product->tags) }}, merchandise, shop">
 @endsection
 
 @section('content')
+<style>
+    .variation-option.active {
+        border-color: #ef4444 !important;
+        border-width: 2px !important;
+    }
+    
+    .variation-option:hover {
+        border-color: #ef4444 !important;
+        border-width: 2px !important;
+    }
+</style>
+
+
 <!-- Breadcrumb -->
 <div class="bg-gray-50 border-b border-gray-200">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
@@ -51,17 +68,64 @@
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
         <!-- Product Images -->
         <div>
-            <!-- Main Image -->
-            <div class="relative mb-4">
-                <div class="aspect-square rounded-xl overflow-hidden bg-gray-200 mb-4">
-                    <img id="mainImage" 
-                         src="{{ $product->images[0] }}" 
-                         alt="{{ $product->title }}" 
-                         class="w-full h-full object-cover">
-                </div>
+            
+            <!-- Image Carousel -->
+            <div class="space-y-4">
+                @php
+                    // Combine all images into one array
+                    $allImages = [];
+                    
+                    // Add product images first
+                    if($product->images && count($product->images) > 0) {
+                        foreach($product->images as $index => $image) {
+                            $allImages[] = [
+                                'url' => $image,
+                                'type' => 'product',
+                                'title' => $product->title,
+                                'variation_id' => null,
+                                'variation_name' => null
+                            ];
+                        }
+                    }
+                    
+                    // Add variant images
+                    if($product->hasVariations()) {
+                        foreach($product->activeVariations as $variation) {
+                            if($variation->images && count($variation->images) > 0) {
+                                foreach($variation->images as $image) {
+                                    $allImages[] = [
+                                        'url' => $image,
+                                        'type' => 'variant',
+                                        'title' => $variation->name,
+                                        'variation_id' => $variation->id,
+                                        'variation_name' => $variation->name
+                                    ];
+                                }
+                            }
+                        }
+                    }
+                @endphp
+                
+                @if(count($allImages) > 0)
+                    <!-- Main Carousel -->
+                    <div class="relative group">
+                        <div class="overflow-hidden rounded-xl">
+                            <div id="image-carousel" class="flex transition-transform duration-300 ease-in-out" style="width: {{ count($allImages) * 100 }}%;">
+                                @foreach($allImages as $index => $imageData)
+                                    <div class="w-full flex-shrink-0" style="width: {{ 100 / count($allImages) }}%;">
+                                        <div class="aspect-square rounded-xl overflow-hidden bg-gray-200 relative">
+                                            <img src="{{ Storage::url($imageData['url']) }}" 
+                                                 alt="{{ $imageData['title'] }}" 
+                                                 class="w-full h-full object-cover"
+                                                 data-index="{{ $index }}"
+                                                 data-type="{{ $imageData['type'] }}"
+                                                 @if($imageData['variation_id']) data-variation-id="{{ $imageData['variation_id'] }}" @endif
+                                                 @if($imageData['variation_name']) data-variation-name="{{ $imageData['variation_name'] }}" @endif>
                 
                 <!-- Badges -->
                 <div class="absolute top-4 left-4 space-y-2">
+                                                @if($imageData['type'] === 'product')
+                                                    <!-- Base product badges -->
                     @if($product->sale_price)
                         <span class="bg-red-600 text-white px-4 py-2 rounded-full text-sm font-bold">
                             {{ $product->discount_percentage }}% OFF
@@ -71,10 +135,25 @@
                         <span class="bg-yellow-400 text-gray-900 px-4 py-2 rounded-full text-sm font-bold">
                             UTAMA
                         </span>
+                                                    @endif
+                                                @elseif($imageData['type'] === 'variant')
+                                                    <!-- Variant badges -->
+                                                    @php
+                                                        $variant = $product->activeVariations->firstWhere('id', $imageData['variation_id']);
+                                                        $variantDiscountPercentage = 0;
+                                                        if ($variant && $variant->sale_price && $variant->price > $variant->sale_price) {
+                                                            $variantDiscountPercentage = round((($variant->price - $variant->sale_price) / $variant->price) * 100);
+                                                        }
+                                                    @endphp
+                                                    @if($variant && $variant->sale_price && $variantDiscountPercentage > 0)
+                                                        <span class="bg-red-600 text-white px-4 py-2 rounded-full text-sm font-bold">
+                                                            {{ $variantDiscountPercentage }}% OFF
+                                                        </span>
+                                                    @endif
                     @endif
                 </div>
 
-                @if($product->stock_quantity <= 5)
+                                            @if($imageData['type'] === 'product' && $product->stock_quantity <= 5)
                     <div class="absolute bottom-4 left-4">
                         <span class="bg-orange-500 text-white px-4 py-2 rounded-full text-sm font-medium">
                             Hanya {{ $product->stock_quantity }} tinggal dalam stok
@@ -82,20 +161,50 @@
                     </div>
                 @endif
             </div>
-            
-            <!-- Thumbnail Images -->
-            @if(count($product->images) > 1)
-                <div class="grid grid-cols-4 gap-2">
-                    @foreach($product->images as $index => $image)
-                        <div class="aspect-square rounded-lg overflow-hidden bg-gray-200 cursor-pointer hover:ring-2 hover:ring-red-500 transition-all"
-                             onclick="changeMainImage('{{ $image }}', this)">
-                            <img src="{{ $image }}" 
-                                 alt="{{ $product->title }}" 
-                                 class="w-full h-full object-cover">
                         </div>
                     @endforeach
                 </div>
+                        </div>
+                        
+                        <!-- Navigation Arrows -->
+                        @if(count($allImages) > 1)
+                            <button id="prev-btn" class="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 rounded-full p-3 shadow-lg transition-all duration-200 opacity-0 group-hover:opacity-100 z-10">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                                </svg>
+                            </button>
+                            <button id="next-btn" class="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 rounded-full p-3 shadow-lg transition-all duration-200 opacity-0 group-hover:opacity-100 z-10">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                </svg>
+                            </button>
             @endif
+                        
+                        <!-- Image Counter -->
+                        @if(count($allImages) > 1)
+                            <div class="absolute bottom-4 right-4 bg-black/50 text-white px-3 py-2 rounded-lg text-sm font-medium">
+                                <span id="current-image">1</span> / <span id="total-images">{{ count($allImages) }}</span>
+                            </div>
+                        @endif
+                    </div>
+                @endif
+
+                <!-- Share Options - Large Screen Only -->
+                <div class="hidden lg:block mt-6">
+                    <h3 class="font-semibold text-gray-900 mb-4">Share This Product</h3>
+                    <div class="flex space-x-3">
+                        <button onclick="shareOnFacebook()" class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors">
+                            Facebook
+                        </button>
+                        <button onclick="shareOnTwitter()" class="bg-sky-500 hover:bg-sky-600 text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors">
+                            Twitter
+                        </button>
+                        <button onclick="copyToClipboard()" class="border border-gray-300 text-gray-700 py-2 px-4 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors">
+                            Copy Link
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- Product Information -->
@@ -115,7 +224,13 @@
                     </div>
                 </div>
                 
-                <h1 class="text-4xl font-bold text-gray-900 mb-4">{{ $product->title }}</h1>
+                <h1 id="product-title" class="text-4xl font-bold text-gray-900 mb-4">
+                    @if($selectedVariation)
+                        {{ $selectedVariation->name }}
+                    @else
+                        {{ $product->title }}
+                    @endif
+                </h1>
                 
                 <!-- Rating and Reviews -->
                 <div class="flex items-center space-x-4 mb-4">
@@ -133,17 +248,74 @@
 
                 <!-- Price -->
                 <div class="flex items-center space-x-4 mb-6">
-                    @if($product->sale_price)
-                        <span class="text-4xl font-bold text-red-600">£{{ number_format($product->sale_price, 2) }}</span>
-                        <span class="text-2xl text-gray-500 line-through">£{{ number_format($product->price, 2) }}</span>
-                        <span class="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm font-bold">
-                            Jimat £{{ number_format($product->price - $product->sale_price, 2) }}
-                        </span>
-                    @else
-                        <span class="text-4xl font-bold text-gray-900">£{{ number_format($product->price, 2) }}</span>
-                    @endif
+                    <div id="product-price-display">
+                        @if($product->hasVariations())
+                            @if($selectedVariation)
+                                <!-- Show selected variant price and stock -->
+                                <div class="mb-2">
+                                    <span class="text-sm text-gray-600">Harga Varian Terpilih:</span>
+                                </div>
+                                @if($selectedVariation->sale_price)
+                                    <span class="text-4xl font-bold text-red-600">RM{{ number_format($selectedVariation->sale_price, 2) }}</span>
+                                    <span class="text-2xl text-gray-500 line-through">RM{{ number_format($selectedVariation->price, 2) }}</span>
+                                <span class="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm font-bold">
+                                        Jimat RM{{ number_format($selectedVariation->price - $selectedVariation->sale_price, 2) }}
+                                </span>
+                            @else
+                                    <span class="text-4xl font-bold text-gray-900">RM{{ number_format($selectedVariation->price, 2) }}</span>
+                                @endif
+                                <div class="mt-2">
+                                    @if($selectedVariation->stock_quantity > 0)
+                                        <span class="text-green-600 font-medium">✓ Dalam Stok ({{ $selectedVariation->stock_quantity }} tersedia)</span>
+                                    @else
+                                        <span class="text-red-600 font-medium">✗ Kehabisan Stok</span>
+                            @endif
+                                </div>
+                        @else
+                                <!-- Show base product price and stock -->
+                                <div class="mb-2">
+                                    <span class="text-sm text-gray-600">Harga Produk:</span>
+                                </div>
+                                @if($product->sale_price)
+                                    <span class="text-4xl font-bold text-red-600">RM{{ number_format($product->sale_price, 2) }}</span>
+                                    <span class="text-2xl text-gray-500 line-through">RM{{ number_format($product->price, 2) }}</span>
+                                    <span class="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm font-bold">
+                                        Jimat RM{{ number_format($product->price - $product->sale_price, 2) }}
+                                    </span>
+                                @else
+                                    <span class="text-4xl font-bold text-gray-900">RM{{ number_format($product->price, 2) }}</span>
+                                @endif
+                                <div class="mt-2">
+                                    @if($product->stock_quantity > 0)
+                                        <span class="text-green-600 font-medium">✓ Dalam Stok ({{ $product->stock_quantity }} tersedia)</span>
+                                    @else
+                                        <span class="text-red-600 font-medium">✗ Kehabisan Stok</span>
+                                    @endif
+                                </div>
+                            @endif
+                        @else
+                            @if($product->sale_price)
+                                <span class="text-4xl font-bold text-red-600">RM{{ number_format($product->sale_price, 2) }}</span>
+                                <span class="text-2xl text-gray-500 line-through">RM{{ number_format($product->price, 2) }}</span>
+                                <span class="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm font-bold">
+                                    Jimat RM{{ number_format($product->price - $product->sale_price, 2) }}
+                                </span>
+                            @else
+                                <span class="text-4xl font-bold text-gray-900">RM{{ number_format($product->price, 2) }}</span>
+                            @endif
+                            <div class="mt-2">
+                                @if($product->stock_quantity > 0)
+                                    <span class="text-green-600 font-medium">✓ Dalam Stok ({{ $product->stock_quantity }} tersedia)</span>
+                                @else
+                                    <span class="text-red-600 font-medium">✗ Kehabisan Stok</span>
+                                @endif
+                            </div>
+                        @endif
+                    </div>
                 </div>
             </div>
+
+
 
             <!-- Product Description -->
             <div class="mb-8">
@@ -153,55 +325,104 @@
                 </div>
             </div>
 
-            <!-- Size Selection (if applicable) -->
-            @if(isset($product->sizes) && count($product->sizes) > 0)
-                <div class="mb-6">
-                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Saiz</h3>
-                    <div class="grid grid-cols-6 gap-2">
-                        @foreach($product->sizes as $size)
-                            <button class="border border-gray-300 hover:border-red-500 hover:text-red-600 py-2 px-4 rounded-lg text-center font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent">
-                                {{ $size }}
-                            </button>
+            <!-- Product Variations -->
+            @if($product->hasVariations())
+                <div class="mb-8">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-xl font-semibold text-gray-900">{{ $product->variation_label ?: 'Pilihan Varian' }}</h3>
+                        @if($selectedVariation)
+                            <button 
+                                onclick="clearVariationSelection()" 
+                                class="text-sm bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-2 rounded-lg transition-colors flex items-center"
+                                title="Kembali ke produk asas">
+                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                </svg>
+                                Padam Varian
+                        </button>
+                        @endif
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        @foreach($product->activeVariations as $variation)
+                            <div class="border border-gray-200 rounded-lg p-4 hover:border-red-500 transition-all duration-200 cursor-pointer variation-option relative {{ $selectedVariantId == $variation->id ? 'border-red-500 active' : '' }}" 
+                                    data-variation-id="{{ $variation->id }}"
+                                 onclick="toggleVariation({{ $variation->id }})"
+                                 title="{{ $selectedVariantId == $variation->id ? 'Klik untuk buang pilihan' : 'Klik untuk pilih varian ini' }}">
+                                <!-- Selection indicator (hidden) -->
+                                <div class="absolute top-2 right-2 w-6 h-6 border-2 border-gray-300 rounded-full selection-indicator hidden">
+                                    <svg class="w-full h-full text-white" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                    </svg>
+                                </div>
+                                <div class="flex items-center justify-center">
+                                    <h4 class="font-medium text-gray-900 text-center">{{ $variation->name }}</h4>
+                                </div>
+                            </div>
                         @endforeach
                     </div>
+                    
+
                 </div>
             @endif
 
             <!-- Quantity and Add to Cart -->
             <div class="mb-8">
+                @php
+                    // Check if all variants and base product are out of stock
+                    $allVariationsOutOfStock = $product->activeVariations->every(function($variation) {
+                        return $variation->stock_quantity <= 0;
+                    });
+                    $baseProductOutOfStock = $product->stock_quantity <= 0;
+                    $everythingOutOfStock = $allVariationsOutOfStock && $baseProductOutOfStock;
+                @endphp
+                
                 <div class="flex items-center space-x-4 mb-4">
                     <div>
                         <label for="quantity" class="block text-sm font-medium text-gray-700 mb-2">Kuantiti</label>
                         <select id="quantity" class="border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-transparent">
-                            @for($i = 1; $i <= min($product->stock_quantity, 10); $i++)
+                            @for($i = 1; $i <= 10; $i++)
                                 <option value="{{ $i }}">{{ $i }}</option>
                             @endfor
                         </select>
                     </div>
-                    <div class="text-sm text-gray-600">
-                        @if($product->stock_quantity > 0)
-                            <span class="text-green-600 font-medium">✓ Dalam Stok ({{ $product->stock_quantity }} tersedia)</span>
-                        @else
-                            <span class="text-red-600 font-medium">✗ Kehabisan Stok</span>
-                        @endif
-                    </div>
+
                 </div>
 
                 <div class="space-y-3">
-                    @if($product->stock_quantity > 0)
-                        <button class="w-full bg-arsenal hover:bg-arsenal text-white py-4 px-6 rounded-lg font-bold text-lg transition-colors">
-                            Tambah ke Troli
-                        </button>
-                        <button class="w-full border-2 border-red-600 text-red-600 hover:bg-red-600 hover:text-white py-4 px-6 rounded-lg font-bold text-lg transition-colors">
-                            Beli Sekarang
-                        </button>
+                    @if($product->hasVariations())
+                        <div class="flex space-x-3">
+                            @if($everythingOutOfStock)
+                                <button class="flex-1 bg-gray-300 text-gray-600 py-4 px-6 rounded-lg font-bold text-lg cursor-not-allowed" disabled>
+                                    Kehabisan Stok
+                                </button>
+                                <button class="flex-1 border-2 border-gray-300 text-gray-600 py-4 px-6 rounded-lg font-bold text-lg cursor-not-allowed" disabled>
+                                    Maklumkan Apabila Tersedia
+                                </button>
+                            @else
+                                <button id="add-to-cart-btn" class="flex-1 bg-arsenal hover:bg-arsenal text-white py-4 px-6 rounded-lg font-bold text-lg transition-colors">
+                                    Tambah ke Troli
+                                </button>
+                                <button id="buy-now-btn" class="flex-1 border-2 border-red-600 text-red-600 hover:bg-red-600 hover:text-white py-4 px-6 rounded-lg font-bold text-lg transition-colors">
+                                    Beli Sekarang
+                                </button>
+                            @endif
+                        </div>
                     @else
-                        <button class="w-full bg-gray-300 text-gray-600 py-4 px-6 rounded-lg font-bold text-lg cursor-not-allowed">
-                            Kehabisan Stok
-                        </button>
-                        <button class="w-full border-2 border-gray-300 text-gray-600 py-4 px-6 rounded-lg font-bold text-lg">
-                            Notify When Available
-                        </button>
+                        @if($product->stock_quantity > 0)
+                            <button class="w-full bg-arsenal hover:bg-arsenal text-white py-4 px-6 rounded-lg font-bold text-lg transition-colors">
+                                Tambah ke Troli
+                            </button>
+                            <button class="w-full border-2 border-red-600 text-red-600 hover:bg-red-600 hover:text-white py-4 px-6 rounded-lg font-bold text-lg transition-colors">
+                                Beli Sekarang
+                            </button>
+                        @else
+                            <button class="w-full bg-gray-300 text-gray-600 py-4 px-6 rounded-lg font-bold text-lg cursor-not-allowed" disabled>
+                                Kehabisan Stok
+                            </button>
+                            <button class="w-full border-2 border-gray-300 text-gray-600 py-4 px-6 rounded-lg font-bold text-lg cursor-not-allowed" disabled>
+                                Maklumkan Apabila Tersedia
+                            </button>
+                        @endif
                     @endif
                 </div>
             </div>
@@ -251,21 +472,7 @@
                 </div>
             @endif
 
-            <!-- Share Options -->
-            <div class="mt-8 pt-6 border-t border-gray-200">
-                <h3 class="font-semibold text-gray-900 mb-4">Share This Product</h3>
-                <div class="flex space-x-3">
-                    <button onclick="shareOnFacebook()" class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors">
-                        Facebook
-                    </button>
-                    <button onclick="shareOnTwitter()" class="bg-sky-500 hover:bg-sky-600 text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors">
-                        Twitter
-                    </button>
-                    <button onclick="copyToClipboard()" class="border border-gray-300 text-gray-700 py-2 px-4 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors">
-                        Copy Link
-                    </button>
-                </div>
-            </div>
+
         </div>
     </div>
 
@@ -288,7 +495,7 @@
             </div>
 
             <div class="space-y-8">
-                @foreach($reviews as $review)
+                @foreach($product->reviews as $review)
                     <div class="border-b border-gray-200 pb-8 last:border-b-0 last:pb-0">
                         <div class="flex items-start space-x-4">
                             <img src="https://ui-avatars.com/api/?name={{ urlencode($review->user->name) }}&size=50&background=dc2626&color=fff" 
@@ -332,7 +539,7 @@
             @foreach($relatedProducts as $relatedProduct)
                 <div class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow overflow-hidden">
                     <div class="relative h-64">
-                        <img src="{{ $relatedProduct->images[0] }}" 
+                        <img src="{{ Storage::url($relatedProduct->images[0]) }}" 
                              alt="{{ $relatedProduct->title }}" 
                              class="w-full h-full object-cover">
                         @if($relatedProduct->sale_price)
@@ -356,10 +563,10 @@
                         <div class="flex items-center justify-between">
                             <div class="flex items-center space-x-2">
                                 @if($relatedProduct->sale_price)
-                                    <span class="text-xl font-bold text-red-600">£{{ number_format($relatedProduct->sale_price, 2) }}</span>
-                                    <span class="text-sm text-gray-500 line-through">£{{ number_format($relatedProduct->price, 2) }}</span>
+                                    <span class="text-xl font-bold text-red-600">RM{{ number_format($relatedProduct->sale_price, 2) }}</span>
+                                    <span class="text-sm text-gray-500 line-through">RM{{ number_format($relatedProduct->price, 2) }}</span>
                                 @else
-                                    <span class="text-xl font-bold text-gray-900">£{{ number_format($relatedProduct->price, 2) }}</span>
+                                    <span class="text-xl font-bold text-gray-900">RM{{ number_format($relatedProduct->price, 2) }}</span>
                                 @endif
                             </div>
                             <div class="flex items-center text-sm">
@@ -379,16 +586,538 @@
 
 @push('scripts')
 <script>
-function changeMainImage(imageSrc, thumbnail) {
+// Global variables for variation selection
+let selectedVariation = null;
+let productVariations = @json($product->activeVariationsWithComputedProperties);
+let isClearingSelection = false; // Flag to prevent selectVariation during clearing
+
+// Carousel variables
+let currentImageIndex = 0;
+let totalImages = {{ count($allImages ?? []) }};
+let isDragging = false;
+let startX = 0;
+let currentX = 0;
+
+// Carousel functions
+function goToImage(index) {
+    if (index < 0 || index >= totalImages) return;
+    
+    currentImageIndex = index;
+    updateCarousel();
+    updateCounter();
+    handleImageSelection(index);
+}
+
+function updateCarousel() {
+    const carousel = document.getElementById('image-carousel');
+    if (carousel) {
+        const translateX = -(currentImageIndex * (100 / totalImages));
+        carousel.style.transform = `translateX(${translateX}%)`;
+    }
+}
+
+function updateCounter() {
+    // Update counter
+    const currentImageSpan = document.getElementById('current-image');
+    if (currentImageSpan) {
+        currentImageSpan.textContent = currentImageIndex + 1;
+    }
+}
+
+function handleImageSelection(index) {
+    const carousel = document.getElementById('image-carousel');
+    if (!carousel) return;
+    
+    const images = carousel.querySelectorAll('img');
+    if (images[index]) {
+        const img = images[index];
+        const variationId = img.dataset.variationId;
+        
+        // Clear ALL variant selections first
+        clearVariantSelection();
+        
+        // If this is a variation image, then select that specific variation
+        if (variationId) {
+            console.log('Selecting variation from carousel:', variationId);
+            selectVariation(parseInt(variationId));
+        } else {
+            console.log('No variation ID from carousel, keeping base product selection');
+        }
+    }
+}
+
+function nextImage() {
+    if (currentImageIndex < totalImages - 1) {
+        goToImage(currentImageIndex + 1);
+    }
+}
+
+function prevImage() {
+    if (currentImageIndex > 0) {
+        goToImage(currentImageIndex - 1);
+    }
+}
+
+// Touch/swipe functionality
+function initCarouselTouch() {
+    const carousel = document.getElementById('image-carousel');
+    if (!carousel) return;
+    
+    carousel.addEventListener('touchstart', (e) => {
+        isDragging = true;
+        startX = e.touches[0].clientX;
+        currentX = startX;
+    });
+    
+    carousel.addEventListener('touchmove', (e) => {
+        if (!isDragging) return;
+        e.preventDefault();
+        currentX = e.touches[0].clientX;
+        const diff = currentX - startX;
+        const translateX = -(currentImageIndex * (100 / totalImages)) + (diff / carousel.offsetWidth * (100 / totalImages));
+        carousel.style.transform = `translateX(${translateX}%)`;
+    });
+    
+    carousel.addEventListener('touchend', () => {
+        if (!isDragging) return;
+        isDragging = false;
+        
+        const diff = currentX - startX;
+        const threshold = carousel.offsetWidth * 0.3;
+        
+        if (Math.abs(diff) > threshold) {
+            if (diff > 0 && currentImageIndex > 0) {
+                prevImage();
+            } else if (diff < 0 && currentImageIndex < totalImages - 1) {
+                nextImage();
+            } else {
+                updateCarousel(); // Reset to current position
+            }
+        } else {
+            updateCarousel(); // Reset to current position
+        }
+    });
+}
+
+// Legacy function for backward compatibility
+function changeMainImage(imageSrc, thumbnail, variationId = null) {
+    console.log('changeMainImage called with:', { imageSrc, variationId });
+    
     document.getElementById('mainImage').src = imageSrc;
     
-    // Remove active state from all thumbnails
-    document.querySelectorAll('.aspect-square').forEach(thumb => {
+    // Clear ALL thumbnails first (both product and variant)
+    document.querySelectorAll('.product-thumbnail, .variation-thumbnail').forEach(thumb => {
         thumb.classList.remove('ring-2', 'ring-red-500');
     });
     
-    // Add active state to clicked thumbnail
+    // Add active state ONLY to the clicked thumbnail
     thumbnail.classList.add('ring-2', 'ring-red-500');
+    
+    // Clear ALL variant selections first
+    clearVariantSelection();
+    
+    // If this is a variation image, then select that specific variation
+    if (variationId) {
+        console.log('Selecting variation:', variationId);
+        selectVariation(variationId);
+    } else {
+        console.log('No variation ID, keeping base product selection');
+    }
+}
+
+function toggleVariation(variationId) {
+    // Check if we're currently on a variant page
+    const urlParams = new URLSearchParams(window.location.search);
+    const currentVariant = urlParams.get('variant');
+    
+    console.log('Toggle clicked for variant:', variationId);
+    console.log('Current variant in URL:', currentVariant);
+    console.log('Current URL:', window.location.href);
+    
+    // Find the clicked variation to get its name
+    const clickedVariation = productVariations.find(v => v.id === variationId);
+    if (!clickedVariation) {
+        console.log('Variation not found:', variationId);
+        return;
+    }
+    
+    const clickedVariantName = clickedVariation.name;
+    console.log('Clicked variant name:', clickedVariantName);
+    
+    if (currentVariant) {
+        // We're on a variant page
+        const decodedCurrentVariant = decodeURIComponent(currentVariant);
+        console.log('Decoded current variant:', decodedCurrentVariant);
+        
+        if (decodedCurrentVariant === clickedVariantName) {
+            // Same variant clicked, go back to base
+            console.log('Same variant clicked, going to base product');
+            const baseUrl = window.location.pathname;
+            console.log('Redirecting to:', baseUrl);
+            window.location.replace(baseUrl);
+        } else {
+            // Different variant clicked, switch to that variant
+            console.log('Different variant clicked, switching to:', clickedVariantName);
+            refreshPageWithVariant(variationId);
+        }
+    } else {
+        // We're on base page, select the variant
+        console.log('Currently on base page, selecting variant:', variationId);
+        refreshPageWithVariant(variationId);
+    }
+}
+
+function refreshPageWithVariant(variationId) {
+    const currentUrl = new URL(window.location);
+    
+    if (variationId) {
+        // Find the variation name by ID
+        const variation = productVariations.find(v => v.id === variationId);
+        if (variation) {
+            // URL encode the variant name to handle special characters
+            const encodedName = encodeURIComponent(variation.name);
+            currentUrl.searchParams.set('variant', encodedName);
+            
+            // Debug log
+            console.log('Setting variant:', variation.name, 'Encoded:', encodedName);
+        }
+    } else {
+        currentUrl.searchParams.delete('variant');
+        console.log('Removing variant parameter');
+    }
+    
+    console.log('Redirecting to:', currentUrl.toString());
+    window.location.href = currentUrl.toString();
+}
+
+function selectVariation(variationId) {
+    console.log('selectVariation called with:', variationId);
+    
+    // Check if we're currently clearing selections
+    if (isClearingSelection) {
+        console.log('selectVariation blocked - currently clearing selections');
+        return;
+    }
+    
+    // Remove active state from all variation options
+    document.querySelectorAll('.variation-option').forEach(option => {
+        console.log('Clearing option in selectVariation:', option);
+        option.classList.remove('border-red-500', 'bg-red-50', 'shadow-lg', 'scale-105', 'active');
+        option.classList.add('border-gray-200');
+        
+        // Also remove any inline styles
+        option.style.borderColor = '';
+        option.style.borderWidth = '';
+        option.style.backgroundColor = '';
+        
+        // Hide selection indicator for all options
+        const indicator = option.querySelector('.selection-indicator');
+        if (indicator) {
+            indicator.classList.add('hidden');
+            indicator.classList.remove('bg-red-500', 'border-red-500');
+        }
+    });
+    
+    // Add active state to selected variation (only variant boxes, not thumbnails)
+    const selectedButton = document.querySelector(`.variation-option[data-variation-id="${variationId}"]`);
+    if (selectedButton) {
+        console.log('Found selected variant box:', selectedButton);
+        selectedButton.classList.remove('border-gray-200');
+        selectedButton.classList.add('border-red-500', 'active');
+        
+        // Force the border to be visible by adding !important equivalent
+        selectedButton.style.borderColor = '#ef4444'; // red-500 color
+        selectedButton.style.borderWidth = '2px';
+    } else {
+        console.log('Selected variant box not found for variation ID:', variationId);
+    }
+    
+    // Find the selected variation
+    const variation = productVariations.find(v => v.id === variationId);
+    if (variation) {
+        selectedVariation = variation;
+        updateProductPrice(variation);
+        enableAddToCart();
+        
+        // Find and display the variant image in the carousel
+        const variantImage = document.querySelector(`img[data-variation-id="${variationId}"]`);
+        if (variantImage) {
+            const imageIndex = parseInt(variantImage.getAttribute('data-index'));
+            console.log('Found variant image at index:', imageIndex);
+            goToImage(imageIndex);
+        }
+    }
+}
+
+
+
+function clearVariantSelection() {
+    console.log('Clearing variant selection...');
+    isClearingSelection = true; // Set flag to prevent selectVariation
+    
+    // Remove active state from all variation options
+    document.querySelectorAll('.variation-option').forEach(option => {
+        console.log('Clearing option:', option);
+        
+        // Remove all possible active classes
+        option.classList.remove('border-red-500', 'bg-red-50', 'shadow-lg', 'scale-105', 'active');
+        option.classList.add('border-gray-200');
+        
+        // Also remove any inline styles that might override CSS
+        option.style.borderColor = '';
+        option.style.borderWidth = '';
+        option.style.backgroundColor = '';
+        
+        // Hide selection indicator for all options
+        const indicator = option.querySelector('.selection-indicator');
+        if (indicator) {
+            indicator.classList.add('hidden');
+            indicator.classList.remove('bg-red-500', 'border-red-500');
+        }
+    });
+    
+    // Reset product price and title to base product
+    resetProductPrice();
+    enableAddToCart();
+    
+    // Clear selected variation
+    selectedVariation = null;
+    
+    // Reset flag after a short delay to allow any pending operations to complete
+    setTimeout(() => {
+        isClearingSelection = false;
+    }, 100);
+    
+    console.log('Variant selection cleared');
+}
+
+function clearVariationSelection() {
+    // Force redirect to base product URL
+    console.log('Clearing variation selection - returning to base product');
+    window.location.replace(window.location.pathname);
+}
+
+function updateProductPrice(variation) {
+    console.log('updateProductPrice called with variation:', variation);
+    
+    const priceDisplay = document.getElementById('product-price-display');
+    const productTitle = document.getElementById('product-title');
+    const stockStatus = document.getElementById('stock-status');
+    
+    console.log('Found elements:', {
+        priceDisplay: priceDisplay,
+        productTitle: productTitle,
+        stockStatus: stockStatus
+    });
+    
+    if (!priceDisplay || !productTitle) {
+        console.error('Required elements not found!');
+        return;
+    }
+    
+    const finalPrice = variation.final_price;
+    const originalPrice = variation.original_price;
+    
+    console.log('Price data:', {
+        finalPrice: finalPrice,
+        originalPrice: originalPrice,
+        salePrice: variation.sale_price,
+        stockQuantity: variation.stock_quantity
+    });
+    
+    // Update product title to show variant name
+    productTitle.textContent = variation.name;
+    console.log('Updated product title to:', variation.name);
+    
+    // Update stock status
+    if (stockStatus) {
+        if (variation.stock_quantity > 0) {
+            stockStatus.textContent = `✓ Dalam Stok (${variation.stock_quantity} tersedia)`;
+            stockStatus.className = 'text-green-600 font-medium';
+        } else {
+            stockStatus.textContent = '✗ Kehabisan Stok';
+            stockStatus.className = 'text-red-600 font-medium';
+        }
+        console.log('Updated stock status to:', stockStatus.textContent);
+    }
+    
+    if (variation.sale_price && variation.sale_price < originalPrice) {
+        const savings = originalPrice - finalPrice;
+        const newHTML = `
+            <div class="mb-2">
+                <span class="text-sm text-gray-600">Harga Varian Terpilih:</span>
+            </div>
+            <span class="text-4xl font-bold text-red-600">RM${parseFloat(finalPrice).toFixed(2)}</span>
+            <span class="text-2xl text-gray-500 line-through">RM${parseFloat(originalPrice).toFixed(2)}</span>
+            <span class="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm font-bold">
+                Jimat RM${parseFloat(savings).toFixed(2)}
+            </span>
+            <div class="mt-2">
+                ${variation.stock_quantity > 0 ? 
+                    `<span class="text-green-600 font-medium">✓ Dalam Stok (${variation.stock_quantity} tersedia)</span>` :
+                    `<span class="text-red-600 font-medium">✗ Kehabisan Stok</span>`
+                }
+            </div>
+        `;
+        priceDisplay.innerHTML = newHTML;
+        console.log('Updated price display with sale price HTML');
+    } else {
+        const newHTML = `
+            <div class="mb-2">
+                <span class="text-sm text-gray-600">Harga Varian Terpilih:</span>
+            </div>
+            <span class="text-4xl font-bold text-gray-900">RM${parseFloat(finalPrice).toFixed(2)}</span>
+            <div class="mt-2">
+                ${variation.stock_quantity > 0 ? 
+                    `<span class="text-green-600 font-medium">✓ Dalam Stok (${variation.stock_quantity} tersedia)</span>` :
+                    `<span class="text-red-600 font-medium">✗ Kehabisan Stok</span>`
+                }
+            </div>
+        `;
+        priceDisplay.innerHTML = newHTML;
+        console.log('Updated price display with regular price HTML');
+    }
+    
+    console.log('Price display update completed');
+}
+
+function resetProductPrice() {
+    const priceDisplay = document.getElementById('product-price-display');
+    const productTitle = document.getElementById('product-title');
+    const stockStatus = document.getElementById('stock-status');
+    
+    // Reset product title to original product name
+    productTitle.textContent = '{{ $product->title }}';
+    
+    // Reset stock status
+    if (stockStatus) {
+        stockStatus.textContent = 'Pilih varian atau beli produk asas';
+        stockStatus.className = 'text-gray-600';
+    }
+    @if($product->hasVariations())
+        @if($product->sale_price)
+            priceDisplay.innerHTML = `
+                <div class="mb-2">
+                    <span class="text-sm text-gray-600">Harga Produk:</span>
+                </div>
+                <span class="text-4xl font-bold text-red-600">RM{{ number_format($product->sale_price, 2) }}</span>
+                <span class="text-2xl text-gray-500 line-through">RM{{ number_format($product->price, 2) }}</span>
+                <span class="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm font-bold">
+                    Jimat RM{{ number_format($product->price - $product->sale_price, 2) }}
+                </span>
+                <div class="mt-2">
+                    @if($product->stock_quantity > 0)
+                        <span class="text-green-600 font-medium">✓ Dalam Stok ({{ $product->stock_quantity }} tersedia)</span>
+                    @else
+                        <span class="text-red-600 font-medium">✗ Kehabisan Stok</span>
+                    @endif
+                </div>
+            `;
+        @else
+            priceDisplay.innerHTML = `
+                <div class="mb-2">
+                    <span class="text-sm text-gray-600">Harga Produk:</span>
+                </div>
+                <span class="text-4xl font-bold text-gray-900">RM{{ number_format($product->price, 2) }}</span>
+                <div class="mt-2">
+                    @if($product->stock_quantity > 0)
+                        <span class="text-green-600 font-medium">✓ Dalam Stok ({{ $product->stock_quantity }} tersedia)</span>
+                    @else
+                        <span class="text-red-600 font-medium">✗ Kehabisan Stok</span>
+                    @endif
+                </div>
+            `;
+        @endif
+    @else
+        @if($product->sale_price)
+            priceDisplay.innerHTML = `
+                <span class="text-4xl font-bold text-red-600">RM{{ number_format($product->sale_price, 2) }}</span>
+                <span class="text-2xl text-gray-500 line-through">RM{{ number_format($product->price, 2) }}</span>
+                <span class="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm font-bold">
+                    Jimat RM{{ number_format($product->price - $product->sale_price, 2) }}
+                </span>
+                <div class="mt-2">
+                    @if($product->stock_quantity > 0)
+                        <span class="text-green-600 font-medium">✓ Dalam Stok ({{ $product->stock_quantity }} tersedia)</span>
+                    @else
+                        <span class="text-red-600 font-medium">✗ Kehabisan Stok</span>
+                    @endif
+                </div>
+            `;
+        @else
+            priceDisplay.innerHTML = `
+                <span class="text-4xl font-bold text-gray-900">RM{{ number_format($product->price, 2) }}</span>
+                <div class="mt-2">
+                    @if($product->stock_quantity > 0)
+                        <span class="text-green-600 font-medium">✓ Dalam Stok ({{ $product->stock_quantity }} tersedia)</span>
+                    @else
+                        <span class="text-red-600 font-medium">✗ Kehabisan Stok</span>
+                    @endif
+                </div>
+            `;
+        @endif
+    @endif
+}
+
+
+
+function enableAddToCart() {
+    const addToCartBtn = document.getElementById('add-to-cart-btn');
+    const buyNowBtn = document.getElementById('buy-now-btn');
+    
+    if (selectedVariation) {
+        // Variation selected
+        if (selectedVariation.stock_quantity > 0) {
+            addToCartBtn.textContent = 'Tambah ke Troli';
+            addToCartBtn.className = 'flex-1 bg-arsenal hover:bg-arsenal text-white py-4 px-6 rounded-lg font-bold text-lg transition-colors';
+            addToCartBtn.disabled = false;
+            
+            buyNowBtn.textContent = 'Beli Sekarang';
+            buyNowBtn.className = 'flex-1 border-2 border-red-600 text-red-600 hover:bg-red-600 hover:text-white py-4 px-6 rounded-lg font-bold text-lg transition-colors';
+            buyNowBtn.disabled = false;
+        } else {
+            addToCartBtn.textContent = 'Kehabisan Stok';
+            addToCartBtn.className = 'flex-1 bg-gray-300 text-gray-600 py-4 px-6 rounded-lg font-bold text-lg cursor-not-allowed';
+            addToCartBtn.disabled = true;
+            
+            buyNowBtn.textContent = 'Kehabisan Stok';
+            buyNowBtn.className = 'flex-1 border-2 border-gray-300 text-gray-600 py-4 px-6 rounded-lg font-bold text-lg cursor-not-allowed';
+            buyNowBtn.disabled = true;
+        }
+    } else {
+        // No variation selected - check if base product has stock
+        const baseProductStock = {{ $product->stock_quantity }};
+        if (baseProductStock > 0) {
+            addToCartBtn.textContent = 'Tambah ke Troli';
+            addToCartBtn.className = 'flex-1 bg-arsenal hover:bg-arsenal text-white py-4 px-6 rounded-lg font-bold text-lg transition-colors';
+            addToCartBtn.disabled = false;
+            
+            buyNowBtn.textContent = 'Beli Sekarang';
+            buyNowBtn.className = 'flex-1 border-2 border-red-600 text-red-600 hover:bg-red-600 hover:text-white py-4 px-6 rounded-lg font-bold text-lg transition-colors';
+            buyNowBtn.disabled = false;
+        } else {
+            addToCartBtn.textContent = 'Kehabisan Stok';
+            addToCartBtn.className = 'flex-1 bg-gray-300 text-gray-600 py-4 px-6 rounded-lg font-bold text-lg cursor-not-allowed';
+            addToCartBtn.disabled = true;
+            
+            buyNowBtn.textContent = 'Kehabisan Stok';
+            buyNowBtn.className = 'flex-1 border-2 border-gray-300 text-gray-600 py-4 px-6 rounded-lg font-bold text-lg cursor-not-allowed';
+            buyNowBtn.disabled = true;
+        }
+    }
+}
+
+function disableAddToCart() {
+    const addToCartBtn = document.getElementById('add-to-cart-btn');
+    const buyNowBtn = document.getElementById('buy-now-btn');
+    
+    addToCartBtn.textContent = 'Tambah ke Troli';
+    addToCartBtn.className = 'flex-1 bg-arsenal hover:bg-arsenal text-white py-4 px-6 rounded-lg font-bold text-lg transition-colors';
+    addToCartBtn.disabled = false;
+    
+    buyNowBtn.textContent = 'Beli Sekarang';
+    buyNowBtn.className = 'flex-1 border-2 border-red-600 text-red-600 hover:bg-red-600 hover:text-white py-4 px-6 rounded-lg font-bold text-lg transition-colors';
+    buyNowBtn.disabled = false;
 }
 
 function shareOnFacebook() {
@@ -409,12 +1138,154 @@ function copyToClipboard() {
     });
 }
 
-// Auto-select first thumbnail
+// Initialize page with pre-selected variant
 document.addEventListener('DOMContentLoaded', function() {
-    const firstThumbnail = document.querySelector('.aspect-square');
-    if (firstThumbnail) {
-        firstThumbnail.classList.add('ring-2', 'ring-red-500');
+    // Initialize carousel
+    if (totalImages > 1) {
+        initCarouselTouch();
+        
+        // Set up navigation buttons
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        
+        if (prevBtn) {
+            prevBtn.addEventListener('click', prevImage);
+        }
+        
+        if (nextBtn) {
+            nextBtn.addEventListener('click', nextImage);
+        }
+        
+        // Add hover effect to show navigation arrows
+        const carouselContainer = document.querySelector('.relative');
+        if (carouselContainer) {
+            carouselContainer.classList.add('group');
+        }
     }
+    
+    // Auto-select first product thumbnail (legacy support)
+    const firstProductThumbnail = document.querySelector('.product-thumbnail');
+    if (firstProductThumbnail) {
+        firstProductThumbnail.classList.add('ring-2', 'ring-red-500');
+    }
+    
+    // Initialize variant from backend data (takes precedence)
+    @if($selectedVariation)
+        console.log('Found selected variation from backend:', @json($selectedVariation));
+        const backendVariant = @json($selectedVariation);
+        const variant = productVariations.find(v => v.id === backendVariant.id);
+        if (variant) {
+            console.log('Found matching variant in productVariations:', variant);
+            
+            // Set the selected variation
+            selectedVariation = variant;
+            
+            // Use setTimeout to ensure DOM is fully ready before updating price
+            setTimeout(() => {
+                console.log('Calling updateProductPrice with delay...');
+                updateProductPrice(variant);
+                enableAddToCart();
+            }, 200); // Increased delay to ensure DOM is ready
+            
+            // Use setTimeout to ensure DOM is fully ready
+            setTimeout(() => {
+                // Debug: Log all variation options
+                console.log('All variation options:', document.querySelectorAll('.variation-option'));
+                document.querySelectorAll('.variation-option').forEach((option, index) => {
+                    console.log(`Option ${index}:`, option, 'data-variation-id:', option.getAttribute('data-variation-id'));
+                });
+                
+                // Select the variant box with active styling
+                const variantBox = document.querySelector(`.variation-option[data-variation-id="${variant.id}"]`);
+                console.log('Looking for variant box with data-variation-id:', variant.id);
+                console.log('Found variant box:', variantBox);
+                
+                if (variantBox) {
+                    console.log('Applying styling to variant box');
+                    console.log('Before styling - classes:', variantBox.className);
+                    console.log('Before styling - border color:', variantBox.style.borderColor);
+                    
+                    variantBox.classList.remove('border-gray-200');
+                    variantBox.classList.add('border-red-500', 'active');
+                    variantBox.style.borderColor = '#ef4444'; // red-500 color
+                    variantBox.style.borderWidth = '2px';
+                    
+                    console.log('After styling - classes:', variantBox.className);
+                    console.log('After styling - border color:', variantBox.style.borderColor);
+                    console.log('After styling - border width:', variantBox.style.borderWidth);
+                } else {
+                    console.log('Variant box not found!');
+                }
+            }, 100); // Small delay to ensure DOM is ready
+            
+            // Find and display the variant image in the carousel
+            const variantImage = document.querySelector(`img[data-variation-id="${variant.id}"]`);
+            if (variantImage) {
+                const imageIndex = parseInt(variantImage.getAttribute('data-index'));
+                console.log('Found variant image at index:', imageIndex);
+                goToImage(imageIndex);
+            }
+        } else {
+            console.log('Variant not found in productVariations array');
+        }
+    @else
+        // Fallback: Check for variant parameter in URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const variantParam = urlParams.get('variant');
+        
+        if (variantParam) {
+            const decodedVariantName = decodeURIComponent(variantParam);
+            console.log('Found variant parameter in URL:', decodedVariantName);
+            
+            // Find the variant by name
+            const variant = productVariations.find(v => v.name === decodedVariantName);
+            if (variant) {
+                console.log('Found variant from URL:', variant);
+                
+                // Set the selected variation
+                selectedVariation = variant;
+                
+                // Use setTimeout to ensure DOM is fully ready before updating price
+                setTimeout(() => {
+                    console.log('Calling updateProductPrice with delay (URL fallback)...');
+                    updateProductPrice(variant);
+                    enableAddToCart();
+                }, 200); // Increased delay to ensure DOM is ready
+                
+                // Use setTimeout to ensure DOM is fully ready
+                setTimeout(() => {
+                    // Select the variant box with active styling
+                    const variantBox = document.querySelector(`.variation-option[data-variation-id="${variant.id}"]`);
+                    if (variantBox) {
+                        variantBox.classList.remove('border-gray-200');
+                        variantBox.classList.add('border-red-500', 'active');
+                        variantBox.style.borderColor = '#ef4444';
+                        variantBox.style.borderWidth = '2px';
+                    }
+                }, 100);
+                
+                // Find and display the variant image in the carousel
+                const variantImage = document.querySelector(`img[data-variation-id="${variant.id}"]`);
+                if (variantImage) {
+                    const imageIndex = parseInt(variantImage.getAttribute('data-index'));
+                    goToImage(imageIndex);
+                }
+            }
+        }
+    @endif
+    
+    // Add click event listeners to update tooltips
+    document.querySelectorAll('.variation-option').forEach(option => {
+        option.addEventListener('click', function() {
+            // Update tooltip after a short delay to reflect the new state
+            setTimeout(() => {
+                const isSelected = this.classList.contains('border-red-500') || this.classList.contains('active');
+                this.title = isSelected ? 'Klik untuk buang pilihan' : 'Klik untuk pilih varian ini';
+            }, 100);
+        });
+    });
+    
+
 });
 </script>
 @endpush 

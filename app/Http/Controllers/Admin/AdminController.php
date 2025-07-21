@@ -22,6 +22,7 @@ class AdminController extends Controller
             'total_products' => Product::count(),
             'published_videos' => Video::where('status', 'published')->count(),
             'pending_services' => Service::where('status', 'pending')->count(),
+            'pending_products' => Product::where('status', 'pending')->count(),
         ];
 
         // Recent activity

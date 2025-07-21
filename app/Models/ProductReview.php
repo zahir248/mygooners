@@ -14,11 +14,12 @@ class ProductReview extends Model
         'user_id',
         'rating',
         'comment',
-        'status'
+        'is_verified'
     ];
 
     protected $casts = [
-        'rating' => 'integer'
+        'rating' => 'integer',
+        'is_verified' => 'boolean'
     ];
 
     public function product()
@@ -31,8 +32,8 @@ class ProductReview extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function scopeApproved($query)
+    public function scopeVerified($query)
     {
-        return $query->where('status', 'approved');
+        return $query->where('is_verified', true);
     }
 } 
