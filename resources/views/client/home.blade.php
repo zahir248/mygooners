@@ -5,8 +5,11 @@
 
 @section('content')
 <!-- Hero Section -->
-<section class="bg-gradient-to-r from-red-600 to-red-700 text-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+<section class="bg-gradient-to-r from-red-600 to-red-700 text-white relative overflow-hidden" style="background-image: url('{{ asset('images/hero-section.png') }}'); background-size: cover; background-position: center; background-repeat: no-repeat; height: 100vh; margin-top: -64px; padding-top: 64px;">
+    <!-- Overlay to ensure text readability -->
+    <div class="absolute inset-0 bg-black bg-opacity-75"></div>
+    <div class="relative z-10 h-full flex items-center justify-center">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <div class="text-center">
             <h1 class="text-4xl md:text-6xl font-bold mb-6">
                 Selamat Datang ke <span class="text-yellow-300">MyGooners</span>
@@ -18,11 +21,12 @@
                 <a href="{{ route('blog.index') }}" class="bg-white text-red-600 hover:bg-gray-100 px-8 py-3 rounded-lg font-semibold text-lg transition-colors">
                     Berita Terkini
                 </a>
-                <a href="{{ route('register') }}" class="border-2 border-white text-white hover:bg-white hover:text-red-600 px-8 py-3 rounded-lg font-semibold text-lg transition-colors">
+                <a href="{{ route('register') }}" class="bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded-lg font-semibold text-lg transition-colors">
                     Sertai Komuniti
                 </a>
             </div>
         </div>
+    </div>
     </div>
 </section>
 
