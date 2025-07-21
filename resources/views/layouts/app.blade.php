@@ -366,7 +366,7 @@
     @stack('scripts')
 
     <!-- FAQ Chatbot -->
-    <div x-data="faqChatbot()" class="fixed bottom-6 right-6 z-50">
+    <div x-data="faqChatbot()" x-init="init" class="fixed bottom-6 right-6 z-50" x-cloak>
         <!-- Floating Button -->
         <button @click="toggleChat()" 
                 class="bg-red-600 hover:bg-red-700 text-white rounded-full p-4 shadow-lg transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
@@ -507,8 +507,15 @@
                     'help': 'Saya boleh membantu dengan soalan tentang:\n• Cara menyertai komuniti\n• Membeli barangan\n• Maklumat tentang Arsenal\n• Navigasi laman web\n• Perkhidmatan yang tersedia\n\nApa yang anda ingin tahu?'
                 },
                 
+                init() {
+                    // On component init, check localStorage for isOpen
+                    const saved = localStorage.getItem('faqChatbotOpen');
+                    this.isOpen = saved === 'true' ? true : false;
+                },
+                
                 toggleChat() {
                     this.isOpen = !this.isOpen;
+                    localStorage.setItem('faqChatbotOpen', this.isOpen);
                     if (this.isOpen) {
                         this.$nextTick(() => {
                             this.scrollToBottom();
