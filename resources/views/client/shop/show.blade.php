@@ -8,7 +8,7 @@
 <meta property="og:title" content="{{ $product->title }} - Arsenal Shop">
 <meta property="og:description" content="{{ $product->description }}">
 @if($product->images && count($product->images) > 0)
-<meta property="og:image" content="{{ Storage::url($product->images[0]) }}">
+<meta property="og:image" content="{{ route('product.image', basename($product->images[0])) }}">
 @endif
 <meta property="og:type" content="product">
 <meta property="og:url" content="{{ request()->url() }}">
@@ -21,7 +21,7 @@
 <meta name="twitter:title" content="{{ $product->title }} - Arsenal Shop">
 <meta name="twitter:description" content="{{ $product->description }}">
 @if($product->images && count($product->images) > 0)
-<meta name="twitter:image" content="{{ Storage::url($product->images[0]) }}">
+<meta name="twitter:image" content="{{ route('product.image', basename($product->images[0])) }}">
 @endif
 
 <!-- Additional Meta Tags -->
@@ -114,7 +114,7 @@
                                 @foreach($allImages as $index => $imageData)
                                     <div class="w-full flex-shrink-0" style="width: {{ 100 / count($allImages) }}%;">
                                         <div class="aspect-square rounded-xl overflow-hidden bg-gray-200 relative">
-                                            <img src="{{ Storage::url($imageData['url']) }}" 
+                                            <img src="{{ $imageData['type'] === 'product' ? route('product.image', basename($imageData['url'])) : route('variation.image', basename($imageData['url'])) }}" 
                                                  alt="{{ $imageData['title'] }}" 
                                                  class="w-full h-full object-cover"
                                                  data-index="{{ $index }}"
@@ -539,7 +539,7 @@
             @foreach($relatedProducts as $relatedProduct)
                 <div class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow overflow-hidden">
                     <div class="relative h-64">
-                        <img src="{{ Storage::url($relatedProduct->images[0]) }}" 
+                                                        <img src="{{ route('product.image', basename($relatedProduct->images[0])) }}" 
                              alt="{{ $relatedProduct->title }}" 
                              class="w-full h-full object-cover">
                         @if($relatedProduct->sale_price)
