@@ -20,6 +20,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'google_id',
         'password',
         'profile_image',
         'bio',
@@ -80,5 +81,10 @@ class User extends Authenticatable
     public function isSuperAdmin()
     {
         return $this->role === 'super_admin';
+    }
+
+    public function isGoogleUser()
+    {
+        return !empty($this->google_id);
     }
 }

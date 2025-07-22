@@ -50,6 +50,9 @@ Route::middleware('guest')->group(function () {
     Route::post('/login', [AuthController::class, 'login']);
     Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
     Route::post('/register', [AuthController::class, 'register']);
+    // Google OAuth
+    Route::get('/auth/google', [AuthController::class, 'redirectToGoogle'])->name('login.google');
+    Route::get('/auth/google/callback', [AuthController::class, 'handleGoogleCallback']);
 });
 
 Route::middleware('auth')->group(function () {
