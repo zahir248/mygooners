@@ -58,8 +58,112 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/dashboard', function () {
-        return view('dashboard');
+        $user = auth()->user();
+        $services = \App\Models\Service::where('user_id', $user->id)->orderBy('created_at', 'desc')->get();
+        $products = \App\Models\Product::where('user_id', $user->id)->orderBy('created_at', 'desc')->get();
+        return view('client.dashboard', compact('services', 'products'));
     })->name('dashboard');
+
+    Route::post('/dashboard/show-seller-form', function () {
+        session(['show_seller_form' => true]);
+        return redirect()->route('dashboard');
+    })->name('dashboard.show_seller_form');
+
+    Route::post('/dashboard/become-seller', function (\Illuminate\Http\Request $request) {
+        $user = auth()->user();
+        $validated = $request->validate([
+            'bio' => 'required|string',
+            'location' => 'required|string',
+            'phone' => 'required|string',
+            'business_name' => 'required|string',
+            'business_type' => 'required|string',
+            'business_registration' => 'nullable|string',
+            'business_address' => 'required|string',
+            'operating_area' => 'required|string',
+            'website' => 'nullable|string',
+            'years_experience' => 'required|integer|min:0',
+            'skills' => 'required|string',
+            'service_areas' => 'required|string',
+            'id_document' => 'required|file|mimes:jpg,jpeg,png,pdf',
+            'selfie_with_id' => 'required|file|mimes:jpg,jpeg,png',
+        ]);
+        // Handle file uploads
+        if ($request->hasFile('id_document')) {
+            $validated['id_document'] = $request->file('id_document')->store('seller_ids', 'public');
+        }
+        if ($request->hasFile('selfie_with_id')) {
+            $validated['selfie_with_id'] = $request->file('selfie_with_id')->store('seller_selfies', 'public');
+        }
+        // Save all seller details to user
+        $user->bio = $validated['bio'];
+        $user->location = $validated['location'];
+        $user->phone = $validated['phone'];
+        $user->business_name = $validated['business_name'];
+        $user->business_type = $validated['business_type'];
+        $user->business_registration = $validated['business_registration'] ?? null;
+        $user->business_address = $validated['business_address'];
+        $user->operating_area = $validated['operating_area'];
+        $user->website = $validated['website'] ?? null;
+        $user->years_experience = $validated['years_experience'];
+        $user->skills = $validated['skills'];
+        $user->service_areas = $validated['service_areas'];
+        $user->id_document = $validated['id_document'];
+        $user->selfie_with_id = $validated['selfie_with_id'];
+        $user->is_seller = true;
+        $user->save();
+        session()->forget('show_seller_form');
+        return redirect()->route('dashboard')->with('success', 'Permohonan penjual anda telah diterima!');
+    })->name('dashboard.become_seller');
+
+    Route::post('/dashboard/update-profile', function (\Illuminate\Http\Request $request) {
+        $user = auth()->user();
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'phone' => 'nullable|string|max:255',
+            'bio' => 'nullable|string',
+            'location' => 'nullable|string|max:255',
+            'profile_image' => 'nullable|file|mimes:jpg,jpeg,png',
+            'business_name' => 'nullable|string|max:255',
+            'business_type' => 'nullable|string|max:255',
+            'business_registration' => 'nullable|string|max:255',
+            'business_address' => 'nullable|string|max:255',
+            'operating_area' => 'nullable|string|max:255',
+            'website' => 'nullable|string|max:255',
+            'years_experience' => 'nullable|integer|min:0',
+            'skills' => 'nullable|string',
+            'service_areas' => 'nullable|string',
+            'id_document' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
+            'selfie_with_id' => 'nullable|file|mimes:jpg,jpeg,png',
+        ]);
+        $user->name = $validated['name'];
+        $user->email = $validated['email'];
+        $user->phone = $validated['phone'] ?? $user->phone;
+        $user->bio = $validated['bio'] ?? $user->bio;
+        $user->location = $validated['location'] ?? $user->location;
+        if ($request->hasFile('profile_image')) {
+            $user->profile_image = $request->file('profile_image')->store('profile_images', 'public');
+        }
+        if ($user->is_seller) {
+            $user->business_name = $validated['business_name'] ?? $user->business_name;
+            $user->business_type = $validated['business_type'] ?? $user->business_type;
+            $user->business_registration = $validated['business_registration'] ?? $user->business_registration;
+            $user->business_address = $validated['business_address'] ?? $user->business_address;
+            $user->operating_area = $validated['operating_area'] ?? $user->operating_area;
+            $user->website = $validated['website'] ?? $user->website;
+            $user->years_experience = $validated['years_experience'] ?? $user->years_experience;
+            $user->skills = $validated['skills'] ?? $user->skills;
+            $user->service_areas = $validated['service_areas'] ?? $user->service_areas;
+            if ($request->hasFile('id_document')) {
+                $user->id_document = $request->file('id_document')->store('seller_ids', 'public');
+            }
+            if ($request->hasFile('selfie_with_id')) {
+                $user->selfie_with_id = $request->file('selfie_with_id')->store('seller_selfies', 'public');
+            }
+        }
+        $user->save();
+        return redirect()->route('dashboard')->with('success', 'Maklumat peribadi berjaya dikemaskini!');
+    })->name('dashboard.update_profile');
 });
 
 // Admin Authentication Routes (not protected)
