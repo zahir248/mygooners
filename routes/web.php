@@ -79,6 +79,7 @@ Route::prefix('admin')->group(function () {
 // Protected Admin Routes
 Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+    Route::get('/dashboard/stats', [AdminController::class, 'getDashboardStats'])->name('admin.dashboard.stats');
     
     // Articles Management
     Route::prefix('articles')->group(function () {
