@@ -28,7 +28,8 @@ class AuthController extends Controller
 
         if (Auth::attempt($request->only('email', 'password'), $request->filled('remember'))) {
             $request->session()->regenerate();
-            
+            // Update last_login timestamp
+            Auth::user()->update(['last_login' => now()]);
             return redirect()->intended(route('dashboard'))
                 ->with('success', 'Selamat kembali! Anda telah berjaya log masuk.');
         }
@@ -200,6 +201,8 @@ class AuthController extends Controller
             }
             
             Auth::login($user, true);
+            // Update last_login timestamp
+            $user->update(['last_login' => now()]);
             return redirect()->route('dashboard')->with('success', 'Selamat kembali! Anda telah berjaya log masuk.');
 
         } catch (\Exception $e) {

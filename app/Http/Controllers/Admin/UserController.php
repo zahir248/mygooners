@@ -8,136 +8,126 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        // Sample users for admin management
-        $users = collect([
-            (object) [
-                'id' => 1,
-                'name' => 'John Smith',
-                'email' => 'john@example.com',
-                'role' => 'user',
-                'is_verified' => true,
-                'trust_score' => 4.8,
-                'status' => 'active',
-                'services_count' => 2,
-                'last_login' => now()->subHours(2),
-                'created_at' => now()->subMonths(6)
-            ],
-            (object) [
-                'id' => 2,
-                'name' => 'Sarah Johnson',
-                'email' => 'sarah@example.com',
-                'role' => 'user',
-                'is_verified' => true,
-                'trust_score' => 4.6,
-                'status' => 'active',
-                'services_count' => 1,
-                'last_login' => now()->subHours(5),
-                'created_at' => now()->subMonths(3)
-            ],
-            (object) [
-                'id' => 3,
-                'name' => 'Mike Wilson',
-                'email' => 'mike@example.com',
-                'role' => 'user',
-                'is_verified' => false,
-                'trust_score' => 4.2,
-                'status' => 'pending',
-                'services_count' => 1,
-                'last_login' => now()->subDays(2),
-                'created_at' => now()->subWeeks(2)
-            ],
-            (object) [
-                'id' => 4,
-                'name' => 'Admin User',
-                'email' => 'admin@mygooners.com',
-                'role' => 'admin',
-                'is_verified' => true,
-                'trust_score' => 5.0,
-                'status' => 'active',
-                'services_count' => 0,
-                'last_login' => now()->subMinutes(30),
-                'created_at' => now()->subYear()
-            ],
-        ]);
+        $query = User::withCount('services');
+
+        // Search functionality
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%")
+                  ->orWhere('phone', 'like', "%{$search}%");
+            });
+        }
+
+        // Role filter
+        if ($request->filled('role')) {
+            $query->where('role', $request->role);
+        }
+
+        // Status filter
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        // Verification filter
+        if ($request->filled('verified')) {
+            $query->where('is_verified', $request->verified);
+        }
+
+        // Order by latest first
+        $query->orderBy('created_at', 'desc');
+
+        // Get paginated results
+        $users = $query->paginate(15);
 
         return view('admin.users.index', compact('users'));
     }
 
     public function show($id)
     {
-        // Sample user data
-        $user = (object) [
-            'id' => $id,
-            'name' => 'John Smith',
-            'email' => 'john@example.com',
-            'phone' => '07123456789',
-            'bio' => 'Former Arsenal youth coach with 10 years experience...',
-            'location' => 'North London',
-            'role' => 'user',
-            'is_verified' => true,
-            'trust_score' => 4.8,
-            'status' => 'active',
-            'services_count' => 2,
-            'last_login' => now()->subHours(2),
-            'created_at' => now()->subMonths(6),
-            'profile_image' => null
-        ];
-
-        $userServices = collect([
-            (object) [
-                'title' => 'Football Coaching for Kids',
-                'category' => 'Coaching',
-                'status' => 'active',
-                'views_count' => 234,
-                'created_at' => now()->subDays(5)
-            ],
-            (object) [
-                'title' => 'Match Day Transport Service',
-                'category' => 'Transport',
-                'status' => 'active',
-                'views_count' => 189,
-                'created_at' => now()->subDays(3)
-            ],
-        ]);
+        $user = User::withCount('services')->findOrFail($id);
+        $userServices = $user->services()->latest()->get();
 
         return view('admin.users.show', compact('user', 'userServices'));
     }
 
     public function verify($id)
     {
-        // Here you would normally update the database
-        // User::findOrFail($id)->update(['is_verified' => true]);
+        $user = User::findOrFail($id);
+        $user->update(['is_verified' => true]);
 
         return redirect()->route('admin.users.index')
-            ->with('success', 'User verified successfully!');
+            ->with('success', 'Pengguna berjaya disahkan!');
     }
 
     public function suspend($id)
     {
-        // Here you would normally update the database
-        // User::findOrFail($id)->update(['status' => 'suspended']);
+        $user = User::findOrFail($id);
+        $user->update(['status' => 'suspended']);
 
         return redirect()->route('admin.users.index')
-            ->with('success', 'User suspended successfully!');
+            ->with('success', 'Pengguna berjaya digantung!');
     }
 
     public function activate($id)
     {
-        // Here you would normally update the database
-        // User::findOrFail($id)->update(['status' => 'active']);
+        $user = User::findOrFail($id);
+        $user->update(['status' => 'active']);
 
         return redirect()->route('admin.users.index')
-            ->with('success', 'User activated successfully!');
+            ->with('success', 'Pengguna berjaya diaktifkan!');
     }
 
     public function destroy($id)
     {
-        // Here you would normally delete from database
-        // User::findOrFail($id)->delete();
+        $user = User::findOrFail($id);
+        
+        // Prevent deletion of super admin or current user
+        if ($user->role === 'super_admin' || $user->id === auth()->id()) {
+            return redirect()->route('admin.users.index')
+                ->with('error', 'Cannot delete this user.');
+        }
+
+        $user->delete();
 
         return redirect()->route('admin.users.index')
-            ->with('success', 'User deleted successfully!');
+            ->with('success', 'Pengguna berjaya dipadam!');
+    }
+
+    public function create()
+    {
+        if (auth()->user()->role !== 'super_admin') {
+            return redirect()->route('admin.users.index')->with('error', 'Only super admin can create users.');
+        }
+        return view('admin.users.create');
+    }
+
+    public function store(Request $request)
+    {
+        if (auth()->user()->role !== 'super_admin') {
+            return redirect()->route('admin.users.index')->with('error', 'Only super admin can create users.');
+        }
+
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
+            'role' => 'required|in:user,admin,super_admin',
+            'password' => 'required|string|min:8|confirmed',
+            'is_verified' => 'nullable|boolean',
+        ]);
+
+        $user = new User();
+        $user->name = $validated['name'];
+        $user->email = $validated['email'];
+        $user->role = $validated['role'];
+        $user->password = bcrypt($validated['password']);
+        $user->is_verified = $request->has('is_verified');
+        $user->status = 'active'; // Automatically set to active
+        $user->save();
+
+        return redirect()->route('admin.users.index')->with('success', 'Pengguna berjaya dicipta!');
     }
 } 

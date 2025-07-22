@@ -33,6 +33,8 @@ class AuthController extends Controller
             $request->session()->regenerate();
 
             $user = Auth::user();
+            // Update last_login timestamp
+            $user->update(['last_login' => now()]);
             
             // Check if user has admin privileges
             if (!in_array($user->role, ['admin', 'super_admin'])) {

@@ -30,47 +30,6 @@
                         </nav>
                         <h1 class="text-2xl font-bold text-gray-900 mt-2">Butiran Pengguna</h1>
                     </div>
-                    <div class="flex space-x-3">
-                        @if(!$user->is_verified && $user->role !== 'super_admin')
-                            <form method="POST" action="{{ route('admin.users.verify', $user->id) }}" class="inline">
-                                @csrf
-                                <button type="submit" 
-                                        class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
-                                        onclick="return confirm('Adakah anda pasti mahu mengesahkan pengguna ini?')">
-                                    <svg class="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                    </svg>
-                                    Sahkan Pengguna
-                                </button>
-                            </form>
-                        @endif
-                        
-                        @if($user->status === 'active' && $user->role !== 'super_admin')
-                            <form method="POST" action="{{ route('admin.users.suspend', $user->id) }}" class="inline">
-                                @csrf
-                                <button type="submit" 
-                                        class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500"
-                                        onclick="return confirm('Adakah anda pasti mahu menggantung pengguna ini?')">
-                                    <svg class="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728L5.636 5.636m12.728 12.728L18.364 5.636M5.636 18.364l12.728-12.728"></path>
-                                    </svg>
-                                    Gantung Pengguna
-                                </button>
-                            </form>
-                        @elseif($user->status === 'suspended')
-                            <form method="POST" action="{{ route('admin.users.activate', $user->id) }}" class="inline">
-                                @csrf
-                                <button type="submit" 
-                                        class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                                        onclick="return confirm('Adakah anda pasti mahu mengaktifkan pengguna ini?')">
-                                    <svg class="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                    </svg>
-                                    Aktifkan Pengguna
-                                </button>
-                            </form>
-                        @endif
-                    </div>
                 </div>
             </div>
 
@@ -227,65 +186,6 @@
 
                 <!-- Sidebar -->
                 <div class="space-y-6">
-                    <!-- User Actions -->
-                    <div class="bg-white shadow-sm rounded-lg overflow-hidden">
-                        <div class="px-6 py-4 border-b border-gray-200">
-                            <h3 class="text-lg font-medium text-gray-900">Tindakan Pengguna</h3>
-                        </div>
-                        <div class="p-6 space-y-3">
-                            @if(!$user->is_verified && $user->role !== 'super_admin')
-                                <form method="POST" action="{{ route('admin.users.verify', $user->id) }}" class="w-full">
-                                    @csrf
-                                    <button type="submit" 
-                                            class="w-full inline-flex justify-center items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
-                                            onclick="return confirm('Adakah anda pasti mahu mengesahkan pengguna ini?')">
-                                        <svg class="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                        </svg>
-                                        Sahkan Pengguna
-                                    </button>
-                                </form>
-                            @endif
-                            
-                            @if($user->status === 'active' && $user->role !== 'super_admin')
-                                <form method="POST" action="{{ route('admin.users.suspend', $user->id) }}" class="w-full">
-                                    @csrf
-                                    <button type="submit" 
-                                            class="w-full inline-flex justify-center items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500"
-                                            onclick="return confirm('Adakah anda pasti mahu menggantung pengguna ini?')">
-                                        <svg class="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728L5.636 5.636m12.728 12.728L18.364 5.636M5.636 18.364l12.728-12.728"></path>
-                                        </svg>
-                                        Gantung Pengguna
-                                    </button>
-                                </form>
-                            @elseif($user->status === 'suspended')
-                                <form method="POST" action="{{ route('admin.users.activate', $user->id) }}" class="w-full">
-                                    @csrf
-                                    <button type="submit" 
-                                            class="w-full inline-flex justify-center items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                                            onclick="return confirm('Adakah anda pasti mahu mengaktifkan pengguna ini?')">
-                                        <svg class="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                        </svg>
-                                        Aktifkan Pengguna
-                                    </button>
-                                </form>
-                            @endif
-
-                            @if($user->role !== 'super_admin')
-                                <button type="button" 
-                                        onclick="changeUserRole({{ $user->id }})"
-                                        class="w-full inline-flex justify-center items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
-                                    <svg class="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                    </svg>
-                                    Tukar Peranan
-                                </button>
-                            @endif
-                        </div>
-                    </div>
-
                     <!-- Recent Activity -->
                     <div class="bg-white shadow-sm rounded-lg overflow-hidden">
                         <div class="px-6 py-4 border-b border-gray-200">
@@ -322,46 +222,4 @@
             </div>
         </div>
     </div>
-
-    <!-- Delete Confirmation Modal -->
-    <div id="deleteModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden z-50">
-        <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
-            <div class="mt-3 text-center">
-                <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100">
-                    <svg class="h-6 w-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
-                    </svg>
-                </div>
-                <h3 class="text-lg font-medium text-gray-900 mt-2">Delete User</h3>
-                <div class="mt-2 px-7 py-3">
-                    <p class="text-sm text-gray-500">
-                        Are you sure you want to delete this user? This action cannot be undone and will remove all their data and services.
-                    </p>
-                </div>
-                <div class="items-center px-4 py-3">
-                    <form id="deleteForm" method="POST" class="inline">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="px-4 py-2 bg-red-600 text-white text-base font-medium rounded-md shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 mr-2">
-                            Delete
-                        </button>
-                    </form>
-                    <button onclick="closeDeleteModal()" class="px-4 py-2 bg-gray-300 text-gray-800 text-base font-medium rounded-md shadow-sm hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-300">
-                        Cancel
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        function deleteUser(userId) {
-            document.getElementById('deleteForm').action = `/admin/users/${userId}`;
-            document.getElementById('deleteModal').classList.remove('hidden');
-        }
-
-        function closeDeleteModal() {
-            document.getElementById('deleteModal').classList.add('hidden');
-        }
-    </script>
 @endsection 

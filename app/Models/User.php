@@ -29,6 +29,8 @@ class User extends Authenticatable
         'role',
         'trust_score',
         'is_verified',
+        'status',
+        'last_login',
         'admin_request_data'
     ];
 
@@ -51,6 +53,7 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
+            'last_login' => 'datetime',
             'password' => 'hashed',
             'trust_score' => 'decimal:2',
             'is_verified' => 'boolean',
