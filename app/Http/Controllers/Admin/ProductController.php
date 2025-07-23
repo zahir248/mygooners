@@ -395,10 +395,17 @@ class ProductController extends Controller
             ->with('success', 'Produk diluluskan dengan jayanya!');
     }
 
-    public function reject($id)
+    public function reject(Request $request, $id)
     {
+        $request->validate([
+            'rejection_reason' => 'required|string|max:1000'
+        ]);
+
         $product = Product::findOrFail($id);
-        $product->update(['status' => 'rejected']);
+        $product->update([
+            'status' => 'rejected',
+            'rejection_reason' => $request->rejection_reason
+        ]);
 
         return redirect()->route('admin.products.index')
             ->with('success', 'Produk ditolak dengan jayanya!');

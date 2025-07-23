@@ -23,14 +23,18 @@ class Service extends Model
         'trust_score',
         'views_count',
         'status',
-        'images'
+        'images',
+        'rejection_reason',
+        'is_update_request',
+        'original_service_id'
     ];
 
     protected $casts = [
         'tags' => 'array',
         'images' => 'array',
         'is_verified' => 'boolean',
-        'trust_score' => 'decimal:2'
+        'trust_score' => 'decimal:2',
+        'is_update_request' => 'boolean'
     ];
 
     public function user()

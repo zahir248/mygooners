@@ -25,7 +25,8 @@ class Product extends Model
         'variation_label',
         'meta_title',
         'meta_description',
-        'views_count'
+        'views_count',
+        'rejection_reason'
     ];
 
     protected $casts = [

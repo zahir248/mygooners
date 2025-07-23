@@ -7,6 +7,7 @@ use App\Http\Controllers\Client\ServiceController;
 use App\Http\Controllers\Client\ProductController;
 use App\Http\Controllers\Client\VideoController;
 use App\Http\Controllers\Client\AuthController;
+use App\Http\Controllers\Client\RequestController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\AuthController as AdminAuthController;
 use App\Http\Controllers\Admin\ArticleController as AdminArticleController;
@@ -59,9 +60,29 @@ Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/dashboard', function () {
         $user = auth()->user();
-        $services = \App\Models\Service::where('user_id', $user->id)->orderBy('created_at', 'desc')->get();
-        $products = \App\Models\Product::where('user_id', $user->id)->orderBy('created_at', 'desc')->get();
-        return view('client.dashboard', compact('services', 'products'));
+        $services = \App\Models\Service::where('user_id', $user->id)->whereIn('status', ['active', 'inactive'])->orderBy('created_at', 'desc')->get();
+        $products = \App\Models\Product::where('user_id', $user->id)->whereIn('status', ['active', 'inactive'])->orderBy('created_at', 'desc')->get();
+        $pendingServices = \App\Models\Service::where('user_id', $user->id)
+            ->where('status', 'pending')
+            ->where('is_update_request', false)
+            ->orderBy('created_at', 'desc')
+            ->get();
+        $pendingProducts = \App\Models\Product::where('user_id', $user->id)->where('status', 'pending')->orderBy('created_at', 'desc')->get();
+        $rejectedServices = \App\Models\Service::where('user_id', $user->id)
+            ->where('status', 'rejected')
+            ->where('is_update_request', false)
+            ->orderBy('created_at', 'desc')
+            ->get();
+        $rejectedProducts = \App\Models\Product::where('user_id', $user->id)->where('status', 'rejected')->orderBy('created_at', 'desc')->get();
+        
+        // Get update requests for services
+        $serviceUpdateRequests = \App\Models\Service::where('user_id', $user->id)
+            ->where('is_update_request', true)
+            ->whereIn('status', ['pending', 'rejected'])
+            ->get()
+            ->keyBy('original_service_id');
+        
+        return view('client.dashboard', compact('services', 'products', 'pendingServices', 'pendingProducts', 'rejectedServices', 'rejectedProducts', 'serviceUpdateRequests'));
     })->name('dashboard');
 
     Route::post('/dashboard/show-seller-form', function () {
@@ -115,6 +136,14 @@ Route::middleware('auth')->group(function () {
         return redirect()->route('dashboard')->with('success', 'Permohonan penjual anda telah diterima!');
     })->name('dashboard.become_seller');
 
+    Route::get('/seller-info', function () {
+        $user = auth()->user();
+        if (!$user->is_seller) {
+            return redirect()->route('dashboard')->with('error', 'Anda bukan penjual.');
+        }
+        return view('client.seller-info', compact('user'));
+    })->name('seller.info');
+
     Route::post('/dashboard/update-profile', function (\Illuminate\Http\Request $request) {
         $user = auth()->user();
         $validated = $request->validate([
@@ -164,6 +193,37 @@ Route::middleware('auth')->group(function () {
         $user->save();
         return redirect()->route('dashboard')->with('success', 'Maklumat peribadi berjaya dikemaskini!');
     })->name('dashboard.update_profile');
+
+    // Request Routes
+    Route::get('/service-request', [RequestController::class, 'showServiceRequestForm'])->name('service.request.create');
+    Route::post('/service-request', [RequestController::class, 'storeServiceRequest'])->name('service.request.store');
+    Route::get('/product-request', [RequestController::class, 'showProductRequestForm'])->name('product.request.create');
+    Route::post('/product-request', [RequestController::class, 'storeProductRequest'])->name('product.request.store');
+    
+    // Preview pending requests (only for the owner)
+            Route::get('/pending-service/{id}', [RequestController::class, 'previewPendingService'])->name('pending.service.preview');
+        Route::get('/pending-product/{id}', [RequestController::class, 'previewPendingProduct'])->name('pending.product.preview');
+        Route::get('/rejected-service/{id}', [RequestController::class, 'previewRejectedService'])->name('rejected.service.preview');
+        Route::get('/rejected-product/{id}', [RequestController::class, 'previewRejectedProduct'])->name('rejected.product.preview');
+        Route::get('/edit-rejected-service/{id}', [RequestController::class, 'editRejectedService'])->name('rejected.service.edit');
+        Route::put('/edit-rejected-service/{id}', [RequestController::class, 'updateRejectedService'])->name('rejected.service.update');
+        Route::get('/edit-rejected-product/{id}', [RequestController::class, 'editRejectedProduct'])->name('rejected.product.edit');
+        Route::put('/edit-rejected-product/{id}', [RequestController::class, 'updateRejectedProduct'])->name('rejected.product.update');
+    
+    // Status Update Routes
+    Route::put('/service/{id}/status', [RequestController::class, 'updateServiceStatus'])->name('service.status.update');
+    Route::put('/product/{id}/status', [RequestController::class, 'updateProductStatus'])->name('product.status.update');
+    
+    // Service Update Request Routes
+    Route::get('/service/{id}/edit-request', [RequestController::class, 'showServiceEditRequestForm'])->name('service.edit.request.create');
+    Route::post('/service/{id}/edit-request', [RequestController::class, 'storeServiceEditRequest'])->name('service.edit.request.store');
+    Route::get('/service-update/{id}/preview', [RequestController::class, 'previewServiceUpdateRequest'])->name('service.update.preview');
+    Route::delete('/service-update/{id}/cancel', [RequestController::class, 'cancelServiceUpdateRequest'])->name('service.update.cancel');
+    
+    // Cancel Service Request Routes
+    Route::delete('/service/{id}/cancel', [RequestController::class, 'cancelServiceRequest'])->name('service.cancel');
+    Route::delete('/product/{id}/cancel', [RequestController::class, 'cancelProductRequest'])->name('product.cancel');
+    Route::get('/service/{id}/preview', [RequestController::class, 'previewOwnService'])->name('service.preview');
 });
 
 // Admin Authentication Routes (not protected)
@@ -209,6 +269,7 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
         Route::post('/{id}/toggle-status', [AdminServiceController::class, 'toggleStatus'])->name('admin.services.toggle-status');
         Route::patch('/{id}/update-status', [AdminServiceController::class, 'updateStatus'])->name('admin.services.update-status');
         Route::delete('/{id}', [AdminServiceController::class, 'destroy'])->name('admin.services.destroy');
+        Route::get('/{id}/details', [AdminServiceController::class, 'getServiceDetails'])->name('admin.services.details');
     });
     
     // Products Management
