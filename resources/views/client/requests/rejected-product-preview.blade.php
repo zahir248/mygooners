@@ -102,32 +102,63 @@
                             @endif
                         </div>
                     </div>
-                    
-                    <div>
-                        <h3 class="text-lg font-semibold text-gray-900 mb-3">Maklumat SEO</h3>
-                        <div class="space-y-3">
-                            @if($product->meta_title)
-                            <div>
-                                <label class="text-sm font-medium text-gray-600">Meta Title</label>
-                                <p class="text-gray-900 mt-1">{{ $product->meta_title }}</p>
+                </div>
+            </div>
+
+            <!-- Product Variations -->
+            @if($product->variations && $product->variations->count() > 0)
+            <div class="px-6 py-4 border-t border-gray-200">
+                <h3 class="text-lg font-semibold text-gray-900 mb-3">
+                    @if($product->variation_label)
+                        {{ $product->variation_label }}
+                    @else
+                        Varian Produk
+                    @endif
+                </h3>
+                <div class="space-y-3">
+                    @foreach($product->variations as $variation)
+                    <div class="border border-gray-200 rounded-lg p-4">
+                        <div class="flex items-start justify-between">
+                            <div class="flex-1">
+                                <h5 class="font-medium text-gray-900 mb-2">{{ $variation->name }}</h5>
+                                @if($variation->sku)
+                                <p class="text-sm text-gray-600 mb-2">SKU: {{ $variation->sku }}</p>
+                                @endif
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                                    <div>
+                                        <span class="font-medium text-gray-600">Harga:</span>
+                                        <span class="text-gray-900">RM {{ number_format($variation->price, 2) }}</span>
+                                    </div>
+                                    @if($variation->sale_price)
+                                    <div>
+                                        <span class="font-medium text-gray-600">Harga Jualan:</span>
+                                        <span class="text-red-600 font-medium">RM {{ number_format($variation->sale_price, 2) }}</span>
+                                    </div>
+                                    @endif
+                                    <div>
+                                        <span class="font-medium text-gray-600">Stok:</span>
+                                        <span class="text-gray-900">{{ $variation->stock_quantity }}</span>
+                                    </div>
+                                </div>
+                                <div class="mt-2">
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $variation->is_active ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800' }}">
+                                        {{ $variation->is_active ? 'Aktif' : 'Tidak Aktif' }}
+                                    </span>
+                                </div>
                             </div>
-                            @endif
-                            @if($product->meta_description)
-                            <div>
-                                <label class="text-sm font-medium text-gray-600">Meta Description</label>
-                                <p class="text-gray-900 mt-1">{{ $product->meta_description }}</p>
-                            </div>
-                            @endif
-                            @if($product->variation_label)
-                            <div>
-                                <label class="text-sm font-medium text-gray-600">Label Variasi</label>
-                                <p class="text-gray-900 mt-1">{{ $product->variation_label }}</p>
+                            @if($variation->images && is_array($variation->images) && count($variation->images) > 0)
+                            <div class="ml-4">
+                                <img src="{{ asset('storage/' . $variation->images[0]) }}" 
+                                     alt="{{ $variation->name }}" 
+                                     class="w-16 h-16 object-cover rounded-lg">
                             </div>
                             @endif
                         </div>
                     </div>
+                    @endforeach
                 </div>
             </div>
+            @endif
 
             <!-- Action Buttons -->
             <div class="px-6 py-4 bg-gray-50 border-t border-gray-200">
@@ -140,7 +171,7 @@
                         Kembali ke Dashboard
                     </a>
                     <a href="{{ route('rejected.product.edit', $product->id) }}" 
-                       class="inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
+                       class="inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                         </svg>

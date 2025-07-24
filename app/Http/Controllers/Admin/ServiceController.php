@@ -13,7 +13,15 @@ class ServiceController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Service::with('user')->where('status', '!=', 'pending');
+        // Show active, inactive, and rejected services, but exclude pending and rejected update requests
+        $query = Service::with('user')
+            ->where(function($q) {
+                $q->whereIn('status', ['active', 'inactive', 'rejected'])
+                  ->where(function($subQ) {
+                      $subQ->where('is_update_request', false)
+                           ->orWhereNull('is_update_request');
+                  });
+            });
 
         // Search filter
         if ($request->filled('search')) {
@@ -54,6 +62,8 @@ class ServiceController extends Controller
 
     public function pending()
     {
+        // Show only pending services (both regular submissions and pending update requests)
+        // Exclude rejected update requests as they should not appear in pending table
         $services = Service::with('user')
             ->where('status', 'pending')
             ->orderBy('created_at', 'desc')

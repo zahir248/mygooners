@@ -1,7 +1,7 @@
-<div x-data="{ open: false }" class="inline">
+<div x-data="{ open: false }" class="inline-flex items-center">
     <!-- Trigger Button -->
     <button type="button" @click="open = true" class="{{ $buttonClass ?? 'text-red-600 hover:text-red-800 text-sm font-medium' }}">
-        Batal
+        {{ $buttonText ?? 'Batal' }}
     </button>
 
     <!-- Modal -->
@@ -22,7 +22,7 @@
                 </div>
             </div>
             <!-- Title -->
-            <h3 class="text-lg font-bold text-gray-900 mb-2 text-center">Batalkan Permohonan?</h3>
+            <h3 class="text-lg font-bold text-gray-900 mb-2 text-center">{{ $buttonText ?? 'Batal' }} Permohonan?</h3>
             <!-- Message -->
             <div class="text-gray-700 text-sm mb-6 text-center">
                 {{ $message ?? 'Adakah anda pasti mahu membatalkan permohonan ini?' }}
@@ -34,7 +34,7 @@
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-2 rounded-lg transition-colors">
-                        Ya, Batalkan
+                        Ya, {{ $buttonText ?? 'Batal' }}
                     </button>
                 </form>
             </div>

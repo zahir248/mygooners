@@ -34,10 +34,17 @@
             </div>
         </div>
         <div>
-            <a href="{{ route('seller.info') }}" class="inline-flex items-center gap-2 bg-gray-600 hover:bg-gray-700 text-white px-6 py-3 rounded-lg font-semibold shadow transition-colors">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                Lihat Maklumat Penjual
-            </a>
+            @if(auth()->user()->is_seller)
+                <a href="{{ route('seller.info') }}" class="inline-flex items-center gap-2 bg-gray-600 hover:bg-gray-700 text-white px-6 py-3 rounded-lg font-semibold shadow transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                    Lihat Maklumat Penjual
+                </a>
+            @else
+                <a href="{{ route('profile.info') }}" class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold shadow transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                    Lihat Maklumat Profil
+                </a>
+            @endif
         </div>
     </div>
 
@@ -88,6 +95,25 @@
                     <button type="submit" class="bg-yellow-500 hover:bg-yellow-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors">Saya ingin menjadi penjual</button>
                 </form>
             @endif
+        </div>
+
+        <!-- Profile Information Notice -->
+        <div class="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-xl shadow p-6 mb-10">
+            <div class="flex items-center gap-3 mb-4">
+                <div class="bg-blue-100 text-blue-600 rounded-full p-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                </div>
+                <h3 class="text-lg font-bold text-blue-800">Maklumat Profil Anda</h3>
+            </div>
+            <p class="text-blue-700 mb-4">Anda boleh melihat dan mengemaskini maklumat profil peribadi anda seperti nama, email, telefon, dan lokasi.</p>
+            <a href="{{ route('profile.info') }}" class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                </svg>
+                Lihat Maklumat Profil
+            </a>
         </div>
     @endif
 
@@ -177,7 +203,7 @@
         </div>
         @endif
 
-        <!-- Pending Update Requests -->
+        <!-- Pending Service Update Requests -->
         @if($pendingUpdateRequests->count() > 0)
         <div class="mb-6">
             <h4 class="font-semibold text-gray-900 mb-3">Kemaskini Perkhidmatan Menunggu ({{ $pendingUpdateRequests->count() }})</h4>
@@ -215,6 +241,44 @@
         </div>
         @endif
 
+        <!-- Pending Product Update Requests -->
+        @if($pendingProductUpdateRequests->count() > 0)
+        <div class="mb-6">
+            <h4 class="font-semibold text-gray-900 mb-3">Kemaskini Produk Menunggu ({{ $pendingProductUpdateRequests->count() }})</h4>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                @foreach($pendingProductUpdateRequests as $updateRequest)
+                    @php
+                        $originalProduct = $products->firstWhere('id', $updateRequest->original_product_id);
+                    @endphp
+                    @if($originalProduct)
+                    <div class="bg-white rounded-lg p-4 border border-yellow-200">
+                        <div class="flex items-start justify-between mb-2">
+                            <h5 class="font-medium text-gray-900 line-clamp-2">{{ $originalProduct->title }}</h5>
+                            <span class="bg-blue-100 text-blue-700 px-2 py-1 rounded-full text-xs font-medium">
+                                Kemaskini Menunggu
+                            </span>
+                        </div>
+                        <p class="text-sm text-gray-600 mb-3">Permohonan kemaskini anda sedang disemak oleh admin.</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs text-gray-500">{{ $updateRequest->created_at->format('d M Y') }}</span>
+                            <div class="flex items-center gap-2">
+                                <a href="{{ route('product.update.preview', $updateRequest->id) }}" 
+                                   class="text-blue-600 hover:text-blue-800 text-sm font-medium">
+                                    Lihat
+                                </a>
+                                @include('client.partials.cancel-modal', [
+                                    'action' => route('product.update.cancel', $updateRequest->id),
+                                    'message' => 'Adakah anda pasti mahu membatalkan permohonan kemaskini produk ini? Tindakan ini tidak boleh diundur.'
+                                ])
+                            </div>
+                        </div>
+                    </div>
+                    @endif
+                @endforeach
+            </div>
+        </div>
+        @endif
+
         <div class="bg-yellow-100 border border-yellow-300 rounded-lg p-4">
             <p class="text-sm text-yellow-800">
                 <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -232,110 +296,7 @@
     </div>
     @endif
 
-    <!-- Rejected Requests Section -->
-    @if($rejectedServices->count() > 0 || $rejectedProducts->count() > 0)
-    <div class="bg-red-50 border border-red-200 rounded-xl p-6 mb-10">
-        <div class="flex items-center gap-3 mb-4">
-            <div class="bg-red-100 text-red-600 rounded-full p-2">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                </svg>
-            </div>
-            <h3 class="text-lg font-bold text-red-800">Permohonan Ditolak</h3>
-        </div>
-        
-        <!-- Rejected Services -->
-        @if($rejectedServices->count() > 0)
-        <div class="mb-6">
-            <h4 class="font-semibold text-gray-900 mb-3">Perkhidmatan Ditolak ({{ $rejectedServices->count() }})</h4>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                @foreach($rejectedServices as $service)
-                <div class="bg-white rounded-lg p-4 border border-red-200">
-                    <div class="flex items-start justify-between mb-2">
-                        <h5 class="font-medium text-gray-900 line-clamp-2">{{ $service->title }}</h5>
-                        <span class="bg-red-100 text-red-700 px-2 py-1 rounded-full text-xs font-medium">
-                            Ditolak
-                        </span>
-                    </div>
-                    <p class="text-sm text-gray-600 mb-3 line-clamp-2">{{ Str::limit($service->description, 80) }}</p>
-                    @if($service->rejection_reason)
-                    <div class="mb-3 p-3 bg-red-50 border border-red-200 rounded-lg">
-                        <p class="text-xs font-medium text-red-800 mb-1">Sebab Penolakan:</p>
-                        <p class="text-xs text-red-700">{{ $service->rejection_reason }}</p>
-                    </div>
-                    @endif
-                    <div class="flex items-center justify-between">
-                        <span class="text-xs text-gray-500">{{ $service->created_at->format('d M Y') }}</span>
-                                                        <div class="flex gap-2">
-                                    <a href="{{ route('rejected.service.preview', $service->id) }}" 
-                                       class="text-blue-600 hover:text-blue-800 text-sm font-medium">
-                                        Lihat
-                                    </a>
-                                    <a href="{{ route('rejected.service.edit', $service->id) }}" 
-                                       class="text-green-600 hover:text-green-800 text-sm font-medium">
-                                        Hantar Semula
-                                    </a>
-                                </div>
-                    </div>
-                </div>
-                @endforeach
-            </div>
-        </div>
-        @endif
 
-        <!-- Rejected Products -->
-        @if($rejectedProducts->count() > 0)
-        <div class="mb-6">
-            <h4 class="font-semibold text-gray-900 mb-3">Produk Ditolak ({{ $rejectedProducts->count() }})</h4>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                @foreach($rejectedProducts as $product)
-                <div class="bg-white rounded-lg p-4 border border-red-200">
-                    <div class="flex items-start justify-between mb-2">
-                        <h5 class="font-medium text-gray-900 line-clamp-2">{{ $product->title }}</h5>
-                        <span class="bg-red-100 text-red-700 px-2 py-1 rounded-full text-xs font-medium">
-                            Ditolak
-                        </span>
-                    </div>
-                    <p class="text-sm text-gray-600 mb-2 line-clamp-2">{{ Str::limit($product->description, 80) }}</p>
-                    <div class="flex items-center justify-between mb-3">
-                        <span class="text-sm font-medium text-gray-900">RM {{ number_format($product->price, 2) }}</span>
-                        <span class="text-xs text-gray-500">Stok: {{ $product->stock_quantity }}</span>
-                    </div>
-                    @if($product->rejection_reason)
-                    <div class="mb-3 p-3 bg-red-50 border border-red-200 rounded-lg">
-                        <p class="text-xs font-medium text-red-800 mb-1">Sebab Penolakan:</p>
-                        <p class="text-xs text-red-700">{{ $product->rejection_reason }}</p>
-                    </div>
-                    @endif
-                    <div class="flex items-center justify-between">
-                        <span class="text-xs text-gray-500">{{ $product->created_at->format('d M Y') }}</span>
-                                                        <div class="flex gap-2">
-                                    <a href="{{ route('rejected.product.preview', $product->id) }}" 
-                                       class="text-blue-600 hover:text-blue-800 text-sm font-medium">
-                                        Lihat
-                                    </a>
-                                    <a href="{{ route('rejected.product.edit', $product->id) }}" 
-                                       class="text-green-600 hover:text-green-800 text-sm font-medium">
-                                        Hantar Semula
-                                    </a>
-                                </div>
-                    </div>
-                </div>
-                @endforeach
-            </div>
-        </div>
-        @endif
-
-        <div class="bg-red-100 border border-red-300 rounded-lg p-4">
-            <p class="text-sm text-red-800">
-                <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                </svg>
-                Permohonan anda telah ditolak oleh admin. Sila semak sebab penolakan dan buat permohonan baharu jika perlu.
-            </p>
-        </div>
-        </div>
-    @endif
 
 
 
@@ -343,18 +304,19 @@
     @php
         $rejectedUpdateRequests = $serviceUpdateRequests->where('status', 'rejected');
     @endphp
-    @if($rejectedUpdateRequests->count() > 0)
+    @if($rejectedUpdateRequests->count() > 0 || $rejectedProductUpdateRequests->count() > 0)
     <div class="bg-red-50 border border-red-200 rounded-xl p-6 mb-10">
         <div class="flex items-center gap-3 mb-4">
             <div class="bg-red-100 text-red-600 rounded-full p-2">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                 </svg>
             </div>
             <h3 class="text-lg font-bold text-red-800">Permohonan Kemaskini Ditolak</h3>
         </div>
         
         <div class="space-y-4">
+            <!-- Rejected Service Update Requests -->
             @foreach($rejectedUpdateRequests as $updateRequest)
                 @php
                     $originalService = $services->firstWhere('id', $updateRequest->original_service_id);
@@ -362,7 +324,12 @@
                 @if($originalService)
                 <div class="bg-white rounded-lg p-4 border border-red-200">
                     <div class="flex items-start justify-between mb-2">
-                        <h5 class="font-medium text-gray-900">{{ $originalService->title }}</h5>
+                        <div class="flex items-center gap-2">
+                            <h5 class="font-medium text-gray-900">{{ $originalService->title }}</h5>
+                            <span class="bg-blue-100 text-blue-700 px-2 py-1 rounded-full text-xs font-medium">
+                                Perkhidmatan
+                            </span>
+                        </div>
                         <span class="bg-red-100 text-red-700 px-2 py-1 rounded-full text-xs font-medium">
                             Kemaskini Ditolak
                         </span>
@@ -375,16 +342,193 @@
                     @endif
                     <div class="flex items-center justify-between">
                         <span class="text-xs text-gray-500">{{ $updateRequest->created_at->format('d M Y') }}</span>
-                        <a href="{{ route('service.edit.request.create', $originalService->id) }}" 
-                           class="text-green-600 hover:text-green-800 text-sm font-medium">
-                            Hantar Semula
-                        </a>
+                        <div class="flex gap-2 items-center">
+                            <a href="{{ route('service.update.preview', $updateRequest->id) }}" 
+                               class="text-blue-600 hover:text-blue-800 text-sm font-medium">
+                                Lihat
+                            </a>
+                            <a href="{{ route('service.edit.request.create', $originalService->id) }}" 
+                               class="text-green-600 hover:text-green-800 text-sm font-medium">
+                                Hantar Semula
+                            </a>
+                            @include('client.partials.cancel-modal', [
+                                'action' => route('service.update.forget', $updateRequest->id),
+                                'message' => 'Adakah anda pasti mahu melupakan permohonan kemaskini perkhidmatan ini? Tindakan ini tidak boleh diundur.',
+                                'buttonText' => 'Lupakan',
+                                'buttonClass' => 'text-red-600 hover:text-red-800 text-sm font-medium'
+                            ])
+                        </div>
+                    </div>
+                </div>
+                @endif
+            @endforeach
+
+            <!-- Rejected Product Update Requests -->
+            @foreach($rejectedProductUpdateRequests as $updateRequest)
+                @php
+                    $originalProduct = $products->firstWhere('id', $updateRequest->original_product_id);
+                @endphp
+                @if($originalProduct)
+                <div class="bg-white rounded-lg p-4 border border-red-200">
+                    <div class="flex items-start justify-between mb-2">
+                        <div class="flex items-center gap-2">
+                            <h5 class="font-medium text-gray-900">{{ $originalProduct->title }}</h5>
+                            <span class="bg-purple-100 text-purple-700 px-2 py-1 rounded-full text-xs font-medium">
+                                Produk
+                            </span>
+                        </div>
+                        <span class="bg-red-100 text-red-700 px-2 py-1 rounded-full text-xs font-medium">
+                            Kemaskini Ditolak
+                        </span>
+                    </div>
+                    @if($updateRequest->rejection_reason)
+                    <div class="mb-3 p-3 bg-red-50 border border-red-200 rounded-lg">
+                        <p class="text-xs font-medium text-red-800 mb-1">Sebab Penolakan:</p>
+                        <p class="text-xs text-red-700">{{ $updateRequest->rejection_reason }}</p>
+                    </div>
+                    @endif
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs text-gray-500">{{ $updateRequest->created_at->format('d M Y') }}</span>
+                        <div class="flex gap-2 items-center">
+                            <a href="{{ route('product.update.preview', $updateRequest->id) }}" 
+                               class="text-blue-600 hover:text-blue-800 text-sm font-medium">
+                                Lihat
+                            </a>
+                            <a href="{{ route('product.edit.request.create', $originalProduct->id) }}" 
+                               class="text-green-600 hover:text-green-800 text-sm font-medium">
+                                Hantar Semula
+                            </a>
+                            @include('client.partials.cancel-modal', [
+                                'action' => route('product.update.forget', $updateRequest->id),
+                                'message' => 'Adakah anda pasti mahu melupakan permohonan kemaskini produk ini? Tindakan ini tidak boleh diundur.',
+                                'buttonText' => 'Lupakan',
+                                'buttonClass' => 'text-red-600 hover:text-red-800 text-sm font-medium'
+                            ])
+                        </div>
                     </div>
                 </div>
                 @endif
             @endforeach
         </div>
+        
+        <div class="bg-red-100 border border-red-300 rounded-lg p-4 mt-4">
+            <p class="text-sm text-red-800">
+                <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                Permohonan anda telah ditolak oleh admin. Sila semak sebab penolakan dan buat permohonan baharu jika perlu.
+            </p>
         </div>
+        </div>
+    @endif
+
+    <!-- Rejected Requests Section -->
+    @if($rejectedServices->count() > 0 || $rejectedProducts->count() > 0)
+    <div class="bg-red-50 border border-red-200 rounded-xl p-6 mb-10">
+        <div class="flex items-center gap-3 mb-4">
+            <div class="bg-red-100 text-red-600 rounded-full p-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </div>
+            <h3 class="text-lg font-bold text-red-800">Permohonan Ditolak</h3>
+        </div>
+        
+        <div class="space-y-4">
+            <!-- Rejected Services -->
+            @foreach($rejectedServices as $service)
+            <div class="bg-white rounded-lg p-4 border border-red-200">
+                <div class="flex items-start justify-between mb-2">
+                    <div class="flex items-center gap-2">
+                        <h5 class="font-medium text-gray-900">{{ $service->title }}</h5>
+                        <span class="bg-blue-100 text-blue-700 px-2 py-1 rounded-full text-xs font-medium">
+                            Perkhidmatan
+                        </span>
+                    </div>
+                    <span class="bg-red-100 text-red-700 px-2 py-1 rounded-full text-xs font-medium">
+                        Ditolak
+                    </span>
+                </div>
+                @if($service->rejection_reason)
+                <div class="mb-3 p-3 bg-red-50 border border-red-200 rounded-lg">
+                    <p class="text-xs font-medium text-red-800 mb-1">Sebab Penolakan:</p>
+                    <p class="text-xs text-red-700">{{ $service->rejection_reason }}</p>
+                </div>
+                @endif
+                <div class="flex items-center justify-between">
+                    <span class="text-xs text-gray-500">{{ $service->created_at->format('d M Y') }}</span>
+                    <div class="flex gap-2 items-center">
+                        <a href="{{ route('rejected.service.preview', $service->id) }}" 
+                           class="text-blue-600 hover:text-blue-800 text-sm font-medium">
+                            Lihat
+                        </a>
+                        <a href="{{ route('rejected.service.edit', $service->id) }}" 
+                           class="text-green-600 hover:text-green-800 text-sm font-medium">
+                            Hantar Semula
+                        </a>
+                        @include('client.partials.cancel-modal', [
+                            'action' => route('service.forget', $service->id),
+                            'message' => 'Adakah anda pasti mahu melupakan permohonan perkhidmatan ini? Tindakan ini tidak boleh diundur.',
+                            'buttonText' => 'Lupakan',
+                            'buttonClass' => 'text-red-600 hover:text-red-800 text-sm font-medium'
+                        ])
+                    </div>
+                </div>
+            </div>
+            @endforeach
+
+            <!-- Rejected Products -->
+            @foreach($rejectedProducts as $product)
+            <div class="bg-white rounded-lg p-4 border border-red-200">
+                <div class="flex items-start justify-between mb-2">
+                    <div class="flex items-center gap-2">
+                        <h5 class="font-medium text-gray-900">{{ $product->title }}</h5>
+                        <span class="bg-purple-100 text-purple-700 px-2 py-1 rounded-full text-xs font-medium">
+                            Produk
+                        </span>
+                    </div>
+                    <span class="bg-red-100 text-red-700 px-2 py-1 rounded-full text-xs font-medium">
+                        Ditolak
+                    </span>
+                </div>
+                @if($product->rejection_reason)
+                <div class="mb-3 p-3 bg-red-50 border border-red-200 rounded-lg">
+                    <p class="text-xs font-medium text-red-800 mb-1">Sebab Penolakan:</p>
+                    <p class="text-xs text-red-700">{{ $product->rejection_reason }}</p>
+                </div>
+                @endif
+                <div class="flex items-center justify-between">
+                    <span class="text-xs text-gray-500">{{ $product->created_at->format('d M Y') }}</span>
+                    <div class="flex gap-2 items-center">
+                        <a href="{{ route('rejected.product.preview', $product->id) }}" 
+                           class="text-blue-600 hover:text-blue-800 text-sm font-medium">
+                            Lihat
+                        </a>
+                        <a href="{{ route('rejected.product.edit', $product->id) }}" 
+                           class="text-green-600 hover:text-green-800 text-sm font-medium">
+                            Hantar Semula
+                        </a>
+                        @include('client.partials.cancel-modal', [
+                            'action' => route('product.forget', $product->id),
+                            'message' => 'Adakah anda pasti mahu melupakan permohonan produk ini? Tindakan ini tidak boleh diundur.',
+                            'buttonText' => 'Lupakan',
+                            'buttonClass' => 'text-red-600 hover:text-red-800 text-sm font-medium'
+                        ])
+                    </div>
+                </div>
+            </div>
+            @endforeach
+        </div>
+        
+        <div class="bg-red-100 border border-red-300 rounded-lg p-4 mt-4">
+            <p class="text-sm text-red-800">
+                <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                Permohonan anda telah ditolak oleh admin. Sila semak sebab penolakan dan buat permohonan baharu jika perlu.
+            </p>
+        </div>
+    </div>
     @endif
 
     <!-- My Services Section -->
@@ -490,15 +634,29 @@
                 @foreach($products as $product)
                     <div class="bg-white rounded-xl shadow hover:shadow-lg transition p-5 flex flex-col justify-between relative">
                         @if($product->status == 'active' || $product->status == 'inactive')
-                            <div class="absolute top-4 right-4">
-                                <form method="POST" action="{{ route('product.status.update', $product->id) }}" class="inline">
-                                    @csrf
-                                    @method('PUT')
-                                    <input type="hidden" name="status" value="{{ $product->status == 'active' ? 'inactive' : 'active' }}">
-                                    <button type="submit" class="relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 {{ $product->status == 'active' ? 'bg-green-600' : 'bg-gray-200' }}">
+                            <div class="absolute top-4 right-4" x-data="{ showError: false }">
+                                @php $updateRequest = $productUpdateRequests->get($product->id); @endphp
+                                @if($updateRequest && $updateRequest->status == 'pending')
+                                    <button type="button"
+                                        class="relative inline-flex h-6 w-11 items-center rounded-full bg-gray-300 cursor-not-allowed opacity-60"
+                                        @click="showError = true"
+                                        title="Tidak boleh tukar status semasa permohonan kemaskini sedang menunggu kelulusan">
                                         <span class="inline-block h-4 w-4 transform rounded-full bg-white transition-transform {{ $product->status == 'active' ? 'translate-x-6' : 'translate-x-1' }}"></span>
                                     </button>
-                                </form>
+                                    <div x-show="showError" x-transition class="absolute right-0 mt-2 w-64 bg-red-50 border border-red-200 text-red-700 text-sm rounded-lg shadow p-3 z-50">
+                                        Tidak boleh tukar status semasa permohonan kemaskini sedang menunggu kelulusan.
+                                        <button @click="showError = false" class="absolute top-1 right-2 text-red-400 hover:text-red-600">&times;</button>
+                                    </div>
+                                @else
+                                    <form method="POST" action="{{ route('product.status.update', $product->id) }}" class="inline">
+                                        @csrf
+                                        @method('PUT')
+                                        <input type="hidden" name="status" value="{{ $product->status == 'active' ? 'inactive' : 'active' }}">
+                                        <button type="submit" class="relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 {{ $product->status == 'active' ? 'bg-green-600' : 'bg-gray-200' }}">
+                                            <span class="inline-block h-4 w-4 transform rounded-full bg-white transition-transform {{ $product->status == 'active' ? 'translate-x-6' : 'translate-x-1' }}"></span>
+                                        </button>
+                                    </form>
+                                @endif
                             </div>
                         @endif
                         <div>
@@ -515,6 +673,20 @@
                         </div>
                         <div class="flex gap-2 mt-4">
                             <a href="{{ route('shop.show', $product->slug) }}" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline text-sm font-medium">Lihat</a>
+                            @if($product->status == 'active' || $product->status == 'inactive')
+                                @php
+                                    $updateRequest = $productUpdateRequests->get($product->id);
+                                @endphp
+                                @if($updateRequest)
+                                    @if($updateRequest->status == 'pending')
+                                        <span class="text-yellow-600 text-sm font-medium">Kemaskini Menunggu</span>
+                                    @elseif($updateRequest->status == 'rejected')
+                                        <a href="{{ route('product.edit.request.create', $product->id) }}" class="text-red-600 hover:underline text-sm font-medium">Kemaskini Ditolak</a>
+                                    @endif
+                                @else
+                                    <a href="{{ route('product.edit.request.create', $product->id) }}" class="text-green-600 hover:underline text-sm font-medium">Kemaskini</a>
+                                @endif
+                            @endif
                         </div>
                     </div>
                 @endforeach

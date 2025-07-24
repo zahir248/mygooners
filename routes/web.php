@@ -67,13 +67,21 @@ Route::middleware('auth')->group(function () {
             ->where('is_update_request', false)
             ->orderBy('created_at', 'desc')
             ->get();
-        $pendingProducts = \App\Models\Product::where('user_id', $user->id)->where('status', 'pending')->orderBy('created_at', 'desc')->get();
+        $pendingProducts = \App\Models\Product::where('user_id', $user->id)
+            ->where('status', 'pending')
+            ->where('is_update_request', false)
+            ->orderBy('created_at', 'desc')
+            ->get();
         $rejectedServices = \App\Models\Service::where('user_id', $user->id)
             ->where('status', 'rejected')
             ->where('is_update_request', false)
             ->orderBy('created_at', 'desc')
             ->get();
-        $rejectedProducts = \App\Models\Product::where('user_id', $user->id)->where('status', 'rejected')->orderBy('created_at', 'desc')->get();
+        $rejectedProducts = \App\Models\Product::where('user_id', $user->id)
+            ->where('status', 'rejected')
+            ->where('is_update_request', false)
+            ->orderBy('created_at', 'desc')
+            ->get();
         
         // Get update requests for services
         $serviceUpdateRequests = \App\Models\Service::where('user_id', $user->id)
@@ -82,13 +90,39 @@ Route::middleware('auth')->group(function () {
             ->get()
             ->keyBy('original_service_id');
         
-        return view('client.dashboard', compact('services', 'products', 'pendingServices', 'pendingProducts', 'rejectedServices', 'rejectedProducts', 'serviceUpdateRequests'));
+        // Get update requests for products
+        $productUpdateRequests = \App\Models\Product::where('user_id', $user->id)
+            ->where('is_update_request', true)
+            ->whereIn('status', ['pending', 'rejected'])
+            ->get()
+            ->keyBy('original_product_id');
+        
+        // Get pending update requests for display
+        $pendingProductUpdateRequests = \App\Models\Product::where('user_id', $user->id)
+            ->where('is_update_request', true)
+            ->where('status', 'pending')
+            ->orderBy('created_at', 'desc')
+            ->get();
+        
+        // Get rejected update requests for display
+        $rejectedProductUpdateRequests = \App\Models\Product::where('user_id', $user->id)
+            ->where('is_update_request', true)
+            ->where('status', 'rejected')
+            ->orderBy('created_at', 'desc')
+            ->get();
+        
+        return view('client.dashboard', compact('services', 'products', 'pendingServices', 'pendingProducts', 'rejectedServices', 'rejectedProducts', 'serviceUpdateRequests', 'productUpdateRequests', 'pendingProductUpdateRequests', 'rejectedProductUpdateRequests'));
     })->name('dashboard');
 
     Route::post('/dashboard/show-seller-form', function () {
         session(['show_seller_form' => true]);
         return redirect()->route('dashboard');
     })->name('dashboard.show_seller_form');
+
+    Route::post('/dashboard/hide-seller-form', function () {
+        session()->forget('show_seller_form');
+        return redirect()->route('dashboard');
+    })->name('dashboard.hide_seller_form');
 
     Route::post('/dashboard/become-seller', function (\Illuminate\Http\Request $request) {
         $user = auth()->user();
@@ -144,6 +178,11 @@ Route::middleware('auth')->group(function () {
         return view('client.seller-info', compact('user'));
     })->name('seller.info');
 
+    Route::get('/profile', function () {
+        $user = auth()->user();
+        return view('client.profile', compact('user'));
+    })->name('profile.info');
+
     Route::post('/dashboard/update-profile', function (\Illuminate\Http\Request $request) {
         $user = auth()->user();
         $validated = $request->validate([
@@ -191,7 +230,12 @@ Route::middleware('auth')->group(function () {
             }
         }
         $user->save();
-        return redirect()->route('dashboard')->with('success', 'Maklumat peribadi berjaya dikemaskini!');
+        // Redirect to appropriate page based on user type
+        if ($user->is_seller) {
+            return redirect()->route('seller.info')->with('success', 'Maklumat peribadi berjaya dikemaskini!');
+        } else {
+            return redirect()->route('profile.info')->with('success', 'Maklumat peribadi berjaya dikemaskini!');
+        }
     })->name('dashboard.update_profile');
 
     // Request Routes
@@ -217,6 +261,16 @@ Route::middleware('auth')->group(function () {
     // Service Update Request Routes
     Route::get('/service/{id}/edit-request', [RequestController::class, 'showServiceEditRequestForm'])->name('service.edit.request.create');
     Route::post('/service/{id}/edit-request', [RequestController::class, 'storeServiceEditRequest'])->name('service.edit.request.store');
+    
+    // Product Edit Request Routes
+    Route::get('/product/{id}/edit-request', [RequestController::class, 'showProductEditRequestForm'])->name('product.edit.request.create');
+    Route::post('/product/{id}/edit-request', [RequestController::class, 'storeProductEditRequest'])->name('product.edit.request.store');
+    Route::get('/product-update/{id}/preview', [RequestController::class, 'previewProductUpdateRequest'])->name('product.update.preview');
+    Route::delete('/product-update/{id}/cancel', [RequestController::class, 'cancelProductUpdateRequest'])->name('product.update.cancel');
+    Route::delete('/service-update/{id}/forget', [RequestController::class, 'forgetServiceUpdateRequest'])->name('service.update.forget');
+    Route::delete('/product-update/{id}/forget', [RequestController::class, 'forgetProductUpdateRequest'])->name('product.update.forget');
+    Route::delete('/service/{id}/forget', [RequestController::class, 'forgetServiceRequest'])->name('service.forget');
+    Route::delete('/product/{id}/forget', [RequestController::class, 'forgetProductRequest'])->name('product.forget');
     Route::get('/service-update/{id}/preview', [RequestController::class, 'previewServiceUpdateRequest'])->name('service.update.preview');
     Route::delete('/service-update/{id}/cancel', [RequestController::class, 'cancelServiceUpdateRequest'])->name('service.update.cancel');
     
@@ -279,6 +333,7 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
         Route::get('/create', [AdminProductController::class, 'create'])->name('admin.products.create');
         Route::post('/', [AdminProductController::class, 'store'])->name('admin.products.store');
         Route::get('/{id}', [AdminProductController::class, 'show'])->name('admin.products.show');
+        Route::get('/{id}/details', [AdminProductController::class, 'details'])->name('admin.products.details');
         Route::get('/{id}/edit', [AdminProductController::class, 'edit'])->name('admin.products.edit');
         Route::put('/{id}', [AdminProductController::class, 'update'])->name('admin.products.update');
         Route::post('/{id}/approve', [AdminProductController::class, 'approve'])->name('admin.products.approve');

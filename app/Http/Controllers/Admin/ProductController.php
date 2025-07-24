@@ -13,7 +13,15 @@ class ProductController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Product::with(['user', 'reviews', 'variations'])->where('status', '!=', 'pending');
+        // Show active, inactive, and rejected products, but exclude pending and rejected update requests
+        $query = Product::with(['user', 'reviews', 'variations'])
+            ->where(function($q) {
+                $q->whereIn('status', ['active', 'inactive', 'rejected'])
+                  ->where(function($subQ) {
+                      $subQ->where('is_update_request', false)
+                           ->orWhereNull('is_update_request');
+                  });
+            });
 
         // Search filter
         if ($request->filled('search')) {
@@ -68,6 +76,8 @@ class ProductController extends Controller
 
     public function pending()
     {
+        // Show only pending products (both regular submissions and pending update requests)
+        // Exclude rejected update requests as they should not appear in pending table
         $products = Product::with(['user', 'reviews', 'variations'])
             ->where('status', 'pending')
             ->orderBy('created_at', 'desc')
@@ -201,6 +211,210 @@ class ProductController extends Controller
         $product = Product::with(['user', 'reviews'])->findOrFail($id);
 
         return view('admin.products.show', compact('product'));
+    }
+
+    public function details($id)
+    {
+        $product = Product::with(['user', 'reviews', 'variations'])->findOrFail($id);
+        
+        $response = [
+            'product' => $product,
+            'user' => $product->user,
+            'created_at' => $product->created_at->format('j M Y, H:i'),
+            'images' => $product->images ? array_map(function($image) {
+                return $image ? route('product.image', basename($image)) : null;
+            }, $product->images) : [],
+            'variations' => []
+        ];
+
+        // Format variations
+        if ($product->variations && $product->variations->count() > 0) {
+            foreach ($product->variations as $variation) {
+                $variationData = [
+                    'id' => $variation->id,
+                    'name' => $variation->name,
+                    'sku' => $variation->sku,
+                    'price' => $variation->price,
+                    'sale_price' => $variation->sale_price,
+                    'stock_quantity' => $variation->stock_quantity,
+                    'is_active' => $variation->is_active,
+                    'images' => $variation->images ? array_map(function($image) {
+                        return $image ? route('variation.image', basename($image)) : null;
+                    }, $variation->images) : [],
+                ];
+
+                $response['variations'][] = $variationData;
+            }
+        }
+
+        // If this is an update request, include original product data for comparison
+        if ($product->is_update_request && $product->original_product_id) {
+            $originalProduct = Product::with('variations')->find($product->original_product_id);
+            if ($originalProduct) {
+                $response['original_product'] = $originalProduct;
+                $response['original_product']['images'] = $originalProduct->images ? array_map(function($image) {
+                    return $image ? route('product.image', basename($image)) : null;
+                }, $originalProduct->images) : [];
+                
+                // Format original variations
+                $response['original_product']['variations'] = [];
+                if ($originalProduct->variations && $originalProduct->variations->count() > 0) {
+                    foreach ($originalProduct->variations as $variation) {
+                        $variationData = [
+                            'id' => $variation->id,
+                            'name' => $variation->name,
+                            'sku' => $variation->sku,
+                            'price' => $variation->price,
+                            'sale_price' => $variation->sale_price,
+                            'stock_quantity' => $variation->stock_quantity,
+                            'is_active' => $variation->is_active,
+                            'images' => $variation->images ? array_map(function($image) {
+                                return $image ? route('variation.image', basename($image)) : null;
+                            }, $variation->images) : [],
+                        ];
+                        $response['original_product']['variations'][] = $variationData;
+                    }
+                }
+                
+                $response['changes'] = $this->getProductChanges($originalProduct, $product);
+            }
+        }
+        
+        return response()->json($response);
+    }
+    
+    private function getProductChanges($originalProduct, $updateProduct)
+    {
+        $changes = [];
+        
+        // Compare basic fields
+        if ($originalProduct->title !== $updateProduct->title) {
+            $changes['title'] = [
+                'old' => $originalProduct->title,
+                'new' => $updateProduct->title
+            ];
+        }
+        
+        if ($originalProduct->description !== $updateProduct->description) {
+            $changes['description'] = [
+                'old' => $originalProduct->description,
+                'new' => $updateProduct->description
+            ];
+        }
+        
+        if ($originalProduct->category !== $updateProduct->category) {
+            $changes['category'] = [
+                'old' => $originalProduct->category,
+                'new' => $updateProduct->category
+            ];
+        }
+        
+        if ($originalProduct->price != $updateProduct->price) {
+            $changes['price'] = [
+                'old' => 'RM' . number_format($originalProduct->price, 2),
+                'new' => 'RM' . number_format($updateProduct->price, 2)
+            ];
+        }
+        
+        if ($originalProduct->sale_price != $updateProduct->sale_price) {
+            $changes['sale_price'] = [
+                'old' => $originalProduct->sale_price ? 'RM' . number_format($originalProduct->sale_price, 2) : 'Tiada harga jualan',
+                'new' => $updateProduct->sale_price ? 'RM' . number_format($updateProduct->sale_price, 2) : 'Tiada harga jualan'
+            ];
+        }
+        
+        if ($originalProduct->stock_quantity != $updateProduct->stock_quantity) {
+            $changes['stock_quantity'] = [
+                'old' => $originalProduct->stock_quantity,
+                'new' => $updateProduct->stock_quantity
+            ];
+        }
+        
+        if ($originalProduct->variation_label !== $updateProduct->variation_label) {
+            $changes['variation_label'] = [
+                'old' => $originalProduct->variation_label ?: 'Tiada label',
+                'new' => $updateProduct->variation_label ?: 'Tiada label'
+            ];
+        }
+        
+        // Compare tags
+        $originalTags = is_array($originalProduct->tags) ? $originalProduct->tags : [];
+        $newTags = is_array($updateProduct->tags) ? $updateProduct->tags : [];
+        if (count(array_diff($originalTags, $newTags)) > 0 || count(array_diff($newTags, $originalTags)) > 0) {
+            $changes['tags'] = [
+                'old' => $originalTags,
+                'new' => $newTags
+            ];
+        }
+        
+        // Compare images
+        $originalImages = is_array($originalProduct->images) ? $originalProduct->images : [];
+        $newImages = is_array($updateProduct->images) ? $updateProduct->images : [];
+        if (count(array_diff($originalImages, $newImages)) > 0 || count(array_diff($newImages, $originalImages)) > 0) {
+            $changes['images'] = [
+                'old_count' => count($originalImages),
+                'new_count' => count($newImages),
+                'added' => array_diff($newImages, $originalImages),
+                'removed' => array_diff($originalImages, $newImages)
+            ];
+        }
+        
+        // Compare variations
+        $originalVariations = $originalProduct->variations ? $originalProduct->variations->toArray() : [];
+        $newVariations = $updateProduct->variations ? $updateProduct->variations->toArray() : [];
+        
+        if (count($originalVariations) !== count($newVariations)) {
+            $changes['variations'] = [
+                'old_count' => count($originalVariations),
+                'new_count' => count($newVariations),
+                'type' => count($newVariations) > count($originalVariations) ? 'added' : 'removed'
+            ];
+        } else {
+            // Check if any variation details changed
+            $variationChanges = [];
+            foreach ($newVariations as $index => $newVariation) {
+                if (isset($originalVariations[$index])) {
+                    $originalVariation = $originalVariations[$index];
+                    $variationChange = [];
+                    
+                    if ($originalVariation['name'] !== $newVariation['name']) {
+                        $variationChange['name'] = [
+                            'old' => $originalVariation['name'],
+                            'new' => $newVariation['name']
+                        ];
+                    }
+                    
+                    if ($originalVariation['price'] != $newVariation['price']) {
+                        $variationChange['price'] = [
+                            'old' => 'RM' . number_format($originalVariation['price'], 2),
+                            'new' => 'RM' . number_format($newVariation['price'], 2)
+                        ];
+                    }
+                    
+                    if ($originalVariation['stock_quantity'] != $newVariation['stock_quantity']) {
+                        $variationChange['stock_quantity'] = [
+                            'old' => $originalVariation['stock_quantity'],
+                            'new' => $newVariation['stock_quantity']
+                        ];
+                    }
+                    
+                    if (!empty($variationChange)) {
+                        $variationChanges[] = $variationChange;
+                    }
+                }
+            }
+            
+            if (!empty($variationChanges)) {
+                $changes['variations'] = [
+                    'old_count' => count($originalVariations),
+                    'new_count' => count($newVariations),
+                    'type' => 'modified',
+                    'details' => $variationChanges
+                ];
+            }
+        }
+        
+        return $changes;
     }
 
     public function edit($id)
@@ -387,11 +601,81 @@ class ProductController extends Controller
     public function approve($id)
     {
         $product = Product::findOrFail($id);
+        
+        // Check if this is an update request
+        if ($product->is_update_request && $product->original_product_id) {
+            // Find the original product
+            $originalProduct = Product::find($product->original_product_id);
+            
+            if ($originalProduct) {
+                // Generate proper slug for the original product
+                $baseSlug = Str::slug($product->title);
+                $originalSlug = $baseSlug;
+                $counter = 1;
+                
+                // Ensure unique slug
+                while (Product::where('slug', $baseSlug)->where('id', '!=', $originalProduct->id)->exists()) {
+                    $baseSlug = $originalSlug . '-' . $counter;
+                    $counter++;
+                }
+                
+                // Update the original product with new data
+                $originalProduct->title = $product->title;
+                $originalProduct->slug = $baseSlug;
+                $originalProduct->description = $product->description;
+                $originalProduct->category = $product->category;
+                $originalProduct->price = $product->price;
+                $originalProduct->sale_price = $product->sale_price;
+                $originalProduct->stock_quantity = $product->stock_quantity;
+                $originalProduct->tags = $product->tags;
+                $originalProduct->images = $product->images;
+                $originalProduct->variation_label = $product->variation_label;
+                $originalProduct->save();
+                
+                // Handle variations - delete old variations and create new ones
+                if ($originalProduct->variations) {
+                    // Delete old variation images
+                    foreach ($originalProduct->variations as $oldVariation) {
+                        if ($oldVariation->images && is_array($oldVariation->images)) {
+                            foreach ($oldVariation->images as $image) {
+                                Storage::disk('public')->delete($image);
+                            }
+                        }
+                    }
+                    // Delete old variations
+                    $originalProduct->variations()->delete();
+                }
+                
+                // Create new variations from update request
+                if ($product->variations) {
+                    foreach ($product->variations as $variation) {
+                        $newVariation = new \App\Models\ProductVariation();
+                        $newVariation->product_id = $originalProduct->id;
+                        $newVariation->name = $variation->name;
+                        $newVariation->sku = $variation->sku;
+                        $newVariation->price = $variation->price;
+                        $newVariation->sale_price = $variation->sale_price;
+                        $newVariation->stock_quantity = $variation->stock_quantity;
+                        $newVariation->is_active = $variation->is_active;
+                        $newVariation->images = $variation->images;
+                        $newVariation->save();
+                    }
+                }
+                
+                // Delete the update request
+                $product->delete();
+                
+                return redirect()->route('admin.products.pending')
+                    ->with('success', 'Kemaskini produk berjaya diluluskan!');
+            }
+        }
+        
+        // Regular product approval
         $product->update([
             'status' => 'active'
         ]);
 
-        return redirect()->route('admin.products.index')
+        return redirect()->route('admin.products.pending')
             ->with('success', 'Produk diluluskan dengan jayanya!');
     }
 
@@ -402,12 +686,25 @@ class ProductController extends Controller
         ]);
 
         $product = Product::findOrFail($id);
+        
+        // Check if this is an update request
+        if ($product->is_update_request && $product->original_product_id) {
+            $product->update([
+                'status' => 'rejected',
+                'rejection_reason' => $request->rejection_reason
+            ]);
+            
+            return redirect()->route('admin.products.pending')
+                ->with('success', 'Kemaskini produk berjaya ditolak!');
+        }
+        
+        // Regular product rejection
         $product->update([
             'status' => 'rejected',
             'rejection_reason' => $request->rejection_reason
         ]);
 
-        return redirect()->route('admin.products.index')
+        return redirect()->route('admin.products.pending')
             ->with('success', 'Produk ditolak dengan jayanya!');
     }
 
