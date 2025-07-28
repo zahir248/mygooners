@@ -26,9 +26,7 @@ class Product extends Model
         'meta_title',
         'meta_description',
         'views_count',
-        'rejection_reason',
-        'is_update_request',
-        'original_product_id'
+        'rejection_reason'
     ];
 
     protected $casts = [

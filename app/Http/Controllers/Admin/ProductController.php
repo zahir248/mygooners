@@ -13,15 +13,9 @@ class ProductController extends Controller
 {
     public function index(Request $request)
     {
-        // Show active, inactive, and rejected products, but exclude pending and rejected update requests
+        // Show active, inactive, and rejected products
         $query = Product::with(['user', 'reviews', 'variations'])
-            ->where(function($q) {
-                $q->whereIn('status', ['active', 'inactive', 'rejected'])
-                  ->where(function($subQ) {
-                      $subQ->where('is_update_request', false)
-                           ->orWhereNull('is_update_request');
-                  });
-            });
+            ->whereIn('status', ['active', 'inactive', 'rejected']);
 
         // Search filter
         if ($request->filled('search')) {
@@ -74,18 +68,6 @@ class ProductController extends Controller
         return view('admin.products.index', compact('products', 'categories'));
     }
 
-    public function pending()
-    {
-        // Show only pending products (both regular submissions and pending update requests)
-        // Exclude rejected update requests as they should not appear in pending table
-        $products = Product::with(['user', 'reviews', 'variations'])
-            ->where('status', 'pending')
-            ->orderBy('created_at', 'desc')
-            ->paginate(10);
-
-        return view('admin.products.pending', compact('products'));
-    }
-
     public function create()
     {
         $categories = [
@@ -129,7 +111,6 @@ class ProductController extends Controller
         ]);
 
         $product = new Product();
-        $product->user_id = auth()->id(); // Set the current admin user as the creator
         $product->title = $request->title;
         $product->slug = Str::slug($request->title);
         $product->description = $request->description;
@@ -138,13 +119,12 @@ class ProductController extends Controller
         $product->sale_price = $request->sale_price;
         $product->stock_quantity = $request->stock_quantity;
         $product->tags = $request->tags ? explode(',', $request->tags) : [];
-        
         $product->meta_title = $request->meta_title;
         $product->meta_description = $request->meta_description;
-        $product->status = 'pending'; // Automatically set to pending for approval
+        $product->status = $request->status;
         $product->is_featured = $request->has('is_featured');
         $product->variation_label = $request->variation_label;
-        $product->views_count = 0;
+        $product->user_id = auth()->id();
 
         // Handle image uploads
         $images = [];
@@ -166,24 +146,24 @@ class ProductController extends Controller
         $product->save();
 
         // Handle variations
-        if ($request->has('variations') && is_array($request->variations)) {
+        if ($request->has('variations')) {
             foreach ($request->variations as $variationData) {
                 if (!empty($variationData['name'])) {
-                    $variation = new \App\Models\ProductVariation();
-                    $variation->product_id = $product->id;
-                    $variation->name = $variationData['name'];
-                    $variation->sku = $variationData['sku'] ?? null;
-                    $variation->price = $variationData['price'] ?? null;
-                    $variation->sale_price = $variationData['sale_price'] ?? null;
-                    $variation->stock_quantity = $variationData['stock_quantity'] ?? 0;
-                    $variation->is_active = $variationData['is_active'] ?? true;
-                    
+                    $variation = $product->variations()->create([
+                        'name' => $variationData['name'],
+                        'sku' => $variationData['sku'] ?? null,
+                        'price' => $variationData['price'] ?? $product->price,
+                        'sale_price' => $variationData['sale_price'] ?? null,
+                        'stock_quantity' => $variationData['stock_quantity'] ?? 0,
+                        'is_active' => $variationData['is_active'] ?? true,
+                    ]);
+
                     // Handle variation images
-                    $variationImages = [];
                     if (isset($variationData['images']) && is_array($variationData['images'])) {
+                        $variationImages = [];
                         foreach ($variationData['images'] as $image) {
-                            if ($image && $image->isValid()) {
-                                $filename = 'variations/' . time() . '_' . Str::slug($variationData['name']) . '_' . Str::random(6) . '.' . $image->getClientOriginalExtension();
+                            if ($image->isValid()) {
+                                $filename = 'variations/' . time() . '_' . Str::slug($variation->name) . '_' . Str::random(6) . '.' . $image->getClientOriginalExtension();
                                 $stored = Storage::disk('public')->putFileAs(
                                     dirname($filename),
                                     $image,
@@ -194,16 +174,14 @@ class ProductController extends Controller
                                 }
                             }
                         }
+                        $variation->images = $variationImages;
+                        $variation->save();
                     }
-                    $variation->images = $variationImages;
-                    
-                    $variation->save();
                 }
             }
         }
 
-        return redirect()->route('admin.products.index')
-            ->with('success', 'Produk berjaya dicipta dan menunggu kelulusan!');
+        return redirect()->route('admin.products.index')->with('success', 'Produk berjaya dicipta.');
     }
 
     public function show($id)
@@ -246,175 +224,8 @@ class ProductController extends Controller
                 $response['variations'][] = $variationData;
             }
         }
-
-        // If this is an update request, include original product data for comparison
-        if ($product->is_update_request && $product->original_product_id) {
-            $originalProduct = Product::with('variations')->find($product->original_product_id);
-            if ($originalProduct) {
-                $response['original_product'] = $originalProduct;
-                $response['original_product']['images'] = $originalProduct->images ? array_map(function($image) {
-                    return $image ? route('product.image', basename($image)) : null;
-                }, $originalProduct->images) : [];
-                
-                // Format original variations
-                $response['original_product']['variations'] = [];
-                if ($originalProduct->variations && $originalProduct->variations->count() > 0) {
-                    foreach ($originalProduct->variations as $variation) {
-                        $variationData = [
-                            'id' => $variation->id,
-                            'name' => $variation->name,
-                            'sku' => $variation->sku,
-                            'price' => $variation->price,
-                            'sale_price' => $variation->sale_price,
-                            'stock_quantity' => $variation->stock_quantity,
-                            'is_active' => $variation->is_active,
-                            'images' => $variation->images ? array_map(function($image) {
-                                return $image ? route('variation.image', basename($image)) : null;
-                            }, $variation->images) : [],
-                        ];
-                        $response['original_product']['variations'][] = $variationData;
-                    }
-                }
-                
-                $response['changes'] = $this->getProductChanges($originalProduct, $product);
-            }
-        }
         
         return response()->json($response);
-    }
-    
-    private function getProductChanges($originalProduct, $updateProduct)
-    {
-        $changes = [];
-        
-        // Compare basic fields
-        if ($originalProduct->title !== $updateProduct->title) {
-            $changes['title'] = [
-                'old' => $originalProduct->title,
-                'new' => $updateProduct->title
-            ];
-        }
-        
-        if ($originalProduct->description !== $updateProduct->description) {
-            $changes['description'] = [
-                'old' => $originalProduct->description,
-                'new' => $updateProduct->description
-            ];
-        }
-        
-        if ($originalProduct->category !== $updateProduct->category) {
-            $changes['category'] = [
-                'old' => $originalProduct->category,
-                'new' => $updateProduct->category
-            ];
-        }
-        
-        if ($originalProduct->price != $updateProduct->price) {
-            $changes['price'] = [
-                'old' => 'RM' . number_format($originalProduct->price, 2),
-                'new' => 'RM' . number_format($updateProduct->price, 2)
-            ];
-        }
-        
-        if ($originalProduct->sale_price != $updateProduct->sale_price) {
-            $changes['sale_price'] = [
-                'old' => $originalProduct->sale_price ? 'RM' . number_format($originalProduct->sale_price, 2) : 'Tiada harga jualan',
-                'new' => $updateProduct->sale_price ? 'RM' . number_format($updateProduct->sale_price, 2) : 'Tiada harga jualan'
-            ];
-        }
-        
-        if ($originalProduct->stock_quantity != $updateProduct->stock_quantity) {
-            $changes['stock_quantity'] = [
-                'old' => $originalProduct->stock_quantity,
-                'new' => $updateProduct->stock_quantity
-            ];
-        }
-        
-        if ($originalProduct->variation_label !== $updateProduct->variation_label) {
-            $changes['variation_label'] = [
-                'old' => $originalProduct->variation_label ?: 'Tiada label',
-                'new' => $updateProduct->variation_label ?: 'Tiada label'
-            ];
-        }
-        
-        // Compare tags
-        $originalTags = is_array($originalProduct->tags) ? $originalProduct->tags : [];
-        $newTags = is_array($updateProduct->tags) ? $updateProduct->tags : [];
-        if (count(array_diff($originalTags, $newTags)) > 0 || count(array_diff($newTags, $originalTags)) > 0) {
-            $changes['tags'] = [
-                'old' => $originalTags,
-                'new' => $newTags
-            ];
-        }
-        
-        // Compare images
-        $originalImages = is_array($originalProduct->images) ? $originalProduct->images : [];
-        $newImages = is_array($updateProduct->images) ? $updateProduct->images : [];
-        if (count(array_diff($originalImages, $newImages)) > 0 || count(array_diff($newImages, $originalImages)) > 0) {
-            $changes['images'] = [
-                'old_count' => count($originalImages),
-                'new_count' => count($newImages),
-                'added' => array_diff($newImages, $originalImages),
-                'removed' => array_diff($originalImages, $newImages)
-            ];
-        }
-        
-        // Compare variations
-        $originalVariations = $originalProduct->variations ? $originalProduct->variations->toArray() : [];
-        $newVariations = $updateProduct->variations ? $updateProduct->variations->toArray() : [];
-        
-        if (count($originalVariations) !== count($newVariations)) {
-            $changes['variations'] = [
-                'old_count' => count($originalVariations),
-                'new_count' => count($newVariations),
-                'type' => count($newVariations) > count($originalVariations) ? 'added' : 'removed'
-            ];
-        } else {
-            // Check if any variation details changed
-            $variationChanges = [];
-            foreach ($newVariations as $index => $newVariation) {
-                if (isset($originalVariations[$index])) {
-                    $originalVariation = $originalVariations[$index];
-                    $variationChange = [];
-                    
-                    if ($originalVariation['name'] !== $newVariation['name']) {
-                        $variationChange['name'] = [
-                            'old' => $originalVariation['name'],
-                            'new' => $newVariation['name']
-                        ];
-                    }
-                    
-                    if ($originalVariation['price'] != $newVariation['price']) {
-                        $variationChange['price'] = [
-                            'old' => 'RM' . number_format($originalVariation['price'], 2),
-                            'new' => 'RM' . number_format($newVariation['price'], 2)
-                        ];
-                    }
-                    
-                    if ($originalVariation['stock_quantity'] != $newVariation['stock_quantity']) {
-                        $variationChange['stock_quantity'] = [
-                            'old' => $originalVariation['stock_quantity'],
-                            'new' => $newVariation['stock_quantity']
-                        ];
-                    }
-                    
-                    if (!empty($variationChange)) {
-                        $variationChanges[] = $variationChange;
-                    }
-                }
-            }
-            
-            if (!empty($variationChanges)) {
-                $changes['variations'] = [
-                    'old_count' => count($originalVariations),
-                    'new_count' => count($newVariations),
-                    'type' => 'modified',
-                    'details' => $variationChanges
-                ];
-            }
-        }
-        
-        return $changes;
     }
 
     public function edit($id)
@@ -454,7 +265,7 @@ class ProductController extends Controller
             'tags' => 'nullable|string',
             'meta_title' => 'nullable|string|max:255',
             'meta_description' => 'nullable|string',
-            'status' => 'required|in:active,inactive,pending,rejected',
+            'status' => 'required|in:active,inactive,rejected',
             'is_featured' => 'boolean',
             'variation_label' => 'nullable|string|max:255',
             'current_images' => 'nullable|array',
@@ -517,468 +328,203 @@ class ProductController extends Controller
         }
 
         $product->save();
-        
-        \Log::info('Product updated successfully', [
-            'product_id' => $product->id,
-            'variation_label' => $product->variation_label,
-            'title' => $product->title
-        ]);
 
         // Handle variations
+        if ($request->has('variations')) {
+            foreach ($request->variations as $variationData) {
+                if (!empty($variationData['name'])) {
+                    if (isset($variationData['id'])) {
+                        // Update existing variation
+                        $variation = $product->variations()->find($variationData['id']);
+                        if ($variation) {
+                            $variation->update([
+                                'name' => $variationData['name'],
+                                'sku' => $variationData['sku'] ?? null,
+                                'price' => $variationData['price'] ?? $product->price,
+                                'sale_price' => $variationData['sale_price'] ?? null,
+                                'stock_quantity' => $variationData['stock_quantity'] ?? 0,
+                                'is_active' => $variationData['is_active'] ?? true,
+                            ]);
+                        }
+                    } else {
+                        // Create new variation
+                        $variation = $product->variations()->create([
+                            'name' => $variationData['name'],
+                            'sku' => $variationData['sku'] ?? null,
+                            'price' => $variationData['price'] ?? $product->price,
+                            'sale_price' => $variationData['sale_price'] ?? null,
+                            'stock_quantity' => $variationData['stock_quantity'] ?? 0,
+                            'is_active' => $variationData['is_active'] ?? true,
+                        ]);
+                    }
+                }
+            }
+        }
+
         // Delete variations marked for deletion
-        if ($request->has('delete_variations') && is_array($request->delete_variations)) {
-            $deleteVariations = array_filter($request->delete_variations, 'is_numeric');
-            
-            if (!empty($deleteVariations)) {
-                // Get variations to delete their images first
-                $variationsToDelete = \App\Models\ProductVariation::where('product_id', $product->id)
-                    ->whereIn('id', $deleteVariations)
-                    ->get();
-                
-                // Delete variation images from storage
-                foreach ($variationsToDelete as $variation) {
-                    if ($variation->images && is_array($variation->images)) {
+        if ($request->has('delete_variations')) {
+            foreach ($request->delete_variations as $variationId) {
+                $variation = $product->variations()->find($variationId);
+                if ($variation) {
+                    // Delete variation images from storage
+                    if ($variation->images) {
                         foreach ($variation->images as $image) {
                             Storage::disk('public')->delete($image);
                         }
                     }
-                }
-                
-                // Delete the variations
-                $deletedCount = \App\Models\ProductVariation::where('product_id', $product->id)
-                    ->whereIn('id', $deleteVariations)
-                    ->delete();
-                
-                \Log::info('Variations deleted', [
-                    'product_id' => $product->id,
-                    'variation_ids' => $deleteVariations,
-                    'deleted_count' => $deletedCount
-                ]);
-            }
-        }
-
-        // Handle new variations
-        if ($request->has('variations') && is_array($request->variations)) {
-            foreach ($request->variations as $variationData) {
-                if (!empty($variationData['name'])) {
-                    $variation = new \App\Models\ProductVariation();
-                    $variation->product_id = $product->id;
-                    $variation->name = $variationData['name'];
-                    $variation->sku = $variationData['sku'] ?? null;
-                    $variation->price = $variationData['price'] ?? null;
-                    $variation->sale_price = $variationData['sale_price'] ?? null;
-                    $variation->stock_quantity = $variationData['stock_quantity'] ?? 0;
-                    $variation->is_active = $variationData['is_active'] ?? true;
-                    
-                    // Handle variation images
-                    $variationImages = [];
-                    if (isset($variationData['images']) && is_array($variationData['images'])) {
-                        foreach ($variationData['images'] as $image) {
-                            if ($image && $image->isValid()) {
-                                $filename = 'variations/' . time() . '_' . Str::slug($variationData['name']) . '_' . Str::random(6) . '.' . $image->getClientOriginalExtension();
-                                $stored = Storage::disk('public')->putFileAs(
-                                    dirname($filename),
-                                    $image,
-                                    basename($filename)
-                                );
-                                if ($stored) {
-                                    $variationImages[] = $filename;
-                                }
-                            }
-                        }
-                    }
-                    $variation->images = $variationImages;
-                    
-                    $variation->save();
+                    $variation->delete();
                 }
             }
         }
 
-        return redirect()->route('admin.products.index')
-            ->with('success', 'Produk berjaya dikemaskini!');
-    }
-
-    public function approve($id)
-    {
-        $product = Product::findOrFail($id);
-        
-        // Check if this is an update request
-        if ($product->is_update_request && $product->original_product_id) {
-            // Find the original product
-            $originalProduct = Product::find($product->original_product_id);
-            
-            if ($originalProduct) {
-                // Generate proper slug for the original product
-                $baseSlug = Str::slug($product->title);
-                $originalSlug = $baseSlug;
-                $counter = 1;
-                
-                // Ensure unique slug
-                while (Product::where('slug', $baseSlug)->where('id', '!=', $originalProduct->id)->exists()) {
-                    $baseSlug = $originalSlug . '-' . $counter;
-                    $counter++;
-                }
-                
-                // Update the original product with new data
-                $originalProduct->title = $product->title;
-                $originalProduct->slug = $baseSlug;
-                $originalProduct->description = $product->description;
-                $originalProduct->category = $product->category;
-                $originalProduct->price = $product->price;
-                $originalProduct->sale_price = $product->sale_price;
-                $originalProduct->stock_quantity = $product->stock_quantity;
-                $originalProduct->tags = $product->tags;
-                $originalProduct->images = $product->images;
-                $originalProduct->variation_label = $product->variation_label;
-                $originalProduct->save();
-                
-                // Handle variations - delete old variations and create new ones
-                if ($originalProduct->variations) {
-                    // Delete old variation images
-                    foreach ($originalProduct->variations as $oldVariation) {
-                        if ($oldVariation->images && is_array($oldVariation->images)) {
-                            foreach ($oldVariation->images as $image) {
-                                Storage::disk('public')->delete($image);
-                            }
-                        }
-                    }
-                    // Delete old variations
-                    $originalProduct->variations()->delete();
-                }
-                
-                // Create new variations from update request
-                if ($product->variations) {
-                    foreach ($product->variations as $variation) {
-                        $newVariation = new \App\Models\ProductVariation();
-                        $newVariation->product_id = $originalProduct->id;
-                        $newVariation->name = $variation->name;
-                        $newVariation->sku = $variation->sku;
-                        $newVariation->price = $variation->price;
-                        $newVariation->sale_price = $variation->sale_price;
-                        $newVariation->stock_quantity = $variation->stock_quantity;
-                        $newVariation->is_active = $variation->is_active;
-                        $newVariation->images = $variation->images;
-                        $newVariation->save();
-                    }
-                }
-                
-                // Delete the update request
-                $product->delete();
-                
-                return redirect()->route('admin.products.pending')
-                    ->with('success', 'Kemaskini produk berjaya diluluskan!');
-            }
-        }
-        
-        // Regular product approval
-        $product->update([
-            'status' => 'active'
-        ]);
-
-        return redirect()->route('admin.products.pending')
-            ->with('success', 'Produk diluluskan dengan jayanya!');
-    }
-
-    public function reject(Request $request, $id)
-    {
-        $request->validate([
-            'rejection_reason' => 'required|string|max:1000'
-        ]);
-
-        $product = Product::findOrFail($id);
-        
-        // Check if this is an update request
-        if ($product->is_update_request && $product->original_product_id) {
-            $product->update([
-                'status' => 'rejected',
-                'rejection_reason' => $request->rejection_reason
-            ]);
-            
-            return redirect()->route('admin.products.pending')
-                ->with('success', 'Kemaskini produk berjaya ditolak!');
-        }
-        
-        // Regular product rejection
-        $product->update([
-            'status' => 'rejected',
-            'rejection_reason' => $request->rejection_reason
-        ]);
-
-        return redirect()->route('admin.products.pending')
-            ->with('success', 'Produk ditolak dengan jayanya!');
+        return redirect()->route('admin.products.index')->with('success', 'Produk berjaya dikemas kini.');
     }
 
     public function toggleStatus($id)
     {
         $product = Product::findOrFail($id);
-        
-        if ($product->status === 'active') {
-            $product->update(['status' => 'inactive']);
-            $message = 'Produk telah dinyahaktifkan!';
-        } else {
-            $product->update(['status' => 'active']);
-            $message = 'Produk telah diaktifkan!';
-        }
+        $product->status = $product->status === 'active' ? 'inactive' : 'active';
+        $product->save();
 
-        return redirect()->route('admin.products.index')
-            ->with('success', $message);
+        return response()->json([
+            'success' => true,
+            'message' => 'Status produk berjaya dikemas kini.',
+            'new_status' => $product->status
+        ]);
     }
 
     public function toggleFeatured($id)
     {
         $product = Product::findOrFail($id);
-        
-        $product->update(['is_featured' => !$product->is_featured]);
-        
-        $message = $product->is_featured ? 'Produk telah ditampilkan!' : 'Produk telah dinyahpaparkan!';
+        $product->is_featured = !$product->is_featured;
+        $product->save();
 
-        return redirect()->route('admin.products.index')
-            ->with('success', $message);
+        return response()->json([
+            'success' => true,
+            'message' => 'Status featured produk berjaya dikemas kini.',
+            'is_featured' => $product->is_featured
+        ]);
     }
 
     public function updateStatus(Request $request, $id)
     {
         $product = Product::findOrFail($id);
-        
-        $request->validate([
-            'status' => 'required|in:active,inactive'
-        ]);
-        
-        $product->update(['status' => $request->status]);
-        
+        $product->status = $request->status;
+        $product->save();
+
         $statusMessages = [
             'active' => 'Produk telah diaktifkan!',
-            'inactive' => 'Produk telah dinyahaktifkan!'
+            'inactive' => 'Produk telah dinyahaktifkan!',
+            'rejected' => 'Produk telah ditolak!'
         ];
-        
+
         $message = $statusMessages[$request->status] ?? 'Status produk telah dikemas kini!';
 
-        return redirect()->route('admin.products.index')
-            ->with('success', $message);
+        return redirect()->back()->with('success', $message);
     }
 
     public function destroy($id)
     {
         $product = Product::findOrFail($id);
         
-        // Delete associated images
+        // Delete product images from storage
         if ($product->images) {
             foreach ($product->images as $image) {
                 Storage::disk('public')->delete($image);
             }
         }
-        
-        $product->delete();
 
-        return redirect()->route('admin.products.index')
-            ->with('success', 'Produk dipadam dengan jayanya!');
-    }
-
-    public function deleteVariation($variationId)
-    {
-        try {
-            $variation = \App\Models\ProductVariation::findOrFail($variationId);
-            
-            // Check if the user has permission to delete this variation
-            // (variation belongs to a product that the current user can manage)
-            $product = $variation->product;
-            
-            // For now, we'll allow deletion if the user is an admin
-            // You can add more specific permission checks here if needed
-            
-            // Delete variation images from storage
-            if ($variation->images && is_array($variation->images)) {
+        // Delete variation images from storage
+        foreach ($product->variations as $variation) {
+            if ($variation->images) {
                 foreach ($variation->images as $image) {
                     Storage::disk('public')->delete($image);
                 }
             }
-            
-            $variation->delete();
-            
-            if (request()->expectsJson()) {
-                return response()->json([
-                    'success' => true,
-                    'message' => 'Varian berjaya dipadam!'
-                ]);
-            }
-            
-            return redirect()->back()->with('success', 'Varian berjaya dipadam!');
-            
-        } catch (\Exception $e) {
-            \Log::error('Error deleting variation: ' . $e->getMessage());
-            
-            if (request()->expectsJson()) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Ralat memadam varian'
-                ], 500);
-            }
-            
-            return redirect()->back()->with('error', 'Ralat memadam varian');
         }
+
+        $product->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Produk berjaya dipadam.'
+        ]);
+    }
+
+    public function deleteVariation($variationId)
+    {
+        $variation = \App\Models\ProductVariation::findOrFail($variationId);
+        
+        // Delete variation images from storage
+        if ($variation->images) {
+            foreach ($variation->images as $image) {
+                Storage::disk('public')->delete($image);
+            }
+        }
+
+        $variation->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Variasi produk berjaya dipadam.'
+        ]);
     }
 
     public function getVariationForEdit($variationId)
     {
-        try {
-            $variation = \App\Models\ProductVariation::with('product')->findOrFail($variationId);
-            
-            return response()->json([
-                'success' => true,
-                'variation' => $variation
-            ]);
-            
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Varian tidak dijumpai'
-            ], 404);
-        } catch (\Exception $e) {
-            \Log::error('Error getting variation for edit: ' . $e->getMessage());
-            
-            return response()->json([
-                'success' => false,
-                'message' => 'Ralat memuat data varian'
-            ], 500);
-        }
+        $variation = \App\Models\ProductVariation::findOrFail($variationId);
+        
+        return response()->json([
+            'variation' => $variation,
+            'images' => $variation->images ? array_map(function($image) {
+                return $image ? route('variation.image', basename($image)) : null;
+            }, $variation->images) : []
+        ]);
     }
 
     public function updateVariation(Request $request, $variationId)
     {
-        try {
-            $variation = \App\Models\ProductVariation::with('product')->findOrFail($variationId);
-            
-            // Debug: Log the incoming request data
-            \Log::info('Variation update request data:', [
-                'variation_id' => $variationId,
-                'request_data' => $request->all(),
-                'files' => $request->allFiles(),
-                'has_new_images' => $request->hasFile('new_images'),
-                'new_images_count' => $request->hasFile('new_images') ? count($request->file('new_images')) : 0
-            ]);
-            
-            // Basic validation rules
-            $validationRules = [
-                'name' => 'nullable|string|max:255',
-                'sku' => 'nullable|string|max:255',
-                'price' => 'nullable|numeric|min:0',
-                'sale_price' => 'nullable|numeric|min:0',
-                'stock_quantity' => 'nullable|integer|min:0',
-                'is_active' => 'nullable|boolean',
-                'current_images' => 'nullable|array',
-                'current_images.*' => 'string',
-            ];
-            
-            // Add file validation only if files are uploaded
-            if ($request->hasFile('new_images')) {
-                foreach ($request->file('new_images') as $key => $file) {
-                    if ($file && $file->isValid()) {
-                        $validationRules["new_images.{$key}"] = 'image|mimes:jpeg,png,jpg,gif|max:10240';
-                    }
+        $variation = \App\Models\ProductVariation::findOrFail($variationId);
+        
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'sku' => 'nullable|string|max:255',
+            'price' => 'required|numeric|min:0',
+            'sale_price' => 'nullable|numeric|min:0',
+            'stock_quantity' => 'required|integer|min:0',
+            'is_active' => 'boolean',
+            'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:10240',
+        ]);
+
+        $variation->name = $request->name;
+        $variation->sku = $request->sku;
+        $variation->price = $request->price;
+        $variation->sale_price = $request->sale_price;
+        $variation->stock_quantity = $request->stock_quantity;
+        $variation->is_active = $request->has('is_active');
+
+        // Handle image uploads
+        if ($request->hasFile('images')) {
+            $images = [];
+            foreach ($request->file('images') as $image) {
+                $filename = 'variations/' . time() . '_' . Str::slug($variation->name) . '_' . Str::random(6) . '.' . $image->getClientOriginalExtension();
+                $stored = Storage::disk('public')->putFileAs(
+                    dirname($filename),
+                    $image,
+                    basename($filename)
+                );
+                if ($stored) {
+                    $images[] = $filename;
                 }
             }
-            
-            $request->validate($validationRules);
-
-            // Validate sale price if provided
-            if ($request->filled('sale_price') && $request->filled('price') && $request->sale_price >= $request->price) {
-                return redirect()->back()
-                    ->with('error', 'Harga jualan mesti lebih rendah daripada harga asal')
-                    ->withInput();
-            }
-            
-            // If sale price is provided but no price, use product price for validation
-            if ($request->filled('sale_price') && !$request->filled('price')) {
-                $productPrice = $variation->product->price;
-                if ($request->sale_price >= $productPrice) {
-                    return redirect()->back()
-                        ->with('error', 'Harga jualan mesti lebih rendah daripada harga produk utama')
-                        ->withInput();
-                }
-            }
-
-            // Use existing data if no new data is provided
-            $variation->name = $request->filled('name') ? $request->name : $variation->name;
-            $variation->sku = $request->filled('sku') ? $request->sku : $variation->sku;
-            $variation->price = $request->filled('price') ? $request->price : $variation->price;
-            $variation->sale_price = $request->filled('sale_price') ? $request->sale_price : $variation->sale_price;
-            $variation->stock_quantity = $request->filled('stock_quantity') ? $request->stock_quantity : $variation->stock_quantity;
-            $variation->is_active = $request->has('is_active') ? $request->boolean('is_active', false) : $variation->is_active;
-
-            // Handle image management
-            $currentImages = $request->input('current_images', []);
-            // Ensure current_images is always an array
-            if (!is_array($currentImages)) {
-                $currentImages = [];
-            }
-            $newImages = [];
-            
-            // Process new uploaded images
-            if ($request->hasFile('new_images')) {
-                foreach ($request->file('new_images') as $image) {
-                    if ($image && $image->isValid()) {
-                        $filename = 'variations/' . time() . '_' . Str::slug($request->name) . '_' . Str::random(6) . '.' . $image->getClientOriginalExtension();
-                        $stored = Storage::disk('public')->putFileAs(
-                            dirname($filename),
-                            $image,
-                            basename($filename)
-                        );
-                        if ($stored) {
-                            $newImages[] = $filename;
-                        }
-                    }
-                }
-            }
-            
-            // Combine current and new images
-            $allImages = array_merge($currentImages, $newImages);
-            // Ensure we only store string values in the images array
-            $variation->images = array_filter($allImages, function($image) {
-                return is_string($image) && !empty($image);
-            });
-            
-            // Debug: Log image processing
-            \Log::info('Image processing:', [
-                'current_images' => $currentImages,
-                'new_images' => $newImages,
-                'all_images' => $allImages,
-                'final_images' => $variation->images
-            ]);
-            
-            // Delete removed images from storage
-            $originalImages = $variation->getOriginal('images') ?? [];
-            // Ensure originalImages is always an array
-            if (!is_array($originalImages)) {
-                $originalImages = [];
-            }
-            $removedImages = array_diff($originalImages, $currentImages);
-            foreach ($removedImages as $removedImage) {
-                if (is_string($removedImage)) {
-                    Storage::disk('public')->delete($removedImage);
-                }
-            }
-
-            $variation->save();
-            
-            return redirect()->back()->with('success', 'Varian berjaya dikemaskini!');
-            
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            return redirect()->back()
-                ->with('error', 'Varian tidak dijumpai');
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            \Log::error('Validation failed for variation update:', [
-                'variation_id' => $variationId,
-                'errors' => $e->errors()
-            ]);
-            return redirect()->back()
-                ->withErrors($e->errors())
-                ->withInput();
-        } catch (\Exception $e) {
-            \Log::error('Error updating variation: ' . $e->getMessage());
-            
-            return redirect()->back()
-                ->with('error', 'Ralat mengemaskini varian: ' . $e->getMessage())
-                ->withInput();
+            $variation->images = $images;
         }
+
+        $variation->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Variasi produk berjaya dikemas kini.'
+        ]);
     }
 } 

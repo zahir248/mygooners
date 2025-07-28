@@ -69,30 +69,7 @@
                             {{ $product->is_featured ? 'Nyahpaparkan' : 'Tampilkan' }}
                         </button>
                     </form>
-                    @if($product->status === 'pending')
-                        <form action="{{ route('admin.products.approve', $product->id) }}" method="POST" class="inline">
-                            @csrf
-                            <button type="submit" 
-                                    class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
-                                    onclick="return confirm('Adakah anda pasti mahu meluluskan produk ini?')">
-                                <svg class="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                </svg>
-                                Lulus
-                            </button>
-                        </form>
-                        <form action="{{ route('admin.products.reject', $product->id) }}" method="POST" class="inline">
-                            @csrf
-                            <button type="submit" 
-                                    class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-                                    onclick="return confirm('Adakah anda pasti mahu menolak produk ini?')">
-                                <svg class="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                                </svg>
-                                Tolak
-                            </button>
-                        </form>
-                    @endif
+
                 </div>
             </div>
         </div>
@@ -134,10 +111,7 @@
                                         <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
                                             Tidak Aktif
                                         </span>
-                                    @elseif($product->status === 'pending')
-                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                                            Menunggu
-                                        </span>
+
                                     @elseif($product->status === 'rejected')
                                         <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
                                             Ditolak

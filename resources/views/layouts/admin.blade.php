@@ -189,36 +189,14 @@
                     </li>
 
                     <!-- Products -->
-                    <li x-data="{ open: {{ request()->routeIs('admin.products.*') ? 'true' : 'false' }} }">
-                        <button @click="open = !open" type="button"
-                                class="flex items-center w-full px-4 py-2 text-sm font-medium rounded-md transition-colors {{ request()->routeIs('admin.products.*') ? 'bg-admin-700 text-white' : 'text-admin-300 hover:bg-admin-700 hover:text-white' }}">
+                    <li>
+                        <a href="{{ route('admin.products.index') }}" 
+                           class="flex items-center px-4 py-2 text-sm font-medium rounded-md transition-colors {{ request()->routeIs('admin.products.*') ? 'bg-admin-700 text-white' : 'text-admin-300 hover:bg-admin-700 hover:text-white' }}">
                             <svg class="mr-3 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
                             </svg>
                             Produk
-                            <svg class="ml-auto h-4 w-4 transform transition-transform duration-200" :class="{ 'rotate-90': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                            </svg>
-                        </button>
-                        <ul x-show="open" class="ml-8 mt-1 space-y-1" x-cloak>
-                            <li>
-                                <a href="{{ route('admin.products.index') }}"
-                                   class="flex items-center px-4 py-2 text-sm font-medium rounded-md transition-colors {{ request()->routeIs('admin.products.index') ? 'bg-admin-700 text-white' : 'text-admin-300 hover:bg-admin-700 hover:text-white' }}">
-                                    Semua Produk
-                                </a>
-                            </li>
-                            <li>
-                                <a href="{{ route('admin.products.pending') }}"
-                                   class="flex items-center px-4 py-2 text-sm font-medium rounded-md transition-colors {{ request()->routeIs('admin.products.pending') ? 'bg-admin-700 text-white' : 'text-admin-300 hover:bg-admin-700 hover:text-white' }}">
-                                    Menunggu Kelulusan
-                                    @if(isset($stats['pending_products']) && $stats['pending_products'] > 0)
-                                        <span class="ml-2 bg-red-600 text-white text-xs rounded-full px-2 py-1">
-                                            {{ $stats['pending_products'] }}
-                                        </span>
-                                    @endif
-                                </a>
-                            </li>
-                        </ul>
+                        </a>
                     </li>
 
                     <!-- Users -->

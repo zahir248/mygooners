@@ -26,7 +26,6 @@ class AdminController extends Controller
             'total_products' => Product::count(),
             'published_videos' => Video::where('status', 'published')->count(),
             'pending_services' => Service::where('status', 'pending')->count(),
-            'pending_products' => Product::where('status', 'pending')->count(),
             'total_reviews' => ProductReview::count() + ServiceReview::count(),
             'new_users_this_month' => User::where('created_at', '>=', Carbon::now()->startOfMonth())->count(),
             'published_articles_this_month' => Article::where('status', 'published')
@@ -47,7 +46,6 @@ class AdminController extends Controller
         // Pending items that need attention
         $pendingItems = [
             'services' => Service::where('status', 'pending')->latest()->take(5)->get(),
-            'products' => Product::where('status', 'pending')->latest()->take(5)->get(),
             'users' => User::where('status', 'pending')->latest()->take(5)->get(),
         ];
 
@@ -267,7 +265,6 @@ class AdminController extends Controller
             'total_products' => Product::count(),
             'published_videos' => Video::where('status', 'published')->count(),
             'pending_services' => Service::where('status', 'pending')->count(),
-            'pending_products' => Product::where('status', 'pending')->count(),
         ];
 
         return response()->json($stats);

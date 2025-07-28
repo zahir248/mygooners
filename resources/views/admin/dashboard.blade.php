@@ -177,11 +177,6 @@
                             <dl>
                                 <dt class="text-sm font-medium text-gray-500 truncate">Jumlah Produk</dt>
                                 <dd class="text-2xl font-bold text-gray-900" id="total-products">{{ number_format($stats['total_products']) }}</dd>
-                                @if($stats['pending_products'] > 0)
-                                    <dd class="text-sm text-red-600">
-                                        <span class="pending-badge">{{ $stats['pending_products'] }}</span> menunggu kelulusan
-                                    </dd>
-                                @endif
                             </dl>
                         </div>
                     </div>
@@ -218,7 +213,7 @@
             <div class="bg-white shadow-sm rounded-lg border border-gray-200 p-6">
                 <h3 class="text-lg font-medium text-gray-900 mb-4">Item Menunggu</h3>
                 <div class="space-y-3">
-                    @if($pendingItems['services']->count() > 0 || $pendingItems['products']->count() > 0)
+                    @if($pendingItems['services']->count() > 0)
                         @foreach($pendingItems['services']->take(3) as $service)
                             <div class="flex items-center justify-between p-3 bg-yellow-50 rounded-lg">
                                 <div class="flex items-center">
@@ -226,15 +221,6 @@
                                     <span class="text-sm text-gray-700">{{ Str::limit($service->title, 30) }}</span>
                                 </div>
                                 <a href="{{ route('admin.services.show', $service->id) }}" class="text-xs text-yellow-600 hover:text-yellow-800">Lihat</a>
-                            </div>
-                        @endforeach
-                        @foreach($pendingItems['products']->take(3) as $product)
-                            <div class="flex items-center justify-between p-3 bg-red-50 rounded-lg">
-                                <div class="flex items-center">
-                                    <div class="w-2 h-2 bg-red-500 rounded-full mr-3"></div>
-                                    <span class="text-sm text-gray-700">{{ Str::limit($product->title, 30) }}</span>
-                                </div>
-                                <a href="{{ route('admin.products.show', $product->id) }}" class="text-xs text-red-600 hover:text-red-800">Lihat</a>
                             </div>
                         @endforeach
                     @else
@@ -438,9 +424,9 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                     </svg>
                                 </span>
-                                @if($stats['pending_services'] > 0 || $stats['pending_products'] > 0)
+                                @if($stats['pending_services'] > 0)
                                     <span class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center">
-                                        {{ $stats['pending_services'] + $stats['pending_products'] }}
+                                        {{ $stats['pending_services'] }}
                                     </span>
                                 @endif
                             </div>

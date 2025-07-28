@@ -22,13 +22,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // Share pending services and products count with all admin views
+        // Share pending services count with all admin views
         View::composer('layouts.admin', function ($view) {
             $pendingServicesCount = Service::where('status', 'pending')->count();
-            $pendingProductsCount = Product::where('status', 'pending')->count();
             $view->with('stats', [
-                'pending_services' => $pendingServicesCount,
-                'pending_products' => $pendingProductsCount
+                'pending_services' => $pendingServicesCount
             ]);
         });
     }

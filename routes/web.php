@@ -61,23 +61,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', function () {
         $user = auth()->user();
         $services = \App\Models\Service::where('user_id', $user->id)->whereIn('status', ['active', 'inactive'])->orderBy('created_at', 'desc')->get();
-        $products = \App\Models\Product::where('user_id', $user->id)->whereIn('status', ['active', 'inactive'])->orderBy('created_at', 'desc')->get();
         $pendingServices = \App\Models\Service::where('user_id', $user->id)
             ->where('status', 'pending')
             ->where('is_update_request', false)
             ->orderBy('created_at', 'desc')
             ->get();
-        $pendingProducts = \App\Models\Product::where('user_id', $user->id)
-            ->where('status', 'pending')
-            ->where('is_update_request', false)
-            ->orderBy('created_at', 'desc')
-            ->get();
         $rejectedServices = \App\Models\Service::where('user_id', $user->id)
-            ->where('status', 'rejected')
-            ->where('is_update_request', false)
-            ->orderBy('created_at', 'desc')
-            ->get();
-        $rejectedProducts = \App\Models\Product::where('user_id', $user->id)
             ->where('status', 'rejected')
             ->where('is_update_request', false)
             ->orderBy('created_at', 'desc')
@@ -90,28 +79,7 @@ Route::middleware('auth')->group(function () {
             ->get()
             ->keyBy('original_service_id');
         
-        // Get update requests for products
-        $productUpdateRequests = \App\Models\Product::where('user_id', $user->id)
-            ->where('is_update_request', true)
-            ->whereIn('status', ['pending', 'rejected'])
-            ->get()
-            ->keyBy('original_product_id');
-        
-        // Get pending update requests for display
-        $pendingProductUpdateRequests = \App\Models\Product::where('user_id', $user->id)
-            ->where('is_update_request', true)
-            ->where('status', 'pending')
-            ->orderBy('created_at', 'desc')
-            ->get();
-        
-        // Get rejected update requests for display
-        $rejectedProductUpdateRequests = \App\Models\Product::where('user_id', $user->id)
-            ->where('is_update_request', true)
-            ->where('status', 'rejected')
-            ->orderBy('created_at', 'desc')
-            ->get();
-        
-        return view('client.dashboard', compact('services', 'products', 'pendingServices', 'pendingProducts', 'rejectedServices', 'rejectedProducts', 'serviceUpdateRequests', 'productUpdateRequests', 'pendingProductUpdateRequests', 'rejectedProductUpdateRequests'));
+        return view('client.dashboard', compact('services', 'pendingServices', 'rejectedServices', 'serviceUpdateRequests'));
     })->name('dashboard');
 
     Route::post('/dashboard/show-seller-form', function () {
@@ -241,42 +209,27 @@ Route::middleware('auth')->group(function () {
     // Request Routes
     Route::get('/service-request', [RequestController::class, 'showServiceRequestForm'])->name('service.request.create');
     Route::post('/service-request', [RequestController::class, 'storeServiceRequest'])->name('service.request.store');
-    Route::get('/product-request', [RequestController::class, 'showProductRequestForm'])->name('product.request.create');
-    Route::post('/product-request', [RequestController::class, 'storeProductRequest'])->name('product.request.store');
     
     // Preview pending requests (only for the owner)
             Route::get('/pending-service/{id}', [RequestController::class, 'previewPendingService'])->name('pending.service.preview');
-        Route::get('/pending-product/{id}', [RequestController::class, 'previewPendingProduct'])->name('pending.product.preview');
         Route::get('/rejected-service/{id}', [RequestController::class, 'previewRejectedService'])->name('rejected.service.preview');
-        Route::get('/rejected-product/{id}', [RequestController::class, 'previewRejectedProduct'])->name('rejected.product.preview');
         Route::get('/edit-rejected-service/{id}', [RequestController::class, 'editRejectedService'])->name('rejected.service.edit');
         Route::put('/edit-rejected-service/{id}', [RequestController::class, 'updateRejectedService'])->name('rejected.service.update');
-        Route::get('/edit-rejected-product/{id}', [RequestController::class, 'editRejectedProduct'])->name('rejected.product.edit');
-        Route::put('/edit-rejected-product/{id}', [RequestController::class, 'updateRejectedProduct'])->name('rejected.product.update');
     
     // Status Update Routes
     Route::put('/service/{id}/status', [RequestController::class, 'updateServiceStatus'])->name('service.status.update');
-    Route::put('/product/{id}/status', [RequestController::class, 'updateProductStatus'])->name('product.status.update');
     
     // Service Update Request Routes
     Route::get('/service/{id}/edit-request', [RequestController::class, 'showServiceEditRequestForm'])->name('service.edit.request.create');
     Route::post('/service/{id}/edit-request', [RequestController::class, 'storeServiceEditRequest'])->name('service.edit.request.store');
     
-    // Product Edit Request Routes
-    Route::get('/product/{id}/edit-request', [RequestController::class, 'showProductEditRequestForm'])->name('product.edit.request.create');
-    Route::post('/product/{id}/edit-request', [RequestController::class, 'storeProductEditRequest'])->name('product.edit.request.store');
-    Route::get('/product-update/{id}/preview', [RequestController::class, 'previewProductUpdateRequest'])->name('product.update.preview');
-    Route::delete('/product-update/{id}/cancel', [RequestController::class, 'cancelProductUpdateRequest'])->name('product.update.cancel');
     Route::delete('/service-update/{id}/forget', [RequestController::class, 'forgetServiceUpdateRequest'])->name('service.update.forget');
-    Route::delete('/product-update/{id}/forget', [RequestController::class, 'forgetProductUpdateRequest'])->name('product.update.forget');
     Route::delete('/service/{id}/forget', [RequestController::class, 'forgetServiceRequest'])->name('service.forget');
-    Route::delete('/product/{id}/forget', [RequestController::class, 'forgetProductRequest'])->name('product.forget');
     Route::get('/service-update/{id}/preview', [RequestController::class, 'previewServiceUpdateRequest'])->name('service.update.preview');
     Route::delete('/service-update/{id}/cancel', [RequestController::class, 'cancelServiceUpdateRequest'])->name('service.update.cancel');
     
     // Cancel Service Request Routes
     Route::delete('/service/{id}/cancel', [RequestController::class, 'cancelServiceRequest'])->name('service.cancel');
-    Route::delete('/product/{id}/cancel', [RequestController::class, 'cancelProductRequest'])->name('product.cancel');
     Route::get('/service/{id}/preview', [RequestController::class, 'previewOwnService'])->name('service.preview');
 });
 
@@ -329,15 +282,12 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     // Products Management
     Route::prefix('products')->group(function () {
         Route::get('/', [AdminProductController::class, 'index'])->name('admin.products.index');
-        Route::get('/pending', [AdminProductController::class, 'pending'])->name('admin.products.pending');
         Route::get('/create', [AdminProductController::class, 'create'])->name('admin.products.create');
         Route::post('/', [AdminProductController::class, 'store'])->name('admin.products.store');
         Route::get('/{id}', [AdminProductController::class, 'show'])->name('admin.products.show');
         Route::get('/{id}/details', [AdminProductController::class, 'details'])->name('admin.products.details');
         Route::get('/{id}/edit', [AdminProductController::class, 'edit'])->name('admin.products.edit');
         Route::put('/{id}', [AdminProductController::class, 'update'])->name('admin.products.update');
-        Route::post('/{id}/approve', [AdminProductController::class, 'approve'])->name('admin.products.approve');
-        Route::post('/{id}/reject', [AdminProductController::class, 'reject'])->name('admin.products.reject');
         Route::post('/{id}/toggle-status', [AdminProductController::class, 'toggleStatus'])->name('admin.products.toggle-status');
         Route::patch('/{id}/update-status', [AdminProductController::class, 'updateStatus'])->name('admin.products.update-status');
         Route::post('/{id}/toggle-featured', [AdminProductController::class, 'toggleFeatured'])->name('admin.products.toggle-featured');
