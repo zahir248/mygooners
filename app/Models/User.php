@@ -31,7 +31,22 @@ class User extends Authenticatable
         'is_verified',
         'status',
         'last_login',
-        'admin_request_data'
+        'admin_request_data',
+        'is_seller',
+        'seller_status',
+        'seller_rejection_reason',
+        'seller_application_date',
+        'business_name',
+        'business_type',
+        'business_registration',
+        'business_address',
+        'operating_area',
+        'website',
+        'id_document',
+        'selfie_with_id',
+        'years_experience',
+        'skills',
+        'service_areas'
     ];
 
     /**
@@ -54,6 +69,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'last_login' => 'datetime',
+            'seller_application_date' => 'datetime',
             'password' => 'hashed',
             'trust_score' => 'decimal:2',
             'is_verified' => 'boolean',

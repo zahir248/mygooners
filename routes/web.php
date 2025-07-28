@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\ServiceController as AdminServiceController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Admin\VideoController as AdminVideoController;
+use App\Http\Controllers\Admin\SellerRequestController;
 
 // Home Page
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -132,10 +133,11 @@ Route::middleware('auth')->group(function () {
         $user->service_areas = $validated['service_areas'];
         $user->id_document = $validated['id_document'];
         $user->selfie_with_id = $validated['selfie_with_id'];
-        $user->is_seller = true;
+        $user->seller_status = 'pending';
+        $user->seller_application_date = now();
         $user->save();
         session()->forget('show_seller_form');
-        return redirect()->route('dashboard')->with('success', 'Permohonan penjual anda telah diterima!');
+        return redirect()->route('dashboard')->with('success', 'Permohonan penjual anda telah dihantar dan sedang menunggu kelulusan admin!');
     })->name('dashboard.become_seller');
 
     Route::get('/seller-info', function () {
@@ -215,6 +217,13 @@ Route::middleware('auth')->group(function () {
         Route::get('/rejected-service/{id}', [RequestController::class, 'previewRejectedService'])->name('rejected.service.preview');
         Route::get('/edit-rejected-service/{id}', [RequestController::class, 'editRejectedService'])->name('rejected.service.edit');
         Route::put('/edit-rejected-service/{id}', [RequestController::class, 'updateRejectedService'])->name('rejected.service.update');
+        
+        // Seller request routes
+        Route::get('/pending-seller-request', [RequestController::class, 'previewPendingSellerRequest'])->name('pending.seller.preview');
+        Route::delete('/seller-request/cancel', [RequestController::class, 'cancelSellerRequest'])->name('seller.request.cancel');
+        Route::get('/rejected-seller-request', [RequestController::class, 'previewRejectedSellerRequest'])->name('rejected.seller.preview');
+        Route::get('/edit-rejected-seller-request', [RequestController::class, 'editRejectedSellerRequest'])->name('rejected.seller.edit');
+        Route::put('/edit-rejected-seller-request', [RequestController::class, 'updateRejectedSellerRequest'])->name('rejected.seller.update');
     
     // Status Update Routes
     Route::put('/service/{id}/status', [RequestController::class, 'updateServiceStatus'])->name('service.status.update');
@@ -309,6 +318,17 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
         Route::post('/{id}/suspend', [AdminUserController::class, 'suspend'])->name('admin.users.suspend');
         Route::post('/{id}/activate', [AdminUserController::class, 'activate'])->name('admin.users.activate');
         Route::delete('/{id}', [AdminUserController::class, 'destroy'])->name('admin.users.destroy');
+    });
+    
+    // Seller Requests Management
+    Route::prefix('seller-requests')->group(function () {
+        Route::get('/', [SellerRequestController::class, 'index'])->name('admin.seller-requests.index');
+        Route::get('/pending', [SellerRequestController::class, 'pending'])->name('admin.seller-requests.pending');
+        Route::get('/{id}', [SellerRequestController::class, 'show'])->name('admin.seller-requests.show');
+        Route::post('/{id}/approve', [SellerRequestController::class, 'approve'])->name('admin.seller-requests.approve');
+        Route::post('/{id}/reject', [SellerRequestController::class, 'reject'])->name('admin.seller-requests.reject');
+        Route::post('/{id}/toggle-status', [SellerRequestController::class, 'toggleStatus'])->name('admin.seller-requests.toggle-status');
+        Route::delete('/{id}', [SellerRequestController::class, 'destroy'])->name('admin.seller-requests.destroy');
     });
     
     // Videos Management

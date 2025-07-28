@@ -200,14 +200,42 @@
                     </li>
 
                     <!-- Users -->
-                    <li>
-                        <a href="{{ route('admin.users.index') }}" 
-                           class="flex items-center px-4 py-2 text-sm font-medium rounded-md transition-colors {{ request()->routeIs('admin.users.*') ? 'bg-admin-700 text-white' : 'text-admin-300 hover:bg-admin-700 hover:text-white' }}">
+                    <li x-data="{ open: {{ request()->routeIs('admin.users.*') || request()->routeIs('admin.seller-requests.*') ? 'true' : 'false' }} }">
+                        <button @click="open = !open" type="button"
+                                class="flex items-center w-full px-4 py-2 text-sm font-medium rounded-md transition-colors {{ request()->routeIs('admin.users.*') || request()->routeIs('admin.seller-requests.*') ? 'bg-admin-700 text-white' : 'text-admin-300 hover:bg-admin-700 hover:text-white' }}">
                             <svg class="mr-3 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
                             </svg>
                             Pengguna
-                        </a>
+                            <svg class="ml-auto h-4 w-4 transform transition-transform duration-200" :class="{ 'rotate-90': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                            </svg>
+                        </button>
+                        <ul x-show="open" class="ml-8 mt-1 space-y-1" x-cloak>
+                            <li>
+                                <a href="{{ route('admin.users.index') }}"
+                                   class="flex items-center px-4 py-2 text-sm font-medium rounded-md transition-colors {{ request()->routeIs('admin.users.*') ? 'bg-admin-700 text-white' : 'text-admin-300 hover:bg-admin-700 hover:text-white' }}">
+                                    Semua Pengguna
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ route('admin.seller-requests.index') }}"
+                                   class="flex items-center px-4 py-2 text-sm font-medium rounded-md transition-colors {{ request()->routeIs('admin.seller-requests.index') ? 'bg-admin-700 text-white' : 'text-admin-300 hover:bg-admin-700 hover:text-white' }}">
+                                    Senarai Penjual
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ route('admin.seller-requests.pending') }}"
+                                   class="flex items-center px-4 py-2 text-sm font-medium rounded-md transition-colors {{ request()->routeIs('admin.seller-requests.pending') ? 'bg-admin-700 text-white' : 'text-admin-300 hover:bg-admin-700 hover:text-white' }}">
+                                    Menunggu Kelulusan
+                                    @if(isset($stats['pending_sellers']) && $stats['pending_sellers'] > 0)
+                                        <span class="ml-2 bg-red-600 text-white text-xs rounded-full px-2 py-1">
+                                            {{ $stats['pending_sellers'] }}
+                                        </span>
+                                    @endif
+                                </a>
+                            </li>
+                        </ul>
                     </li>
 
                     <!-- Divider -->

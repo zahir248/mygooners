@@ -20,7 +20,7 @@
             @endif
             <div>
                 <h1 class="text-2xl md:text-3xl font-bold text-gray-900 mb-1">Selamat kembali, {{ auth()->user()->name }}!</h1>
-                @if(auth()->user()->is_seller)
+                @if(auth()->user()->is_seller && auth()->user()->seller_status === 'approved')
                     <div class="flex items-center gap-2 mb-1">
                         <span class="inline-flex items-center px-3 py-1 rounded-full bg-green-100 text-green-700 text-xs font-semibold">Penjual Disahkan</span>
                         @if(auth()->user()->business_name)
@@ -34,7 +34,7 @@
             </div>
         </div>
         <div>
-            @if(auth()->user()->is_seller)
+            @if(auth()->user()->is_seller && auth()->user()->seller_status === 'approved')
                 <a href="{{ route('seller.info') }}" class="inline-flex items-center gap-2 bg-gray-600 hover:bg-gray-700 text-white px-6 py-3 rounded-lg font-semibold shadow transition-colors">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                     Lihat Maklumat Penjual
@@ -49,6 +49,7 @@
     </div>
 
     <!-- Stats Overview -->
+    @if(auth()->user()->is_seller && auth()->user()->seller_status === 'approved')
     <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
         <div class="bg-white rounded-xl shadow p-6 flex flex-col items-center">
             <div class="bg-green-100 text-green-600 rounded-full p-3 mb-2">
@@ -75,15 +76,140 @@
             <div class="bg-blue-100 text-blue-600 rounded-full p-3 mb-2">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
             </div>
-            <div class="text-2xl font-bold">{{ auth()->user()->is_seller ? 'Penjual' : 'Pengguna' }}</div>
+                <div class="text-2xl font-bold">Penjual (Disahkan)</div>
             <div class="text-gray-500 text-sm">Status Akaun</div>
         </div>
     </div>
+    @else
+        @if(auth()->user()->seller_status !== null)
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+            <div class="bg-white rounded-xl shadow p-6 flex flex-col items-center">
+                <div class="bg-yellow-100 text-yellow-600 rounded-full p-3 mb-2">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                </div>
+                <div class="text-2xl font-bold">1</div>
+                <div class="text-gray-500 text-sm">Permohonan Penjual</div>
+            </div>
+            <div class="bg-white rounded-xl shadow p-6 flex flex-col items-center">
+                <div class="bg-blue-100 text-blue-600 rounded-full p-3 mb-2">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                </div>
+                <div class="text-2xl font-bold">
+                    @if(auth()->user()->is_seller)
+                        @if(auth()->user()->seller_status === 'pending')
+                            Penjual (Menunggu)
+                        @elseif(auth()->user()->seller_status === 'approved')
+                            Penjual (Disahkan)
+                        @elseif(auth()->user()->seller_status === 'rejected')
+                            Penjual (Ditolak)
+                        @else
+                            Penjual
+                        @endif
+                    @else
+                        Pengguna
+                    @endif
+                </div>
+                <div class="text-gray-500 text-sm">Status Akaun</div>
+            </div>
+        </div>
+        @else
+        <!-- Status Akaun Card - Full Width for non-sellers -->
+        <div class="bg-white rounded-xl shadow p-6 mb-10">
+            <div class="flex flex-col items-center">
+                <div class="bg-blue-100 text-blue-600 rounded-full p-3 mb-2">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                </div>
+                <div class="text-2xl font-bold">
+                    @if(auth()->user()->is_seller)
+                        @if(auth()->user()->seller_status === 'pending')
+                            Penjual (Menunggu)
+                        @elseif(auth()->user()->seller_status === 'approved')
+                            Penjual (Disahkan)
+                        @elseif(auth()->user()->seller_status === 'rejected')
+                            Penjual (Ditolak)
+                        @else
+                            Penjual
+                        @endif
+                    @else
+                        Pengguna
+                    @endif
+                </div>
+                <div class="text-gray-500 text-sm">Status Akaun</div>
+            </div>
+        </div>
+        @endif
+    @endif
 
 
+
+    <!-- Seller Status Information -->
+    @if(auth()->user()->seller_status !== null)
+        @if(auth()->user()->seller_status === 'pending')
+            <div class="bg-yellow-50 border border-yellow-200 rounded-xl shadow p-6 mb-10">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="bg-yellow-100 text-yellow-600 rounded-full p-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-bold text-yellow-800">Permohonan Penjual Menunggu</h3>
+                </div>
+                <p class="text-yellow-700 mb-4">Permohonan anda untuk menjadi penjual sedang dalam proses semakan oleh admin. Anda akan diberitahu sebaik sahaja keputusan dikeluarkan.</p>
+                <div class="bg-yellow-100 border border-yellow-300 rounded-lg p-4 mb-4">
+                    <p class="text-yellow-800 text-sm"><strong>Status:</strong> Menunggu kelulusan admin</p>
+                    <p class="text-yellow-800 text-sm mt-2"><strong>Tarikh Permohonan:</strong> 
+                        @if(auth()->user()->seller_application_date)
+                            {{ auth()->user()->seller_application_date->format('d/m/Y H:i') }}
+                        @else
+                            {{ auth()->user()->created_at->format('d/m/Y H:i') }}
+                        @endif
+                    </p>
+                </div>
+                <div class="flex items-center gap-3">
+                    <a href="{{ route('pending.seller.preview') }}" 
+                       class="text-blue-600 hover:text-blue-800 text-sm font-medium">
+                        Lihat
+                    </a>
+                    @include('client.partials.cancel-modal', [
+                        'action' => route('seller.request.cancel'),
+                        'message' => 'Adakah anda pasti mahu membatalkan permohonan penjual ini? Tindakan ini tidak boleh diundur.'
+                    ])
+                </div>
+            </div>
+        @elseif(auth()->user()->seller_status === 'rejected')
+            <div class="bg-red-50 border border-red-200 rounded-xl shadow p-6 mb-10">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="bg-red-100 text-red-600 rounded-full p-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-bold text-red-800">Permohonan Penjual Ditolak</h3>
+                </div>
+                <p class="text-red-700 mb-4">Permohonan anda untuk menjadi penjual telah ditolak. Sila lihat sebab penolakan di bawah.</p>
+                @if(auth()->user()->seller_rejection_reason)
+                    <div class="bg-red-100 border border-red-300 rounded-lg p-4 mb-4">
+                        <p class="text-red-800 text-sm"><strong>Sebab Penolakan:</strong></p>
+                        <p class="text-red-800 text-sm mt-2">{{ auth()->user()->seller_rejection_reason }}</p>
+                    </div>
+                @endif
+                <p class="text-red-700 text-sm mb-4">Anda boleh menghantar semula permohonan dengan maklumat yang dikemaskini.</p>
+                <div class="flex items-center gap-3">
+                    <a href="{{ route('rejected.seller.preview') }}" 
+                       class="text-blue-600 hover:text-blue-800 text-sm font-medium">
+                        Lihat
+                    </a>
+                    <a href="{{ route('rejected.seller.edit') }}" 
+                       class="text-green-600 hover:text-green-800 text-sm font-medium">
+                        Hantar Semula
+                    </a>
+                </div>
+            </div>
+        @endif
+    @endif
 
     <!-- Become Seller CTA -->
-    @if(!auth()->user()->is_seller)
+    @if(auth()->user()->seller_status === null)
         <div class="bg-gradient-to-r from-yellow-100 to-yellow-200 border-l-4 border-yellow-500 rounded-xl shadow p-6 mb-10">
             <h2 class="text-xl font-bold text-yellow-800 mb-2">Jana pendapatan dengan menjadi penjual di MyGooners!</h2>
             <p class="text-yellow-700 mb-4">Isi maklumat perniagaan anda untuk mula menjual perkhidmatan kepada komuniti Gooners.</p>
@@ -97,24 +223,7 @@
             @endif
         </div>
 
-        <!-- Profile Information Notice -->
-        <div class="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-xl shadow p-6 mb-10">
-            <div class="flex items-center gap-3 mb-4">
-                <div class="bg-blue-100 text-blue-600 rounded-full p-2">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                    </svg>
-                </div>
-                <h3 class="text-lg font-bold text-blue-800">Maklumat Profil Anda</h3>
-            </div>
-            <p class="text-blue-700 mb-4">Anda boleh melihat dan mengemaskini maklumat profil peribadi anda seperti nama, email, telefon, dan lokasi.</p>
-            <a href="{{ route('profile.info') }}" class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-                </svg>
-                Lihat Maklumat Profil
-            </a>
-        </div>
+
     @endif
 
     <!-- Pending Requests Section -->
@@ -376,15 +485,14 @@
     @endif
 
     <!-- My Services Section -->
+    @if(auth()->user()->is_seller && auth()->user()->seller_status === 'approved')
     <div class="mb-10">
         <div class="flex items-center justify-between mb-4">
             <h3 class="text-xl font-bold text-gray-900">Perkhidmatan Saya</h3>
-            @if(auth()->user()->is_seller)
                 <a href="{{ route('service.request.create') }}" class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium text-sm transition-colors">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
                     Mohon Tambah Perkhidmatan
                 </a>
-            @endif
         </div>
         @if($services->count())
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -452,7 +560,7 @@
             <div class="bg-white rounded-xl shadow p-8 text-center text-gray-400">
                 <svg class="w-12 h-12 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-6a2 2 0 012-2h2a2 2 0 012 2v6m-6 4h6"/></svg>
                 <p class="mb-2">Anda belum menyiarkan sebarang perkhidmatan.</p>
-                @if(auth()->user()->is_seller)
+                @if(auth()->user()->is_seller && auth()->user()->seller_status === 'approved')
                     <a href="{{ route('service.request.create') }}" class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium text-sm transition-colors mt-2">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
                         Mohon Tambah Perkhidmatan
@@ -461,6 +569,7 @@
             </div>
         @endif
     </div>
+    @endif
 
 
 

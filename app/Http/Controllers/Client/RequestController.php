@@ -537,4 +537,185 @@ class RequestController extends Controller
         return redirect()->route('dashboard')
             ->with('success', 'Permohonan perkhidmatan berjaya dilupakan.');
     }
+
+    public function previewPendingSellerRequest()
+    {
+        $user = auth()->user();
+        
+        if (!$user->seller_status || $user->seller_status !== 'pending') {
+            return redirect()->route('dashboard')->with('error', 'Permohonan penjual tidak ditemui.');
+        }
+
+        return view('client.requests.pending-seller-preview', compact('user'));
+    }
+
+    public function cancelSellerRequest()
+    {
+        $user = auth()->user();
+        
+        if (!$user->seller_status || $user->seller_status !== 'pending') {
+            return redirect()->route('dashboard')->with('error', 'Permohonan penjual tidak ditemui.');
+        }
+
+        // Delete associated files
+        if ($user->id_document) {
+            Storage::disk('public')->delete($user->id_document);
+        }
+        if ($user->selfie_with_id) {
+            Storage::disk('public')->delete($user->selfie_with_id);
+        }
+
+        // Reset seller status
+        $user->update([
+            'seller_status' => null,
+            'seller_rejection_reason' => null,
+            'id_document' => null,
+            'selfie_with_id' => null
+        ]);
+
+        return redirect()->route('dashboard')
+            ->with('success', 'Permohonan penjual telah dibatalkan.');
+    }
+
+    public function previewRejectedSellerRequest()
+    {
+        $user = auth()->user();
+        
+        if (!$user->seller_status || $user->seller_status !== 'rejected') {
+            return redirect()->route('dashboard')->with('error', 'Permohonan penjual tidak ditemui.');
+        }
+
+        return view('client.requests.rejected-seller-preview', compact('user'));
+    }
+
+    public function editRejectedSellerRequest()
+    {
+        $user = auth()->user();
+        
+        if (!$user->seller_status || $user->seller_status !== 'rejected') {
+            return redirect()->route('dashboard')->with('error', 'Permohonan penjual tidak ditemui.');
+        }
+
+        return view('client.requests.rejected-seller-edit', compact('user'));
+    }
+
+    public function updateRejectedSellerRequest(Request $request)
+    {
+        $user = auth()->user();
+        
+        if (!$user->seller_status || $user->seller_status !== 'rejected') {
+            return redirect()->route('dashboard')->with('error', 'Permohonan penjual tidak ditemui.');
+        }
+
+        $validated = $request->validate([
+            'business_name' => 'required|string|max:255',
+            'business_type' => 'required|string|max:255',
+            'business_registration' => 'nullable|string|max:255',
+            'business_address' => 'required|string|max:500',
+            'operating_area' => 'required|string|max:255',
+            'website' => 'nullable|url|max:255',
+            'years_experience' => 'required|integer|min:0|max:50',
+            'skills' => 'required|string|max:1000',
+            'service_areas' => 'required|string|max:500',
+            'id_document' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'selfie_with_id' => 'nullable|file|mimes:jpg,jpeg,png|max:2048'
+        ]);
+
+        // Check if any changes were made
+        $hasChanges = false;
+        $changes = [];
+
+        // Check basic fields
+        if ($user->business_name !== $request->business_name) {
+            $hasChanges = true;
+            $changes[] = 'Nama perniagaan';
+        }
+        if ($user->business_type !== $request->business_type) {
+            $hasChanges = true;
+            $changes[] = 'Jenis perniagaan';
+        }
+        if ($user->business_registration !== $request->business_registration) {
+            $hasChanges = true;
+            $changes[] = 'Pendaftaran perniagaan';
+        }
+        if ($user->business_address !== $request->business_address) {
+            $hasChanges = true;
+            $changes[] = 'Alamat perniagaan';
+        }
+        if ($user->operating_area !== $request->operating_area) {
+            $hasChanges = true;
+            $changes[] = 'Kawasan operasi';
+        }
+        if ($user->website !== $request->website) {
+            $hasChanges = true;
+            $changes[] = 'Laman web';
+        }
+        if ($user->years_experience != $request->years_experience) {
+            $hasChanges = true;
+            $changes[] = 'Tahun pengalaman';
+        }
+        if ($user->skills !== $request->skills) {
+            $hasChanges = true;
+            $changes[] = 'Kemahiran';
+        }
+        if ($user->service_areas !== $request->service_areas) {
+            $hasChanges = true;
+            $changes[] = 'Kawasan perkhidmatan';
+        }
+
+        // Check for new files
+        if ($request->hasFile('id_document')) {
+            $hasChanges = true;
+            $changes[] = 'Dokumen pengenalan';
+        }
+        if ($request->hasFile('selfie_with_id')) {
+            $hasChanges = true;
+            $changes[] = 'Selfie dengan ID';
+        }
+
+        // If no changes, show reminder
+        if (!$hasChanges) {
+            return redirect()->back()
+                ->with('warning', 'Tiada perubahan dibuat. Sila kemaskini maklumat berdasarkan sebab penolakan sebelum menghantar semula.')
+                ->withInput();
+        }
+
+        // Handle file uploads
+        if ($request->hasFile('id_document')) {
+            // Delete old file if exists
+            if ($user->id_document) {
+                Storage::disk('public')->delete($user->id_document);
+            }
+            $validated['id_document'] = $request->file('id_document')->store('seller-documents', 'public');
+        }
+
+        if ($request->hasFile('selfie_with_id')) {
+            // Delete old file if exists
+            if ($user->selfie_with_id) {
+                Storage::disk('public')->delete($user->selfie_with_id);
+            }
+            $validated['selfie_with_id'] = $request->file('selfie_with_id')->store('seller-documents', 'public');
+        }
+
+        // Update user with new seller information
+        $user->update([
+            'business_name' => $validated['business_name'],
+            'business_type' => $validated['business_type'],
+            'business_registration' => $validated['business_registration'],
+            'business_address' => $validated['business_address'],
+            'operating_area' => $validated['operating_area'],
+            'website' => $validated['website'],
+            'years_experience' => $validated['years_experience'],
+            'skills' => $validated['skills'],
+            'service_areas' => $validated['service_areas'],
+            'seller_status' => 'pending', // Reset to pending for new submission
+            'seller_rejection_reason' => null, // Clear rejection reason
+            'seller_application_date' => now(), // Update application date for resubmission
+            'id_document' => $validated['id_document'] ?? $user->id_document,
+            'selfie_with_id' => $validated['selfie_with_id'] ?? $user->selfie_with_id
+        ]);
+
+        return redirect()->route('dashboard')
+            ->with('success', 'Permohonan penjual anda telah dihantar semula dan sedang menunggu kelulusan admin!');
+    }
 } 
