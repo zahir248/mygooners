@@ -324,6 +324,7 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     Route::prefix('seller-requests')->group(function () {
         Route::get('/', [SellerRequestController::class, 'index'])->name('admin.seller-requests.index');
         Route::get('/pending', [SellerRequestController::class, 'pending'])->name('admin.seller-requests.pending');
+        Route::get('/{id}/services', [SellerRequestController::class, 'getServices'])->name('admin.seller-requests.services');
         Route::get('/{id}', [SellerRequestController::class, 'show'])->name('admin.seller-requests.show');
         Route::post('/{id}/approve', [SellerRequestController::class, 'approve'])->name('admin.seller-requests.approve');
         Route::post('/{id}/reject', [SellerRequestController::class, 'reject'])->name('admin.seller-requests.reject');

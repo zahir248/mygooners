@@ -11,7 +11,8 @@ class SellerRequestController extends Controller
     public function index(Request $request)
     {
         $query = User::where('seller_status', '!=', null)
-                    ->where('seller_status', '!=', 'pending');
+                    ->where('seller_status', '!=', 'pending')
+                    ->withCount('services');
 
         // Search functionality
         if ($request->filled('search')) {
@@ -41,6 +42,7 @@ class SellerRequestController extends Controller
     public function pending()
     {
         $sellers = User::where('seller_status', 'pending')
+            ->withCount('services')
             ->orderByRaw('COALESCE(seller_application_date, created_at) DESC')
             ->paginate(15);
 
@@ -52,6 +54,16 @@ class SellerRequestController extends Controller
         $seller = User::where('seller_status', '!=', null)->findOrFail($id);
         
         return view('admin.seller-requests.show', compact('seller'));
+    }
+
+    public function getServices($id)
+    {
+        $seller = User::where('seller_status', '!=', null)->findOrFail($id);
+        $services = $seller->services()->select('id', 'title', 'description', 'pricing', 'status', 'created_at')->get();
+        
+        return response()->json([
+            'services' => $services
+        ]);
     }
 
     public function approve($id)
