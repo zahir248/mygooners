@@ -30,7 +30,7 @@
                 <p class="text-gray-600 mt-1">Tambah alamat bil untuk memudahkan proses pembelian seterusnya</p>
             </div>
             
-            <a href="{{ route('billing-details.index') }}" 
+            <a href="{{ route('addresses.index') }}" 
                class="text-gray-600 hover:text-red-600 font-medium transition-colors">
                 ← Kembali ke Alamat Bil
             </a>
@@ -186,7 +186,7 @@
             </div>
             
             <div class="flex items-center justify-between pt-6 border-t border-gray-200 mt-8">
-                <a href="{{ route('billing-details.index') }}" 
+                <a href="{{ route('addresses.index') }}" 
                    class="text-gray-600 hover:text-gray-800 font-medium">
                     Batal
                 </a>

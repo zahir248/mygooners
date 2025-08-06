@@ -167,7 +167,7 @@
             </div>
             
             <div class="flex items-center justify-end space-x-4 pt-6 border-t border-gray-200">
-                <a href="{{ route('shipping-details.index') }}" 
+                <a href="{{ route('addresses.index') }}" 
                    class="px-6 py-3 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors">
                     Batal
                 </a>
