@@ -29,6 +29,54 @@
 @endsection
 
 @section('content')
+<!-- Success Message Display -->
+<div id="success-message" class="fixed top-20 right-4 z-50 hidden">
+    <div class="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg shadow-lg max-w-sm" role="alert">
+        <div class="flex items-start">
+            <div class="flex-shrink-0">
+                <svg class="h-5 w-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                </svg>
+            </div>
+            <div class="ml-3 flex-1">
+                <p class="text-sm font-medium" id="success-message-text"></p>
+            </div>
+            <div class="ml-4 flex-shrink-0">
+                <button onclick="hideSuccessMessage()" class="inline-flex text-green-400 hover:text-green-600 focus:outline-none focus:text-green-600">
+                    <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Login Required Modal -->
+<div id="login-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-xl shadow-2xl max-w-md w-full transform transition-all">
+        <div class="p-6">
+            <div class="flex items-center justify-center w-12 h-12 mx-auto bg-blue-100 rounded-full mb-4">
+                <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                </svg>
+            </div>
+            <h3 class="text-lg font-bold text-gray-900 text-center mb-2">Log Masuk Diperlukan</h3>
+            <p class="text-gray-600 text-center mb-6">
+                Anda perlu log masuk terlebih dahulu untuk menambah item ke troli. Sila log masuk untuk meneruskan.
+            </p>
+            <div class="flex space-x-3">
+                <button onclick="hideLoginModal()" class="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-colors">
+                    Batal
+                </button>
+                <button onclick="goToLogin()" class="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg font-medium hover:bg-red-700 transition-colors">
+                    Log Masuk
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <style>
     .variation-option.active {
         border-color: #ef4444 !important;
@@ -399,20 +447,20 @@
                                     Maklumkan Apabila Tersedia
                                 </button>
                             @else
-                                <button id="add-to-cart-btn" class="flex-1 bg-arsenal hover:bg-arsenal text-white py-4 px-6 rounded-lg font-bold text-lg transition-colors">
+                                <button id="add-to-cart-btn" onclick="addToCart()" class="flex-1 bg-arsenal hover:bg-arsenal text-white py-4 px-6 rounded-lg font-bold text-lg transition-colors">
                                     Tambah ke Troli
                                 </button>
-                                <button id="buy-now-btn" class="flex-1 border-2 border-red-600 text-red-600 hover:bg-red-600 hover:text-white py-4 px-6 rounded-lg font-bold text-lg transition-colors">
+                                <button id="buy-now-btn" onclick="buyNow()" class="flex-1 border-2 border-red-600 text-red-600 hover:bg-red-600 hover:text-white py-4 px-6 rounded-lg font-bold text-lg transition-colors">
                                     Beli Sekarang
                                 </button>
                             @endif
                         </div>
                     @else
                         @if($product->stock_quantity > 0)
-                            <button class="w-full bg-arsenal hover:bg-arsenal text-white py-4 px-6 rounded-lg font-bold text-lg transition-colors">
+                            <button onclick="addToCartSimple()" class="w-full bg-arsenal hover:bg-arsenal text-white py-4 px-6 rounded-lg font-bold text-lg transition-colors">
                                 Tambah ke Troli
                             </button>
-                            <button class="w-full border-2 border-red-600 text-red-600 hover:bg-red-600 hover:text-white py-4 px-6 rounded-lg font-bold text-lg transition-colors">
+                            <button onclick="buyNowSimple()" class="w-full border-2 border-red-600 text-red-600 hover:bg-red-600 hover:text-white py-4 px-6 rounded-lg font-bold text-lg transition-colors">
                                 Beli Sekarang
                             </button>
                         @else
@@ -515,7 +563,7 @@
                                 </div>
                                 <p class="text-gray-700 leading-relaxed">{{ $review->comment }}</p>
                             </div>
-                        </div>
+                        </div>image.png
                     </div>
                 @endforeach
             </div>
@@ -539,9 +587,17 @@
             @foreach($relatedProducts as $relatedProduct)
                 <div class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow overflow-hidden">
                     <div class="relative h-64">
-                                                        <img src="{{ route('product.image', basename($relatedProduct->images[0])) }}" 
-                             alt="{{ $relatedProduct->title }}" 
-                             class="w-full h-full object-cover">
+                        @if($relatedProduct->images && is_array($relatedProduct->images) && count($relatedProduct->images) > 0)
+                            <img src="{{ route('product.image', basename($relatedProduct->images[0])) }}" 
+                                 alt="{{ $relatedProduct->title }}" 
+                                 class="w-full h-full object-cover">
+                        @else
+                            <div class="w-full h-full bg-gray-200 flex items-center justify-center">
+                                <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 002 2z"></path>
+                                </svg>
+                            </div>
+                        @endif
                         @if($relatedProduct->sale_price)
                             <div class="absolute top-3 left-3">
                                 <span class="bg-red-600 text-white px-3 py-1 rounded-full text-sm font-bold">
@@ -591,6 +647,9 @@ let selectedVariation = null;
 let productVariations = @json($product->activeVariationsWithComputedProperties);
 let isClearingSelection = false; // Flag to prevent selectVariation during clearing
 
+// Debug: Log product variations
+console.log('Product variations loaded:', productVariations);
+
 // Carousel variables
 let currentImageIndex = 0;
 let totalImages = {{ count($allImages ?? []) }};
@@ -633,15 +692,23 @@ function handleImageSelection(index) {
         const img = images[index];
         const variationId = img.dataset.variationId;
         
-        // Clear ALL variant selections first
-        clearVariantSelection();
+        // Only clear and select if we're not already on a variant page
+        const urlParams = new URLSearchParams(window.location.search);
+        const currentVariant = urlParams.get('variant');
         
-        // If this is a variation image, then select that specific variation
-        if (variationId) {
-            console.log('Selecting variation from carousel:', variationId);
-            selectVariation(parseInt(variationId));
+        if (!currentVariant) {
+            // Clear ALL variant selections first
+            clearVariantSelection();
+            
+            // If this is a variation image, then select that specific variation
+            if (variationId) {
+                console.log('Selecting variation from carousel:', variationId);
+                selectVariation(parseInt(variationId));
+            } else {
+                console.log('No variation ID from carousel, keeping base product selection');
+            }
         } else {
-            console.log('No variation ID from carousel, keeping base product selection');
+            console.log('Already on variant page, skipping carousel selection');
         }
     }
 }
@@ -750,11 +817,9 @@ function toggleVariation(variationId) {
         console.log('Decoded current variant:', decodedCurrentVariant);
         
         if (decodedCurrentVariant === clickedVariantName) {
-            // Same variant clicked, go back to base
-            console.log('Same variant clicked, going to base product');
-            const baseUrl = window.location.pathname;
-            console.log('Redirecting to:', baseUrl);
-            window.location.replace(baseUrl);
+            // Same variant clicked, just update the UI without reloading
+            console.log('Same variant clicked, updating UI only');
+            selectVariation(variationId);
         } else {
             // Different variant clicked, switch to that variant
             console.log('Different variant clicked, switching to:', clickedVariantName);
@@ -774,12 +839,11 @@ function refreshPageWithVariant(variationId) {
         // Find the variation name by ID
         const variation = productVariations.find(v => v.id === variationId);
         if (variation) {
-            // URL encode the variant name to handle special characters
-            const encodedName = encodeURIComponent(variation.name);
-            currentUrl.searchParams.set('variant', encodedName);
+            // Use the raw variant name - URLSearchParams will handle encoding properly
+            currentUrl.searchParams.set('variant', variation.name);
             
             // Debug log
-            console.log('Setting variant:', variation.name, 'Encoded:', encodedName);
+            console.log('Setting variant:', variation.name);
         }
     } else {
         currentUrl.searchParams.delete('variant');
@@ -880,8 +944,10 @@ function clearVariantSelection() {
     resetProductPrice();
     enableAddToCart();
     
-    // Clear selected variation
-    selectedVariation = null;
+    // Clear selected variation only if we're not in the process of setting it
+    if (!window.location.search.includes('variant=')) {
+        selectedVariation = null;
+    }
     
     // Reset flag after a short delay to allow any pending operations to complete
     setTimeout(() => {
@@ -1138,6 +1204,212 @@ function copyToClipboard() {
     });
 }
 
+function addToCart() {
+    // Check if user is logged in
+    @auth
+        const quantity = parseInt(document.getElementById('quantity').value);
+        const productId = {{ $product->id }};
+        const variationId = selectedVariation ? selectedVariation.id : null;
+        
+        // Debug logging
+        console.log('addToCart called with:', {
+            quantity: quantity,
+            productId: productId,
+            variationId: variationId,
+            selectedVariation: selectedVariation
+        });
+        console.log('All product variations:', productVariations);
+        console.log('Current URL:', window.location.href);
+        console.log('URL search params:', window.location.search);
+        console.log('selectedVariation details:', selectedVariation ? {
+            id: selectedVariation.id,
+            name: selectedVariation.name,
+            price: selectedVariation.price
+        } : 'null');
+        
+        // Validate stock
+        const stockQuantity = selectedVariation ? selectedVariation.stock_quantity : {{ $product->stock_quantity }};
+        if (stockQuantity < quantity) {
+            alert('Stok tidak mencukupi');
+            return;
+        }
+        
+        // Show loading state
+        const addToCartBtn = document.getElementById('add-to-cart-btn');
+        const originalText = addToCartBtn.textContent;
+        addToCartBtn.textContent = 'Menambah...';
+        addToCartBtn.disabled = true;
+        
+        const requestData = {
+            product_id: productId,
+            variation_id: variationId,
+            quantity: quantity
+        };
+        
+        console.log('Sending request data:', requestData);
+        
+        fetch('{{ route("cart.add") }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
+            body: JSON.stringify(requestData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Response received:', data);
+            if (data.success) {
+                // Store success message in session storage
+                sessionStorage.setItem('cartSuccessMessage', data.message);
+                // Refresh the page
+                window.location.reload();
+            } else {
+                alert(data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Ralat semasa menambah ke troli');
+        })
+        .finally(() => {
+            // Reset button state
+            addToCartBtn.textContent = originalText;
+            addToCartBtn.disabled = false;
+        });
+    @else
+        // User is not logged in, show login modal
+        showLoginModal();
+    @endauth
+}
+
+function addToCartSimple() {
+    // Check if user is logged in
+    @auth
+        const quantity = parseInt(document.getElementById('quantity').value);
+        const productId = {{ $product->id }};
+        
+        // Debug logging
+        console.log('addToCartSimple called with:', {
+            quantity: quantity,
+            productId: productId
+        });
+        
+        // Validate stock
+        const stockQuantity = {{ $product->stock_quantity }};
+        if (stockQuantity < quantity) {
+            alert('Stok tidak mencukupi');
+            return;
+        }
+        
+        // Show loading state
+        const addToCartBtn = event.target; // Get the button that was clicked
+        const originalText = addToCartBtn.textContent;
+        addToCartBtn.textContent = 'Menambah...';
+        addToCartBtn.disabled = true;
+        
+        const requestData = {
+            product_id: productId,
+            variation_id: null, // No variation for simple products
+            quantity: quantity
+        };
+        
+        console.log('Sending request data:', requestData);
+        
+        fetch('{{ route("cart.add") }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
+            body: JSON.stringify(requestData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Response received:', data);
+            if (data.success) {
+                // Store success message in session storage
+                sessionStorage.setItem('cartSuccessMessage', data.message);
+                // Refresh the page
+                window.location.reload();
+            } else {
+                alert(data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Ralat semasa menambah ke troli');
+        })
+        .finally(() => {
+            // Reset button state
+            addToCartBtn.textContent = originalText;
+            addToCartBtn.disabled = false;
+        });
+    @else
+        // User is not logged in, show login modal
+        showLoginModal();
+    @endauth
+}
+
+function showLoginModal() {
+    const modal = document.getElementById('login-modal');
+    modal.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+}
+
+function hideLoginModal() {
+    const modal = document.getElementById('login-modal');
+    modal.classList.add('hidden');
+    document.body.style.overflow = 'auto';
+}
+
+function goToLogin() {
+    window.location.href = '{{ route("login") }}';
+}
+
+function buyNow() {
+    // Check if user is logged in
+    @auth
+        const quantity = parseInt(document.getElementById('quantity').value);
+        const productId = {{ $product->id }};
+        const variationId = selectedVariation ? selectedVariation.id : null;
+        
+        // Validate stock
+        const stockQuantity = selectedVariation ? selectedVariation.stock_quantity : {{ $product->stock_quantity }};
+        if (stockQuantity < quantity) {
+            alert('Stok tidak mencukupi');
+            return;
+        }
+        
+        // Redirect directly to direct checkout page
+        window.location.href = '{{ route("direct-checkout.index") }}?product_id={{ $product->id }}&quantity=' + quantity + (variationId ? '&variation_id=' + variationId : '');
+    @else
+        // User is not logged in, show login modal
+        showLoginModal();
+    @endauth
+}
+
+function buyNowSimple() {
+    // Check if user is logged in
+    @auth
+        const quantity = parseInt(document.getElementById('quantity').value);
+        const productId = {{ $product->id }};
+        
+        // Validate stock
+        const stockQuantity = {{ $product->stock_quantity }};
+        if (stockQuantity < quantity) {
+            alert('Stok tidak mencukupi');
+            return;
+        }
+        
+        // Redirect directly to direct checkout page
+        window.location.href = '{{ route("direct-checkout.index") }}?product_id={{ $product->id }}&quantity=' + quantity;
+    @else
+        // User is not logged in, show login modal
+        showLoginModal();
+    @endauth
+}
+
 // Initialize page with pre-selected variant
 document.addEventListener('DOMContentLoaded', function() {
     // Initialize carousel
@@ -1236,9 +1508,16 @@ document.addEventListener('DOMContentLoaded', function() {
         if (variantParam) {
             const decodedVariantName = decodeURIComponent(variantParam);
             console.log('Found variant parameter in URL:', decodedVariantName);
+            console.log('Raw variant parameter:', variantParam);
+            console.log('Available product variations:', productVariations.map(v => ({ id: v.id, name: v.name })));
             
             // Find the variant by name
             const variant = productVariations.find(v => v.name === decodedVariantName);
+            console.log('Variant search result:', variant);
+            console.log('Exact name comparison test:');
+            productVariations.forEach(v => {
+                console.log(`  "${v.name}" === "${decodedVariantName}" = ${v.name === decodedVariantName}`);
+            });
             if (variant) {
                 console.log('Found variant from URL:', variant);
                 
@@ -1285,7 +1564,45 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
-
+    // Check for success message on page load
+    const successMessage = sessionStorage.getItem('cartSuccessMessage');
+    if (successMessage) {
+        showSuccessMessage(successMessage);
+        sessionStorage.removeItem('cartSuccessMessage');
+    }
+    
+    // Add click outside functionality for login modal
+    const loginModal = document.getElementById('login-modal');
+    loginModal.addEventListener('click', function(e) {
+        if (e.target === loginModal) {
+            hideLoginModal();
+        }
+    });
+    
+    // Add escape key functionality
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            hideLoginModal();
+        }
+    });
 });
+
+function showSuccessMessage(message) {
+    const successMessage = document.getElementById('success-message');
+    const messageText = document.getElementById('success-message-text');
+    
+    messageText.textContent = message;
+    successMessage.classList.remove('hidden');
+    
+    // Auto-hide after 5 seconds
+    setTimeout(() => {
+        hideSuccessMessage();
+    }, 5000);
+}
+
+function hideSuccessMessage() {
+    const successMessage = document.getElementById('success-message');
+    successMessage.classList.add('hidden');
+}
 </script>
 @endpush 

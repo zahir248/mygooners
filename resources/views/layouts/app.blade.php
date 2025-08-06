@@ -106,6 +106,35 @@
         ::-webkit-scrollbar-thumb:hover {
             background: #cc0000;
         }
+        
+        /* Cart icon animations */
+        .cart-count {
+            animation: cartPulse 2s infinite;
+        }
+        
+        @keyframes cartPulse {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.7);
+            }
+            50% {
+                transform: scale(1.1);
+                box-shadow: 0 0 0 4px rgba(220, 38, 38, 0);
+            }
+        }
+        
+        /* Modern cart icon styling */
+        .cart-icon-modern {
+            background: linear-gradient(135deg, #ffffff 0%, #fef2f2 100%);
+            border: 2px solid #fecaca;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .cart-icon-modern:hover {
+            border-color: #f87171;
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.15);
+            transform: translateY(-1px);
+        }
     </style>
 
     @stack('styles')
@@ -148,34 +177,80 @@
 
                     <!-- Right side -->
                     <div class="flex items-center space-x-4">
-                        <!-- Search -->
-                        <div class="hidden lg:block">
-                            <form action="{{ request()->routeIs('blog.*') ? route('blog.index') : (request()->routeIs('services.*') ? route('services.index') : route('shop.index')) }}" method="GET" class="relative">
-                                <input type="text" 
-                                       name="search" 
-                                       value="{{ request('search') }}" 
-                                       placeholder="Cari..." 
-                                       class="w-64 pl-10 pr-4 py-2 border border-gray-300 rounded-full focus:ring-2 focus:ring-red-500 focus:border-transparent">
-                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                    <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m21 21-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        <!-- Cart Icon - Only for logged in users -->
+                        @auth
+                        <div class="relative group">
+                            <a href="{{ route('cart.index') }}" class="flex items-center space-x-3 px-3 py-2 text-gray-700 hover:text-red-600 transition-colors">
+                                <div class="relative">
+                                    <svg class="w-6 h-6 text-gray-600" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12L8.1 13h7.45c.75 0 1.41-.41 1.75-1.03L21.7 4H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/>
                                     </svg>
+                                    @if(\App\Models\Cart::getOrCreateCart()->item_count > 0)
+                                        <span class="cart-count absolute -top-1 -right-1 bg-red-600 text-white text-xs font-bold rounded-full h-4 w-4 flex items-center justify-center">
+                                            {{ \App\Models\Cart::getOrCreateCart()->item_count }}
+                                        </span>
+                                    @else
+                                        <span class="cart-count absolute -top-1 -right-1 bg-red-600 text-white text-xs font-bold rounded-full h-4 w-4 flex items-center justify-center hidden">
+                                            0
+                                        </span>
+                                    @endif
                                 </div>
-                            </form>
+                                <div class="hidden lg:block">
+                                    <span class="text-sm font-medium text-gray-700 group-hover:text-red-600 transition-colors">Troli</span>
+                                    <div class="text-xs text-gray-500 cart-total">
+                                        RM{{ number_format(\App\Models\Cart::getOrCreateCart()->total, 2) }}
+                                    </div>
+                                </div>
+                            </a>
                         </div>
+                        @endauth
+                        
+
 
                         <!-- Auth -->
                         @auth
                             <div class="relative" x-data="{ open: false }">
                                 <button @click="open = !open" class="flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
-                                    <img class="h-8 w-8 rounded-full bg-gray-300" src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->name) }}&background=dc2626&color=fff" alt="{{ auth()->user()->name }}">
+                                    @if(auth()->user()->profile_image)
+                                        @if(Str::startsWith(auth()->user()->profile_image, 'http'))
+                                            <img class="h-8 w-8 rounded-full object-cover" src="{{ auth()->user()->profile_image }}" alt="{{ auth()->user()->name }}">
+                                        @else
+                                            <img class="h-8 w-8 rounded-full object-cover" src="{{ asset('storage/' . auth()->user()->profile_image) }}" alt="{{ auth()->user()->name }}">
+                                        @endif
+                                    @else
+                                        <img class="h-8 w-8 rounded-full bg-gray-300" src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->name) }}&background=dc2626&color=fff" alt="{{ auth()->user()->name }}">
+                                    @endif
                                     <span class="ml-2 text-gray-700 font-medium">{{ auth()->user()->name }}</span>
                                 </button>
                                 <div x-show="open" @click.away="open = false" x-cloak class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
-                                    <a href="{{ route('dashboard') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Panel Kawalan</a>
+                                    <a href="{{ route('dashboard') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                        <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                                        </svg>
+                                        Panel Kawalan
+                                    </a>
+                                                    <a href="{{ route('checkout.orders') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                    <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                    </svg>
+                    Pesanan Saya
+                </a>
+                <a href="{{ route('addresses.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                    <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    </svg>
+                    Alamat
+                </a>
+                <div class="border-t border-gray-100 my-1"></div>
                                     <form method="POST" action="{{ route('logout') }}">
                                         @csrf
-                                        <button type="submit" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Log Keluar</button>
+                                        <button type="submit" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                            <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                                            </svg>
+                                            Log Keluar
+                                        </button>
                                     </form>
                                 </div>
                             </div>
@@ -210,6 +285,13 @@
                         <a href="{{ route('videos.index') }}" class="block px-3 py-2 text-base font-medium text-gray-900 hover:text-red-600 hover:bg-gray-50">Video</a>
                         <a href="{{ route('services.index') }}" class="block px-3 py-2 text-base font-medium text-gray-900 hover:text-red-600 hover:bg-gray-50">Perkhidmatan</a>
                         <a href="{{ route('shop.index') }}" class="block px-3 py-2 text-base font-medium text-gray-900 hover:text-red-600 hover:bg-gray-50">Kedai</a>
+                        @auth
+                                            <div class="border-t border-gray-200 pt-2 mt-2">
+                    <a href="{{ route('dashboard') }}" class="block px-3 py-2 text-base font-medium text-gray-900 hover:text-red-600 hover:bg-gray-50">Panel Kawalan</a>
+                    <a href="{{ route('checkout.orders') }}" class="block px-3 py-2 text-base font-medium text-gray-900 hover:text-red-600 hover:bg-gray-50">Pesanan Saya</a>
+                    <a href="{{ route('addresses.index') }}" class="block px-3 py-2 text-base font-medium text-gray-900 hover:text-red-600 hover:bg-gray-50">Alamat</a>
+                </div>
+                        @endauth
                     </div>
                 </div>
             </div>

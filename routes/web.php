@@ -8,6 +8,11 @@ use App\Http\Controllers\Client\ProductController;
 use App\Http\Controllers\Client\VideoController;
 use App\Http\Controllers\Client\AuthController;
 use App\Http\Controllers\Client\RequestController;
+use App\Http\Controllers\Client\CartController;
+use App\Http\Controllers\Client\CheckoutController;
+use App\Http\Controllers\Client\BillingDetailController;
+use App\Http\Controllers\Client\ShippingDetailController;
+use App\Http\Controllers\Client\DirectCheckoutController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\AuthController as AdminAuthController;
 use App\Http\Controllers\Admin\ArticleController as AdminArticleController;
@@ -16,6 +21,7 @@ use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Admin\VideoController as AdminVideoController;
 use App\Http\Controllers\Admin\SellerRequestController;
+use App\Http\Controllers\Admin\OrderController;
 
 // Home Page
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -39,6 +45,91 @@ Route::prefix('shop')->group(function () {
     Route::get('/category/{category}', [ProductController::class, 'category'])->name('shop.category');
     Route::get('/{slug}', [ProductController::class, 'show'])->name('shop.show');
 });
+
+// Cart Routes
+Route::prefix('cart')->group(function () {
+    Route::get('/', [CartController::class, 'index'])->name('cart.index');
+    Route::post('/add', [CartController::class, 'add'])->name('cart.add');
+    Route::put('/update/{item}', [CartController::class, 'update'])->name('cart.update');
+    Route::delete('/remove/{item}', [CartController::class, 'remove'])->name('cart.remove');
+    Route::delete('/clear', [CartController::class, 'clear'])->name('cart.clear');
+    Route::get('/count', [CartController::class, 'count'])->name('cart.count');
+});
+
+// Checkout Routes
+Route::prefix('checkout')->middleware('auth')->group(function () {
+    Route::get('/', [CheckoutController::class, 'index'])->name('checkout.index');
+    Route::post('/', [CheckoutController::class, 'store'])->name('checkout.store');
+    Route::get('/stripe-payment', [CheckoutController::class, 'stripePayment'])->name('checkout.stripe-payment');
+    Route::get('/success/{orderId}', [CheckoutController::class, 'success'])->name('checkout.success');
+    Route::get('/orders', [CheckoutController::class, 'indexOrders'])->name('checkout.orders');
+    Route::get('/orders/{orderId}', [CheckoutController::class, 'show'])->name('checkout.show');
+    Route::post('/orders/{order}/cancel', [CheckoutController::class, 'cancelOrder'])->name('checkout.cancel-order');
+    Route::post('/orders/{order}/mark-delivered', [CheckoutController::class, 'markAsDelivered'])->name('checkout.mark-delivered');
+    Route::post('/orders/{order}/retry-payment', [CheckoutController::class, 'retryPayment'])->name('checkout.retry-payment');
+    Route::get('/orders/{order}/retry-payment', [CheckoutController::class, 'showRetryPayment'])->name('checkout.show-retry-payment');
+    Route::post('/orders/{order}/retry-payment-with-method', [CheckoutController::class, 'retryPaymentWithMethod'])->name('checkout.retry-payment-with-method');
+    
+    // ToyyibPay callback routes
+Route::get('/toyyibpay/return', [CheckoutController::class, 'toyyibpayReturn'])->name('checkout.toyyibpay.return');
+Route::post('/toyyibpay/callback', [CheckoutController::class, 'toyyibpayCallback'])->name('checkout.toyyibpay.callback');
+
+// Stripe payment routes
+Route::get('/stripe/payment', [CheckoutController::class, 'stripePayment'])->name('checkout.stripe.payment');
+Route::get('/stripe/return', [CheckoutController::class, 'stripeReturn'])->name('checkout.stripe.return');
+
+// Stripe webhook route (no auth middleware needed)
+Route::post('/stripe/webhook', function (\Illuminate\Http\Request $request) {
+    $stripeService = new \App\Services\StripeService();
+    $result = $stripeService->handleWebhook($request->getContent(), $request->header('Stripe-Signature'));
+    
+    if ($result['success']) {
+        return response('Webhook handled successfully', 200);
+    } else {
+        return response('Webhook error: ' . $result['message'], 400);
+    }
+})->name('stripe.webhook');
+});
+
+// Addresses Routes (Unified Billing and Shipping)
+Route::prefix('addresses')->middleware('auth')->group(function () {
+    Route::get('/', [BillingDetailController::class, 'index'])->name('addresses.index');
+    Route::get('/billing/create', [BillingDetailController::class, 'create'])->name('addresses.billing.create');
+    Route::post('/billing', [BillingDetailController::class, 'store'])->name('addresses.billing.store');
+    Route::get('/billing/{billingDetail}/edit', [BillingDetailController::class, 'edit'])->name('addresses.billing.edit');
+    Route::put('/billing/{billingDetail}', [BillingDetailController::class, 'update'])->name('addresses.billing.update');
+    Route::delete('/billing/{billingDetail}', [BillingDetailController::class, 'destroy'])->name('addresses.billing.destroy');
+    Route::post('/billing/{billingDetail}/set-default', [BillingDetailController::class, 'setDefault'])->name('addresses.billing.set-default');
+    
+    Route::get('/shipping/create', [ShippingDetailController::class, 'create'])->name('addresses.shipping.create');
+    Route::post('/shipping', [ShippingDetailController::class, 'store'])->name('addresses.shipping.store');
+    Route::get('/shipping/{shippingDetail}/edit', [ShippingDetailController::class, 'edit'])->name('addresses.shipping.edit');
+    Route::put('/shipping/{shippingDetail}', [ShippingDetailController::class, 'update'])->name('addresses.shipping.update');
+    Route::delete('/shipping/{shippingDetail}', [ShippingDetailController::class, 'destroy'])->name('addresses.shipping.destroy');
+    Route::post('/shipping/{shippingDetail}/set-default', [ShippingDetailController::class, 'setDefault'])->name('addresses.shipping.set-default');
+});
+
+
+
+// Direct Checkout Routes
+Route::prefix('direct-checkout')->middleware('auth')->group(function () {
+    Route::get('/', [DirectCheckoutController::class, 'index'])->name('direct-checkout.index');
+    Route::post('/', [DirectCheckoutController::class, 'store'])->name('direct-checkout.store');
+    Route::get('/stripe/payment', [DirectCheckoutController::class, 'stripePayment'])->name('direct-checkout.stripe.payment');
+    Route::get('/success/{orderId}', [DirectCheckoutController::class, 'success'])->name('direct-checkout.success');
+    Route::post('/orders/{order}/cancel', [DirectCheckoutController::class, 'cancelOrder'])->name('direct-checkout.cancel-order');
+    Route::post('/orders/{order}/mark-delivered', [DirectCheckoutController::class, 'markAsDelivered'])->name('direct-checkout.mark-delivered');
+    Route::post('/orders/{order}/retry-payment', [DirectCheckoutController::class, 'retryPayment'])->name('direct-checkout.retry-payment');
+    Route::get('/orders/{order}/retry-payment', [DirectCheckoutController::class, 'showRetryPayment'])->name('direct-checkout.show-retry-payment');
+    Route::post('/orders/{order}/retry-payment-with-method', [DirectCheckoutController::class, 'retryPaymentWithMethod'])->name('direct-checkout.retry-payment-with-method');
+});
+
+// Direct Checkout ToyyibPay return route
+Route::get('/direct-checkout/toyyibpay/return', [DirectCheckoutController::class, 'toyyibpayReturn'])->name('direct-checkout.toyyibpay.return');
+
+// Direct Checkout Stripe routes
+Route::get('/direct-checkout/stripe/payment', [DirectCheckoutController::class, 'stripePayment'])->name('direct-checkout.stripe.payment');
+Route::get('/direct-checkout/stripe/return', [DirectCheckoutController::class, 'stripeReturn'])->name('direct-checkout.stripe.return');
 
 // Video Podcast Gallery
 Route::prefix('videos')->group(function () {
@@ -306,6 +397,17 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
         Route::get('/variations/{variationId}/edit', [AdminProductController::class, 'getVariationForEdit'])->name('admin.products.variations.edit');
         Route::delete('/variations/{variationId}', [AdminProductController::class, 'deleteVariation'])->name('admin.products.variations.destroy');
         Route::put('/variations/{variationId}', [AdminProductController::class, 'updateVariation'])->name('admin.products.variations.update');
+    });
+    
+    // Orders Management
+    Route::prefix('orders')->group(function () {
+        Route::get('/', [OrderController::class, 'index'])->name('admin.orders.index');
+        Route::get('/{id}', [OrderController::class, 'show'])->name('admin.orders.show');
+        Route::patch('/{id}/status', [OrderController::class, 'updateStatus'])->name('admin.orders.update-status');
+        Route::patch('/{id}/payment-status', [OrderController::class, 'updatePaymentStatus'])->name('admin.orders.update-payment-status');
+        Route::delete('/{id}', [OrderController::class, 'destroy'])->name('admin.orders.destroy');
+        Route::get('/stats', [OrderController::class, 'getStats'])->name('admin.orders.stats');
+        Route::get('/export', [OrderController::class, 'export'])->name('admin.orders.export');
     });
     
     // Users Management

@@ -92,6 +92,21 @@ class User extends Authenticatable
         return $this->hasMany(ProductReview::class);
     }
 
+    public function billingDetails()
+    {
+        return $this->hasMany(BillingDetail::class);
+    }
+
+    public function shippingDetails()
+    {
+        return $this->hasMany(ShippingDetail::class);
+    }
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
+
     public function isAdmin()
     {
         return $this->role === 'admin' || $this->role === 'super_admin';
