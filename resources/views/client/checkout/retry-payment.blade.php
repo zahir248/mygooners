@@ -136,21 +136,8 @@
                     </div>
                 </label>
 
-                <!-- Stripe -->
-                <label class="flex items-center p-4 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
-                    <input type="radio" name="payment_method" value="stripe" class="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300" {{ old('payment_method', $order->payment_method) === 'stripe' ? 'checked' : '' }}>
-                    <div class="ml-3 flex-1">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <p class="text-sm font-medium text-gray-900">Kad Kredit/Debit</p>
-                                <p class="text-xs text-gray-500">Bayar menggunakan kad kredit atau debit antarabangsa</p>
-                            </div>
-                            <div class="flex items-center space-x-2">
-                                <img src="https://stripe.com/img/v3/home/twitter.png" alt="Stripe" class="h-8 w-auto">
-                            </div>
-                        </div>
-                    </div>
-                </label>
+                <!-- Hidden Stripe option - kept for form functionality but not visible to users -->
+                <input type="radio" name="payment_method" value="stripe" class="hidden" {{ old('payment_method', $order->payment_method) === 'stripe' ? 'checked' : '' }}>
             </div>
 
             @error('payment_method')
