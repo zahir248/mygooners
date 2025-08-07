@@ -5,7 +5,7 @@
 
 @section('content')
 <!-- Hero Section -->
-<section class="bg-gradient-to-r from-red-600 to-red-700 text-white relative overflow-hidden" style="background-image: url('{{ asset('images/hero-section.png') }}'); background-size: cover; background-position: center; background-repeat: no-repeat; height: 100vh; margin-top: -64px; padding-top: 64px;">
+<section class="bg-gradient-to-r from-red-600 to-red-700 text-white relative overflow-hidden" style="background-image: url('{{ asset('images/hero-section.png') }}'); background-size: cover; background-position: center; background-repeat: no-repeat; height: 70vh; margin-top: -64px; padding-top: 64px;">
     <!-- Overlay to ensure text readability -->
     <div class="absolute inset-0 bg-black bg-opacity-75"></div>
     <div class="relative z-10 h-full flex items-center justify-center">

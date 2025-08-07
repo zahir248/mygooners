@@ -52,19 +52,7 @@
     </div>
 </div>
 
-<!-- Hero Section -->
-<div class="bg-gradient-to-r from-red-600 to-red-700 text-white relative overflow-hidden" style="background-image: url('{{ asset('images/hero-section.png') }}'); background-size: cover; background-position: center; background-repeat: no-repeat; height: 100vh; margin-top: -64px; padding-top: 64px;">
-    <!-- Overlay to ensure text readability -->
-    <div class="absolute inset-0 bg-black bg-opacity-75"></div>
-    <div class="relative z-10 h-full flex items-center justify-center">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h1 class="text-4xl md:text-5xl font-bold mb-4">Kedai Arsenal Rasmi</h1>
-            <p class="text-xl text-red-100 max-w-3xl mx-auto">
-                Dapatkan barangan Arsenal terkini, jersi, dan item eksklusif. Tunjukkan kebanggaan Gunners anda dengan peralatan rasmi.
-            </p>
-        </div>
-    </div>
-</div>
+
 
 <!-- Search and Filter Section -->
 <div class="bg-white border-b border-gray-200">
