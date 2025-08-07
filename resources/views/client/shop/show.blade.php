@@ -92,28 +92,28 @@
 
 <!-- Breadcrumb -->
 <div class="bg-gray-50 border-b border-gray-200">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-        <nav class="flex items-center space-x-2 text-sm text-gray-600">
-            <a href="{{ route('home') }}" class="hover:text-red-600 transition-colors">Utama</a>
-            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4">
+        <nav class="flex items-center space-x-1 sm:space-x-2 text-xs sm:text-sm text-gray-600 overflow-x-auto">
+            <a href="{{ route('home') }}" class="hover:text-red-600 transition-colors whitespace-nowrap">Utama</a>
+            <svg class="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
             </svg>
-            <a href="{{ route('shop.index') }}" class="hover:text-red-600 transition-colors">Kedai</a>
-            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+            <a href="{{ route('shop.index') }}" class="hover:text-red-600 transition-colors whitespace-nowrap">Kedai</a>
+            <svg class="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
             </svg>
-            <a href="{{ route('shop.index', ['category' => strtolower($product->category)]) }}" class="hover:text-red-600 transition-colors">{{ $product->category }}</a>
-            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+            <a href="{{ route('shop.index', ['category' => strtolower($product->category)]) }}" class="hover:text-red-600 transition-colors whitespace-nowrap">{{ $product->category }}</a>
+            <svg class="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
             </svg>
-            <span class="text-gray-900 font-medium">{{ $product->title }}</span>
+            <span class="text-gray-900 font-medium whitespace-nowrap">{{ Str::limit($product->title, 30) }}</span>
         </nav>
     </div>
 </div>
 
 <!-- Main Content -->
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12 mb-8 lg:mb-16">
         <!-- Product Images -->
         <div>
             
@@ -272,7 +272,7 @@
                     </div>
                 </div>
                 
-                <h1 id="product-title" class="text-4xl font-bold text-gray-900 mb-4">
+                <h1 id="product-title" class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-3 sm:mb-4">
                     @if($selectedVariation)
                         {{ $selectedVariation->name }}
                     @else
@@ -281,21 +281,21 @@
                 </h1>
                 
                 <!-- Rating and Reviews -->
-                <div class="flex items-center space-x-4 mb-4">
+                <div class="flex flex-wrap items-center gap-2 sm:gap-4 mb-4">
                     <div class="flex items-center">
                         @for($i = 1; $i <= 5; $i++)
-                            <svg class="w-5 h-5 {{ $i <= $product->average_rating ? 'text-yellow-400' : 'text-gray-300' }}" fill="currentColor" viewBox="0 0 20 20">
+                            <svg class="w-4 h-4 sm:w-5 sm:h-5 {{ $i <= $product->average_rating ? 'text-yellow-400' : 'text-gray-300' }}" fill="currentColor" viewBox="0 0 20 20">
                                 <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
                             </svg>
                         @endfor
                     </div>
-                    <span class="text-lg font-semibold text-gray-900">{{ number_format($product->average_rating, 1) }}</span>
-                    <span class="text-gray-500">({{ $product->reviews_count }} ulasan)</span>
-                    <a href="#reviews" class="text-red-600 hover:text-red-700 font-medium">Baca Ulasan</a>
+                    <span class="text-base sm:text-lg font-semibold text-gray-900">{{ number_format($product->average_rating, 1) }}</span>
+                    <span class="text-sm sm:text-base text-gray-500">({{ $product->reviews_count }} ulasan)</span>
+                    <a href="#reviews" class="text-red-600 hover:text-red-700 font-medium text-sm sm:text-base">Baca Ulasan</a>
                 </div>
 
                 <!-- Price -->
-                <div class="flex items-center space-x-4 mb-6">
+                <div class="flex items-center space-x-4 mb-4 sm:mb-6">
                     <div id="product-price-display">
                         @if($product->hasVariations())
                             @if($selectedVariation)
@@ -304,19 +304,19 @@
                                     <span class="text-sm text-gray-600">Harga Varian Terpilih:</span>
                                 </div>
                                 @if($selectedVariation->sale_price)
-                                    <span class="text-4xl font-bold text-red-600">RM{{ number_format($selectedVariation->sale_price, 2) }}</span>
-                                    <span class="text-2xl text-gray-500 line-through">RM{{ number_format($selectedVariation->price, 2) }}</span>
-                                <span class="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm font-bold">
+                                    <span class="text-2xl sm:text-3xl lg:text-4xl font-bold text-red-600">RM{{ number_format($selectedVariation->sale_price, 2) }}</span>
+                                    <span class="text-lg sm:text-xl lg:text-2xl text-gray-500 line-through">RM{{ number_format($selectedVariation->price, 2) }}</span>
+                                <span class="bg-red-100 text-red-800 px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-bold">
                                         Jimat RM{{ number_format($selectedVariation->price - $selectedVariation->sale_price, 2) }}
                                 </span>
                             @else
-                                    <span class="text-4xl font-bold text-gray-900">RM{{ number_format($selectedVariation->price, 2) }}</span>
+                                    <span class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900">RM{{ number_format($selectedVariation->price, 2) }}</span>
                                 @endif
                                 <div class="mt-2">
                                     @if($selectedVariation->stock_quantity > 0)
-                                        <span class="text-green-600 font-medium">✓ Dalam Stok ({{ $selectedVariation->stock_quantity }} tersedia)</span>
+                                        <span class="text-green-600 font-medium text-sm sm:text-base">✓ Dalam Stok ({{ $selectedVariation->stock_quantity }} tersedia)</span>
                                     @else
-                                        <span class="text-red-600 font-medium">✗ Kehabisan Stok</span>
+                                        <span class="text-red-600 font-medium text-sm sm:text-base">✗ Kehabisan Stok</span>
                             @endif
                                 </div>
                         @else
@@ -325,37 +325,37 @@
                                     <span class="text-sm text-gray-600">Harga Produk:</span>
                                 </div>
                                 @if($product->sale_price)
-                                    <span class="text-4xl font-bold text-red-600">RM{{ number_format($product->sale_price, 2) }}</span>
-                                    <span class="text-2xl text-gray-500 line-through">RM{{ number_format($product->price, 2) }}</span>
-                                    <span class="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm font-bold">
+                                    <span class="text-2xl sm:text-3xl lg:text-4xl font-bold text-red-600">RM{{ number_format($product->sale_price, 2) }}</span>
+                                    <span class="text-lg sm:text-xl lg:text-2xl text-gray-500 line-through">RM{{ number_format($product->price, 2) }}</span>
+                                    <span class="bg-red-100 text-red-800 px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-bold">
                                         Jimat RM{{ number_format($product->price - $product->sale_price, 2) }}
                                     </span>
                                 @else
-                                    <span class="text-4xl font-bold text-gray-900">RM{{ number_format($product->price, 2) }}</span>
+                                    <span class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900">RM{{ number_format($product->price, 2) }}</span>
                                 @endif
                                 <div class="mt-2">
                                     @if($product->stock_quantity > 0)
-                                        <span class="text-green-600 font-medium">✓ Dalam Stok ({{ $product->stock_quantity }} tersedia)</span>
+                                        <span class="text-green-600 font-medium text-sm sm:text-base">✓ Dalam Stok ({{ $product->stock_quantity }} tersedia)</span>
                                     @else
-                                        <span class="text-red-600 font-medium">✗ Kehabisan Stok</span>
+                                        <span class="text-red-600 font-medium text-sm sm:text-base">✗ Kehabisan Stok</span>
                                     @endif
                                 </div>
                             @endif
                         @else
                             @if($product->sale_price)
-                                <span class="text-4xl font-bold text-red-600">RM{{ number_format($product->sale_price, 2) }}</span>
-                                <span class="text-2xl text-gray-500 line-through">RM{{ number_format($product->price, 2) }}</span>
-                                <span class="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm font-bold">
+                                <span class="text-2xl sm:text-3xl lg:text-4xl font-bold text-red-600">RM{{ number_format($product->sale_price, 2) }}</span>
+                                <span class="text-lg sm:text-xl lg:text-2xl text-gray-500 line-through">RM{{ number_format($product->price, 2) }}</span>
+                                <span class="bg-red-100 text-red-800 px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-bold">
                                     Jimat RM{{ number_format($product->price - $product->sale_price, 2) }}
                                 </span>
                             @else
-                                <span class="text-4xl font-bold text-gray-900">RM{{ number_format($product->price, 2) }}</span>
+                                <span class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900">RM{{ number_format($product->price, 2) }}</span>
                             @endif
                             <div class="mt-2">
                                 @if($product->stock_quantity > 0)
-                                    <span class="text-green-600 font-medium">✓ Dalam Stok ({{ $product->stock_quantity }} tersedia)</span>
+                                    <span class="text-green-600 font-medium text-sm sm:text-base">✓ Dalam Stok ({{ $product->stock_quantity }} tersedia)</span>
                                 @else
-                                    <span class="text-red-600 font-medium">✗ Kehabisan Stok</span>
+                                    <span class="text-red-600 font-medium text-sm sm:text-base">✗ Kehabisan Stok</span>
                                 @endif
                             </div>
                         @endif
@@ -366,22 +366,22 @@
 
 
             <!-- Product Description -->
-            <div class="mb-8">
-                <h3 class="text-xl font-semibold text-gray-900 mb-3">Penerangan</h3>
-                <div class="prose text-gray-700 leading-relaxed">
+            <div class="mb-6 sm:mb-8">
+                <h3 class="text-lg sm:text-xl font-semibold text-gray-900 mb-2 sm:mb-3">Penerangan</h3>
+                <div class="prose text-gray-700 leading-relaxed text-sm sm:text-base">
                     {{ $product->description }}
                 </div>
             </div>
 
             <!-- Product Variations -->
             @if($product->hasVariations())
-                <div class="mb-8">
-                    <div class="flex items-center justify-between mb-4">
-                        <h3 class="text-xl font-semibold text-gray-900">{{ $product->variation_label ?: 'Pilihan Varian' }}</h3>
+                <div class="mb-6 sm:mb-8">
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-0 mb-3 sm:mb-4">
+                        <h3 class="text-lg sm:text-xl font-semibold text-gray-900">{{ $product->variation_label ?: 'Pilihan Varian' }}</h3>
                         @if($selectedVariation)
                             <button 
                                 onclick="clearVariationSelection()" 
-                                class="text-sm bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-2 rounded-lg transition-colors flex items-center"
+                                class="text-sm bg-gray-100 hover:bg-gray-200 text-gray-700 px-2 sm:px-3 py-2 rounded-lg transition-colors flex items-center self-start sm:self-auto"
                                 title="Kembali ke produk asas">
                                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
@@ -390,7 +390,7 @@
                         </button>
                         @endif
                     </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                         @foreach($product->activeVariations as $variation)
                             <div class="border border-gray-200 rounded-lg p-4 hover:border-red-500 transition-all duration-200 cursor-pointer variation-option relative {{ $selectedVariantId == $variation->id ? 'border-red-500 active' : '' }}" 
                                     data-variation-id="{{ $variation->id }}"
@@ -414,7 +414,7 @@
             @endif
 
             <!-- Quantity and Add to Cart -->
-            <div class="mb-8">
+            <div class="mb-6 sm:mb-8">
                 @php
                     // Check if all variants and base product are out of stock
                     $allVariationsOutOfStock = $product->activeVariations->every(function($variation) {
@@ -427,7 +427,7 @@
                 <div class="flex items-center space-x-4 mb-4">
                     <div>
                         <label for="quantity" class="block text-sm font-medium text-gray-700 mb-2">Kuantiti</label>
-                        <select id="quantity" class="border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-transparent">
+                        <select id="quantity" class="border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-transparent w-full sm:w-auto">
                             @for($i = 1; $i <= 10; $i++)
                                 <option value="{{ $i }}">{{ $i }}</option>
                             @endfor
@@ -438,36 +438,36 @@
 
                 <div class="space-y-3">
                     @if($product->hasVariations())
-                        <div class="flex space-x-3">
+                        <div class="flex flex-col sm:flex-row gap-3">
                             @if($everythingOutOfStock)
-                                <button class="flex-1 bg-gray-300 text-gray-600 py-4 px-6 rounded-lg font-bold text-lg cursor-not-allowed" disabled>
+                                <button class="flex-1 bg-gray-300 text-gray-600 py-3 sm:py-4 px-4 sm:px-6 rounded-lg font-bold text-base sm:text-lg cursor-not-allowed" disabled>
                                     Kehabisan Stok
                                 </button>
-                                <button class="flex-1 border-2 border-gray-300 text-gray-600 py-4 px-6 rounded-lg font-bold text-lg cursor-not-allowed" disabled>
+                                <button class="flex-1 border-2 border-gray-300 text-gray-600 py-3 sm:py-4 px-4 sm:px-6 rounded-lg font-bold text-base sm:text-lg cursor-not-allowed" disabled>
                                     Maklumkan Apabila Tersedia
                                 </button>
                             @else
-                                <button id="add-to-cart-btn" onclick="addToCart()" class="flex-1 bg-arsenal hover:bg-arsenal text-white py-4 px-6 rounded-lg font-bold text-lg transition-colors">
+                                <button id="add-to-cart-btn" onclick="addToCart()" class="flex-1 bg-arsenal hover:bg-arsenal text-white py-3 sm:py-4 px-4 sm:px-6 rounded-lg font-bold text-base sm:text-lg transition-colors">
                                     Tambah ke Troli
                                 </button>
-                                <button id="buy-now-btn" onclick="buyNow()" class="flex-1 border-2 border-red-600 text-red-600 hover:bg-red-600 hover:text-white py-4 px-6 rounded-lg font-bold text-lg transition-colors">
+                                <button id="buy-now-btn" onclick="buyNow()" class="flex-1 border-2 border-red-600 text-red-600 hover:bg-red-600 hover:text-white py-3 sm:py-4 px-4 sm:px-6 rounded-lg font-bold text-base sm:text-lg transition-colors">
                                     Beli Sekarang
                                 </button>
                             @endif
                         </div>
                     @else
                         @if($product->stock_quantity > 0)
-                            <button onclick="addToCartSimple()" class="w-full bg-arsenal hover:bg-arsenal text-white py-4 px-6 rounded-lg font-bold text-lg transition-colors">
+                            <button onclick="addToCartSimple()" class="w-full bg-arsenal hover:bg-arsenal text-white py-3 sm:py-4 px-4 sm:px-6 rounded-lg font-bold text-base sm:text-lg transition-colors">
                                 Tambah ke Troli
                             </button>
-                            <button onclick="buyNowSimple()" class="w-full border-2 border-red-600 text-red-600 hover:bg-red-600 hover:text-white py-4 px-6 rounded-lg font-bold text-lg transition-colors">
+                            <button onclick="buyNowSimple()" class="w-full border-2 border-red-600 text-red-600 hover:bg-red-600 hover:text-white py-3 sm:py-4 px-4 sm:px-6 rounded-lg font-bold text-base sm:text-lg transition-colors">
                                 Beli Sekarang
                             </button>
                         @else
-                            <button class="w-full bg-gray-300 text-gray-600 py-4 px-6 rounded-lg font-bold text-lg cursor-not-allowed" disabled>
+                            <button class="w-full bg-gray-300 text-gray-600 py-3 sm:py-4 px-4 sm:px-6 rounded-lg font-bold text-base sm:text-lg cursor-not-allowed" disabled>
                                 Kehabisan Stok
                             </button>
-                            <button class="w-full border-2 border-gray-300 text-gray-600 py-4 px-6 rounded-lg font-bold text-lg cursor-not-allowed" disabled>
+                            <button class="w-full border-2 border-gray-300 text-gray-600 py-3 sm:py-4 px-4 sm:px-6 rounded-lg font-bold text-base sm:text-lg cursor-not-allowed" disabled>
                                 Maklumkan Apabila Tersedia
                             </button>
                         @endif
@@ -476,8 +476,8 @@
             </div>
 
             <!-- Product Features -->
-            <div class="border-t border-gray-200 pt-6">
-                <div class="grid grid-cols-2 gap-4 text-sm">
+            <div class="border-t border-gray-200 pt-4 sm:pt-6">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 text-xs sm:text-sm">
                     <div class="flex items-center">
                         <svg class="w-5 h-5 text-green-600 mr-2" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
@@ -508,11 +508,11 @@
 
             <!-- Tags -->
             @if($product->tags)
-                <div class="mt-6">
-                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Tags</h3>
+                <div class="mt-4 sm:mt-6">
+                    <h3 class="text-base sm:text-lg font-semibold text-gray-900 mb-2 sm:mb-3">Tags</h3>
                     <div class="flex flex-wrap gap-2">
                         @foreach($product->tags as $tag)
-                            <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm">
+                            <span class="bg-gray-100 text-gray-700 px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm">
                                 #{{ $tag }}
                             </span>
                         @endforeach
@@ -525,51 +525,51 @@
     </div>
 
     <!-- Reviews Section -->
-    <div id="reviews" class="mb-16">
-        <div class="bg-white rounded-xl shadow-lg p-8">
-            <div class="flex items-center justify-between mb-8">
-                <h2 class="text-3xl font-bold text-gray-900">Customer Reviews</h2>
+    <div id="reviews" class="mb-8 lg:mb-16">
+        <div class="bg-white rounded-xl shadow-lg p-4 sm:p-6 lg:p-8">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 sm:gap-0 mb-6 sm:mb-8">
+                <h2 class="text-2xl sm:text-3xl font-bold text-gray-900">Customer Reviews</h2>
                 <div class="flex items-center space-x-2">
                     <div class="flex items-center">
                         @for($i = 1; $i <= 5; $i++)
-                            <svg class="w-6 h-6 {{ $i <= $product->average_rating ? 'text-yellow-400' : 'text-gray-300' }}" fill="currentColor" viewBox="0 0 20 20">
+                            <svg class="w-5 h-5 sm:w-6 sm:h-6 {{ $i <= $product->average_rating ? 'text-yellow-400' : 'text-gray-300' }}" fill="currentColor" viewBox="0 0 20 20">
                                 <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
                             </svg>
                         @endfor
                     </div>
-                    <span class="text-2xl font-bold text-gray-900">{{ number_format($product->average_rating, 1) }}</span>
-                    <span class="text-gray-500">({{ $product->reviews_count }} ulasan)</span>
+                    <span class="text-xl sm:text-2xl font-bold text-gray-900">{{ number_format($product->average_rating, 1) }}</span>
+                    <span class="text-sm sm:text-base text-gray-500">({{ $product->reviews_count }} ulasan)</span>
                 </div>
             </div>
 
-            <div class="space-y-8">
+            <div class="space-y-6 sm:space-y-8">
                 @foreach($product->reviews as $review)
-                    <div class="border-b border-gray-200 pb-8 last:border-b-0 last:pb-0">
-                        <div class="flex items-start space-x-4">
+                    <div class="border-b border-gray-200 pb-6 sm:pb-8 last:border-b-0 last:pb-0">
+                        <div class="flex items-start space-x-3 sm:space-x-4">
                             <img src="https://ui-avatars.com/api/?name={{ urlencode($review->user->name) }}&size=50&background=dc2626&color=fff" 
                                  alt="{{ $review->user->name }}" 
-                                 class="w-12 h-12 rounded-full">
-                            <div class="flex-1">
-                                <div class="flex items-center space-x-2 mb-2">
-                                    <h4 class="font-semibold text-gray-900">{{ $review->user->name }}</h4>
+                                 class="w-10 h-10 sm:w-12 sm:h-12 rounded-full flex-shrink-0">
+                            <div class="flex-1 min-w-0">
+                                <div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 mb-2">
+                                    <h4 class="font-semibold text-gray-900 text-sm sm:text-base">{{ $review->user->name }}</h4>
                                     <div class="flex items-center">
                                         @for($i = 1; $i <= 5; $i++)
-                                            <svg class="w-4 h-4 {{ $i <= $review->rating ? 'text-yellow-400' : 'text-gray-300' }}" fill="currentColor" viewBox="0 0 20 20">
+                                            <svg class="w-3 h-3 sm:w-4 sm:h-4 {{ $i <= $review->rating ? 'text-yellow-400' : 'text-gray-300' }}" fill="currentColor" viewBox="0 0 20 20">
                                                 <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
                                             </svg>
                                         @endfor
                                     </div>
-                                    <span class="text-sm text-gray-500">{{ $review->created_at->diffForHumans() }}</span>
+                                    <span class="text-xs sm:text-sm text-gray-500">{{ $review->created_at->diffForHumans() }}</span>
                                 </div>
-                                <p class="text-gray-700 leading-relaxed">{{ $review->comment }}</p>
+                                <p class="text-gray-700 leading-relaxed text-sm sm:text-base">{{ $review->comment }}</p>
                             </div>
-                        </div>image.png
+                        </div>
                     </div>
                 @endforeach
             </div>
 
-            <div class="mt-8 pt-6 border-t border-gray-200">
-                <button class="bg-arsenal hover:bg-arsenal text-white px-6 py-3 rounded-lg font-medium transition-colors">
+            <div class="mt-6 sm:mt-8 pt-4 sm:pt-6 border-t border-gray-200">
+                <button class="bg-arsenal hover:bg-arsenal text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-medium transition-colors text-sm sm:text-base">
                     Write a Review
                 </button>
             </div>
@@ -578,12 +578,12 @@
 
     <!-- Related Products -->
     <div>
-        <div class="mb-8">
-            <h2 class="text-3xl font-bold text-gray-900 mb-2">You May Also Like</h2>
-            <p class="text-gray-600">More Arsenal merchandise you might be interested in</p>
+        <div class="mb-6 sm:mb-8">
+            <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">You May Also Like</h2>
+            <p class="text-gray-600 text-sm sm:text-base">More Arsenal merchandise you might be interested in</p>
         </div>
         
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             @foreach($relatedProducts as $relatedProduct)
                 <div class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow overflow-hidden">
                     <div class="relative h-64">
@@ -606,27 +606,27 @@
                             </div>
                         @endif
                     </div>
-                    <div class="p-6">
+                    <div class="p-4 sm:p-6">
                         <span class="bg-gray-100 text-gray-600 px-2 py-1 rounded-full text-xs font-medium mb-2 inline-block">
                             {{ $relatedProduct->category }}
                         </span>
-                        <h3 class="text-lg font-bold text-gray-900 mb-2">
+                        <h3 class="text-base sm:text-lg font-bold text-gray-900 mb-2">
                             <a href="{{ route('shop.show', $relatedProduct->slug) }}" class="hover:text-red-600 transition-colors">
                                 {{ $relatedProduct->title }}
                             </a>
                         </h3>
-                        <p class="text-gray-600 mb-4">{{ Str::limit($relatedProduct->description, 100) }}</p>
+                        <p class="text-gray-600 mb-4 text-sm sm:text-base">{{ Str::limit($relatedProduct->description, 100) }}</p>
                         <div class="flex items-center justify-between">
                             <div class="flex items-center space-x-2">
                                 @if($relatedProduct->sale_price)
-                                    <span class="text-xl font-bold text-red-600">RM{{ number_format($relatedProduct->sale_price, 2) }}</span>
-                                    <span class="text-sm text-gray-500 line-through">RM{{ number_format($relatedProduct->price, 2) }}</span>
+                                    <span class="text-lg sm:text-xl font-bold text-red-600">RM{{ number_format($relatedProduct->sale_price, 2) }}</span>
+                                    <span class="text-xs sm:text-sm text-gray-500 line-through">RM{{ number_format($relatedProduct->price, 2) }}</span>
                                 @else
-                                    <span class="text-xl font-bold text-gray-900">RM{{ number_format($relatedProduct->price, 2) }}</span>
+                                    <span class="text-lg sm:text-xl font-bold text-gray-900">RM{{ number_format($relatedProduct->price, 2) }}</span>
                                 @endif
                             </div>
-                            <div class="flex items-center text-sm">
-                                <svg class="w-4 h-4 mr-1 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                            <div class="flex items-center text-xs sm:text-sm">
+                                <svg class="w-3 h-3 sm:w-4 sm:h-4 mr-1 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
                                     <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
                                 </svg>
                                 <span>{{ number_format($relatedProduct->average_rating, 1) }}</span>
