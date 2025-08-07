@@ -17,6 +17,45 @@ class DirectCheckoutController extends Controller
 {
     public function index(Request $request)
     {
+        // Check if there's a failed payment in session that needs to be retried
+        $failedPaymentOrderId = session('failed_payment_order_id');
+        
+        if ($failedPaymentOrderId) {
+            // Find the failed order
+            $failedOrder = Order::where('id', $failedPaymentOrderId)
+                               ->where('user_id', auth()->id())
+                               ->whereIn('payment_status', ['failed', 'pending'])
+                               ->whereNotIn('status', ['cancelled', 'refunded'])
+                               ->first();
+            
+            if ($failedOrder) {
+                \Log::info('Redirecting to retry payment from direct checkout page', [
+                    'order_id' => $failedOrder->id,
+                    'payment_status' => $failedOrder->payment_status,
+                    'payment_method' => $failedOrder->payment_method
+                ]);
+                
+                // Clear the failed payment session data
+                session()->forget([
+                    'failed_payment_order_id',
+                    'failed_payment_bill_code',
+                    'failed_payment_payment_intent_id',
+                    'failed_payment_method'
+                ]);
+                
+                return redirect()->route('checkout.show-retry-payment', $failedOrder->id)
+                               ->with('warning', 'Pembayaran sebelumnya gagal. Anda boleh cuba bayar semula.');
+            } else {
+                // Clear invalid failed payment session data
+                session()->forget([
+                    'failed_payment_order_id',
+                    'failed_payment_bill_code',
+                    'failed_payment_payment_intent_id',
+                    'failed_payment_method'
+                ]);
+            }
+        }
+
         // Validate required parameters
         $request->validate([
             'product_id' => 'required|exists:products,id',
@@ -245,75 +284,87 @@ class DirectCheckoutController extends Controller
             // Force session save to ensure data persistence
             session()->save();
 
-            // Create order immediately in database
-            $order = Order::create([
-                'order_number' => (new Order())->generateOrderNumber(),
-                'user_id' => auth()->id(),
-                'status' => 'pending',
-                'subtotal' => $checkoutData['subtotal'],
-                'shipping_cost' => $checkoutData['shipping_cost'],
-                'tax' => $checkoutData['tax'],
-                'total' => $checkoutData['total'],
-                'payment_method' => $request->payment_method,
-                'payment_status' => 'pending',
-                'shipping_name' => $shippingData['shipping_name'],
-                'shipping_email' => $shippingData['shipping_email'],
-                'shipping_phone' => $shippingData['shipping_phone'],
-                'shipping_address' => $shippingData['shipping_address'],
-                'shipping_city' => $shippingData['shipping_city'],
-                'shipping_state' => $shippingData['shipping_state'],
-                'shipping_postal_code' => $shippingData['shipping_postal_code'],
-                'shipping_country' => $shippingData['shipping_country'],
-                'billing_name' => $billingData['billing_name'],
-                'billing_email' => $billingData['billing_email'],
-                'billing_phone' => $billingData['billing_phone'],
-                'billing_address' => $billingData['billing_address'],
-                'billing_city' => $billingData['billing_city'],
-                'billing_state' => $billingData['billing_state'],
-                'billing_postal_code' => $billingData['billing_postal_code'],
-                'billing_country' => $billingData['billing_country'],
-                'notes' => $request->notes,
-            ]);
+            // For ToyyibPay, don't create order yet - wait for response
+            // For Stripe, create order immediately since we need it for payment intent
+            if ($request->payment_method === 'toyyibpay') {
+                // Store checkout data in session for ToyyibPay response
+                session(['pending_direct_checkout' => $pendingCheckoutData]);
+                
+                \Log::info('Direct checkout data stored in session for ToyyibPay - order will be created after response', [
+                    'user_id' => auth()->id(),
+                    'payment_method' => $request->payment_method,
+                    'session_keys' => array_keys(session()->all())
+                ]);
+            } else {
+                // Create order immediately for Stripe
+                $order = Order::create([
+                    'order_number' => (new Order())->generateOrderNumber(),
+                    'user_id' => auth()->id(),
+                    'status' => 'pending',
+                    'subtotal' => $checkoutData['subtotal'],
+                    'shipping_cost' => $checkoutData['shipping_cost'],
+                    'tax' => $checkoutData['tax'],
+                    'total' => $checkoutData['total'],
+                    'payment_method' => $request->payment_method,
+                    'payment_status' => 'pending',
+                    'shipping_name' => $shippingData['shipping_name'],
+                    'shipping_email' => $shippingData['shipping_email'],
+                    'shipping_phone' => $shippingData['shipping_phone'],
+                    'shipping_address' => $shippingData['shipping_address'],
+                    'shipping_city' => $shippingData['shipping_city'],
+                    'shipping_state' => $shippingData['shipping_state'],
+                    'shipping_postal_code' => $shippingData['shipping_postal_code'],
+                    'shipping_country' => $shippingData['shipping_country'],
+                    'billing_name' => $billingData['billing_name'],
+                    'billing_email' => $billingData['billing_email'],
+                    'billing_phone' => $billingData['billing_phone'],
+                    'billing_address' => $billingData['billing_address'],
+                    'billing_city' => $billingData['billing_city'],
+                    'billing_state' => $billingData['billing_state'],
+                    'billing_postal_code' => $billingData['billing_postal_code'],
+                    'billing_country' => $billingData['billing_country'],
+                    'notes' => $request->notes,
+                ]);
 
-            // Create order item
-            $order->items()->create([
-                'product_id' => $checkoutData['product_id'],
-                'product_variation_id' => $checkoutData['variation_id'],
-                'product_name' => $checkoutData['product']['title'],
-                'variation_name' => $checkoutData['variation']['name'] ?? null,
-                'price' => $checkoutData['price'],
-                'quantity' => $checkoutData['quantity'],
-                'subtotal' => $checkoutData['subtotal'],
-            ]);
+                // Create order item
+                $order->items()->create([
+                    'product_id' => $checkoutData['product_id'],
+                    'product_variation_id' => $checkoutData['variation_id'],
+                    'product_name' => $checkoutData['product']['title'],
+                    'variation_name' => $checkoutData['variation']['name'] ?? null,
+                    'price' => $checkoutData['price'],
+                    'quantity' => $checkoutData['quantity'],
+                    'subtotal' => $checkoutData['subtotal'],
+                ]);
 
-            // Store order ID in session for payment processing
-            session(['pending_direct_order_id' => $order->id]);
-            
-            \Log::info('Direct checkout order created immediately', [
-                'order_id' => $order->id,
-                'order_number' => $order->order_number,
-                'user_id' => auth()->id(),
-                'payment_method' => $request->payment_method
-            ]);
-
-            // Store payment data in database as backup (for 1 hour)
-            \Cache::put('direct_payment_data_' . auth()->id() . '_' . $order->order_number, $pendingCheckoutData, 3600);
-            
-            \Log::info('Direct payment data backed up to cache', [
-                'user_id' => auth()->id(),
-                'order_number' => $order->order_number,
-                'cache_key' => 'direct_payment_data_' . auth()->id() . '_' . $order->order_number
-            ]);
+                // Store order ID in session for payment processing
+                session(['pending_direct_order_id' => $order->id]);
+                
+                \Log::info('Direct checkout order created immediately for Stripe', [
+                    'order_id' => $order->id,
+                    'order_number' => $order->order_number,
+                    'user_id' => auth()->id(),
+                    'payment_method' => $request->payment_method
+                ]);
+            }
 
             // Handle payment based on method
             if ($request->payment_method === 'toyyibpay') {
-                // Create ToyyibPay bill
+                // Store payment data in database as backup (for 1 hour) - use session ID since no order number yet
+                $cacheKey = 'direct_payment_data_' . auth()->id() . '_' . session()->getId();
+                \Cache::put($cacheKey, $pendingCheckoutData, 3600);
+                
+                \Log::info('Direct payment data backed up to cache for ToyyibPay', [
+                    'user_id' => auth()->id(),
+                    'cache_key' => $cacheKey
+                ]);
+
+                // Create ToyyibPay bill (pass checkout data instead of order)
                 $toyyibPayService = new ToyyibPayService();
-                $paymentResult = $toyyibPayService->createBill($order, route('direct-checkout.toyyibpay.return'));
+                $paymentResult = $toyyibPayService->createBill($pendingCheckoutData, route('direct-checkout.toyyibpay.return'));
 
                 \Log::info('ToyyibPay direct checkout payment result', [
-                    'order_id' => $order->id,
-                    'order_number' => $order->order_number,
+                    'user_id' => auth()->id(),
                     'success' => $paymentResult['success'],
                     'message' => $paymentResult['message'] ?? 'No message',
                     'payment_url' => $paymentResult['payment_url'] ?? 'No URL'
@@ -329,11 +380,19 @@ class DirectCheckoutController extends Controller
                     return redirect($paymentResult['payment_url']);
                 } else {
                     DB::rollBack();
-                    // If payment creation fails, order still exists but payment failed
                     return back()->with('error', 'Gagal membuat bil pembayaran. Sila cuba lagi.')
                                 ->withInput();
                 }
             } elseif ($request->payment_method === 'stripe') {
+                // Store payment data in database as backup (for 1 hour)
+                \Cache::put('direct_payment_data_' . auth()->id() . '_' . $order->order_number, $pendingCheckoutData, 3600);
+                
+                \Log::info('Direct payment data backed up to cache for Stripe', [
+                    'user_id' => auth()->id(),
+                    'order_number' => $order->order_number,
+                    'cache_key' => 'direct_payment_data_' . auth()->id() . '_' . $order->order_number
+                ]);
+
                 // Create Stripe payment intent
                 $stripeService = new StripeService();
                 $paymentResult = $stripeService->createPaymentIntent($order);
@@ -423,6 +482,37 @@ class DirectCheckoutController extends Controller
                 'notes' => $order->notes ? $order->notes . "\n\nDibatalkan oleh pelanggan pada " . now()->format('d/m/Y H:i') : 
                           'Dibatalkan oleh pelanggan pada ' . now()->format('d/m/Y H:i')
             ]);
+
+            // Restore stock quantities for all order items
+            foreach ($order->items as $item) {
+                if ($item->product_variation_id) {
+                    // Restore stock for product variation
+                    $variation = \App\Models\ProductVariation::find($item->product_variation_id);
+                    if ($variation) {
+                        $variation->increment('stock_quantity', $item->quantity);
+                        \Log::info('Stock restored for variation after direct checkout order cancellation', [
+                            'order_id' => $order->id,
+                            'variation_id' => $variation->id,
+                            'variation_name' => $variation->name,
+                            'quantity_restored' => $item->quantity,
+                            'remaining_stock' => $variation->fresh()->stock_quantity
+                        ]);
+                    }
+                } else {
+                    // Restore stock for base product
+                    $product = \App\Models\Product::find($item->product_id);
+                    if ($product) {
+                        $product->increment('stock_quantity', $item->quantity);
+                        \Log::info('Stock restored for product after direct checkout order cancellation', [
+                            'order_id' => $order->id,
+                            'product_id' => $product->id,
+                            'product_title' => $product->title,
+                            'quantity_restored' => $item->quantity,
+                            'remaining_stock' => $product->fresh()->stock_quantity
+                        ]);
+                    }
+                }
+            }
 
             // If payment was pending, we might need to handle payment cancellation
             if ($order->payment_status === 'pending') {
@@ -525,12 +615,19 @@ class DirectCheckoutController extends Controller
 
             // Handle payment based on method
             if ($order->payment_method === 'toyyibpay') {
-                // Create new ToyyibPay bill first
+                // Try to reuse existing bill code first, then create new one if needed
                 $toyyibPayService = new ToyyibPayService();
-                $paymentResult = $toyyibPayService->createBill($order, route('direct-checkout.toyyibpay.return'));
+                
+                // If we have an existing bill code, try to reuse it
+                if ($originalToyyibpayBillCode) {
+                    $paymentResult = $toyyibPayService->reuseBill($originalToyyibpayBillCode, $order);
+                } else {
+                    // No existing bill code, create new one
+                    $paymentResult = $toyyibPayService->createBill($order, route('direct-checkout.toyyibpay.return'), true);
+                }
 
                 if ($paymentResult['success']) {
-                    // Store new payment details in session (don't update order yet)
+                    // Store payment details in session (don't update order yet)
                     session([
                         'pending_direct_bill_code' => $paymentResult['bill_code'],
                         'pending_direct_order_id' => $order->id,
@@ -547,12 +644,19 @@ class DirectCheckoutController extends Controller
                     return back()->with('error', 'Gagal membuat bil pembayaran. Sila cuba lagi.');
                 }
             } elseif ($order->payment_method === 'stripe') {
-                // Create new Stripe payment intent first
+                // Try to reuse existing payment intent first, then create new one if needed
                 $stripeService = new StripeService();
-                $paymentResult = $stripeService->createPaymentIntent($order);
+                
+                // If we have an existing payment intent ID, try to reuse it
+                if ($originalStripeIntentId) {
+                    $paymentResult = $stripeService->reusePaymentIntent($originalStripeIntentId, $order);
+                } else {
+                    // No existing payment intent ID, create new one
+                    $paymentResult = $stripeService->createPaymentIntent($order);
+                }
 
                 if ($paymentResult['success']) {
-                    // Store new payment details in session (don't update order yet)
+                    // Store payment details in session (don't update order yet)
                     session([
                         'pending_direct_stripe_payment_intent_id' => $paymentResult['payment_intent_id'],
                         'pending_direct_order_id' => $order->id,
@@ -744,17 +848,29 @@ class DirectCheckoutController extends Controller
             'order_number' => $order ? $order->order_number : null
         ]);
 
+        // If still no order found, check if we have pending checkout data (new flow)
         if (!$order) {
-            \Log::error('Direct checkout order not found for ToyyibPay bill code', [
-                'bill_code' => $billCode,
-                'user_id' => auth()->id(),
-                'session_pending_order_id' => session('pending_direct_order_id'),
-                'session_pending_bill_code' => session('pending_direct_bill_code'),
-                'all_session_data' => session()->all()
-            ]);
+            $pendingCheckout = session('pending_direct_checkout');
             
-            return redirect()->route('checkout.orders')
-                           ->with('error', 'Pesanan tidak dijumpai.');
+            if ($pendingCheckout) {
+                \Log::info('Found pending direct checkout data - will create order after payment verification', [
+                    'bill_code' => $billCode,
+                    'user_id' => auth()->id(),
+                    'pending_checkout_keys' => array_keys($pendingCheckout)
+                ]);
+            } else {
+                \Log::error('No order or pending checkout data found for direct checkout ToyyibPay bill code', [
+                    'bill_code' => $billCode,
+                    'user_id' => auth()->id(),
+                    'session_pending_order_id' => session('pending_direct_order_id'),
+                    'session_pending_bill_code' => session('pending_direct_bill_code'),
+                    'session_pending_direct_checkout' => session('pending_direct_checkout'),
+                    'all_session_data' => session()->all()
+                ]);
+                
+                return redirect()->route('checkout.orders')
+                               ->with('error', 'Pesanan tidak dijumpai.');
+            }
         }
 
         // Verify payment status
@@ -770,39 +886,98 @@ class DirectCheckoutController extends Controller
                 $pendingOriginalPaymentMethod = session('pending_direct_original_payment_method');
                 $pendingBillCode = session('pending_direct_bill_code');
                 
-                if ($pendingBillCode === $billCode) {
-                    // This is a retry payment - update the order
-                    if ($pendingPaymentMethod && $pendingPaymentMethod !== $pendingOriginalPaymentMethod) {
-                        // Retry with new payment method
-                        $order->update([
-                            'payment_method' => $pendingPaymentMethod,
-                            'stripe_payment_intent_id' => null,
-                            'toyyibpay_bill_code' => $billCode
+                if ($order) {
+                    // Order already exists - this is a retry payment
+                    if ($pendingBillCode === $billCode) {
+                        // This is a retry payment - update the order
+                        if ($pendingPaymentMethod && $pendingPaymentMethod !== $pendingOriginalPaymentMethod) {
+                            // Retry with new payment method
+                            $order->update([
+                                'payment_method' => $pendingPaymentMethod,
+                                'stripe_payment_intent_id' => null,
+                                'toyyibpay_bill_code' => $billCode
+                            ]);
+                            
+                            \Log::info('Updated direct checkout order with new payment method after successful payment', [
+                                'order_id' => $order->id,
+                                'original_method' => $pendingOriginalPaymentMethod,
+                                'new_method' => $pendingPaymentMethod,
+                                'bill_code' => $billCode
+                            ]);
+                        } else {
+                            // Retry with same payment method - just update the bill code
+                            $order->update(['toyyibpay_bill_code' => $billCode]);
+                            
+                            \Log::info('Updated direct checkout order with new bill code after successful retry payment', [
+                                'order_id' => $order->id,
+                                'payment_method' => $pendingPaymentMethod,
+                                'bill_code' => $billCode
+                            ]);
+                        }
+                    }
+
+                    // Update order status to paid and processing
+                    $order->update([
+                        'status' => 'processing',
+                        'payment_status' => 'paid'
+                    ]);
+                } else {
+                    // No order exists - create new order from pending checkout data
+                    $pendingCheckout = session('pending_direct_checkout');
+                    
+                    if ($pendingCheckout) {
+                        // Create the order
+                        $order = Order::create([
+                            'order_number' => (new Order())->generateOrderNumber(),
+                            'user_id' => auth()->id(),
+                            'status' => 'processing',
+                            'subtotal' => $pendingCheckout['subtotal'],
+                            'shipping_cost' => $pendingCheckout['shipping_cost'],
+                            'tax' => $pendingCheckout['tax'],
+                            'total' => $pendingCheckout['total'],
+                            'payment_method' => $pendingCheckout['payment_method'],
+                            'payment_status' => 'paid',
+                            'toyyibpay_bill_code' => $billCode,
+                            'shipping_name' => $pendingCheckout['shipping_data']['shipping_name'],
+                            'shipping_email' => $pendingCheckout['shipping_data']['shipping_email'],
+                            'shipping_phone' => $pendingCheckout['shipping_data']['shipping_phone'],
+                            'shipping_address' => $pendingCheckout['shipping_data']['shipping_address'],
+                            'shipping_city' => $pendingCheckout['shipping_data']['shipping_city'],
+                            'shipping_state' => $pendingCheckout['shipping_data']['shipping_state'],
+                            'shipping_postal_code' => $pendingCheckout['shipping_data']['shipping_postal_code'],
+                            'shipping_country' => $pendingCheckout['shipping_data']['shipping_country'],
+                            'billing_name' => $pendingCheckout['billing_data']['billing_name'],
+                            'billing_email' => $pendingCheckout['billing_data']['billing_email'],
+                            'billing_phone' => $pendingCheckout['billing_data']['billing_phone'],
+                            'billing_address' => $pendingCheckout['billing_data']['billing_address'],
+                            'billing_city' => $pendingCheckout['billing_data']['billing_city'],
+                            'billing_state' => $pendingCheckout['billing_data']['billing_state'],
+                            'billing_postal_code' => $pendingCheckout['billing_data']['billing_postal_code'],
+                            'billing_country' => $pendingCheckout['billing_data']['billing_country'],
+                            'notes' => $pendingCheckout['notes'],
                         ]);
-                        
-                        \Log::info('Updated direct checkout order with new payment method after successful payment', [
+
+                        // Create order item
+                        $order->items()->create([
+                            'product_id' => $pendingCheckout['product_id'],
+                            'product_variation_id' => $pendingCheckout['variation_id'],
+                            'product_name' => $pendingCheckout['product_name'],
+                            'variation_name' => $pendingCheckout['variation_name'],
+                            'price' => $pendingCheckout['price'],
+                            'quantity' => $pendingCheckout['quantity'],
+                            'subtotal' => $pendingCheckout['subtotal'],
+                        ]);
+
+                        \Log::info('Created new direct checkout order from pending checkout data after successful ToyyibPay payment', [
                             'order_id' => $order->id,
-                            'original_method' => $pendingOriginalPaymentMethod,
-                            'new_method' => $pendingPaymentMethod,
-                            'bill_code' => $billCode
+                            'order_number' => $order->order_number,
+                            'bill_code' => $billCode,
+                            'user_id' => auth()->id()
                         ]);
                     } else {
-                        // Retry with same payment method - just update the bill code
-                        $order->update(['toyyibpay_bill_code' => $billCode]);
-                        
-                        \Log::info('Updated direct checkout order with new bill code after successful retry payment', [
-                            'order_id' => $order->id,
-                            'payment_method' => $pendingPaymentMethod,
-                            'bill_code' => $billCode
-                        ]);
+                        throw new \Exception('No pending checkout data found for order creation');
                     }
                 }
-
-                // Update order status to paid and processing
-                $order->update([
-                    'status' => 'processing',
-                    'payment_status' => 'paid'
-                ]);
 
                 // Update stock
                 if ($order->items->first()->product_variation_id) {
@@ -827,6 +1002,18 @@ class DirectCheckoutController extends Controller
 
                 DB::commit();
 
+                // Send order confirmation emails with invoice
+                try {
+                    $orderEmailService = new \App\Services\OrderEmailService(new \App\Services\InvoiceService());
+                    $orderEmailService->sendOrderConfirmationEmails($order);
+                } catch (\Exception $e) {
+                    \Log::error('Failed to send order confirmation emails', [
+                        'order_id' => $order->id,
+                        'error' => $e->getMessage()
+                    ]);
+                    // Don't fail the payment process if email fails
+                }
+
                 return redirect()->route('direct-checkout.success', $order->id)
                                ->with('success', 'Pembayaran berjaya! Pesanan anda sedang diproses.');
 
@@ -838,11 +1025,19 @@ class DirectCheckoutController extends Controller
                                ->with('error', 'Ralat semasa memproses pesanan. Sila hubungi kami.');
             }
         } else {
-            // Payment failed - update order status and clear pending session data
+            // Payment failed or user clicked back - preserve order for retry
             $order->update(['payment_status' => 'failed']);
             
-            // Clear pending session data since payment failed
+            // Store order information in session for retry payment
+            session([
+                'failed_payment_order_id' => $order->id,
+                'failed_payment_bill_code' => $billCode,
+                'failed_payment_method' => $order->payment_method
+            ]);
+            
+            // Clear pending session data but keep order info for retry
             session()->forget([
+                'pending_direct_checkout',
                 'pending_direct_bill_code', 
                 'pending_direct_order_id',
                 'pending_direct_payment_method',
@@ -851,9 +1046,99 @@ class DirectCheckoutController extends Controller
                 'pending_direct_original_toyyibpay_bill_code'
             ]);
             
-            return redirect()->route('checkout.orders')
-                           ->with('warning', 'Pembayaran gagal. Anda boleh cuba bayar semula.');
+            \Log::info('Direct checkout ToyyibPay payment failed - redirecting to retry payment', [
+                'order_id' => $order->id,
+                'bill_code' => $billCode,
+                'payment_status' => $order->payment_status
+            ]);
+            
+            return redirect()->route('checkout.show-retry-payment', $order->id)
+                           ->with('warning', 'Pembayaran gagal atau dibatalkan. Anda boleh cuba bayar semula.');
         }
+    }
+
+    /**
+     * Handle ToyyibPay payment cancellation for direct checkout (when user clicks back or cancels)
+     */
+    public function toyyibpayCancel(Request $request)
+    {
+        $billCode = $request->get('billcode');
+        $orderId = $request->get('order_id');
+
+        \Log::info('Direct checkout ToyyibPay payment cancellation requested', [
+            'bill_code' => $billCode,
+            'order_id' => $orderId,
+            'user_id' => auth()->id(),
+            'all_request_params' => $request->all()
+        ]);
+
+        // Try to find the order
+        $order = null;
+        
+        if ($orderId) {
+            $order = Order::where('id', $orderId)
+                         ->where('user_id', auth()->id())
+                         ->first();
+        } elseif ($billCode) {
+            $order = Order::where('toyyibpay_bill_code', $billCode)
+                         ->where('user_id', auth()->id())
+                         ->first();
+        }
+
+        // If no order found, check session data
+        if (!$order) {
+            $pendingOrderId = session('pending_direct_order_id');
+            $pendingBillCode = session('pending_direct_bill_code');
+            
+            if ($pendingOrderId && (!$billCode || $pendingBillCode === $billCode)) {
+                $order = Order::where('id', $pendingOrderId)
+                             ->where('user_id', auth()->id())
+                             ->first();
+            }
+        }
+
+        if (!$order) {
+            \Log::warning('No order found for direct checkout ToyyibPay cancellation', [
+                'bill_code' => $billCode,
+                'order_id' => $orderId,
+                'user_id' => auth()->id(),
+                'session_pending_direct_order_id' => session('pending_direct_order_id'),
+                'session_pending_direct_bill_code' => session('pending_direct_bill_code')
+            ]);
+            
+            return redirect()->route('checkout.orders')
+                           ->with('error', 'Pesanan tidak dijumpai.');
+        }
+
+        // Update order status to failed
+        $order->update(['payment_status' => 'failed']);
+
+        // Store order information in session for retry payment
+        session([
+            'failed_payment_order_id' => $order->id,
+            'failed_payment_bill_code' => $order->toyyibpay_bill_code,
+            'failed_payment_method' => $order->payment_method
+        ]);
+
+        // Clear pending session data but keep order info for retry
+        session()->forget([
+            'pending_direct_checkout',
+            'pending_direct_bill_code', 
+            'pending_direct_order_id',
+            'pending_direct_payment_method',
+            'pending_direct_original_payment_method',
+            'pending_direct_original_stripe_intent_id',
+            'pending_direct_original_toyyibpay_bill_code'
+        ]);
+
+        \Log::info('Direct checkout ToyyibPay payment cancelled - redirecting to retry payment', [
+            'order_id' => $order->id,
+            'bill_code' => $order->toyyibpay_bill_code,
+            'payment_status' => $order->payment_status
+        ]);
+
+        return redirect()->route('checkout.show-retry-payment', $order->id)
+                       ->with('warning', 'Pembayaran dibatalkan. Anda boleh cuba bayar semula.');
     }
 
     /**
@@ -906,6 +1191,32 @@ class DirectCheckoutController extends Controller
         }
 
         if (!$paymentResult['paid']) {
+            // Payment failed or user clicked back - preserve order for retry
+            // Try to find existing order with this payment intent
+            $existingOrder = \App\Models\Order::where('stripe_payment_intent_id', $paymentIntentId)
+                                            ->where('user_id', auth()->id())
+                                            ->first();
+            
+            if ($existingOrder) {
+                $existingOrder->update(['payment_status' => 'failed']);
+                
+                // Store order information in session for retry payment
+                session([
+                    'failed_payment_order_id' => $existingOrder->id,
+                    'failed_payment_payment_intent_id' => $paymentIntentId,
+                    'failed_payment_method' => $existingOrder->payment_method
+                ]);
+                
+                \Log::info('Direct checkout Stripe payment failed - redirecting to retry payment', [
+                    'order_id' => $existingOrder->id,
+                    'payment_intent_id' => $paymentIntentId,
+                    'payment_status' => $existingOrder->payment_status
+                ]);
+                
+                return redirect()->route('checkout.show-retry-payment', $existingOrder->id)
+                               ->with('warning', 'Pembayaran gagal atau dibatalkan. Anda boleh cuba bayar semula.');
+            }
+            
             return redirect()->route('checkout.orders')
                            ->with('warning', 'Pembayaran belum diselesaikan. Sila cuba lagi atau hubungi kami.');
         }
@@ -919,102 +1230,7 @@ class DirectCheckoutController extends Controller
                 'session_id' => session()->getId()
             ]);
 
-            // Special case: If we have pending_direct_checkout but missing payment_intent_id, use session data
-            if ($pendingCheckout && !$pendingPaymentIntentId) {
-                \Log::info('Using direct checkout session data despite missing payment intent ID', [
-                    'payment_intent_id' => $paymentIntentId,
-                    'session_data_keys' => array_keys($pendingCheckout)
-                ]);
-                
-                // Use the existing session data to create order
-            try {
-                DB::beginTransaction();
-
-                // Create the actual order
-                $order = \App\Models\Order::create([
-                    'order_number' => (new \App\Models\Order())->generateOrderNumber(),
-                    'user_id' => $pendingCheckout['user_id'],
-                    'status' => 'processing',
-                    'subtotal' => $pendingCheckout['subtotal'],
-                    'shipping_cost' => $pendingCheckout['shipping_cost'],
-                    'tax' => $pendingCheckout['tax'],
-                    'total' => $pendingCheckout['total'],
-                    'payment_method' => $pendingCheckout['payment_method'],
-                    'payment_status' => 'paid',
-                    'stripe_payment_intent_id' => $paymentIntentId,
-                    'shipping_name' => $pendingCheckout['shipping_data']['shipping_name'],
-                    'shipping_email' => $pendingCheckout['shipping_data']['shipping_email'],
-                    'shipping_phone' => $pendingCheckout['shipping_data']['shipping_phone'],
-                    'shipping_address' => $pendingCheckout['shipping_data']['shipping_address'],
-                    'shipping_city' => $pendingCheckout['shipping_data']['shipping_city'],
-                    'shipping_state' => $pendingCheckout['shipping_data']['shipping_state'],
-                    'shipping_postal_code' => $pendingCheckout['shipping_data']['shipping_postal_code'],
-                    'shipping_country' => $pendingCheckout['shipping_data']['shipping_country'],
-                    'billing_name' => $pendingCheckout['billing_data']['billing_name'],
-                    'billing_email' => $pendingCheckout['billing_data']['billing_email'],
-                    'billing_phone' => $pendingCheckout['billing_data']['billing_phone'],
-                    'billing_address' => $pendingCheckout['billing_data']['billing_address'],
-                    'billing_city' => $pendingCheckout['billing_data']['billing_city'],
-                    'billing_state' => $pendingCheckout['billing_data']['billing_state'],
-                    'billing_postal_code' => $pendingCheckout['billing_data']['billing_postal_code'],
-                    'billing_country' => $pendingCheckout['billing_data']['billing_country'],
-                    'notes' => $pendingCheckout['notes'],
-                ]);
-
-                // Create order item
-                \App\Models\OrderItem::create([
-                    'order_id' => $order->id,
-                    'product_id' => $pendingCheckout['product_id'],
-                    'product_variation_id' => $pendingCheckout['variation_id'],
-                    'product_name' => $pendingCheckout['product_name'],
-                    'variation_name' => $pendingCheckout['variation_name'],
-                    'price' => $pendingCheckout['price'],
-                    'quantity' => $pendingCheckout['quantity'],
-                    'subtotal' => $pendingCheckout['subtotal'],
-                ]);
-
-                // Update stock
-                if ($pendingCheckout['variation_id']) {
-                    $variation = ProductVariation::find($pendingCheckout['variation_id']);
-                    $variation->decrement('stock_quantity', $pendingCheckout['quantity']);
-                } else {
-                    $product = Product::find($pendingCheckout['product_id']);
-                    $product->decrement('stock_quantity', $pendingCheckout['quantity']);
-                }
-
-                // Clear session data
-                session()->forget([
-                    'pending_direct_checkout', 
-                    'pending_direct_stripe_payment_intent_id', 
-                    'direct_checkout',
-                    'pending_direct_payment_method',
-                    'pending_direct_original_payment_method',
-                    'pending_direct_original_stripe_intent_id',
-                    'pending_direct_original_toyyibpay_bill_code'
-                ]);
-
-                DB::commit();
-
-                    \Log::info('Direct checkout order created successfully from session data', [
-                        'order_id' => $order->id,
-                        'order_number' => $order->order_number,
-                        'payment_intent_id' => $paymentIntentId
-                    ]);
-
-                return redirect()->route('direct-checkout.success', $order->id)
-                               ->with('success', 'Pembayaran berjaya! Pesanan anda sedang diproses.');
-
-            } catch (\Exception $e) {
-                DB::rollBack();
-                    \Log::error('Error creating direct checkout order from session data: ' . $e->getMessage(), [
-                        'payment_intent_id' => $paymentIntentId,
-                        'user_id' => auth()->id(),
-                        'trace' => $e->getTraceAsString()
-                    ]);
-                }
-            }
-
-            // Fallback: Try to find existing order with this payment intent
+            // Try to find existing order with this payment intent first
             $existingOrder = \App\Models\Order::where('stripe_payment_intent_id', $paymentIntentId)
                                             ->where('user_id', auth()->id())
                                             ->first();
@@ -1026,203 +1242,11 @@ class DirectCheckoutController extends Controller
                     'payment_intent_id' => $paymentIntentId
                 ]);
 
-                // Check if this is a retry payment with new payment method
-                $pendingPaymentMethod = session('pending_direct_payment_method');
-                $pendingOriginalPaymentMethod = session('pending_direct_original_payment_method');
-                
-                if ($pendingPaymentMethod && $pendingPaymentMethod !== $pendingOriginalPaymentMethod) {
-                    // This is a retry with new payment method - update the order
-                    $existingOrder->update([
-                        'payment_method' => $pendingPaymentMethod,
-                        'stripe_payment_intent_id' => $paymentIntentId,
-                        'toyyibpay_bill_code' => null
-                    ]);
-                    
-                    \Log::info('Updated existing direct checkout order with new payment method after successful payment', [
-                        'order_id' => $existingOrder->id,
-                        'original_method' => $pendingOriginalPaymentMethod,
-                        'new_method' => $pendingPaymentMethod,
-                        'payment_intent_id' => $paymentIntentId
-                    ]);
-                }
-
-                // Clear any stale session data
-                session()->forget([
-                    'pending_direct_checkout', 
-                    'pending_direct_stripe_payment_intent_id', 
-                    'direct_checkout',
-                    'pending_direct_payment_method',
-                    'pending_direct_original_payment_method',
-                    'pending_direct_original_stripe_intent_id',
-                    'pending_direct_original_toyyibpay_bill_code'
-                ]);
-
-                return redirect()->route('direct-checkout.success', $existingOrder->id)
-                               ->with('success', 'Pembayaran berjaya! Pesanan anda sedang diproses.');
-            }
-
-            // Try to find payment data in cache using payment intent metadata
-            $paymentIntent = \Stripe\PaymentIntent::retrieve($paymentIntentId);
-            $orderNumber = $paymentIntent->metadata->order_number ?? null;
-            
-            if ($orderNumber) {
-                $cachedPaymentData = \Cache::get('direct_payment_data_' . auth()->id() . '_' . $orderNumber);
-                
-                if ($cachedPaymentData) {
-                    \Log::info('Found cached direct payment data', [
-                        'order_number' => $orderNumber,
-            'payment_intent_id' => $paymentIntentId,
-                        'cached_data_keys' => array_keys($cachedPaymentData)
-                    ]);
-                    
-                    // Use cached data to create order
-                    try {
-                        DB::beginTransaction();
-
-                        // Create the actual order
-                        $order = \App\Models\Order::create([
-                            'order_number' => (new \App\Models\Order())->generateOrderNumber(),
-                            'user_id' => $cachedPaymentData['user_id'],
-                            'status' => 'processing',
-                            'subtotal' => $cachedPaymentData['subtotal'],
-                            'shipping_cost' => $cachedPaymentData['shipping_cost'],
-                            'tax' => $cachedPaymentData['tax'],
-                            'total' => $cachedPaymentData['total'],
-                            'payment_method' => $cachedPaymentData['payment_method'],
-                            'payment_status' => 'paid',
-                            'stripe_payment_intent_id' => $paymentIntentId,
-                            'shipping_name' => $cachedPaymentData['shipping_data']['shipping_name'],
-                            'shipping_email' => $cachedPaymentData['shipping_data']['shipping_email'],
-                            'shipping_phone' => $cachedPaymentData['shipping_data']['shipping_phone'],
-                            'shipping_address' => $cachedPaymentData['shipping_data']['shipping_address'],
-                            'shipping_city' => $cachedPaymentData['shipping_data']['shipping_city'],
-                            'shipping_state' => $cachedPaymentData['shipping_data']['shipping_state'],
-                            'shipping_postal_code' => $cachedPaymentData['shipping_data']['shipping_postal_code'],
-                            'shipping_country' => $cachedPaymentData['shipping_data']['shipping_country'],
-                            'billing_name' => $cachedPaymentData['billing_data']['billing_name'],
-                            'billing_email' => $cachedPaymentData['billing_data']['billing_email'],
-                            'billing_phone' => $cachedPaymentData['billing_data']['billing_phone'],
-                            'billing_address' => $cachedPaymentData['billing_data']['billing_address'],
-                            'billing_city' => $cachedPaymentData['billing_data']['billing_city'],
-                            'billing_state' => $cachedPaymentData['billing_data']['billing_state'],
-                            'billing_postal_code' => $cachedPaymentData['billing_data']['billing_postal_code'],
-                            'billing_country' => $cachedPaymentData['billing_data']['billing_country'],
-                            'notes' => $cachedPaymentData['notes'],
-                        ]);
-
-                        // Create order item
-                        \App\Models\OrderItem::create([
-                            'order_id' => $order->id,
-                            'product_id' => $cachedPaymentData['product_id'],
-                            'product_variation_id' => $cachedPaymentData['variation_id'],
-                            'product_name' => $cachedPaymentData['product_name'],
-                            'variation_name' => $cachedPaymentData['variation_name'],
-                            'price' => $cachedPaymentData['price'],
-                            'quantity' => $cachedPaymentData['quantity'],
-                            'subtotal' => $cachedPaymentData['subtotal'],
-                        ]);
-
-                        // Update stock
-                        if ($cachedPaymentData['variation_id']) {
-                            $variation = ProductVariation::find($cachedPaymentData['variation_id']);
-                            $variation->decrement('stock_quantity', $cachedPaymentData['quantity']);
-                        } else {
-                            $product = Product::find($cachedPaymentData['product_id']);
-                            $product->decrement('stock_quantity', $cachedPaymentData['quantity']);
-                        }
-
-                        // Clear session data and cache
-                        session()->forget(['pending_direct_checkout', 'pending_direct_stripe_payment_intent_id', 'direct_checkout']);
-                        \Cache::forget('direct_payment_data_' . auth()->id() . '_' . $orderNumber);
-
-                        DB::commit();
-
-                        \Log::info('Direct checkout order created successfully from cached data', [
-                            'order_id' => $order->id,
-                            'order_number' => $order->order_number,
-                'payment_intent_id' => $paymentIntentId
-            ]);
-
-                        return redirect()->route('direct-checkout.success', $order->id)
-                                       ->with('success', 'Pembayaran berjaya! Pesanan anda sedang diproses.');
-
-                    } catch (\Exception $e) {
-                        DB::rollBack();
-                        \Log::error('Error creating direct checkout order from cached data: ' . $e->getMessage(), [
-                            'payment_intent_id' => $paymentIntentId,
-                            'user_id' => auth()->id(),
-                            'trace' => $e->getTraceAsString()
-                        ]);
-                    }
-                }
-            }
-
-            // If no existing order found, show error
-            return redirect()->route('checkout.orders')
-                           ->with('error', 'Sesi pembayaran tidak sah atau telah tamat. Sila cuba lagi.');
-        }
-
-        // Session data is valid, proceed with order creation
-            try {
-                DB::beginTransaction();
-
-                // Create the actual order
-                $order = \App\Models\Order::create([
-                    'order_number' => (new \App\Models\Order())->generateOrderNumber(),
-                    'user_id' => $pendingCheckout['user_id'],
+                // Update the existing order to paid status
+                $existingOrder->update([
                     'status' => 'processing',
-                    'subtotal' => $pendingCheckout['subtotal'],
-                    'shipping_cost' => $pendingCheckout['shipping_cost'],
-                    'tax' => $pendingCheckout['tax'],
-                    'total' => $pendingCheckout['total'],
-                    'payment_method' => $pendingCheckout['payment_method'],
-                    'payment_status' => 'paid',
-                    'stripe_payment_intent_id' => $paymentIntentId,
-                    'shipping_name' => $pendingCheckout['shipping_data']['shipping_name'],
-                    'shipping_email' => $pendingCheckout['shipping_data']['shipping_email'],
-                    'shipping_phone' => $pendingCheckout['shipping_data']['shipping_phone'],
-                    'shipping_address' => $pendingCheckout['shipping_data']['shipping_address'],
-                    'shipping_city' => $pendingCheckout['shipping_data']['shipping_city'],
-                    'shipping_state' => $pendingCheckout['shipping_data']['shipping_state'],
-                    'shipping_postal_code' => $pendingCheckout['shipping_data']['shipping_postal_code'],
-                    'shipping_country' => $pendingCheckout['shipping_data']['shipping_country'],
-                    'billing_name' => $pendingCheckout['billing_data']['billing_name'],
-                    'billing_email' => $pendingCheckout['billing_data']['billing_email'],
-                    'billing_phone' => $pendingCheckout['billing_data']['billing_phone'],
-                    'billing_address' => $pendingCheckout['billing_data']['billing_address'],
-                    'billing_city' => $pendingCheckout['billing_data']['billing_city'],
-                    'billing_state' => $pendingCheckout['billing_data']['billing_state'],
-                    'billing_postal_code' => $pendingCheckout['billing_data']['billing_postal_code'],
-                    'billing_country' => $pendingCheckout['billing_data']['billing_country'],
-                    'notes' => $pendingCheckout['notes'],
+                    'payment_status' => 'paid'
                 ]);
-
-            \Log::info('Direct checkout order created successfully', [
-                'order_id' => $order->id,
-                'order_number' => $order->order_number,
-                'payment_intent_id' => $paymentIntentId
-            ]);
-
-                // Create order item
-                \App\Models\OrderItem::create([
-                    'order_id' => $order->id,
-                    'product_id' => $pendingCheckout['product_id'],
-                    'product_variation_id' => $pendingCheckout['variation_id'],
-                    'product_name' => $pendingCheckout['product_name'],
-                    'variation_name' => $pendingCheckout['variation_name'],
-                    'price' => $pendingCheckout['price'],
-                    'quantity' => $pendingCheckout['quantity'],
-                    'subtotal' => $pendingCheckout['subtotal'],
-                ]);
-
-                // Update stock
-                if ($pendingCheckout['variation_id']) {
-                    $variation = ProductVariation::find($pendingCheckout['variation_id']);
-                    $variation->decrement('stock_quantity', $pendingCheckout['quantity']);
-                } else {
-                    $product = Product::find($pendingCheckout['product_id']);
-                    $product->decrement('stock_quantity', $pendingCheckout['quantity']);
-                }
 
                 // Clear session data
                 session()->forget([
@@ -1235,7 +1259,93 @@ class DirectCheckoutController extends Controller
                     'pending_direct_original_toyyibpay_bill_code'
                 ]);
 
-                DB::commit();
+                // Send order confirmation emails with invoice
+                try {
+                    $orderEmailService = new \App\Services\OrderEmailService(new \App\Services\InvoiceService());
+                    $orderEmailService->sendOrderConfirmationEmails($existingOrder);
+                } catch (\Exception $e) {
+                    \Log::error('Failed to send order confirmation emails', [
+                        'order_id' => $existingOrder->id,
+                        'error' => $e->getMessage()
+                    ]);
+                }
+
+                return redirect()->route('direct-checkout.success', $existingOrder->id)
+                               ->with('success', 'Pembayaran berjaya! Pesanan anda sedang diproses.');
+            }
+
+            // If no existing order found, show error
+            return redirect()->route('checkout.orders')
+                           ->with('error', 'Sesi pembayaran tidak sah atau telah tamat. Sila cuba lagi.');
+        }
+
+        // Session data is valid, proceed with order update
+        try {
+            DB::beginTransaction();
+
+            // Find the existing order that was created during checkout
+            $pendingOrderId = session('pending_direct_order_id');
+            $order = \App\Models\Order::where('id', $pendingOrderId)
+                                     ->where('user_id', auth()->id())
+                                     ->first();
+
+            if (!$order) {
+                \Log::error('No pending order found for direct checkout', [
+                    'pending_order_id' => $pendingOrderId,
+                    'user_id' => auth()->id(),
+                    'payment_intent_id' => $paymentIntentId
+                ]);
+                return redirect()->route('checkout.orders')
+                               ->with('error', 'Pesanan tidak dijumpai. Sila cuba lagi.');
+            }
+
+            // Update the existing order with payment success
+            $order->update([
+                'status' => 'processing',
+                'payment_status' => 'paid',
+                'stripe_payment_intent_id' => $paymentIntentId
+            ]);
+
+            \Log::info('Direct checkout order updated successfully', [
+                'order_id' => $order->id,
+                'order_number' => $order->order_number,
+                'payment_intent_id' => $paymentIntentId
+            ]);
+
+            // Update stock (only if not already updated)
+            if ($pendingCheckout['variation_id']) {
+                $variation = ProductVariation::find($pendingCheckout['variation_id']);
+                $variation->decrement('stock_quantity', $pendingCheckout['quantity']);
+            } else {
+                $product = Product::find($pendingCheckout['product_id']);
+                $product->decrement('stock_quantity', $pendingCheckout['quantity']);
+            }
+
+            // Clear session data
+            session()->forget([
+                'pending_direct_checkout', 
+                'pending_direct_stripe_payment_intent_id', 
+                'direct_checkout',
+                'pending_direct_order_id',
+                'pending_direct_payment_method',
+                'pending_direct_original_payment_method',
+                'pending_direct_original_stripe_intent_id',
+                'pending_direct_original_toyyibpay_bill_code'
+            ]);
+
+            DB::commit();
+
+            // Send order confirmation emails with invoice
+            try {
+                $orderEmailService = new \App\Services\OrderEmailService(new \App\Services\InvoiceService());
+                $orderEmailService->sendOrderConfirmationEmails($order);
+            } catch (\Exception $e) {
+                \Log::error('Failed to send order confirmation emails', [
+                    'order_id' => $order->id,
+                    'error' => $e->getMessage()
+                ]);
+                // Don't fail the payment process if email fails
+            }
 
             \Log::info('Direct checkout Stripe payment completed successfully', [
                 'order_id' => $order->id,
@@ -1243,19 +1353,19 @@ class DirectCheckoutController extends Controller
                 'payment_intent_id' => $paymentIntentId
             ]);
 
-                return redirect()->route('direct-checkout.success', $order->id)
-                               ->with('success', 'Pembayaran berjaya! Pesanan anda sedang diproses.');
+            return redirect()->route('direct-checkout.success', $order->id)
+                           ->with('success', 'Pembayaran berjaya! Pesanan anda sedang diproses.');
 
-            } catch (\Exception $e) {
-                DB::rollBack();
+        } catch (\Exception $e) {
+            DB::rollBack();
             \Log::error('Error creating direct checkout order after Stripe payment: ' . $e->getMessage(), [
                 'payment_intent_id' => $paymentIntentId,
                 'user_id' => auth()->id(),
                 'trace' => $e->getTraceAsString()
             ]);
                 
-                return redirect()->route('checkout.orders')
-                               ->with('error', 'Ralat semasa memproses pesanan. Sila hubungi kami.');
+            return redirect()->route('checkout.orders')
+                           ->with('error', 'Ralat semasa memproses pesanan. Sila hubungi kami.');
         }
     }
 
@@ -1301,5 +1411,88 @@ class DirectCheckoutController extends Controller
         }
 
         return view('client.direct-checkout.stripe-payment', compact('paymentIntentId', 'clientSecret'));
+    }
+
+    /**
+     * Download invoice PDF for an order
+     */
+    public function downloadInvoice($orderId)
+    {
+        $order = Order::where('id', $orderId)
+                     ->where('user_id', auth()->id())
+                     ->with(['items.product', 'items.variation'])
+                     ->firstOrFail();
+
+        // Check if order is eligible for invoice download
+        if (($order->status === 'pending' && $order->payment_status === 'pending') || $order->payment_status === 'failed') {
+            return back()->with('error', 'Invois tidak tersedia untuk pesanan yang belum dibayar atau pembayaran gagal.');
+        }
+
+        // Check if order is cancelled
+        if ($order->status === 'cancelled') {
+            return back()->with('error', 'Invois tidak tersedia untuk pesanan yang telah dibatalkan.');
+        }
+
+        try {
+            $invoiceService = new \App\Services\InvoiceService();
+            $pdfPath = $invoiceService->generateInvoice($order);
+            
+            // Get the filename from the path
+            $filename = basename($pdfPath);
+            
+            // Return the file as a download response
+            return response()->download($pdfPath, $filename, [
+                'Content-Type' => 'application/pdf',
+                'Content-Disposition' => 'attachment; filename="' . $filename . '"'
+            ]);
+            
+        } catch (\Exception $e) {
+            \Log::error('Failed to download invoice: ' . $e->getMessage(), [
+                'order_id' => $orderId,
+                'user_id' => auth()->id()
+            ]);
+            
+            return back()->with('error', 'Gagal memuat turun invois. Sila cuba lagi.');
+        }
+    }
+
+    /**
+     * View invoice PDF in browser
+     */
+    public function viewInvoice($orderId)
+    {
+        $order = Order::where('id', $orderId)
+                     ->where('user_id', auth()->id())
+                     ->with(['items.product', 'items.variation'])
+                     ->firstOrFail();
+
+        // Check if order is eligible for invoice viewing
+        if (($order->status === 'pending' && $order->payment_status === 'pending') || $order->payment_status === 'failed') {
+            return back()->with('error', 'Invois tidak tersedia untuk pesanan yang belum dibayar atau pembayaran gagal.');
+        }
+
+        // Check if order is cancelled
+        if ($order->status === 'cancelled') {
+            return back()->with('error', 'Invois tidak tersedia untuk pesanan yang telah dibatalkan.');
+        }
+
+        try {
+            $invoiceService = new \App\Services\InvoiceService();
+            $pdfPath = $invoiceService->generateInvoice($order);
+            
+            // Return the file to be displayed in browser
+            return response()->file($pdfPath, [
+                'Content-Type' => 'application/pdf',
+                'Content-Disposition' => 'inline; filename="' . basename($pdfPath) . '"'
+            ]);
+            
+        } catch (\Exception $e) {
+            \Log::error('Failed to view invoice: ' . $e->getMessage(), [
+                'order_id' => $orderId,
+                'user_id' => auth()->id()
+            ]);
+            
+            return back()->with('error', 'Gagal memaparkan invois. Sila cuba lagi.');
+        }
     }
 }

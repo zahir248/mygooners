@@ -121,6 +121,30 @@ class Order extends Model
         };
     }
 
+    public function getPaymentStatusDisplayName()
+    {
+        return match($this->payment_status) {
+            'paid' => 'DIBAYAR',
+            'pending' => 'MENUNGGU',
+            'failed' => 'GAGAL',
+            'refunded' => 'DIPULANGKAN',
+            default => ucfirst($this->payment_status),
+        };
+    }
+
+    public function getOrderStatusDisplayName()
+    {
+        return match($this->status) {
+            'pending' => 'MENUNGGU',
+            'processing' => 'DIPROSES',
+            'shipped' => 'DIHANTAR',
+            'delivered' => 'DITERIMA',
+            'cancelled' => 'DIBATALKAN',
+            'refunded' => 'DIPULANGKAN',
+            default => ucfirst($this->status),
+        };
+    }
+
     public function getTrackingUrl()
     {
         if (!$this->tracking_number) {

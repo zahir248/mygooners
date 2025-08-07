@@ -60,6 +60,55 @@ class StripeService
     }
 
     /**
+     * Reuse existing payment intent for retry payment
+     */
+    public function reusePaymentIntent($paymentIntentId, $order)
+    {
+        try {
+            $paymentIntent = PaymentIntent::retrieve($paymentIntentId);
+
+            // Check if payment intent can be reused
+            if ($paymentIntent->status === 'requires_payment_method' || 
+                $paymentIntent->status === 'requires_confirmation' ||
+                $paymentIntent->status === 'requires_action') {
+                
+                Log::info('Reusing existing Stripe payment intent for retry', [
+                    'order_number' => $order->order_number,
+                    'payment_intent_id' => $paymentIntent->id,
+                    'status' => $paymentIntent->status,
+                    'amount' => $paymentIntent->amount
+                ]);
+
+                return [
+                    'success' => true,
+                    'payment_intent_id' => $paymentIntent->id,
+                    'client_secret' => $paymentIntent->client_secret,
+                    'amount' => $paymentIntent->amount,
+                    'reused' => true
+                ];
+            } else {
+                // Payment intent cannot be reused, create a new one
+                Log::info('Payment intent cannot be reused, creating new one', [
+                    'payment_intent_id' => $paymentIntentId,
+                    'status' => $paymentIntent->status
+                ]);
+                
+                return $this->createPaymentIntent($order);
+            }
+
+        } catch (ApiErrorException $e) {
+            Log::error('Failed to reuse payment intent, creating new one', [
+                'payment_intent_id' => $paymentIntentId,
+                'order_number' => $order->order_number,
+                'error' => $e->getMessage()
+            ]);
+
+            // If we can't retrieve the payment intent, create a new one
+            return $this->createPaymentIntent($order);
+        }
+    }
+
+    /**
      * Verify payment intent status
      */
     public function verifyPayment($paymentIntentId)

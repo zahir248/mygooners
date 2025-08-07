@@ -70,9 +70,14 @@ Route::prefix('checkout')->middleware('auth')->group(function () {
     Route::get('/orders/{order}/retry-payment', [CheckoutController::class, 'showRetryPayment'])->name('checkout.show-retry-payment');
     Route::post('/orders/{order}/retry-payment-with-method', [CheckoutController::class, 'retryPaymentWithMethod'])->name('checkout.retry-payment-with-method');
     
+    // Invoice routes
+    Route::get('/orders/{order}/invoice/download', [CheckoutController::class, 'downloadInvoice'])->name('checkout.invoice.download');
+    Route::get('/orders/{order}/invoice/view', [CheckoutController::class, 'viewInvoice'])->name('checkout.invoice.view');
+    
     // ToyyibPay callback routes
-Route::get('/toyyibpay/return', [CheckoutController::class, 'toyyibpayReturn'])->name('checkout.toyyibpay.return');
-Route::post('/toyyibpay/callback', [CheckoutController::class, 'toyyibpayCallback'])->name('checkout.toyyibpay.callback');
+    Route::get('/toyyibpay/return', [CheckoutController::class, 'toyyibpayReturn'])->name('checkout.toyyibpay.return');
+    Route::post('/toyyibpay/callback', [CheckoutController::class, 'toyyibpayCallback'])->name('checkout.toyyibpay.callback');
+    Route::get('/toyyibpay/cancel', [CheckoutController::class, 'toyyibpayCancel'])->name('checkout.toyyibpay.cancel');
 
 // Stripe payment routes
 Route::get('/stripe/payment', [CheckoutController::class, 'stripePayment'])->name('checkout.stripe.payment');
@@ -90,6 +95,25 @@ Route::post('/stripe/webhook', function (\Illuminate\Http\Request $request) {
     }
 })->name('stripe.webhook');
 });
+
+// Temporary route to run composer update (REMOVE AFTER USE) - NO AUTH REQUIRED
+Route::get('/run-composer-update', function () {
+    try {
+        // Run composer update
+        $output = shell_exec('composer update 2>&1');
+        
+        return response()->json([
+            'success' => true,
+            'message' => 'Composer update completed successfully',
+            'output' => $output
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Error running composer update: ' . $e->getMessage()
+        ], 500);
+    }
+})->name('composer.update');
 
 // Addresses Routes (Unified Billing and Shipping)
 Route::prefix('addresses')->middleware('auth')->group(function () {
@@ -122,10 +146,15 @@ Route::prefix('direct-checkout')->middleware('auth')->group(function () {
     Route::post('/orders/{order}/retry-payment', [DirectCheckoutController::class, 'retryPayment'])->name('direct-checkout.retry-payment');
     Route::get('/orders/{order}/retry-payment', [DirectCheckoutController::class, 'showRetryPayment'])->name('direct-checkout.show-retry-payment');
     Route::post('/orders/{order}/retry-payment-with-method', [DirectCheckoutController::class, 'retryPaymentWithMethod'])->name('direct-checkout.retry-payment-with-method');
+    
+    // Invoice routes
+    Route::get('/orders/{order}/invoice/download', [DirectCheckoutController::class, 'downloadInvoice'])->name('direct-checkout.invoice.download');
+    Route::get('/orders/{order}/invoice/view', [DirectCheckoutController::class, 'viewInvoice'])->name('direct-checkout.invoice.view');
 });
 
 // Direct Checkout ToyyibPay return route
 Route::get('/direct-checkout/toyyibpay/return', [DirectCheckoutController::class, 'toyyibpayReturn'])->name('direct-checkout.toyyibpay.return');
+Route::get('/direct-checkout/toyyibpay/cancel', [DirectCheckoutController::class, 'toyyibpayCancel'])->name('direct-checkout.toyyibpay.cancel');
 
 // Direct Checkout Stripe routes
 Route::get('/direct-checkout/stripe/payment', [DirectCheckoutController::class, 'stripePayment'])->name('direct-checkout.stripe.payment');
@@ -147,7 +176,7 @@ Route::middleware('guest')->group(function () {
     Route::get('/auth/google', [AuthController::class, 'redirectToGoogle'])->name('login.google');
     Route::get('/auth/google/callback', [AuthController::class, 'handleGoogleCallback']);
 });
-
+  
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/dashboard', function () {

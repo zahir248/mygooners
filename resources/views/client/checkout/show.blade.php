@@ -450,7 +450,39 @@
                 </div>
                 
                 <div class="p-6 space-y-3">
-                                         <a href="{{ route('checkout.orders') }}" 
+                    <!-- Invoice Actions -->
+                    @if(!(($order->status === 'pending' && $order->payment_status === 'pending') || $order->payment_status === 'failed') && $order->status !== 'cancelled')
+                        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+                            <h3 class="text-sm font-bold text-blue-900 mb-2">📄 Invois Pesanan</h3>
+                            <p class="text-xs text-blue-700 mb-3">Muat turun atau lihat invois untuk pesanan ini</p>
+                            <div class="flex space-x-2">
+                                <a href="{{ route('checkout.invoice.view', $order->id) }}" 
+                                   target="_blank"
+                                   class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg text-sm font-medium text-center transition-colors">
+                                    Lihat Invois
+                                </a>
+                                <a href="{{ route('checkout.invoice.download', $order->id) }}" 
+                                   class="flex-1 bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-lg text-sm font-medium text-center transition-colors">
+                                    Muat Turun
+                                </a>
+                            </div>
+                        </div>
+                    @else
+                        <div class="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-4">
+                            <h3 class="text-sm font-bold text-gray-700 mb-2">📄 Invois Pesanan</h3>
+                            <p class="text-xs text-gray-600 mb-3">
+                                @if($order->status === 'pending' && $order->payment_status === 'pending')
+                                    Invois akan tersedia selepas pembayaran berjaya.
+                                @elseif($order->payment_status === 'failed')
+                                    Invois tidak tersedia untuk pesanan dengan pembayaran gagal.
+                                @elseif($order->status === 'cancelled')
+                                    Invois tidak tersedia untuk pesanan yang telah dibatalkan.
+                                @endif
+                            </p>
+                        </div>
+                    @endif
+                    
+                    <a href="{{ route('checkout.orders') }}" 
                         class="w-full bg-gray-600 hover:bg-gray-700 text-white py-3 px-6 rounded-lg font-bold text-center transition-colors block">
                          Kembali ke Pesanan
                      </a>

@@ -15,6 +15,20 @@
             </div>
             <h1 class="text-3xl font-bold text-green-900 mb-2">Pesanan Berjaya!</h1>
             <p class="text-green-700">Terima kasih atas pembelian anda. Pesanan anda telah berjaya dibuat.</p>
+            @if($order->payment_status === 'paid')
+                <div class="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                    <div class="flex items-center justify-center space-x-2">
+                        <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                        </svg>
+                        <p class="text-blue-800 font-medium">Emel pengesahan telah dihantar ke {{ $order->shipping_email }}</p>
+                        <p class="text-blue-700 text-sm mt-1">Nota: Invois PDF mungkin tidak dilampirkan kerana isu teknikal. Sila hubungi kami jika anda memerlukan invois.</p>
+                    </div>
+                    @if($order->billing_email !== $order->shipping_email)
+                        <p class="text-blue-700 text-sm mt-1">Dan juga ke {{ $order->billing_email }}</p>
+                    @endif
+                </div>
+            @endif
         </div>
     </div>
 </div>
