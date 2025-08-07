@@ -18,41 +18,7 @@
     <link href="https://fonts.bunny.net/css?family=inter:300,400,500,600,700" rel="stylesheet" />
 
     <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'arsenal': {
-                            50: '#fff5f5',
-                            100: '#ffe5e5',
-                            200: '#ffcccc',
-                            300: '#ffb3b3',
-                            400: '#ff6666',
-                            500: '#ff3333',
-                            600: '#ff0000',
-                            700: '#cc0000',
-                            800: '#990000',
-                            900: '#660000',
-                        },
-                        'red': {
-                            50: '#fff5f5',
-                            100: '#ffe5e5',
-                            200: '#ffcccc',
-                            300: '#ffb3b3',
-                            400: '#ff6666',
-                            500: '#ff3333',
-                            600: '#ff0000',
-                            700: '#cc0000',
-                            800: '#990000',
-                            900: '#660000',
-                        }
-                    }
-                }
-            }
-        }
-    </script>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 
     <!-- Custom Styles -->
     <style>
@@ -70,23 +36,23 @@
         
         /* Arsenal Official Colors */
         .bg-arsenal {
-            background-color: #ff0000 !important;
+            background-color: #dc2626 !important;
         }
         
         .text-arsenal {
-            color: #ff0000 !important;
+            color: #dc2626 !important;
         }
         
         .border-arsenal {
-            border-color: #ff0000 !important;
+            border-color: #dc2626 !important;
         }
         
         .hover\:bg-arsenal:hover {
-            background-color: #cc0000 !important;
+            background-color: #b91c1c !important;
         }
         
         .hover\:text-arsenal:hover {
-            color: #ff0000 !important;
+            color: #dc2626 !important;
         }
         
         /* Custom scrollbar for webkit browsers */
@@ -99,12 +65,12 @@
         }
         
         ::-webkit-scrollbar-thumb {
-            background: #ff0000;
+            background: #dc2626;
             border-radius: 4px;
         }
         
         ::-webkit-scrollbar-thumb:hover {
-            background: #cc0000;
+            background: #b91c1c;
         }
         
         /* Cart icon animations */
@@ -142,14 +108,14 @@
 <body class="h-full bg-gray-50 font-sans antialiased">
     <div class="min-h-full">
         <!-- Header -->
-        <header class="bg-white border-b border-gray-200 sticky top-0 z-50">
+        <header class="bg-white border-b border-gray-200 sticky top-0 z-50" x-data="{ mobileMenuOpen: false }">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <!-- Top bar -->
                 <div class="flex items-center justify-between h-16">
                     <!-- Logo -->
                     <div class="flex-shrink-0">
                         <a href="{{ route('home') }}" class="flex items-center">
-                            <div class="bg-arsenal text-white rounded-lg px-3 py-2 font-bold text-xl">
+                            <div class="bg-red-600 text-white rounded-lg px-3 py-2 font-bold text-xl">
                                 MG
                             </div>
                             <span class="ml-2 text-xl font-bold text-gray-900">MyGooners</span>
@@ -176,13 +142,13 @@
                     </nav>
 
                     <!-- Right side -->
-                    <div class="flex items-center space-x-4">
+                    <div class="flex items-center space-x-2 md:space-x-4">
                         <!-- Cart Icon - Only for logged in users -->
                         @auth
                         <div class="relative group">
-                            <a href="{{ route('cart.index') }}" class="flex items-center space-x-3 px-3 py-2 text-gray-700 hover:text-red-600 transition-colors">
+                            <a href="{{ route('cart.index') }}" class="flex items-center space-x-1 md:space-x-3 px-2 md:px-3 py-2 text-gray-700 hover:text-red-600 transition-colors">
                                 <div class="relative">
-                                    <svg class="w-6 h-6 text-gray-600" fill="currentColor" viewBox="0 0 24 24">
+                                    <svg class="w-5 h-5 md:w-6 md:h-6 text-gray-600" fill="currentColor" viewBox="0 0 24 24">
                                         <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12L8.1 13h7.45c.75 0 1.41-.41 1.75-1.03L21.7 4H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/>
                                     </svg>
                                     @if(\App\Models\Cart::getOrCreateCart()->item_count > 0)
@@ -213,14 +179,14 @@
                                 <button @click="open = !open" class="flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
                                     @if(auth()->user()->profile_image)
                                         @if(Str::startsWith(auth()->user()->profile_image, 'http'))
-                                            <img class="h-8 w-8 rounded-full object-cover" src="{{ auth()->user()->profile_image }}" alt="{{ auth()->user()->name }}">
+                                            <img class="h-7 w-7 md:h-8 md:w-8 rounded-full object-cover" src="{{ auth()->user()->profile_image }}" alt="{{ auth()->user()->name }}">
                                         @else
-                                            <img class="h-8 w-8 rounded-full object-cover" src="{{ asset('storage/' . auth()->user()->profile_image) }}" alt="{{ auth()->user()->name }}">
+                                            <img class="h-7 w-7 md:h-8 md:w-8 rounded-full object-cover" src="{{ asset('storage/' . auth()->user()->profile_image) }}" alt="{{ auth()->user()->name }}">
                                         @endif
                                     @else
-                                        <img class="h-8 w-8 rounded-full bg-gray-300" src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->name) }}&background=dc2626&color=fff" alt="{{ auth()->user()->name }}">
+                                        <img class="h-7 w-7 md:h-8 md:w-8 rounded-full bg-gray-300" src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->name) }}&background=dc2626&color=fff" alt="{{ auth()->user()->name }}">
                                     @endif
-                                    <span class="ml-2 text-gray-700 font-medium">{{ auth()->user()->name }}</span>
+                                    <span class="ml-1 md:ml-2 text-gray-700 font-medium text-sm md:text-base hidden sm:block">{{ auth()->user()->name }}</span>
                                 </button>
                                 <div x-show="open" @click.away="open = false" x-cloak class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
                                     <a href="{{ route('dashboard') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
@@ -229,20 +195,20 @@
                                         </svg>
                                         Panel Kawalan
                                     </a>
-                                                    <a href="{{ route('checkout.orders') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                    <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
-                    </svg>
-                    Pesanan Saya
-                </a>
-                <a href="{{ route('addresses.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                    <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                    </svg>
-                    Alamat
-                </a>
-                <div class="border-t border-gray-100 my-1"></div>
+                                    <a href="{{ route('checkout.orders') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                        <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                                        </svg>
+                                        Pesanan Saya
+                                    </a>
+                                    <a href="{{ route('addresses.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                        <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                        </svg>
+                                        Alamat
+                                    </a>
+                                    <div class="border-t border-gray-100 my-1"></div>
                                     <form method="POST" action="{{ route('logout') }}">
                                         @csrf
                                         <button type="submit" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
@@ -267,10 +233,9 @@
 
                         <!-- Mobile menu button -->
                         <div class="md:hidden">
-                            <button x-data="{ open: false }" @click="open = !open" type="button" class="text-gray-700 hover:text-red-600 focus:outline-none">
+                            <button @click="mobileMenuOpen = !mobileMenuOpen" type="button" class="text-gray-700 hover:text-red-600 focus:outline-none p-1">
                                 <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path x-show="!open" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                                    <path x-show="open" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
                                 </svg>
                             </button>
                         </div>
@@ -278,19 +243,27 @@
                 </div>
 
                 <!-- Mobile Navigation -->
-                <div x-data="{ open: false }" x-show="open" @click.away="open = false" x-cloak class="md:hidden border-t border-gray-200 py-4">
-                    <div class="space-y-1">
-                        <a href="{{ route('home') }}" class="block px-3 py-2 text-base font-medium text-gray-900 hover:text-red-600 hover:bg-gray-50">Utama</a>
-                        <a href="{{ route('blog.index') }}" class="block px-3 py-2 text-base font-medium text-gray-900 hover:text-red-600 hover:bg-gray-50">Berita</a>
-                        <a href="{{ route('videos.index') }}" class="block px-3 py-2 text-base font-medium text-gray-900 hover:text-red-600 hover:bg-gray-50">Video</a>
-                        <a href="{{ route('services.index') }}" class="block px-3 py-2 text-base font-medium text-gray-900 hover:text-red-600 hover:bg-gray-50">Perkhidmatan</a>
-                        <a href="{{ route('shop.index') }}" class="block px-3 py-2 text-base font-medium text-gray-900 hover:text-red-600 hover:bg-gray-50">Kedai</a>
+                <div x-show="mobileMenuOpen" 
+                     x-transition:enter="transition ease-out duration-200"
+                     x-transition:enter-start="opacity-0 transform -translate-y-2"
+                     x-transition:enter-end="opacity-100 transform translate-y-0"
+                     x-transition:leave="transition ease-in duration-150"
+                     x-transition:leave-start="opacity-100 transform translate-y-0"
+                     x-transition:leave-end="opacity-0 transform -translate-y-2"
+                     x-cloak 
+                     class="md:hidden absolute top-full left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-50">
+                    <div class="px-4 py-4 space-y-1">
+                        <a href="{{ route('home') }}" class="block px-3 py-2 text-base font-medium text-gray-900 hover:text-red-600 hover:bg-gray-50 rounded-md">Utama</a>
+                        <a href="{{ route('blog.index') }}" class="block px-3 py-2 text-base font-medium text-gray-900 hover:text-red-600 hover:bg-gray-50 rounded-md">Berita</a>
+                        <a href="{{ route('videos.index') }}" class="block px-3 py-2 text-base font-medium text-gray-900 hover:text-red-600 hover:bg-gray-50 rounded-md">Video</a>
+                        <a href="{{ route('services.index') }}" class="block px-3 py-2 text-base font-medium text-gray-900 hover:text-red-600 hover:bg-gray-50 rounded-md">Perkhidmatan</a>
+                        <a href="{{ route('shop.index') }}" class="block px-3 py-2 text-base font-medium text-gray-900 hover:text-red-600 hover:bg-gray-50 rounded-md">Kedai</a>
                         @auth
-                                            <div class="border-t border-gray-200 pt-2 mt-2">
-                    <a href="{{ route('dashboard') }}" class="block px-3 py-2 text-base font-medium text-gray-900 hover:text-red-600 hover:bg-gray-50">Panel Kawalan</a>
-                    <a href="{{ route('checkout.orders') }}" class="block px-3 py-2 text-base font-medium text-gray-900 hover:text-red-600 hover:bg-gray-50">Pesanan Saya</a>
-                    <a href="{{ route('addresses.index') }}" class="block px-3 py-2 text-base font-medium text-gray-900 hover:text-red-600 hover:bg-gray-50">Alamat</a>
-                </div>
+                            <div class="border-t border-gray-200 pt-2 mt-2">
+                                <a href="{{ route('dashboard') }}" class="block px-3 py-2 text-base font-medium text-gray-900 hover:text-red-600 hover:bg-gray-50 rounded-md">Panel Kawalan</a>
+                                <a href="{{ route('checkout.orders') }}" class="block px-3 py-2 text-base font-medium text-gray-900 hover:text-red-600 hover:bg-gray-50 rounded-md">Pesanan Saya</a>
+                                <a href="{{ route('addresses.index') }}" class="block px-3 py-2 text-base font-medium text-gray-900 hover:text-red-600 hover:bg-gray-50 rounded-md">Alamat</a>
+                            </div>
                         @endauth
                     </div>
                 </div>
