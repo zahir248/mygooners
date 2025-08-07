@@ -69,12 +69,14 @@ class ToyyibPayService
                 'billTo' => $shippingName,
                 'billEmail' => $shippingEmail,
                 'billPhone' => $shippingPhone,
-                'billSplitPayment' => 0,
-                'billSplitPaymentArgs' => '',
+                'billSplitPayment' => 0, // No split payment
+                'billSplitPaymentArgs' => '', // No split payment arguments
                 'billPaymentChannel' => 0, // All channels
                 'billDisplayMerchant' => 1,
                 'billContentEmail' => 'Terima kasih atas pembelian anda. Pesanan #' . $orderNumber,
-                'billChargeToCustomer' => 0,
+                'billChargeToCustomer' => '', // Leave blank to charge both FPX and Credit Card to bill owner (merchant)
+                'billMultiPayment' => 0, // Single payment only
+                'billIsFixedAmount' => 1, // Fixed amount, no additional fees
             ];
 
             Log::info('ToyyibPay API request', [
