@@ -223,6 +223,48 @@
         </div>
     </div>
     
+    @if($order->fpl_manager_name && $order->fpl_team_name)
+        <!-- Fantasy Premier League Section -->
+        <div class="bg-white rounded-xl shadow-lg overflow-hidden mt-8">
+            <div class="px-6 py-4 border-b border-gray-200">
+                <h2 class="text-xl font-bold text-gray-900">Fantasy Premier League</h2>
+                <p class="text-sm text-gray-600 mt-1">Maklumat untuk pengesahan pesanan</p>
+            </div>
+            
+            <div class="p-6 space-y-4">
+                <div class="flex justify-between">
+                    <span class="text-gray-600">Nama Manager:</span>
+                    <span class="font-medium">{{ $order->fpl_manager_name }}</span>
+                </div>
+                
+                <div class="flex justify-between">
+                    <span class="text-gray-600">Nama Pasukan:</span>
+                    <span class="font-medium">{{ $order->fpl_team_name }}</span>
+                </div>
+                
+                <div class="flex justify-between">
+                    <span class="text-gray-600">Kod Liga:</span>
+                    <span class="font-medium">k7l1d7</span>
+                </div>
+                
+                <div class="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                    <div class="flex items-start space-x-3">
+                        <svg class="w-5 h-5 text-blue-600 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        <div>
+                            <h4 class="text-sm font-medium text-blue-900">Sertai Liga FPL MyGooners</h4>
+                            <p class="text-sm text-blue-700 mt-1">
+                                Gunakan kod liga <strong>k7l1d7</strong> untuk menyertai liga Fantasy Premier League MyGooners. 
+                                Bersaing dengan pemain lain dan menangi hadiah menarik!
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
+    
     <!-- Order Items -->
     <div class="bg-white rounded-xl shadow-lg overflow-hidden mt-8">
         <div class="px-6 py-4 border-b border-gray-200">

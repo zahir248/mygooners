@@ -36,6 +36,8 @@ class Order extends Model
         'billing_postal_code',
         'billing_country',
         'notes',
+        'fpl_manager_name',
+        'fpl_team_name',
         'tracking_number',
         'shipping_courier',
         'toyyibpay_bill_code',

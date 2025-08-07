@@ -149,6 +149,8 @@ class DirectCheckoutController extends Controller
             'billing_postal_code' => 'required_without:billing_detail_id|string|max:10',
             'billing_country' => 'required_without:billing_detail_id|string|max:255',
             'payment_method' => 'required|in:toyyibpay,stripe',
+            'fpl_manager_name' => 'required|string|max:255',
+            'fpl_team_name' => 'required|string|max:255',
             'notes' => 'nullable|string',
             'save_shipping_detail' => 'boolean',
             'save_billing_detail' => 'boolean',
@@ -263,6 +265,8 @@ class DirectCheckoutController extends Controller
                 'tax' => $checkoutData['tax'],
                 'total' => $checkoutData['total'],
                 'payment_method' => $request->payment_method,
+                'fpl_manager_name' => $request->fpl_manager_name,
+                'fpl_team_name' => $request->fpl_team_name,
                 'shipping_data' => $shippingData,
                 'billing_data' => $billingData,
                 'notes' => $request->notes,
@@ -323,6 +327,8 @@ class DirectCheckoutController extends Controller
                     'billing_state' => $billingData['billing_state'],
                     'billing_postal_code' => $billingData['billing_postal_code'],
                     'billing_country' => $billingData['billing_country'],
+                    'fpl_manager_name' => $request->fpl_manager_name,
+                    'fpl_team_name' => $request->fpl_team_name,
                     'notes' => $request->notes,
                 ]);
 
@@ -954,6 +960,8 @@ class DirectCheckoutController extends Controller
                             'billing_state' => $pendingCheckout['billing_data']['billing_state'],
                             'billing_postal_code' => $pendingCheckout['billing_data']['billing_postal_code'],
                             'billing_country' => $pendingCheckout['billing_data']['billing_country'],
+                            'fpl_manager_name' => $pendingCheckout['fpl_manager_name'],
+                            'fpl_team_name' => $pendingCheckout['fpl_team_name'],
                             'notes' => $pendingCheckout['notes'],
                         ]);
 
@@ -1025,25 +1033,94 @@ class DirectCheckoutController extends Controller
                                ->with('error', 'Ralat semasa memproses pesanan. Sila hubungi kami.');
             }
         } else {
-            // Payment failed or user clicked back - preserve order for retry
-            $order->update(['payment_status' => 'failed']);
+            // Payment failed or user clicked back - create order if it doesn't exist and redirect to retry
+            if (!$order) {
+                // Create order from pending checkout data even for failed payment
+                $pendingCheckout = session('pending_direct_checkout');
+                
+                if ($pendingCheckout) {
+                    try {
+                        DB::beginTransaction();
+                        
+                        // Create the order with failed payment status
+                        $order = Order::create([
+                            'order_number' => (new Order())->generateOrderNumber(),
+                            'user_id' => auth()->id(),
+                            'status' => 'pending',
+                            'subtotal' => $pendingCheckout['subtotal'],
+                            'shipping_cost' => $pendingCheckout['shipping_cost'],
+                            'tax' => $pendingCheckout['tax'],
+                            'total' => $pendingCheckout['total'],
+                            'payment_method' => $pendingCheckout['payment_method'],
+                            'payment_status' => 'failed',
+                            'toyyibpay_bill_code' => $billCode,
+                            'shipping_name' => $pendingCheckout['shipping_data']['shipping_name'],
+                            'shipping_email' => $pendingCheckout['shipping_data']['shipping_email'],
+                            'shipping_phone' => $pendingCheckout['shipping_data']['shipping_phone'],
+                            'shipping_address' => $pendingCheckout['shipping_data']['shipping_address'],
+                            'shipping_city' => $pendingCheckout['shipping_data']['shipping_city'],
+                            'shipping_state' => $pendingCheckout['shipping_data']['shipping_state'],
+                            'shipping_postal_code' => $pendingCheckout['shipping_data']['shipping_postal_code'],
+                            'shipping_country' => $pendingCheckout['shipping_data']['shipping_country'],
+                            'billing_name' => $pendingCheckout['billing_data']['billing_name'],
+                            'billing_email' => $pendingCheckout['billing_data']['billing_email'],
+                            'billing_phone' => $pendingCheckout['billing_data']['billing_phone'],
+                            'billing_address' => $pendingCheckout['billing_data']['billing_address'],
+                            'billing_city' => $pendingCheckout['billing_data']['billing_city'],
+                            'billing_state' => $pendingCheckout['billing_data']['billing_state'],
+                            'billing_postal_code' => $pendingCheckout['billing_data']['billing_postal_code'],
+                            'billing_country' => $pendingCheckout['billing_data']['billing_country'],
+                            'fpl_manager_name' => $pendingCheckout['fpl_manager_name'],
+                            'fpl_team_name' => $pendingCheckout['fpl_team_name'],
+                            'notes' => $pendingCheckout['notes'],
+                        ]);
+
+                        // Create order item
+                        $order->items()->create([
+                            'product_id' => $pendingCheckout['product_id'],
+                            'product_variation_id' => $pendingCheckout['variation_id'],
+                            'product_name' => $pendingCheckout['product_name'],
+                            'variation_name' => $pendingCheckout['variation_name'],
+                            'price' => $pendingCheckout['price'],
+                            'quantity' => $pendingCheckout['quantity'],
+                            'subtotal' => $pendingCheckout['subtotal'],
+                        ]);
+
+                        DB::commit();
+                        
+                        \Log::info('Created new direct checkout order from pending checkout data for failed payment', [
+                            'order_id' => $order->id,
+                            'order_number' => $order->order_number,
+                            'bill_code' => $billCode,
+                            'user_id' => auth()->id(),
+                            'payment_status' => 'failed'
+                        ]);
+                    } catch (\Exception $e) {
+                        DB::rollBack();
+                        \Log::error('Error creating order for failed direct checkout payment: ' . $e->getMessage());
+                        
+                        return redirect()->route('checkout.orders')
+                                       ->with('error', 'Ralat semasa memproses pesanan. Sila hubungi kami.');
+                    }
+                } else {
+                    \Log::warning('Direct checkout ToyyibPay payment failed but no pending checkout data found', [
+                        'bill_code' => $billCode,
+                        'user_id' => auth()->id()
+                    ]);
+                    
+                    return redirect()->route('checkout.orders')
+                                   ->with('error', 'Pembayaran gagal dan maklumat pesanan tidak dijumpai.');
+                }
+            } else {
+                // Order exists - update payment status to failed
+                $order->update(['payment_status' => 'failed']);
+            }
             
             // Store order information in session for retry payment
             session([
                 'failed_payment_order_id' => $order->id,
                 'failed_payment_bill_code' => $billCode,
                 'failed_payment_method' => $order->payment_method
-            ]);
-            
-            // Clear pending session data but keep order info for retry
-            session()->forget([
-                'pending_direct_checkout',
-                'pending_direct_bill_code', 
-                'pending_direct_order_id',
-                'pending_direct_payment_method',
-                'pending_direct_original_payment_method',
-                'pending_direct_original_stripe_intent_id',
-                'pending_direct_original_toyyibpay_bill_code'
             ]);
             
             \Log::info('Direct checkout ToyyibPay payment failed - redirecting to retry payment', [

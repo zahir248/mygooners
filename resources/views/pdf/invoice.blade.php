@@ -415,6 +415,26 @@
                     </div>
                 </div>
             </div>
+
+            @if($order->fpl_manager_name && $order->fpl_team_name)
+                <div class="payment-section">
+                    <div class="payment-title">Fantasy Premier League</div>
+                    <div class="payment-grid">
+                        <div class="payment-item">
+                            <span class="payment-label">Nama Manager:</span>
+                            <span class="payment-value">{{ $order->fpl_manager_name }}</span>
+                        </div>
+                        <div class="payment-item">
+                            <span class="payment-label">Nama Pasukan:</span>
+                            <span class="payment-value">{{ $order->fpl_team_name }}</span>
+                        </div>
+                        <div class="payment-item">
+                            <span class="payment-label">Kod Liga:</span>
+                            <span class="payment-value">k7l1d7</span>
+                        </div>
+                    </div>
+                </div>
+            @endif
         </div>
     </div>
 

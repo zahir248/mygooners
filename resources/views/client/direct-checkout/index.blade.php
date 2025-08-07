@@ -390,6 +390,57 @@
                     </div>
                 </div>
                 
+                <!-- Fantasy Premier League Section -->
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden mb-8">
+                    <div class="px-6 py-4 border-b border-gray-200">
+                        <h2 class="text-xl font-bold text-gray-900">Fantasy Premier League</h2>
+                        <p class="text-sm text-gray-600 mt-1">Maklumat untuk pengesahan pesanan</p>
+                    </div>
+                    
+                    <div class="p-6 space-y-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label for="fpl_manager_name" class="block text-sm font-medium text-gray-700 mb-2">Nama Manager *</label>
+                                <input type="text" id="fpl_manager_name" name="fpl_manager_name" 
+                                       value="{{ old('fpl_manager_name') }}"
+                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-colors"
+                                       placeholder="Masukkan nama manager FPL anda"
+                                       required>
+                                @error('fpl_manager_name')
+                                    <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+                                @enderror
+                            </div>
+                            
+                            <div>
+                                <label for="fpl_team_name" class="block text-sm font-medium text-gray-700 mb-2">Nama Pasukan *</label>
+                                <input type="text" id="fpl_team_name" name="fpl_team_name" 
+                                       value="{{ old('fpl_team_name') }}"
+                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-colors"
+                                       placeholder="Masukkan nama pasukan FPL anda"
+                                       required>
+                                @error('fpl_team_name')
+                                    <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+                                @enderror
+                            </div>
+                        </div>
+                        
+                        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                            <div class="flex items-start space-x-3">
+                                <svg class="w-5 h-5 text-blue-600 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                <div>
+                                    <h4 class="text-sm font-medium text-blue-900">Maklumat FPL Diperlukan</h4>
+                                    <p class="text-sm text-blue-700 mt-1">
+                                        Sila masukkan nama manager dan nama pasukan Fantasy Premier League anda untuk pengesahan pesanan. 
+                                        Maklumat ini akan digunakan untuk menghubungi anda berkaitan dengan pesanan.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
                 <!-- Payment Method -->
                 <div class="bg-white rounded-xl shadow-lg overflow-hidden mb-8">
                     <div class="px-6 py-4 border-b border-gray-200">

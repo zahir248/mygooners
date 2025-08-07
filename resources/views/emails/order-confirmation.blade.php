@@ -181,6 +181,17 @@
             </div>
         @endif
 
+        @if($order->fpl_manager_name && $order->fpl_team_name)
+            <div class="address-section">
+                <div class="address-title">Fantasy Premier League:</div>
+                <div>
+                    <strong>Nama Manager:</strong> {{ $order->fpl_manager_name }}<br>
+                    <strong>Nama Pasukan:</strong> {{ $order->fpl_team_name }}<br>
+                    <strong>Kod Liga:</strong> k7l1d7
+                </div>
+            </div>
+        @endif
+
         <div style="text-align: center; margin: 30px 0;">
             <a href="{{ route('checkout.show', $order->id) }}" class="button">Lihat Pesanan</a>
         </div>

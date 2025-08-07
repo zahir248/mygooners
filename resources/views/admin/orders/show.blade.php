@@ -198,6 +198,17 @@
                         </div>
                     @endif
                     
+                    @if($order->fpl_manager_name && $order->fpl_team_name)
+                        <div>
+                            <span class="text-gray-600 text-sm">FPL Manager</span>
+                            <p class="font-medium">{{ $order->fpl_manager_name }}</p>
+                        </div>
+                        <div>
+                            <span class="text-gray-600 text-sm">FPL Team</span>
+                            <p class="font-medium">{{ $order->fpl_team_name }}</p>
+                        </div>
+                    @endif
+                    
                     @if($order->shipped_at)
                         <div>
                             <span class="text-gray-600 text-sm">Tarikh Penghantaran</span>
