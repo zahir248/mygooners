@@ -101,6 +101,214 @@
             box-shadow: 0 4px 12px rgba(239, 68, 68, 0.15);
             transform: translateY(-1px);
         }
+        
+        /* Mobile-first responsive design */
+        @media (max-width: 767px) {
+            /* Ensure navbar elements are completely hidden on mobile */
+            .navbar-desktop {
+                display: none !important;
+            }
+            
+            /* Mobile menu improvements */
+            .mobile-menu {
+                max-height: calc(100vh - 4rem);
+                overflow-y: auto;
+            }
+            
+            /* Better touch targets for mobile */
+            .mobile-menu a,
+            .mobile-menu button {
+                min-height: 44px;
+                display: flex;
+                align-items: center;
+            }
+        }
+        
+        /* Mobile and Tablet Design (≤1024px) - Including iPad Pro */
+        @media (max-width: 1024px) {
+            /* Hide desktop navigation on mobile and tablet */
+            .navbar-desktop {
+                display: none !important;
+            }
+            
+            /* Hide right side elements on mobile and tablet */
+            .tablet-cart,
+            .tablet-user,
+            .tablet-auth {
+                display: none !important;
+            }
+            
+            /* Show hamburger menu on both mobile and tablet */
+            .mobile-hamburger {
+                display: block !important;
+            }
+            
+            /* Mobile menu improvements */
+            .mobile-menu {
+                max-height: calc(100vh - 4rem);
+                overflow-y: auto;
+            }
+            
+            /* Better touch targets for mobile and tablet */
+            .mobile-menu a,
+            .mobile-menu button {
+                min-height: 44px;
+                display: flex;
+                align-items: center;
+            }
+        }
+        
+        /* Desktop Design (≥1025px) - Only true desktop */
+        @media (min-width: 1025px) {
+            .navbar-desktop {
+                display: flex !important;
+                gap: 1rem;
+            }
+            
+            .navbar-desktop a {
+                padding: 0.75rem 1.25rem;
+                font-size: 0.9rem;
+            }
+            
+            /* Show right side elements on desktop */
+            .tablet-cart,
+            .tablet-user,
+            .tablet-auth {
+                display: block !important;
+            }
+            
+            /* Hide hamburger on desktop */
+            .mobile-hamburger {
+                display: none !important;
+            }
+        }
+        
+        /* Ensure smooth transitions */
+        .mobile-menu-transition {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        /* Logo styling */
+        .navbar-logo {
+            transition: transform 0.2s ease-in-out;
+            border-radius: 0.75rem;
+            overflow: hidden;
+        }
+        
+        .navbar-logo:hover {
+            transform: scale(1.05);
+        }
+        
+        /* Navbar scroll effects */
+        .navbar-scrolled {
+            background-color: white !important;
+            border-bottom: 1px solid #e5e7eb !important;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+        }
+        
+        .navbar-transparent {
+            background-color: transparent !important;
+            border-bottom: none !important;
+            box-shadow: none !important;
+        }
+        
+        /* Force background override for scrolled state */
+        header.navbar-scrolled {
+            background-color: white !important;
+            border-bottom: 1px solid #e5e7eb !important;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+        }
+        
+        /* Force background override for transparent state */
+        header.navbar-transparent {
+            background-color: transparent !important;
+            border-bottom: none !important;
+            box-shadow: none !important;
+        }
+        
+        /* Ensure text is visible on transparent background */
+        .navbar-transparent .text-gray-900 {
+            color: white !important;
+        }
+        
+        .navbar-transparent .text-gray-700 {
+            color: white !important;
+        }
+        
+        .navbar-transparent .text-gray-600 {
+            color: white !important;
+        }
+        
+        /* Hover effects for transparent navbar */
+        .navbar-transparent .hover\:text-red-600:hover {
+            color: #dc2626 !important;
+        }
+        
+        /* Ensure mobile menu button is visible */
+        .navbar-transparent .mobile-hamburger {
+            color: white !important;
+        }
+        
+        .navbar-transparent .mobile-hamburger:hover {
+            color: #dc2626 !important;
+        }
+        
+        /* When scrolled, restore original colors */
+        .navbar-scrolled .text-gray-900 {
+            color: #111827 !important;
+        }
+        
+        .navbar-scrolled .text-gray-700 {
+            color: #374151 !important;
+        }
+        
+        .navbar-scrolled .text-gray-600 {
+            color: #4b5563 !important;
+        }
+        
+        .navbar-scrolled .mobile-hamburger {
+            color: #374151 !important;
+        }
+        
+        .navbar-scrolled .mobile-hamburger:hover {
+            color: #dc2626 !important;
+        }
+        
+        /* Simple responsive design */
+        @media (max-width: 1024px) {
+            .navbar-desktop {
+                display: none !important;
+            }
+            
+            .mobile-hamburger-container {
+                display: block !important;
+            }
+            
+            /* Adjust logo size for mobile/tablet */
+            .navbar-logo {
+                height: 2.5rem;
+            }
+        }
+        
+        @media (min-width: 1025px) {
+            .navbar-desktop {
+                display: flex !important;
+            }
+            
+            .mobile-hamburger-container {
+                display: none !important;
+            }
+            
+            /* Hide mobile menu completely on desktop */
+            .mobile-menu {
+                display: none !important;
+            }
+            
+            /* Larger logo for desktop */
+            .navbar-logo {
+                height: 3rem;
+            }
+        }
     </style>
 
     @stack('styles')
@@ -108,22 +316,31 @@
 <body class="h-full bg-gray-50 font-sans antialiased">
     <div class="min-h-full">
         <!-- Header -->
-        <header class="bg-white border-b border-gray-200 sticky top-0 z-50" x-data="{ mobileMenuOpen: false }">
+        <header class="sticky top-0 z-50 transition-all duration-300" 
+                x-data="{ mobileMenuOpen: false, scrolled: false }" 
+                x-init="
+                    function updateScroll() {
+                        scrolled = window.pageYOffset > 50;
+                    }
+                    window.addEventListener('scroll', updateScroll);
+                    updateScroll();
+                "
+                :class="scrolled ? 'bg-white border-b border-gray-200 shadow-md' : 'bg-transparent'"
+                :style="scrolled ? 'background-color: white !important; border-bottom: 1px solid #e5e7eb !important; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;' : 'background-color: transparent !important; border-bottom: none !important; box-shadow: none !important;'">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <!-- Top bar -->
                 <div class="flex items-center justify-between h-16">
                     <!-- Logo -->
                     <div class="flex-shrink-0">
                         <a href="{{ route('home') }}" class="flex items-center">
-                            <div class="bg-red-600 text-white rounded-lg px-3 py-2 font-bold text-xl">
-                                MG
-                            </div>
-                            <span class="ml-2 text-xl font-bold text-gray-900">MyGooners</span>
+                            <img src="{{ asset('images/official-logo.png') }}" alt="MyGooners Logo" class="h-12 w-auto navbar-logo">
                         </a>
                     </div>
+                    
+
 
                     <!-- Desktop Navigation -->
-                    <nav class="hidden md:flex space-x-8">
+                    <nav class="hidden xl:flex space-x-8 navbar-desktop">
                         <a href="{{ route('home') }}" class="text-gray-900 hover:text-red-600 px-3 py-2 text-sm font-medium transition-colors {{ request()->routeIs('home') ? 'text-red-600 border-b-2 border-red-600' : '' }}">
                             Utama
                         </a>
@@ -143,9 +360,9 @@
 
                     <!-- Right side -->
                     <div class="flex items-center space-x-2 md:space-x-4">
-                        <!-- Cart Icon - Only for logged in users -->
+                        <!-- Cart Icon - Only for logged in users (Hidden on mobile and tablet) -->
                         @auth
-                        <div class="relative group">
+                        <div class="relative group hidden xl:block">
                             <a href="{{ route('cart.index') }}" class="flex items-center space-x-1 md:space-x-3 px-2 md:px-3 py-2 text-gray-700 hover:text-red-600 transition-colors">
                                 <div class="relative">
                                     <svg class="w-5 h-5 md:w-6 md:h-6 text-gray-600" fill="currentColor" viewBox="0 0 24 24">
@@ -161,10 +378,10 @@
                                         </span>
                                     @endif
                                 </div>
-                                <div class="hidden lg:block">
+                                <div class="hidden xl:block">
                                     <span class="text-sm font-medium text-gray-700 group-hover:text-red-600 transition-colors">Troli</span>
                                     <div class="text-xs text-gray-500 cart-total">
-                                        RM{{ number_format(\App\Models\Cart::getOrCreateCart()->total, 2) }}
+                                        RM{{ number_format(\App\Models\Cart::getOrCreateCart()->item_count > 0 ? \App\Models\Cart::getOrCreateCart()->total : 0, 2) }}
                                     </div>
                                 </div>
                             </a>
@@ -173,9 +390,9 @@
                         
 
 
-                        <!-- Auth -->
+                        <!-- Auth (Hidden on mobile and tablet) -->
                         @auth
-                            <div class="relative" x-data="{ open: false }">
+                            <div class="relative hidden xl:block" x-data="{ open: false }">
                                 <button @click="open = !open" class="flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
                                     @if(auth()->user()->profile_image)
                                         @if(Str::startsWith(auth()->user()->profile_image, 'http'))
@@ -191,7 +408,7 @@
                                 <div x-show="open" @click.away="open = false" x-cloak class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
                                     <a href="{{ route('dashboard') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                         <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2zm0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
                                         </svg>
                                         Panel Kawalan
                                     </a>
@@ -221,19 +438,19 @@
                                 </div>
                             </div>
                         @else
-                            <div class="flex space-x-2">
+                            <div class="hidden xl:flex space-x-2">
                                 <a href="{{ route('login') }}" class="text-gray-700 hover:text-red-600 px-3 py-2 text-sm font-medium transition-colors">
                                     Log Masuk
                                 </a>
-                                <a href="{{ route('register') }}" class="bg-red-600 text-white hover:bg-red-700 px-4 py-2 rounded-md text-sm font-medium transition-colors">
+                                <a href="{{ route('register') }}" class="bg-red-600 text-white hover:text-red-700 px-4 py-2 rounded-md text-sm font-medium transition-colors">
                                     Sertai Kami
                                 </a>
                             </div>
                         @endauth
 
                         <!-- Mobile menu button -->
-                        <div class="md:hidden">
-                            <button @click="mobileMenuOpen = !mobileMenuOpen" type="button" class="text-gray-700 hover:text-red-600 focus:outline-none p-1">
+                        <div class="xl:hidden mobile-hamburger-container">
+                            <button @click="mobileMenuOpen = !mobileMenuOpen" type="button" class="text-gray-700 hover:text-red-600 focus:outline-none p-1 mobile-hamburger">
                                 <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
                                 </svg>
@@ -242,31 +459,160 @@
                     </div>
                 </div>
 
-                <!-- Mobile Navigation -->
+                <!-- Mobile Navigation - Right Sidebar -->
                 <div x-show="mobileMenuOpen" 
-                     x-transition:enter="transition ease-out duration-200"
-                     x-transition:enter-start="opacity-0 transform -translate-y-2"
-                     x-transition:enter-end="opacity-100 transform translate-y-0"
-                     x-transition:leave="transition ease-in duration-150"
-                     x-transition:leave-start="opacity-100 transform translate-y-0"
-                     x-transition:leave-end="opacity-0 transform -translate-y-2"
+                     x-transition:enter="transition ease-out duration-300"
+                     x-transition:enter-start="opacity-0 transform translate-x-full"
+                     x-transition:enter-end="opacity-100 transform translate-x-0"
+                     x-transition:leave="transition ease-in duration-200"
+                     x-transition:leave-start="opacity-100 transform translate-x-0"
+                     x-transition:leave-end="opacity-0 transform translate-x-full"
                      x-cloak 
-                     class="md:hidden absolute top-full left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-50">
-                    <div class="px-4 py-4 space-y-1">
-                        <a href="{{ route('home') }}" class="block px-3 py-2 text-base font-medium text-gray-900 hover:text-red-600 hover:bg-gray-50 rounded-md">Utama</a>
-                        <a href="{{ route('blog.index') }}" class="block px-3 py-2 text-base font-medium text-gray-900 hover:text-red-600 hover:bg-gray-50 rounded-md">Berita</a>
-                        <a href="{{ route('videos.index') }}" class="block px-3 py-2 text-base font-medium text-gray-900 hover:text-red-600 hover:bg-gray-50 rounded-md">Video</a>
-                        <a href="{{ route('services.index') }}" class="block px-3 py-2 text-base font-medium text-gray-900 hover:text-red-600 hover:bg-gray-50 rounded-md">Perkhidmatan</a>
-                        <a href="{{ route('shop.index') }}" class="block px-3 py-2 text-base font-medium text-gray-900 hover:text-red-600 hover:bg-gray-50 rounded-md">Kedai</a>
-                        @auth
-                            <div class="border-t border-gray-200 pt-2 mt-2">
-                                <a href="{{ route('dashboard') }}" class="block px-3 py-2 text-base font-medium text-gray-900 hover:text-red-600 hover:bg-gray-50 rounded-md">Panel Kawalan</a>
-                                <a href="{{ route('checkout.orders') }}" class="block px-3 py-2 text-base font-medium text-gray-900 hover:text-red-600 hover:bg-gray-50 rounded-md">Pesanan Saya</a>
-                                <a href="{{ route('addresses.index') }}" class="block px-3 py-2 text-base font-medium text-gray-900 hover:text-red-600 hover:bg-gray-50 rounded-md">Alamat</a>
-                            </div>
-                        @endauth
+                     class="xl:hidden fixed top-0 right-0 h-full w-80 bg-white shadow-2xl z-50 mobile-menu mobile-menu-transition">
+                    
+                    <!-- Header with close button only -->
+                    <div class="flex items-center justify-end p-4 border-b border-gray-200 bg-gray-50">
+                        <button @click="mobileMenuOpen = false" class="text-gray-400 hover:text-gray-600 p-2 rounded-full hover:bg-gray-200 transition-colors">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    
+                    <!-- Menu Content -->
+                    <div class="flex flex-col h-full">
+                        <!-- Main Navigation -->
+                        <div class="flex-1 px-4 py-6 space-y-2">
+                            <a href="{{ route('home') }}" class="flex items-center px-4 py-3 text-base font-medium text-gray-900 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors">
+                                <svg class="w-5 h-5 mr-3 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                                </svg>
+                                Utama
+                            </a>
+                            <a href="{{ route('blog.index') }}" class="flex items-center px-4 py-3 text-base font-medium text-gray-900 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors">
+                                <svg class="w-5 h-5 mr-3 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path>
+                                </svg>
+                                Berita
+                            </a>
+                            <a href="{{ route('videos.index') }}" class="flex items-center px-4 py-3 text-base font-medium text-gray-900 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors">
+                                <svg class="w-5 h-5 mr-3 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                                </svg>
+                                Video
+                            </a>
+                            <a href="{{ route('services.index') }}" class="flex items-center px-4 py-3 text-base font-medium text-gray-900 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors">
+                                <svg class="w-5 h-5 mr-3 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                                </svg>
+                                Perkhidmatan
+                            </a>
+                            <a href="{{ route('shop.index') }}" class="flex items-center px-4 py-3 text-base font-medium text-gray-900 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors">
+                                <svg class="w-5 h-5 mr-3 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                                </svg>
+                                Kedai
+                            </a>
+                        </div>
+                        
+                        <!-- Bottom Section -->
+                        <div class="border-t border-gray-200 p-4 space-y-4">
+                            <!-- Cart Section for Mobile -->
+                            @auth
+                                <div class="bg-gray-50 rounded-lg p-4">
+                                    <a href="{{ route('cart.index') }}" class="flex items-center justify-between text-base font-medium text-gray-900 hover:text-red-600 transition-colors">
+                                        <div class="flex items-center">
+                                            <svg class="w-5 h-5 mr-3 text-gray-600" fill="currentColor" viewBox="0 0 24 24">
+                                                <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12L8.1 13h7.45c.75 0 1.41-.41 1.75-1.03L21.7 4H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/>
+                                            </svg>
+                                            <span>Troli</span>
+                                        </div>
+                                        @if(\App\Models\Cart::getOrCreateCart()->item_count > 0)
+                                            <span class="bg-red-600 text-white text-xs font-bold rounded-full h-6 w-6 flex items-center justify-center">
+                                                {{ \App\Models\Cart::getOrCreateCart()->item_count }}
+                                            </span>
+                                        @endif
+                                    </a>
+                                    <div class="mt-2 text-sm text-gray-600">
+                                        Total: RM{{ number_format(\App\Models\Cart::getOrCreateCart()->total, 2) }}
+                                    </div>
+                                </div>
+                            @endauth
+                            
+                            <!-- User Section for Mobile -->
+                            @auth
+                                <div class="bg-gray-50 rounded-lg p-4">
+                                    <div class="flex items-center mb-3">
+                                        @if(auth()->user()->profile_image)
+                                            @if(Str::startsWith(auth()->user()->profile_image, 'http'))
+                                                <img class="h-10 w-10 rounded-full object-cover mr-3" src="{{ auth()->user()->profile_image }}" alt="{{ auth()->user()->name }}">
+                                            @else
+                                                <img class="h-10 w-10 rounded-full object-cover mr-3" src="{{ asset('storage/' . auth()->user()->profile_image) }}" alt="{{ auth()->user()->name }}">
+                                            @endif
+                                        @else
+                                            <img class="h-10 w-10 rounded-full bg-gray-300 mr-3" src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->profile_image) }}&background=dc2626&color=fff" alt="{{ auth()->user()->name }}">
+                                        @endif
+                                        <div>
+                                            <div class="text-sm font-medium text-gray-900">{{ auth()->user()->name }}</div>
+                                            <div class="text-xs text-gray-500">{{ auth()->user()->email }}</div>
+                                        </div>
+                                    </div>
+                                    <div class="space-y-2">
+                                        <a href="{{ route('dashboard') }}" class="flex items-center text-sm text-gray-700 hover:text-red-600 transition-colors">
+                                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2zm0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                                            </svg>
+                                            Panel Kawalan
+                                        </a>
+                                        <a href="{{ route('checkout.orders') }}" class="flex items-center text-sm text-gray-700 hover:text-red-600 transition-colors">
+                                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                                            </svg>
+                                            Pesanan Saya
+                                        </a>
+                                        <a href="{{ route('addresses.index') }}" class="flex items-center text-sm text-gray-700 hover:text-red-600 transition-colors">
+                                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                            </svg>
+                                            Alamat
+                                        </a>
+                                    </div>
+                                    <form method="POST" action="{{ route('logout') }}" class="mt-3 pt-3 border-t border-gray-200">
+                                        @csrf
+                                        <button type="submit" class="flex items-center w-full text-left text-sm text-red-600 hover:text-red-700 transition-colors">
+                                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                                            </svg>
+                                            Log Keluar
+                                        </button>
+                                    </form>
+                                </div>
+                            @else
+                                <div class="bg-gray-50 rounded-lg p-4 space-y-3">
+                                    <a href="{{ route('login') }}" class="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+                                        Log Masuk
+                                    </a>
+                                    <a href="{{ route('register') }}" class="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 transition-colors">
+                                        Sertai Kami
+                                    </a>
+                                </div>
+                            @endauth
+                        </div>
                     </div>
                 </div>
+                
+                <!-- Backdrop overlay -->
+                <div x-show="mobileMenuOpen" 
+                     x-transition:enter="transition-opacity ease-out duration-300"
+                     x-transition:enter-start="opacity-0"
+                     x-transition:enter-end="opacity-100"
+                     x-transition:leave="transition-opacity ease-in duration-200"
+                     x-transition:leave-start="opacity-100"
+                     x-transition:leave-end="opacity-0"
+                     x-cloak
+                     @click="mobileMenuOpen = false"
+                     class="xl:hidden fixed inset-0 bg-black bg-opacity-50 z-40"></div>
             </div>
         </header>
 
@@ -689,6 +1035,115 @@
             }
         }
     </script>
+    
+    <!-- Navbar scroll effect script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const header = document.querySelector('header');
+            
+            // Check if current page is homepage
+            const isHomepage = window.location.pathname === '/' || window.location.pathname === '/home';
+            
+            function updateNavbar() {
+                if (window.pageYOffset > 50) {
+                    // Scrolled state - white background with dark text (all pages)
+                    header.style.backgroundColor = 'white';
+                    header.style.borderBottom = '1px solid #e5e7eb';
+                    header.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)';
+                    
+                    // Change text colors to dark (only navbar elements, not mobile menu)
+                    const navLinks = header.querySelectorAll('.navbar-desktop a, .text-gray-900, .text-gray-700, .text-gray-600');
+                    navLinks.forEach(link => {
+                        // Don't change colors if inside mobile menu
+                        if (!link.closest('.mobile-menu')) {
+                            link.style.color = '#111827'; // Dark gray
+                        }
+                    });
+                    
+                    // Change cart and user text to dark (only navbar elements)
+                    const cartTexts = header.querySelectorAll('.text-gray-700, .text-gray-600');
+                    cartTexts.forEach(text => {
+                        // Don't change colors if inside mobile menu
+                        if (!text.closest('.mobile-menu')) {
+                            text.style.color = '#374151'; // Medium gray
+                        }
+                    });
+                    
+                    // Change mobile hamburger to dark
+                    const hamburger = header.querySelector('.mobile-hamburger');
+                    if (hamburger) {
+                        hamburger.style.color = '#374151';
+                    }
+                    
+                } else {
+                    // Top position - different behavior based on page
+                    if (isHomepage) {
+                        // Homepage: transparent background with white text
+                        header.style.backgroundColor = 'transparent';
+                        header.style.borderBottom = 'none';
+                        header.style.boxShadow = 'none';
+                        
+                        // Change text colors to white (only navbar elements, not mobile menu)
+                        const navLinks = header.querySelectorAll('.navbar-desktop a, .text-gray-900, .text-gray-700, .text-gray-600');
+                        navLinks.forEach(link => {
+                            // Don't change colors if inside mobile menu
+                            if (!link.closest('.mobile-menu')) {
+                                link.style.color = 'white';
+                            }
+                        });
+                        
+                        // Change cart and user text to white (only navbar elements)
+                        const cartTexts = header.querySelectorAll('.text-gray-700, .text-gray-600');
+                        cartTexts.forEach(text => {
+                            // Don't change colors if inside mobile menu
+                            if (!text.closest('.mobile-menu')) {
+                                text.style.color = 'white';
+                            }
+                        });
+                        
+                        // Change mobile hamburger to white
+                        const hamburger = header.querySelector('.mobile-hamburger');
+                        if (hamburger) {
+                            hamburger.style.color = 'white';
+                        }
+                    } else {
+                        // Other pages: always white background with dark text
+                        header.style.backgroundColor = 'white';
+                        header.style.borderBottom = '1px solid #e5e7eb';
+                        header.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)';
+                        
+                        // Keep text colors dark (only navbar elements, not mobile menu)
+                        const navLinks = header.querySelectorAll('.navbar-desktop a, .text-gray-900, .text-gray-700, .text-gray-600');
+                        navLinks.forEach(link => {
+                            // Don't change colors if inside mobile menu
+                            if (!link.closest('.mobile-menu')) {
+                                link.style.color = '#111827'; // Dark gray
+                            }
+                        });
+                        
+                        // Keep cart and user text dark (only navbar elements)
+                        const cartTexts = header.querySelectorAll('.text-gray-700, .text-gray-600');
+                        cartTexts.forEach(text => {
+                            // Don't change colors if inside mobile menu
+                            if (!text.closest('.mobile-menu')) {
+                                text.style.color = '#374151'; // Medium gray
+                            }
+                        });
+                        
+                        // Keep mobile hamburger dark
+                        const hamburger = header.querySelector('.mobile-hamburger');
+                        if (hamburger) {
+                            hamburger.style.color = '#374151';
+                        }
+                    }
+                }
+            }
+            
+            window.addEventListener('scroll', updateNavbar);
+            updateNavbar(); // Initial check
+        });
+    </script>
+    
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </body>
 </html> 
