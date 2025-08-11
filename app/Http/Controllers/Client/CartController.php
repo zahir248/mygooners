@@ -16,31 +16,11 @@ class CartController extends Controller
         $cart = Cart::getOrCreateCart();
         $cart->load(['items.product', 'items.variation']);
         
-        // Debug logging for cart items
-        foreach ($cart->items as $item) {
-            \Log::info('Cart item loaded:', [
-                'item_id' => $item->id,
-                'product_id' => $item->product_id,
-                'variation_id' => $item->product_variation_id,
-                'product_title' => $item->product->title,
-                'variation_name' => $item->variation ? $item->variation->name : 'null',
-                'display_name' => $item->display_name
-            ]);
-        }
-        
         return view('client.cart.index', compact('cart'));
     }
 
     public function add(Request $request)
     {
-        // Debug logging
-        \Log::info('Cart add request received:', [
-            'product_id' => $request->product_id,
-            'variation_id' => $request->variation_id,
-            'quantity' => $request->quantity,
-            'all_data' => $request->all()
-        ]);
-        
         $request->validate([
             'product_id' => 'required|exists:products,id',
             'variation_id' => 'nullable|exists:product_variations,id',
@@ -58,15 +38,8 @@ class CartController extends Controller
             $variation = ProductVariation::findOrFail($request->variation_id);
             $price = $variation->sale_price ?: $variation->price;
             $variationId = $variation->id;
-            
-            \Log::info('Variation found:', [
-                'variation_id' => $variation->id,
-                'variation_name' => $variation->name,
-                'price' => $price
-            ]);
         } else {
             $price = $product->sale_price ?: $product->price;
-            \Log::info('No variation, using base product price:', ['price' => $price]);
         }
 
         // Check stock availability
@@ -112,14 +85,6 @@ class CartController extends Controller
                 'price' => $price
             ]);
         }
-        
-        \Log::info('Cart item created/updated:', [
-            'cart_item_id' => $cartItem->id,
-            'product_id' => $cartItem->product_id,
-            'variation_id' => $cartItem->product_variation_id,
-            'quantity' => $cartItem->quantity,
-            'price' => $cartItem->price
-        ]);
 
         return response()->json([
             'success' => true,
@@ -229,7 +194,11 @@ class CartController extends Controller
         $sessionId = session()->getId();
 
         if ($user) {
-            return $cart->user_id === $user->id;
+            // Cast both values to integers to handle type mismatches
+            $cartUserId = (int) $cart->user_id;
+            $currentUserId = (int) $user->id;
+            
+            return $cartUserId === $currentUserId;
         } else {
             return $cart->session_id === $sessionId;
         }

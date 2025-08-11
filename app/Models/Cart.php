@@ -14,6 +14,16 @@ class Cart extends Model
         'session_id'
     ];
 
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'user_id' => 'integer',
+        'session_id' => 'string',
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -43,10 +53,16 @@ class Cart extends Model
 
         if ($user) {
             // For authenticated users, get or create cart by user_id
-            return static::firstOrCreate(['user_id' => $user->id]);
+            // Ensure user_id is cast to integer
+            $userId = (int) $user->id;
+            $cart = static::firstOrCreate(['user_id' => $userId]);
+            
+            return $cart;
         } else {
             // For guest users, get or create cart by session_id
-            return static::firstOrCreate(['session_id' => $sessionId]);
+            $cart = static::firstOrCreate(['session_id' => $sessionId]);
+            
+            return $cart;
         }
     }
 }
