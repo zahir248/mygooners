@@ -187,7 +187,7 @@
                 <div>
                     <strong>Nama Manager:</strong> {{ $order->fpl_manager_name }}<br>
                     <strong>Nama Pasukan:</strong> {{ $order->fpl_team_name }}<br>
-                    <strong>Kod Liga:</strong> k7l1d7
+                    <strong>Kod Liga:</strong> 8nx2p4
                 </div>
             </div>
         @endif

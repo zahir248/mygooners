@@ -430,7 +430,7 @@
                         </div>
                         <div class="payment-item">
                             <span class="payment-label">Kod Liga:</span>
-                            <span class="payment-value">k7l1d7</span>
+                            <span class="payment-value">8nx2p4</span>
                         </div>
                     </div>
                 </div>

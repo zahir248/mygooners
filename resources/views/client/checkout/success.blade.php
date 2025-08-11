@@ -244,7 +244,7 @@
                 
                 <div class="flex justify-between">
                     <span class="text-gray-600">Kod Liga:</span>
-                    <span class="font-medium">k7l1d7</span>
+                    <span class="font-medium">8nx2p4</span>
                 </div>
                 
                 <div class="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
@@ -255,7 +255,7 @@
                         <div>
                             <h4 class="text-sm font-medium text-blue-900">Sertai Liga FPL MyGooners</h4>
                             <p class="text-sm text-blue-700 mt-1">
-                                Gunakan kod liga <strong>k7l1d7</strong> untuk menyertai liga Fantasy Premier League MyGooners. 
+                                Gunakan kod liga <strong>8nx2p4</strong> untuk menyertai liga Fantasy Premier League MyGooners. 
                                 Bersaing dengan pemain lain dan menangi hadiah menarik!
                             </p>
                         </div>
