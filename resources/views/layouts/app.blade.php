@@ -73,6 +73,60 @@
             background: #b91c1c;
         }
         
+        /* Mobile menu styling without scrollbar */
+        .mobile-menu {
+            overflow: hidden;
+        }
+        
+        /* Ensure sidebar content fits without scrollbars */
+        .mobile-menu .flex.flex-col {
+            height: 100% !important;
+            overflow: hidden !important;
+        }
+        
+        .mobile-menu .flex-1 {
+            overflow: hidden !important;
+        }
+        
+        /* Hide any scrollbars that might appear */
+        .mobile-menu::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .mobile-menu {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        
+        /* Ensure mobile menu fills entire screen height */
+        .mobile-menu {
+            height: 100vh !important;
+            min-height: 100vh !important;
+        }
+        
+        /* Ensure proper flex layout for full height */
+        .mobile-menu .flex.flex-col {
+            height: 100% !important;
+            min-height: 0 !important;
+        }
+        
+        .mobile-menu .flex-1 {
+            flex: 1 1 auto !important;
+            min-height: 0 !important;
+        }
+        
+        /* Prevent body scrolling when mobile menu is open */
+        body.menu-open {
+            overflow: hidden !important;
+            position: fixed !important;
+            width: 100% !important;
+            height: 100% !important;
+        }
+        
+        html.menu-open {
+            overflow: hidden !important;
+        }
+        
         /* Cart icon animations */
         .cart-count {
             animation: cartPulse 2s infinite;
@@ -253,6 +307,32 @@
             color: #dc2626 !important;
         }
         
+        /* Ensure submenu text is always visible and styled consistently */
+        .navbar-transparent .absolute .text-gray-700 {
+            color: #374151 !important;
+        }
+        
+        .navbar-transparent .absolute .hover\:bg-gray-100:hover {
+            background-color: #f3f4f6 !important;
+        }
+        
+        .navbar-transparent .absolute .hover\:bg-gray-100:hover .text-gray-700 {
+            color: #374151 !important;
+        }
+        
+        /* Force submenu background and text colors regardless of navbar state */
+        .absolute.bg-white .text-gray-700 {
+            color: #374151 !important;
+        }
+        
+        .absolute.bg-white .hover\:bg-gray-100:hover {
+            background-color: #f3f4f6 !important;
+        }
+        
+        .absolute.bg-white .hover\:bg-gray-100:hover .text-gray-700 {
+            color: #374151 !important;
+        }
+        
         /* When scrolled, restore original colors */
         .navbar-scrolled .text-gray-900 {
             color: #111827 !important;
@@ -324,6 +404,127 @@
                     }
                     window.addEventListener('scroll', updateScroll);
                     updateScroll();
+                    
+                    // Function to prevent scrolling
+                    function preventScroll(e) {
+                        if (mobileMenuOpen) {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            return false;
+                        }
+                    }
+                    
+                    // Function to disable scrolling
+                    function disableScroll() {
+                        // Store current scroll position
+                        const scrollY = window.pageYOffset;
+                        
+                        // Apply styles to body
+                        document.body.style.overflow = 'hidden';
+                        document.body.style.position = 'fixed';
+                        document.body.style.top = '-' + scrollY + 'px';
+                        document.body.style.width = '100%';
+                        document.body.style.height = '100%';
+                        
+                        // Also apply to html element
+                        document.documentElement.style.overflow = 'hidden';
+                        document.documentElement.style.position = 'fixed';
+                        document.documentElement.style.top = '-' + scrollY + 'px';
+                        document.documentElement.style.width = '100%';
+                        document.documentElement.style.height = '100%';
+                        
+                        // Create invisible overlay to block all scrolling
+                        createScrollBlocker();
+                        
+                        // Store scroll position for restoration
+                        document.body.dataset.scrollY = scrollY;
+                    }
+                    
+                    // Function to enable scrolling
+                    function enableScroll() {
+                        // Remove styles from body
+                        document.body.style.overflow = '';
+                        document.body.style.position = '';
+                        document.body.style.top = '';
+                        document.body.style.width = '';
+                        document.body.style.height = '';
+                        
+                        // Remove styles from html
+                        document.documentElement.style.overflow = '';
+                        document.documentElement.style.position = '';
+                        document.documentElement.style.top = '';
+                        document.documentElement.style.width = '';
+                        document.documentElement.style.height = '';
+                        
+                        // Remove the scroll blocker overlay
+                        removeScrollBlocker();
+                        
+                        // Restore scroll position
+                        const scrollY = document.body.dataset.scrollY || 0;
+                        window.scrollTo(0, parseInt(scrollY));
+                    }
+                    
+                    // Enhanced prevent scroll function
+                    function preventScroll(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        e.stopImmediatePropagation();
+                        return false;
+                    }
+                    
+                    // Create overlay to block scrolling
+                    function createScrollBlocker() {
+                        // Remove existing blocker if any
+                        const existingBlocker = document.getElementById('scroll-blocker');
+                        if (existingBlocker) {
+                            existingBlocker.remove();
+                        }
+                        
+                        // Create new blocker
+                        const blocker = document.createElement('div');
+                        blocker.id = 'scroll-blocker';
+                        blocker.style.cssText = `
+                            position: fixed;
+                            top: 0;
+                            left: 0;
+                            width: 100vw;
+                            height: 100vh;
+                            background: transparent;
+                            z-index: 9999;
+                            touch-action: none;
+                            -webkit-overflow-scrolling: none;
+                        `;
+                        
+                        // Add event listeners to the blocker
+                        blocker.addEventListener('touchmove', (e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            return false;
+                        }, { passive: false, capture: true });
+                        
+                        blocker.addEventListener('wheel', (e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            return false;
+                        }, { passive: false, capture: true });
+                        
+                        blocker.addEventListener('scroll', (e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            return false;
+                        }, { passive: false, capture: true });
+                        
+                        // Add to body
+                        document.body.appendChild(blocker);
+                    }
+                    
+                    // Remove overlay
+                    function removeScrollBlocker() {
+                        const blocker = document.getElementById('scroll-blocker');
+                        if (blocker) {
+                            blocker.remove();
+                        }
+                    }
                 "
                 :class="scrolled ? 'bg-white border-b border-gray-200 shadow-md' : 'bg-transparent'"
                 :style="scrolled ? 'background-color: white !important; border-bottom: 1px solid #e5e7eb !important; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;' : 'background-color: transparent !important; border-bottom: none !important; box-shadow: none !important;'">
@@ -331,7 +532,7 @@
                 <!-- Top bar -->
                 <div class="flex items-center justify-between h-16">
                     <!-- Logo -->
-                    <div class="flex-shrink-0">
+                    <div class="flex-shrink-0 hidden xl:block">
                         <a href="{{ route('home') }}" class="flex items-center">
                             <img src="{{ asset('images/official-logo.png') }}" alt="MyGooners Logo" class="h-12 w-auto navbar-logo">
                         </a>
@@ -380,7 +581,7 @@
                                 </div>
                                 <div class="hidden xl:block">
                                     <span class="text-sm font-medium text-gray-700 group-hover:text-red-600 transition-colors">Troli</span>
-                                    <div class="text-xs text-gray-500 cart-total">
+                                    <div class="text-xs text-gray-900 cart-total">
                                         RM{{ number_format(\App\Models\Cart::getOrCreateCart()->item_count > 0 ? \App\Models\Cart::getOrCreateCart()->total : 0, 2) }}
                                     </div>
                                 </div>
@@ -393,7 +594,7 @@
                         <!-- Auth (Hidden on mobile and tablet) -->
                         @auth
                             <div class="relative hidden xl:block" x-data="{ open: false }">
-                                <button @click="open = !open" class="flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
+                                <button @click="open = !open" class="flex items-center text-sm rounded-full focus:outline-none">
                                     @if(auth()->user()->profile_image)
                                         @if(Str::startsWith(auth()->user()->profile_image, 'http'))
                                             <img class="h-7 w-7 md:h-8 md:w-8 rounded-full object-cover" src="{{ auth()->user()->profile_image }}" alt="{{ auth()->user()->name }}">
@@ -450,7 +651,14 @@
 
                         <!-- Mobile menu button -->
                         <div class="xl:hidden mobile-hamburger-container">
-                            <button @click="mobileMenuOpen = !mobileMenuOpen" type="button" class="text-gray-700 hover:text-red-600 focus:outline-none p-1 mobile-hamburger">
+                            <button @click="
+                            mobileMenuOpen = !mobileMenuOpen;
+                            if (mobileMenuOpen) {
+                                disableScroll();
+                            } else {
+                                enableScroll();
+                            }
+                        " type="button" class="text-gray-700 hover:text-red-600 focus:outline-none p-1 mobile-hamburger">
                                 <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
                                 </svg>
@@ -462,17 +670,20 @@
                 <!-- Mobile Navigation - Right Sidebar -->
                 <div x-show="mobileMenuOpen" 
                      x-transition:enter="transition ease-out duration-300"
-                     x-transition:enter-start="opacity-0 transform translate-x-full"
+                     x-transition:enter-start="opacity-0 transform -translate-x-full"
                      x-transition:enter-end="opacity-100 transform translate-x-0"
                      x-transition:leave="transition ease-in duration-200"
                      x-transition:leave-start="opacity-100 transform translate-x-0"
-                     x-transition:leave-end="opacity-0 transform translate-x-full"
+                     x-transition:leave-end="opacity-0 transform -translate-x-full"
                      x-cloak 
-                     class="xl:hidden fixed top-0 right-0 h-full w-80 bg-white shadow-2xl z-50 mobile-menu mobile-menu-transition">
+                                           class="xl:hidden fixed top-0 left-0 h-screen w-80 bg-white shadow-2xl z-50 mobile-menu mobile-menu-transition">
                     
                     <!-- Header with close button only -->
                     <div class="flex items-center justify-end p-4 border-b border-gray-200 bg-gray-50">
-                        <button @click="mobileMenuOpen = false" class="text-gray-400 hover:text-gray-600 p-2 rounded-full hover:bg-gray-200 transition-colors">
+                        <button @click="
+                            mobileMenuOpen = false;
+                            enableScroll();
+                        " class="text-gray-400 hover:text-gray-600 p-2 rounded-full hover:bg-gray-200 transition-colors">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                             </svg>
@@ -482,41 +693,53 @@
                     <!-- Menu Content -->
                     <div class="flex flex-col h-full">
                         <!-- Main Navigation -->
-                        <div class="flex-1 px-4 py-6 space-y-2">
-                            <a href="{{ route('home') }}" class="flex items-center px-4 py-3 text-base font-medium text-gray-900 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors">
+                        <div class="flex-1 px-4 py-4 space-y-1">
+                            <a href="{{ route('home') }}" class="flex items-center px-4 py-2 text-base font-medium text-gray-900 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors">
                                 <svg class="w-5 h-5 mr-3 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
                                 </svg>
                                 Utama
                             </a>
-                            <a href="{{ route('blog.index') }}" class="flex items-center px-4 py-3 text-base font-medium text-gray-900 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors">
+                            <a href="{{ route('blog.index') }}" class="flex items-center px-4 py-2 text-base font-medium text-gray-900 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors">
                                 <svg class="w-5 h-5 mr-3 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path>
                                 </svg>
                                 Berita
                             </a>
-                            <a href="{{ route('videos.index') }}" class="flex items-center px-4 py-3 text-base font-medium text-gray-900 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors">
+                            <a href="{{ route('videos.index') }}" class="flex items-center px-4 py-2 text-base font-medium text-gray-900 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors">
                                 <svg class="w-5 h-5 mr-3 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
                                 </svg>
                                 Video
                             </a>
-                            <a href="{{ route('services.index') }}" class="flex items-center px-4 py-3 text-base font-medium text-gray-900 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors">
+                            <a href="{{ route('services.index') }}" class="flex items-center px-4 py-2 text-base font-medium text-gray-900 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors">
                                 <svg class="w-5 h-5 mr-3 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
                                 </svg>
                                 Perkhidmatan
                             </a>
-                            <a href="{{ route('shop.index') }}" class="flex items-center px-4 py-3 text-base font-medium text-gray-900 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors">
+                            <a href="{{ route('shop.index') }}" class="flex items-center px-4 py-2 text-base font-medium text-gray-900 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors">
                                 <svg class="w-5 h-5 mr-3 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
                                 </svg>
                                 Kedai
                             </a>
+                            
+                            <!-- Auth buttons for non-logged in users -->
+                            @guest
+                                <div class="pt-2 space-y-2">
+                                    <a href="{{ route('login') }}" class="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:text-red-600 hover:border-red-300 transition-colors">
+                                        Log Masuk
+                                    </a>
+                                    <a href="{{ route('register') }}" class="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 transition-colors">
+                                        Sertai Kami
+                                    </a>
+                                </div>
+                            @endguest
                         </div>
                         
                         <!-- Bottom Section -->
-                        <div class="border-t border-gray-200 p-4 space-y-4">
+                        <div class="border-t border-gray-200 p-4 space-y-3">
                             <!-- Cart Section for Mobile -->
                             @auth
                                 <div class="bg-gray-50 rounded-lg p-4">
@@ -587,15 +810,9 @@
                                             Log Keluar
                                         </button>
                                     </form>
-                                </div>
-                            @else
-                                <div class="bg-gray-50 rounded-lg p-4 space-y-3">
-                                    <a href="{{ route('login') }}" class="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
-                                        Log Masuk
-                                    </a>
-                                    <a href="{{ route('register') }}" class="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 transition-colors">
-                                        Sertai Kami
-                                    </a>
+                                    
+                                    <!-- Additional bottom spacing -->
+                                    <div class="h-8"></div>
                                 </div>
                             @endauth
                         </div>
