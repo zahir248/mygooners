@@ -34,6 +34,22 @@ class Article extends Model
         'is_featured' => 'boolean'
     ];
 
+    /**
+     * Ensure tags is always an array
+     */
+    public function getTagsAttribute($value)
+    {
+        if (is_null($value)) {
+            return [];
+        }
+        
+        if (is_string($value)) {
+            return json_decode($value, true) ?: [];
+        }
+        
+        return $value ?: [];
+    }
+
     public function scopePublished($query)
     {
         return $query->where('status', 'published');
@@ -90,5 +106,30 @@ class Article extends Model
     public function getFormattedPublishedDateAttribute()
     {
         return $this->published_at ? $this->published_at->format('j M Y') : 'Tidak Diterbitkan';
+    }
+
+    /**
+     * Get content with line breaks converted to HTML
+     */
+    public function getFormattedContentAttribute()
+    {
+        if (!$this->content) {
+            return '';
+        }
+        
+        // Split content by line breaks to create paragraphs
+        $paragraphs = preg_split('/\n/', $this->content);
+        
+        $formattedContent = '';
+        foreach ($paragraphs as $paragraph) {
+            $paragraph = trim($paragraph);
+            if (!empty($paragraph)) {
+                // Convert single line breaks within paragraphs to <br> tags
+                $paragraph = nl2br($paragraph);
+                $formattedContent .= '<p class="mb-4">' . $paragraph . '</p>';
+            }
+        }
+        
+        return $formattedContent;
     }
 } 

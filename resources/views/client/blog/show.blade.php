@@ -21,9 +21,11 @@
     <!-- Article specific -->
     <meta property="article:published_time" content="{{ $article->published_at->toISOString() }}">
     <meta property="article:section" content="{{ $article->category }}">
-    @foreach($article->tags as $tag)
-        <meta property="article:tag" content="{{ $tag }}">
-    @endforeach
+    @if($article->tags && is_array($article->tags))
+        @foreach($article->tags as $tag)
+            <meta property="article:tag" content="{{ $tag }}">
+        @endforeach
+    @endif
 @endpush
 
 @section('content')
@@ -102,7 +104,7 @@
                 <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 leading-tight">
                     {{ $article->title }}
                 </h1>
-                <div class="flex items-center text-white/90 text-sm">
+                <div class="flex items-center text-white text-sm">
                     <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
                         <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path>
                     </svg>
@@ -144,20 +146,22 @@
 
             <!-- Article Content -->
             <div class="prose prose-lg max-w-none prose-headings:text-gray-900 prose-p:text-gray-700 prose-a:text-red-600 prose-a:no-underline hover:prose-a:underline prose-strong:text-gray-900 prose-blockquote:border-red-600 prose-blockquote:text-gray-600">
-                {!! $article->content !!}
+                {!! $article->formatted_content !!}
             </div>
 
             <!-- Tags -->
-            <div class="mt-12 pt-8 border-t border-gray-200">
-                <h3 class="text-sm font-medium text-gray-900 mb-4">Tags</h3>
-                <div class="flex flex-wrap gap-2">
-                    @foreach($article->tags as $tag)
-                        <span class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1 rounded-full text-sm font-medium transition-colors cursor-pointer">
-                            #{{ $tag }}
-                        </span>
-                    @endforeach
+            @if($article->tags && is_array($article->tags) && count($article->tags) > 0)
+                <div class="mt-12 pt-8 border-t border-gray-200">
+                    <h3 class="text-sm font-medium text-gray-900 mb-4">Tags</h3>
+                    <div class="flex flex-wrap gap-2">
+                        @foreach($article->tags as $tag)
+                            <span class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1 rounded-full text-sm font-medium transition-colors cursor-pointer">
+                                #{{ $tag }}
+                            </span>
+                        @endforeach
+                    </div>
                 </div>
-            </div>
+            @endif
 
             <!-- Social Sharing -->
             <div class="mt-8 pt-8 border-t border-gray-200">
@@ -197,7 +201,7 @@
 </div>
 
 <!-- Related Articles -->
-@if($relatedArticles->count() > 0)
+@if($relatedArticles && $relatedArticles->count() > 0)
     <div class="bg-gray-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
             <div class="text-center mb-12">

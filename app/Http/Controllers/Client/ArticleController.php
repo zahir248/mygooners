@@ -81,6 +81,11 @@ class ArticleController extends Controller
             $relatedArticles = $relatedArticles->merge($additionalArticles);
         }
 
+        // Ensure relatedArticles is always a collection
+        if (!$relatedArticles) {
+            $relatedArticles = collect();
+        }
+
         return view('client.blog.show', compact('article', 'relatedArticles'));
     }
 
