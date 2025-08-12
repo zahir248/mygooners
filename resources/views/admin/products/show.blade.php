@@ -188,7 +188,9 @@
 
                             <div>
                                 <dt class="text-sm font-medium text-gray-500">Deskripsi</dt>
-                                <dd class="mt-1 text-sm text-gray-900">{{ $product->description }}</dd>
+                                <dd class="mt-1 text-sm text-gray-900">
+                                    <p class="whitespace-pre-line">{{ $product->description }}</p>
+                                </dd>
                             </div>
 
                             @if($product->tags)

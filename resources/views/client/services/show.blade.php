@@ -123,7 +123,7 @@
             <div class="bg-white rounded-xl shadow-lg p-8 mb-8">
                 <h2 class="text-2xl font-bold text-gray-900 mb-4">Mengenai Perkhidmatan Ini</h2>
                 <div class="prose max-w-none text-gray-700 leading-relaxed">
-                    {{ $service->description }}
+                    <p class="whitespace-pre-line">{{ $service->description }}</p>
                 </div>
                 
                 @if($service->tags)

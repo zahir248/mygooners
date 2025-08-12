@@ -369,7 +369,7 @@
             <div class="mb-6 sm:mb-8">
                 <h3 class="text-lg sm:text-xl font-semibold text-gray-900 mb-2 sm:mb-3">Penerangan</h3>
                 <div class="prose text-gray-700 leading-relaxed text-sm sm:text-base">
-                    {{ $product->description }}
+                    <p class="whitespace-pre-line">{{ $product->description }}</p>
                 </div>
             </div>
 
