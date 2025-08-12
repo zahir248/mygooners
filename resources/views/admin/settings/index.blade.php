@@ -77,6 +77,9 @@
                                                 <input type="hidden" name="settings[{{ $loop->index }}][group]" value="{{ $setting->group }}">
                                                 <input type="hidden" name="settings[{{ $loop->index }}][description]" value="{{ $setting->description }}">
                                                 
+                                                <!-- Hidden input to always send a value -->
+                                                <input type="hidden" name="settings[{{ $loop->index }}][value]" value="false">
+                                                
                                                 <input type="checkbox" 
                                                        name="settings[{{ $loop->index }}][value]" 
                                                        value="true"
