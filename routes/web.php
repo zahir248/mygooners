@@ -470,6 +470,13 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
         Route::post('/reset', [\App\Http\Controllers\Admin\SettingsController::class, 'reset'])->name('admin.settings.reset');
     });
     
+    // Logs Management
+    Route::prefix('logs')->group(function () {
+        Route::get('/', [\App\Http\Controllers\Admin\LogController::class, 'index'])->name('admin.logs.index');
+        Route::post('/clear', [\App\Http\Controllers\Admin\LogController::class, 'clear'])->name('admin.logs.clear');
+        Route::get('/download', [\App\Http\Controllers\Admin\LogController::class, 'download'])->name('admin.logs.download');
+    });
+    
     // Videos Management
     Route::prefix('videos')->group(function () {
         Route::get('/', [AdminVideoController::class, 'index'])->name('admin.videos.index');
