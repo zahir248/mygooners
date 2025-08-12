@@ -1514,12 +1514,35 @@ class DirectCheckoutController extends Controller
             $invoiceService = new \App\Services\InvoiceService();
             $pdfPath = $invoiceService->generateInvoice($order);
             
+            // Check if invoice generation failed
+            if (!$pdfPath) {
+                \Log::error('Invoice generation returned null', [
+                    'order_id' => $orderId,
+                    'user_id' => auth()->id()
+                ]);
+                return back()->with('error', 'Gagal menjana invois. Sila cuba lagi.');
+            }
+            
+            // Check if file exists
+            if (!file_exists($pdfPath)) {
+                \Log::error('Generated invoice file does not exist', [
+                    'order_id' => $orderId,
+                    'user_id' => auth()->id(),
+                    'filepath' => $pdfPath
+                ]);
+                return back()->with('error', 'Fail invois tidak dijumpai. Sila cuba lagi.');
+            }
+            
             // Get the filename from the path
             $filename = basename($pdfPath);
             
+            // Determine content type based on file extension
+            $extension = pathinfo($filename, PATHINFO_EXTENSION);
+            $contentType = $this->getContentType($extension);
+            
             // Return the file as a download response
             return response()->download($pdfPath, $filename, [
-                'Content-Type' => 'application/pdf',
+                'Content-Type' => $contentType,
                 'Content-Disposition' => 'attachment; filename="' . $filename . '"'
             ]);
             
@@ -1557,10 +1580,35 @@ class DirectCheckoutController extends Controller
             $invoiceService = new \App\Services\InvoiceService();
             $pdfPath = $invoiceService->generateInvoice($order);
             
+            // Check if invoice generation failed
+            if (!$pdfPath) {
+                \Log::error('Invoice generation returned null', [
+                    'order_id' => $orderId,
+                    'user_id' => auth()->id()
+                ]);
+                return back()->with('error', 'Gagal menjana invois. Sila cuba lagi.');
+            }
+            
+            // Check if file exists
+            if (!file_exists($pdfPath)) {
+                \Log::error('Generated invoice file does not exist', [
+                    'order_id' => $orderId,
+                    'user_id' => auth()->id(),
+                    'filepath' => $pdfPath
+                ]);
+                return back()->with('error', 'Fail invois tidak dijumpai. Sila cuba lagi.');
+            }
+            
+            // Get the filename and determine content type
+            $filename = basename($pdfPath);
+            $extension = pathinfo($filename, PATHINFO_EXTENSION);
+            $contentType = $this->getContentType($extension);
+            $disposition = $extension === 'html' ? 'inline' : 'inline';
+            
             // Return the file to be displayed in browser
             return response()->file($pdfPath, [
-                'Content-Type' => 'application/pdf',
-                'Content-Disposition' => 'inline; filename="' . basename($pdfPath) . '"'
+                'Content-Type' => $contentType,
+                'Content-Disposition' => $disposition . '; filename="' . $filename . '"'
             ]);
             
         } catch (\Exception $e) {
@@ -1570,6 +1618,26 @@ class DirectCheckoutController extends Controller
             ]);
             
             return back()->with('error', 'Gagal memaparkan invois. Sila cuba lagi.');
+        }
+    }
+
+    private function getContentType($extension)
+    {
+        switch ($extension) {
+            case 'pdf':
+                return 'application/pdf';
+            case 'doc':
+            case 'docx':
+                return 'application/msword';
+            case 'xls':
+            case 'xlsx':
+                return 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+            case 'txt':
+                return 'text/plain';
+            case 'html':
+                return 'text/html';
+            default:
+                return 'application/octet-stream'; // Default for unknown types
         }
     }
 }
