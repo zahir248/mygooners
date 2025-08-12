@@ -463,6 +463,13 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
         Route::delete('/{id}', [SellerRequestController::class, 'destroy'])->name('admin.seller-requests.destroy');
     });
     
+    // Settings Management
+    Route::prefix('settings')->group(function () {
+        Route::get('/', [\App\Http\Controllers\Admin\SettingsController::class, 'index'])->name('admin.settings.index');
+        Route::post('/', [\App\Http\Controllers\Admin\SettingsController::class, 'update'])->name('admin.settings.update');
+        Route::post('/reset', [\App\Http\Controllers\Admin\SettingsController::class, 'reset'])->name('admin.settings.reset');
+    });
+    
     // Videos Management
     Route::prefix('videos')->group(function () {
         Route::get('/', [AdminVideoController::class, 'index'])->name('admin.videos.index');

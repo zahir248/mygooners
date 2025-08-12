@@ -121,23 +121,44 @@
             <!-- Payment Methods -->
             <div class="space-y-4 mb-6">
                 <!-- ToyyibPay -->
-                <label class="flex items-center p-4 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                <label class="flex items-center p-4 border border-gray-300 rounded-lg cursor-pointer hover:border-red-500 transition-colors">
                     <input type="radio" name="payment_method" value="toyyibpay" class="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300" {{ old('payment_method', $order->payment_method) === 'toyyibpay' ? 'checked' : '' }}>
                     <div class="ml-3 flex-1">
                         <div class="flex items-center justify-between">
                             <div>
                                 <p class="text-sm font-medium text-gray-900">ToyyibPay</p>
-                                <p class="text-xs text-gray-500">Bayar menggunakan kad kredit/debit, e-wallet, atau internet banking</p>
+                                <p class="text-xs text-gray-500">Pembayaran selamat melalui ToyyibPay</p>
                             </div>
                             <div class="flex items-center space-x-2">
-                                <img src="https://toyyibpay.com/images/logo.png" alt="ToyyibPay" class="h-8 w-auto">
+                                <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a2 3 0 003 3z"></path>
+                                </svg>
                             </div>
                         </div>
                     </div>
                 </label>
 
-                <!-- Hidden Stripe option - kept for form functionality but not visible to users -->
-                <input type="radio" name="payment_method" value="stripe" class="hidden" {{ old('payment_method', $order->payment_method) === 'stripe' ? 'checked' : '' }}>
+                @if(setting('stripe_payment_enabled', false))
+                    <label class="flex items-center p-4 border border-gray-300 rounded-lg cursor-pointer hover:border-red-500 transition-colors">
+                        <input type="radio" name="payment_method" value="stripe" class="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300" {{ old('payment_method', $order->payment_method) === 'stripe' ? 'checked' : '' }}>
+                        <div class="ml-3 flex-1">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm font-medium text-gray-900">Stripe</p>
+                                    <p class="text-xs text-gray-500">Bayar menggunakan kad kredit/debit</p>
+                                </div>
+                                <div class="flex items-center space-x-2">
+                                    <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a2 3 0 003 3z"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    </label>
+                @else
+                    <!-- Hidden Stripe option - kept for form functionality but not visible to users -->
+                    <input type="radio" name="payment_method" value="stripe" class="hidden" {{ old('payment_method', $order->payment_method) === 'stripe' ? 'checked' : '' }}>
+                @endif
             </div>
 
             @error('payment_method')

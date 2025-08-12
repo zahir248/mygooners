@@ -451,22 +451,47 @@
                             <label class="flex items-center p-4 border border-gray-300 rounded-lg cursor-pointer hover:border-red-500 transition-colors">
                                 <input type="radio" name="payment_method" value="toyyibpay" 
                                        {{ old('payment_method', 'toyyibpay') == 'toyyibpay' ? 'checked' : '' }}
-                                       class="text-red-600 focus:ring-red-500" checked>
-                                <div class="ml-3">
-                                    <div class="flex items-center">
-                                        <svg class="w-6 h-6 text-blue-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
-                                        </svg>
-                                        <span class="font-medium">ToyyibPay</span>
+                                       class="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300" checked>
+                                <div class="ml-3 flex-1">
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <p class="text-sm font-medium text-gray-900">ToyyibPay</p>
+                                            <p class="text-xs text-gray-500">Pembayaran selamat melalui ToyyibPay</p>
+                                        </div>
+                                        <div class="flex items-center space-x-2">
+                                            <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a2 3 0 003 3z"></path>
+                                            </svg>
+                                        </div>
                                     </div>
-                                    <p class="text-sm text-gray-600">Pembayaran selamat melalui ToyyibPay</p>
                                 </div>
                             </label>
 
-                            <!-- Hidden Stripe option - kept for form functionality but not visible to users -->
-                            <input type="radio" name="payment_method" value="stripe" 
-                                   {{ old('payment_method') == 'stripe' ? 'checked' : '' }}
-                                   class="hidden">
+                            @if(setting('stripe_payment_enabled', false))
+                                <label class="flex items-center p-4 border border-gray-300 rounded-lg cursor-pointer hover:border-red-500 transition-colors">
+                                    <input type="radio" name="payment_method" value="stripe" 
+                                           {{ old('payment_method') == 'stripe' ? 'checked' : '' }}
+                                           class="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300">
+                                    <div class="ml-3 flex-1">
+                                        <div class="flex items-center justify-between">
+                                            <div>
+                                                <p class="text-sm font-medium text-gray-900">Stripe</p>
+                                                <p class="text-xs text-gray-500">Bayar menggunakan kad kredit/debit</p>
+                                            </div>
+                                            <div class="flex items-center space-x-2">
+                                                <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a2 3 0 003 3z"></path>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </label>
+                            @else
+                                <!-- Hidden Stripe option - kept for form functionality but not visible to users -->
+                                <input type="radio" name="payment_method" value="stripe" 
+                                       {{ old('payment_method') == 'stripe' ? 'checked' : '' }}
+                                       class="hidden">
+                            @endif
                         </div>
                         
                         @error('payment_method')
