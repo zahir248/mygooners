@@ -408,7 +408,7 @@ class CheckoutController extends Controller
 
     public function show($orderId)
     {
-        $order = Order::with(['items.product', 'items.variation'])
+        $order = Order::with(['items.product', 'items.variation', 'latestRefund'])
                      ->where('user_id', auth()->id())
                      ->findOrFail($orderId);
 
@@ -424,7 +424,12 @@ class CheckoutController extends Controller
         
         // Filter by status if provided
         if ($status && in_array($status, ['pending', 'processing', 'shipped', 'delivered', 'cancelled', 'refunded'])) {
-            $query->where('status', $status);
+            if ($status === 'cancelled') {
+                // For cancelled status, show both cancelled and refunded orders
+                $query->whereIn('status', ['cancelled', 'refunded']);
+            } else {
+                $query->where('status', $status);
+            }
         }
         
         $orders = $query->orderBy('created_at', 'desc')->paginate(10);

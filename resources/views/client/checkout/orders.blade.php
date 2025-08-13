@@ -323,6 +323,30 @@
                                 @endif
                                 @endif
 
+                                @if($order->status === 'delivered')
+                                    @if($order->canRequestRefund())
+                                        <a href="{{ route('checkout.refunds.create', $order->id) }}" 
+                                           class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                                            Mohon Refund
+                                        </a>
+                                        <div class="text-xs text-green-600 mt-1">
+                                            ⏰ Anda mempunyai {{ $order->getFormattedRefundCountdown() }} untuk memohon refund
+                                        </div>
+                                    @elseif($order->hasPendingRefund())
+                                        <span class="bg-yellow-100 text-yellow-800 px-3 py-2 rounded-lg text-sm font-medium">
+                                            ⏳ Refund Menunggu Semakan
+                                        </span>
+                                    @elseif($order->hasActiveRefund())
+                                        <span class="bg-blue-100 text-blue-800 px-3 py-2 rounded-lg text-sm font-medium">
+                                            📋 Refund Sedang Diproses
+                                        </span>
+                                    @else
+                                        <span class="bg-gray-100 text-gray-600 px-3 py-2 rounded-lg text-sm font-medium">
+                                            ⏰ Tempoh refund telah tamat
+                                        </span>
+                                    @endif
+                                @endif
+
                                 @if(in_array($order->status, ['pending', 'processing']) && 
                                     ($order->payment_status !== 'paid' || 
                                      ($order->payment_status === 'paid' && $order->created_at->diffInHours(now()) <= 24)))
@@ -371,7 +395,7 @@
                             Tiada Pesanan Telah Diterima
                             @break
                         @case('cancelled')
-                            Tiada Pesanan Dibatalkan
+                            Tiada Pesanan Dibatalkan/Dikembalikan
                             @break
                         @case('refunded')
                             Tiada Pesanan Dikembalikan
@@ -399,7 +423,7 @@
                             Tiada pesanan dengan status "Telah Diterima" ditemui.
                             @break
                         @case('cancelled')
-                            Tiada pesanan dengan status "Dibatalkan" ditemui.
+                            Tiada pesanan dengan status "Dibatalkan/Dikembalikan" ditemui.
                             @break
                         @case('refunded')
                             Tiada pesanan dengan status "Dikembalikan" ditemui.

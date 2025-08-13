@@ -210,6 +210,17 @@
                         </a>
                     </li>
 
+                    <!-- Refunds -->
+                    <li>
+                        <a href="{{ route('admin.refunds.index') }}" 
+                           class="flex items-center px-4 py-2 text-sm font-medium rounded-md transition-colors {{ request()->routeIs('admin.refunds.*') ? 'bg-admin-700 text-white' : 'text-admin-300 hover:bg-admin-700 hover:text-white' }}">
+                            <svg class="mr-3 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"></path>
+                            </svg>
+                            Refund
+                        </a>
+                    </li>
+
                     <!-- Users -->
                     <li x-data="{ open: {{ request()->routeIs('admin.users.*') || request()->routeIs('admin.seller-requests.*') ? 'true' : 'false' }} }">
                         <button @click="open = !open" type="button"

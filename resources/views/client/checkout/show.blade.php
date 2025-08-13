@@ -98,6 +98,18 @@
                     @elseif($order->status === 'cancelled')
                         <p>• <strong>Pesanan ini telah dibatalkan</strong> pada {{ $order->updated_at->format('d/m/Y H:i') }}</p>
                         <p>• <strong>Refund:</strong> Jika pembayaran telah dibuat, refund akan diproses dalam 3-5 hari bekerja</p>
+                    @elseif($order->status === 'refunded')
+                        <p>• <strong>Pesanan ini telah dikembalikan</strong> dan refund sedang diproses</p>
+                        @if($order->latestRefund)
+                            <p>• <strong>Status Refund:</strong> {{ ucfirst($order->latestRefund->status) }}</p>
+                            @if($order->latestRefund->status === 'completed')
+                                <p>• <strong>Refund Selesai:</strong> Jumlah {{ $order->latestRefund->getFormattedRefundAmount() }} telah diproses</p>
+                            @elseif($order->latestRefund->status === 'processing')
+                                <p>• <strong>Refund Sedang Diproses:</strong> Sila tunggu sehingga 3-5 hari bekerja</p>
+                            @elseif($order->latestRefund->status === 'approved')
+                                <p>• <strong>Refund Diluluskan:</strong> Sila lengkapkan maklumat bank dan tracking untuk meneruskan proses</p>
+                            @endif
+                        @endif
                     @endif
                     
                     @if($order->payment_status === 'failed')
@@ -243,6 +255,118 @@
                         </div>
                     @endforeach
                 </div>
+
+                @if($order->status === 'refunded' && $order->latestRefund)
+                <!-- Refund Details Section -->
+                <div class="px-6 py-4 border-t border-gray-200 bg-red-50">
+                    <div class="flex items-center space-x-2 mb-4">
+                        <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        <h3 class="text-lg font-semibold text-red-900">Maklumat Refund</h3>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-white rounded-lg p-4 border border-red-200">
+                            <h4 class="font-medium text-red-900 mb-2">Status Refund</h4>
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
+                                @switch($order->latestRefund->status)
+                                    @case('pending')
+                                        bg-yellow-100 text-yellow-800
+                                        @break
+                                    @case('approved')
+                                        bg-blue-100 text-blue-800
+                                        @break
+                                    @case('processing')
+                                        bg-purple-100 text-purple-800
+                                        @break
+                                    @case('completed')
+                                        bg-green-100 text-green-800
+                                        @break
+                                    @case('rejected')
+                                        bg-red-100 text-red-800
+                                        @break
+                                    @default
+                                        bg-gray-100 text-gray-800
+                                @endswitch">
+                                @switch($order->latestRefund->status)
+                                    @case('pending')
+                                        Menunggu Semakan
+                                        @break
+                                    @case('approved')
+                                        Diluluskan
+                                        @break
+                                    @case('processing')
+                                        Sedang Diproses
+                                        @break
+                                    @case('completed')
+                                        Selesai
+                                        @break
+                                    @case('rejected')
+                                        Ditolak
+                                        @break
+                                    @default
+                                        {{ ucfirst($order->latestRefund->status) }}
+                                @endswitch
+                            </span>
+                        </div>
+                        
+                        <div class="bg-white rounded-lg p-4 border border-red-200">
+                            <h4 class="font-medium text-red-900 mb-2">Jumlah Refund</h4>
+                            <p class="text-lg font-bold text-red-900">{{ $order->latestRefund->getFormattedRefundAmount() }}</p>
+                        </div>
+                        
+                        <div class="bg-white rounded-lg p-4 border border-red-200">
+                            <h4 class="font-medium text-red-900 mb-2">Sebab Refund</h4>
+                            <p class="text-sm text-gray-700">{{ $order->latestRefund->refund_reason }}</p>
+                        </div>
+                        
+                        <div class="bg-white rounded-lg p-4 border border-red-200">
+                            <h4 class="font-medium text-red-900 mb-2">Tarikh Permohonan</h4>
+                            <p class="text-sm text-gray-700">{{ $order->latestRefund->created_at->format('d/m/Y H:i') }}</p>
+                        </div>
+                    </div>
+
+                    @if($order->latestRefund->admin_notes)
+                    <div class="mt-4 bg-white rounded-lg p-4 border border-red-200">
+                        <h4 class="font-medium text-red-900 mb-2">Nota Admin</h4>
+                        <p class="text-sm text-gray-700">{{ $order->latestRefund->admin_notes }}</p>
+                    </div>
+                    @endif
+
+                    @if($order->latestRefund->rejection_reason)
+                    <div class="mt-4 bg-white rounded-lg p-4 border border-red-200">
+                        <h4 class="font-medium text-red-900 mb-2">Sebab Penolakan</h4>
+                        <p class="text-sm text-red-700">{{ $order->latestRefund->rejection_reason }}</p>
+                    </div>
+                    @endif
+
+                    @if($order->latestRefund->receipt_image)
+                    <div class="mt-4 bg-white rounded-lg p-4 border border-red-200">
+                        <h4 class="font-medium text-red-900 mb-2">Resit Transaksi Refund</h4>
+                        <div class="text-center">
+                            <a href="{{ $order->latestRefund->receipt_image_url }}" target="_blank" class="block group">
+                                <img src="{{ $order->latestRefund->receipt_image_url }}" 
+                                     alt="Resit Transaksi Refund" 
+                                     class="max-w-full h-auto max-h-64 object-contain rounded-lg border border-red-200 mx-auto group-hover:opacity-80 transition-opacity">
+                                <p class="text-sm text-gray-600 mt-2 group-hover:text-blue-600 transition-colors">Resit transaksi refund telah disediakan oleh admin</p>
+                            </a>
+                        </div>
+                    </div>
+                    @endif
+
+                    <div class="mt-4 flex justify-center">
+                        <a href="{{ route('checkout.refunds.show', $order->latestRefund->id) }}" 
+                           class="inline-flex items-center px-4 py-2 bg-red-600 text-white text-sm font-medium rounded-lg hover:bg-red-700 transition-colors">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                            </svg>
+                            Lihat Detail Lengkap Refund
+                        </a>
+                    </div>
+                </div>
+                @endif
                 
                 <!-- Order Summary -->
                 <div class="px-6 py-4 border-t border-gray-200 bg-gray-50">

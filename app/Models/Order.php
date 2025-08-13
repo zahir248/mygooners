@@ -61,6 +61,83 @@ class Order extends Model
         return $this->hasMany(OrderItem::class);
     }
 
+    public function refunds()
+    {
+        return $this->hasMany(Refund::class);
+    }
+
+    public function latestRefund()
+    {
+        return $this->hasOne(Refund::class)->latest();
+    }
+
+    public function hasActiveRefund()
+    {
+        return $this->refunds()->whereIn('status', ['approved', 'processing'])->exists();
+    }
+
+    public function hasPendingRefund()
+    {
+        return $this->refunds()->where('status', 'pending')->exists();
+    }
+
+    public function canRequestRefund()
+    {
+        // Check if order is delivered and within 3 days
+        if ($this->status !== 'delivered' || !$this->delivered_at) {
+            return false;
+        }
+
+        // Check if already has active refund
+        if ($this->hasActiveRefund()) {
+            return false;
+        }
+
+        $daysSinceDelivery = $this->delivered_at->diffInDays(now());
+        return $daysSinceDelivery <= 3;
+    }
+
+    public function getDaysRemainingForRefund()
+    {
+        if ($this->status !== 'delivered' || !$this->delivered_at) {
+            return null;
+        }
+
+        $daysSinceDelivery = $this->delivered_at->diffInDays(now());
+        $daysRemaining = 3 - $daysSinceDelivery;
+        
+        return max(0, $daysRemaining);
+    }
+
+    /**
+     * Get formatted countdown string for refund deadline
+     */
+    public function getFormattedRefundCountdown()
+    {
+        if ($this->status !== 'delivered' || !$this->delivered_at) {
+            return null;
+        }
+
+        $now = now();
+        $refundDeadline = $this->delivered_at->addDays(3);
+        
+        if ($now >= $refundDeadline) {
+            return 'Tempoh refund telah tamat';
+        }
+
+        $diff = $now->diff($refundDeadline);
+        
+        if ($diff->days > 0) {
+            return $diff->days . ' hari lagi';
+        } elseif ($diff->h > 0) {
+            return $diff->h . ' jam lagi';
+        } elseif ($diff->i > 0) {
+            return $diff->i . ' minit lagi';
+        } else {
+            return 'Sekarang';
+        }
+    }
+
     public function generateOrderNumber()
     {
         $prefix = 'MG';

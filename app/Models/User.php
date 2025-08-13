@@ -107,6 +107,11 @@ class User extends Authenticatable
         return $this->hasMany(Order::class);
     }
 
+    public function refunds()
+    {
+        return $this->hasMany(Refund::class);
+    }
+
     public function isAdmin()
     {
         return $this->role === 'admin' || $this->role === 'super_admin';
