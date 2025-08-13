@@ -19,7 +19,7 @@
                         <!-- Product Image -->
                         <div class="relative h-64 overflow-hidden">
                             @if($product->images && count($product->images) > 0)
-                                <img src="{{ asset('storage/' . $product->images[0]) }}" 
+                                <img src="{{ route('product.image', basename($product->images[0])) }}" 
                                      alt="{{ $product->title }}" 
                                      class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                             @else
