@@ -189,7 +189,7 @@ class OrderController extends Controller
      */
     public function export(Request $request)
     {
-        $query = Order::with(['user', 'items']);
+        $query = Order::with(['user', 'items.product', 'items.variation']);
 
         // Apply filters
         if ($request->filled('status')) {
@@ -216,34 +216,78 @@ class OrderController extends Controller
         $callback = function() use ($orders) {
             $file = fopen('php://output', 'w');
             
-            // CSV headers
+            // CSV headers - Enhanced with complete details
             fputcsv($file, [
                 'Order Number',
-                'Customer Name',
-                'Customer Email',
-                'Status',
+                'Order Date',
+                'Order Status',
                 'Payment Status',
                 'Payment Method',
-                'Total',
+                'Customer Name',
+                'Customer Email',
+                'Customer Phone',
+                'Subtotal',
+                'Shipping Cost',
+                'Tax',
+                'Total Amount',
                 'Items Count',
-                'Order Date',
-                'Shipping Address',
-                'Billing Address'
+                'Complete Shipping Address',
+                'Complete Billing Address',
+                'Order Notes',
+                'FPL Manager Name',
+                'FPL Team Name',
+                'Tracking Number',
+                'Shipping Courier',
+                'Shipped Date',
+                'Delivered Date',
+                'Item Details'
             ]);
 
             foreach ($orders as $order) {
+                // Build complete addresses
+                $shippingAddress = $this->buildCompleteAddress([
+                    'address' => $order->shipping_address,
+                    'city' => $order->shipping_city,
+                    'state' => $order->shipping_state,
+                    'postal_code' => $order->shipping_postal_code,
+                    'country' => $order->shipping_country
+                ]);
+
+                $billingAddress = $this->buildCompleteAddress([
+                    'address' => $order->billing_address,
+                    'city' => $order->billing_city,
+                    'state' => $order->billing_state,
+                    'postal_code' => $order->billing_postal_code,
+                    'country' => $order->billing_country
+                ]);
+
+                // Build item details
+                $itemDetails = $this->buildItemDetails($order->items);
+
                 fputcsv($file, [
                     $order->order_number,
-                    $order->shipping_name,
-                    $order->shipping_email,
+                    $order->created_at->format('Y-m-d H:i:s'),
                     $order->status,
                     $order->payment_status,
                     $order->payment_method,
+                    $order->shipping_name,
+                    $order->shipping_email,
+                    $order->shipping_phone,
+                    $order->subtotal,
+                    $order->shipping_cost,
+                    $order->tax,
                     $order->total,
                     $order->items->count(),
-                    $order->created_at->format('Y-m-d H:i:s'),
-                    $order->shipping_address . ', ' . $order->shipping_city . ', ' . $order->shipping_state,
-                    $order->billing_address . ', ' . $order->billing_city . ', ' . $order->billing_state
+                    $shippingAddress,
+                    $billingAddress,
+                    $order->notes ?? '',
+                    $order->fpl_manager_name ?? '',
+                    $order->fpl_team_name ?? '',
+                    $order->tracking_number ?? '',
+                    $order->shipping_courier ?? '',
+                    $order->shipped_at ? $order->shipped_at->format('Y-m-d H:i:s') : '',
+                    $order->delivered_at ? $order->delivered_at->format('Y-m-d H:i:s') : '',
+                    $itemDetails
                 ]);
             }
 
@@ -251,5 +295,213 @@ class OrderController extends Controller
         };
 
         return response()->stream($callback, 200, $headers);
+    }
+
+    /**
+     * Build complete address string
+     */
+    private function buildCompleteAddress($addressData)
+    {
+        $parts = [];
+        
+        if (!empty($addressData['address'])) {
+            $parts[] = $addressData['address'];
+        }
+        
+        if (!empty($addressData['city'])) {
+            $parts[] = $addressData['city'];
+        }
+        
+        if (!empty($addressData['state'])) {
+            $parts[] = $addressData['state'];
+        }
+        
+        if (!empty($addressData['postal_code'])) {
+            $parts[] = $addressData['postal_code'];
+        }
+        
+        if (!empty($addressData['country'])) {
+            $parts[] = $addressData['country'];
+        }
+        
+        return implode(', ', $parts);
+    }
+
+    /**
+     * Build detailed item information
+     */
+    private function buildItemDetails($items)
+    {
+        $itemDetails = [];
+        
+        foreach ($items as $item) {
+            $itemInfo = [];
+            
+            // Product name
+            if ($item->product) {
+                $itemInfo[] = 'Product: ' . $item->product->title;
+            } else {
+                $itemInfo[] = 'Product: ' . $item->product_name;
+            }
+            
+            // Variation details
+            if ($item->variation && $item->variation->name) {
+                $itemInfo[] = 'Variation: ' . $item->variation->name;
+            }
+            
+            // Quantity and price
+            $itemInfo[] = 'Qty: ' . $item->quantity;
+            $itemInfo[] = 'Price: RM' . number_format($item->price, 2);
+            $itemInfo[] = 'Subtotal: RM' . number_format($item->price * $item->quantity, 2);
+            
+            $itemDetails[] = implode(' | ', $itemInfo);
+        }
+        
+        return implode(' || ', $itemDetails);
+    }
+
+    /**
+     * View invoice for an order
+     */
+    public function viewInvoice($id)
+    {
+        $order = Order::with(['user', 'items.product', 'items.variation'])
+                     ->findOrFail($id);
+
+        // Check if order is eligible for invoice viewing
+        if (($order->status === 'pending' && $order->payment_status === 'pending') || $order->payment_status === 'failed') {
+            return back()->with('error', 'Invois tidak tersedia untuk pesanan yang belum dibayar atau pembayaran gagal.');
+        }
+
+        // Check if order is cancelled
+        if ($order->status === 'cancelled') {
+            return back()->with('error', 'Invois tidak tersedia untuk pesanan yang telah dibatalkan.');
+        }
+
+        try {
+            $invoiceService = new \App\Services\InvoiceService();
+            $pdfPath = $invoiceService->generateInvoice($order);
+            
+            // Check if invoice generation failed
+            if (!$pdfPath) {
+                \Log::error('Invoice generation returned null', [
+                    'order_id' => $id,
+                    'admin_id' => auth()->id()
+                ]);
+                return back()->with('error', 'Gagal menjana invois. Sila cuba lagi.');
+            }
+            
+            // Check if file exists
+            if (!file_exists($pdfPath)) {
+                \Log::error('Generated invoice file does not exist', [
+                    'order_id' => $id,
+                    'admin_id' => auth()->id(),
+                    'filepath' => $pdfPath
+                ]);
+                return back()->with('error', 'Fail invois tidak dijumpai. Sila cuba lagi.');
+            }
+            
+            // Get the filename and determine content type
+            $filename = basename($pdfPath);
+            $extension = pathinfo($filename, PATHINFO_EXTENSION);
+            $contentType = $this->getContentType($extension);
+            $disposition = $extension === 'html' ? 'inline' : 'inline';
+            
+            // Return the file to be displayed in browser
+            return response()->file($pdfPath, [
+                'Content-Type' => $contentType,
+                'Content-Disposition' => $disposition . '; filename="' . $filename . '"'
+            ]);
+            
+        } catch (\Exception $e) {
+            \Log::error('Failed to view invoice', [
+                'order_id' => $id,
+                'admin_id' => auth()->id(),
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            
+            return back()->with('error', 'Gagal memaparkan invois. Sila cuba lagi.');
+        }
+    }
+
+    /**
+     * Download invoice PDF for an order
+     */
+    public function downloadInvoice($id)
+    {
+        $order = Order::with(['user', 'items.product', 'items.variation'])
+                     ->findOrFail($id);
+
+        // Check if order is eligible for invoice download
+        if (($order->status === 'pending' && $order->payment_status === 'pending') || $order->payment_status === 'failed') {
+            return back()->with('error', 'Invois tidak tersedia untuk pesanan yang belum dibayar atau pembayaran gagal.');
+        }
+
+        // Check if order is cancelled
+        if ($order->status === 'cancelled') {
+            return back()->with('error', 'Invois tidak tersedia untuk pesanan yang telah dibatalkan.');
+        }
+
+        try {
+            $invoiceService = new \App\Services\InvoiceService();
+            $pdfPath = $invoiceService->generateInvoice($order);
+            
+            // Check if invoice generation failed
+            if (!$pdfPath) {
+                \Log::error('Invoice generation returned null', [
+                    'order_id' => $id,
+                    'admin_id' => auth()->id()
+                ]);
+                return back()->with('error', 'Gagal menjana invois. Sila cuba lagi.');
+            }
+            
+            // Check if file exists
+            if (!file_exists($pdfPath)) {
+                \Log::error('Generated invoice file does not exist', [
+                    'order_id' => $id,
+                    'admin_id' => auth()->id(),
+                    'filepath' => $pdfPath
+                ]);
+                return back()->with('error', 'Fail invois tidak dijumpai. Sila cuba lagi.');
+            }
+            
+            // Get the filename and determine content type
+            $filename = basename($pdfPath);
+            $extension = pathinfo($filename, PATHINFO_EXTENSION);
+            $contentType = $this->getContentType($extension);
+            
+            // Return the file for download
+            return response()->download($pdfPath, $filename, [
+                'Content-Type' => $contentType
+            ]);
+            
+        } catch (\Exception $e) {
+            \Log::error('Failed to download invoice', [
+                'order_id' => $id,
+                'admin_id' => auth()->id(),
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            
+            return back()->with('error', 'Gagal memuat turun invois. Sila cuba lagi.');
+        }
+    }
+
+    /**
+     * Get content type based on file extension
+     */
+    private function getContentType($extension)
+    {
+        switch (strtolower($extension)) {
+            case 'pdf':
+                return 'application/pdf';
+            case 'html':
+                return 'text/html';
+            case 'txt':
+                return 'text/plain';
+            default:
+                return 'application/octet-stream';
+        }
     }
 } 

@@ -172,10 +172,14 @@
                  <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                      @foreach($refund->images as $image)
                          <div class="text-center">
-                             <img src="{{ $image->image_url }}" 
-                                  alt="Bukti {{ $loop->iteration }}" 
-                                  class="w-full h-32 object-cover rounded-lg border border-gray-200">
-                             <p class="text-sm text-gray-600 mt-2">{{ $image->image_name }}</p>
+                             <a href="{{ $image->image_url }}" 
+                                target="_blank" 
+                                class="block group cursor-pointer">
+                                 <img src="{{ $image->image_url }}" 
+                                      alt="Bukti {{ $loop->iteration }}" 
+                                      class="w-full h-32 object-cover rounded-lg border border-gray-200 group-hover:border-blue-400 group-hover:shadow-lg transition-all duration-200">
+                                 <p class="text-sm text-gray-600 mt-2 group-hover:text-blue-600 transition-colors duration-200">{{ $image->image_name }}</p>
+                             </a>
                          </div>
                      @endforeach
                  </div>
@@ -186,10 +190,14 @@
                  <div class="bg-white rounded-lg shadow p-6">
                      <h3 class="text-lg font-semibold text-gray-900 mb-4">Resit Transaksi Refund</h3>
                      <div class="text-center">
-                         <img src="{{ $refund->receipt_image_url }}" 
-                              alt="Resit Transaksi Refund" 
-                              class="max-w-full h-auto max-h-96 object-contain rounded-lg border border-gray-200 mx-auto">
-                         <p class="text-sm text-gray-600 mt-2">Resit transaksi refund telah diproses</p>
+                         <a href="{{ $refund->receipt_image_url }}" 
+                            target="_blank" 
+                            class="block group cursor-pointer">
+                             <img src="{{ $refund->receipt_image_url }}" 
+                                  alt="Resit Transaksi Refund" 
+                                  class="max-w-full h-auto max-h-96 object-contain rounded-lg border border-gray-200 mx-auto group-hover:border-blue-400 group-hover:shadow-lg transition-all duration-200">
+                             <p class="text-sm text-gray-600 mt-2 group-hover:text-blue-600 transition-colors duration-200">Resit transaksi refund telah diproses</p>
+                         </a>
                      </div>
                  </div>
              @endif

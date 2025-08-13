@@ -12,6 +12,23 @@
         </div>
         
         <div class="flex space-x-3">
+            @if($order->payment_status === 'paid' || ($order->status !== 'pending' && $order->status !== 'cancelled'))
+                <a href="{{ route('admin.orders.invoice', $order->id) }}" 
+                   target="_blank"
+                   class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">
+                    <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                    </svg>
+                    Lihat Invois
+                </a>
+                <a href="{{ route('admin.orders.invoice.download', $order->id) }}" 
+                   class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">
+                    <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                    </svg>
+                    Muat Turun Invois
+                </a>
+            @endif
             <a href="{{ route('admin.orders.index') }}" 
                class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">
                 Kembali ke Senarai
@@ -114,6 +131,106 @@
                     
                     <div class="p-6">
                         <p class="text-gray-700">{{ $order->notes }}</p>
+                    </div>
+                </div>
+            @endif
+
+            <!-- Refund Details -->
+            @if($order->payment_status === 'refunded' && $order->refunds->count() > 0)
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+                    <div class="px-6 py-4 border-b border-gray-200">
+                        <h2 class="text-xl font-bold text-gray-900">Butiran Refund</h2>
+                    </div>
+                    
+                    <div class="p-6">
+                        <div class="space-y-4">
+                            @foreach($order->refunds as $refund)
+                                <div class="bg-gray-50 rounded-lg p-4 border border-gray-200">
+                                    <div class="flex items-center justify-between mb-3">
+                                        <span class="text-sm font-medium text-gray-600">Refund #{{ $refund->id }}</span>
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $refund->getStatusBadgeClass() }}">
+                                            {{ $refund->getStatusDisplayName() }}
+                                        </span>
+                                    </div>
+                                    
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-600">
+                                        <div class="space-y-2">
+                                            <div class="flex justify-between">
+                                                <span class="font-medium">Jumlah Refund:</span>
+                                                <span class="font-semibold text-gray-900">{{ $refund->getFormattedRefundAmount() }}</span>
+                                            </div>
+                                            
+                                            @if($refund->bank_name)
+                                                <div class="flex justify-between">
+                                                    <span>Bank:</span>
+                                                    <span>{{ $refund->bank_name }}</span>
+                                                </div>
+                                            @endif
+                                            
+                                            @if($refund->bank_account_number)
+                                                <div class="flex justify-between">
+                                                    <span>Akaun Bank:</span>
+                                                    <span>{{ $refund->bank_account_number }}</span>
+                                                </div>
+                                            @endif
+                                            
+                                            @if($refund->bank_account_holder)
+                                                <div class="flex justify-between">
+                                                    <span>Pemegang Akaun:</span>
+                                                    <span>{{ $refund->bank_account_holder }}</span>
+                                                </div>
+                                            @endif
+                                        </div>
+                                        
+                                        <div class="space-y-2">
+                                            @if($refund->tracking_number)
+                                                <div class="flex justify-between">
+                                                    <span>Tracking:</span>
+                                                    <span>{{ $refund->tracking_number }}</span>
+                                                </div>
+                                            @endif
+                                            
+                                            @if($refund->shipping_courier)
+                                                <div class="flex justify-between">
+                                                    <span>Kurier:</span>
+                                                    <span>{{ $refund->shipping_courier }}</span>
+                                                </div>
+                                            @endif
+                                            
+                                            <div class="flex justify-between">
+                                                <span>Tarikh Permohonan:</span>
+                                                <span>{{ $refund->created_at->format('d/m/Y H:i') }}</span>
+                                            </div>
+                                            
+                                            @if($refund->updated_at != $refund->created_at)
+                                                <div class="flex justify-between">
+                                                    <span>Tarikh Kemas Kini:</span>
+                                                    <span>{{ $refund->updated_at->format('d/m/Y H:i') }}</span>
+                                                </div>
+                                            @endif
+                                        </div>
+                                    </div>
+                                    
+                                    @if($refund->admin_notes)
+                                        <div class="mt-4 pt-4 border-t border-gray-200">
+                                            <span class="text-sm font-medium text-gray-600">Nota Admin:</span>
+                                            <p class="text-sm text-gray-700 mt-2">{{ $refund->admin_notes }}</p>
+                                        </div>
+                                    @endif
+                                    
+                                    <div class="mt-4 pt-4 border-t border-gray-200">
+                                        <a href="{{ route('admin.refunds.show', $refund->id) }}" 
+                                           class="inline-flex items-center bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors">
+                                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                            </svg>
+                                            Lihat Butiran Refund
+                                        </a>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
                     </div>
                 </div>
             @endif
@@ -450,6 +567,30 @@
                                class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg font-medium transition-colors block text-center">
                                 📦 Jejak Penghantaran
                             </a>
+                        </div>
+                    @endif
+
+                    <!-- Invoice Actions -->
+                    @if($order->payment_status === 'paid' || ($order->status !== 'pending' && $order->status !== 'cancelled'))
+                        <div class="border-t border-gray-200 pt-4">
+                            <h3 class="text-sm font-medium text-gray-700 mb-3">Invois</h3>
+                            <div class="space-y-2">
+                                <a href="{{ route('admin.orders.invoice', $order->id) }}" 
+                                   target="_blank"
+                                   class="w-full bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-lg font-medium transition-colors block text-center">
+                                    <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                    </svg>
+                                    Lihat Invois
+                                </a>
+                                <a href="{{ route('admin.orders.invoice.download', $order->id) }}" 
+                                   class="w-full bg-purple-600 hover:bg-purple-700 text-white py-2 px-4 rounded-lg font-medium transition-colors block text-center">
+                                    <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                    </svg>
+                                    Muat Turun Invois
+                                </a>
+                            </div>
                         </div>
                     @endif
 

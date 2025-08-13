@@ -439,22 +439,24 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     
     // Orders Management
     Route::prefix('orders')->group(function () {
-    Route::get('/', [OrderController::class, 'index'])->name('admin.orders.index');
-    Route::get('/{id}', [OrderController::class, 'show'])->name('admin.orders.show');
-    Route::patch('/{id}/status', [OrderController::class, 'updateStatus'])->name('admin.orders.update-status');
-    Route::patch('/{id}/payment-status', [OrderController::class, 'updatePaymentStatus'])->name('admin.orders.update-payment-status');
-    Route::delete('/{id}', [OrderController::class, 'destroy'])->name('admin.orders.destroy');
-    Route::get('/stats', [OrderController::class, 'getStats'])->name('admin.orders.stats');
-    Route::get('/export', [OrderController::class, 'export'])->name('admin.orders.export');
-});
+        Route::get('/', [OrderController::class, 'index'])->name('admin.orders.index');
+        Route::get('/export', [OrderController::class, 'export'])->name('admin.orders.export');
+        Route::get('/stats', [OrderController::class, 'getStats'])->name('admin.orders.stats');
+        Route::get('/{id}', [OrderController::class, 'show'])->name('admin.orders.show');
+        Route::patch('/{id}/status', [OrderController::class, 'updateStatus'])->name('admin.orders.update-status');
+        Route::patch('/{id}/payment-status', [OrderController::class, 'updatePaymentStatus'])->name('admin.orders.update-payment-status');
+        Route::delete('/{id}', [OrderController::class, 'destroy'])->name('admin.orders.destroy');
+        Route::get('/{id}/invoice', [OrderController::class, 'viewInvoice'])->name('admin.orders.invoice');
+        Route::get('/{id}/invoice/download', [OrderController::class, 'downloadInvoice'])->name('admin.orders.invoice.download');
+    });
 
 // Admin Refund Routes
 Route::prefix('refunds')->group(function () {
     Route::get('/', [AdminRefundController::class, 'index'])->name('admin.refunds.index');
-    Route::get('/{refund}', [AdminRefundController::class, 'show'])->name('admin.refunds.show');
-    Route::patch('/{refund}/status', [AdminRefundController::class, 'updateStatus'])->name('admin.refunds.update-status');
     Route::get('/export', [AdminRefundController::class, 'export'])->name('admin.refunds.export');
     Route::get('/stats', [AdminRefundController::class, 'getStats'])->name('admin.refunds.stats');
+    Route::get('/{refund}', [AdminRefundController::class, 'show'])->name('admin.refunds.show');
+    Route::patch('/{refund}/status', [AdminRefundController::class, 'updateStatus'])->name('admin.refunds.update-status');
 });
     
     // Users Management

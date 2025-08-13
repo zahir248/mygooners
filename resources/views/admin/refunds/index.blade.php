@@ -12,10 +12,13 @@
                 <p class="text-gray-600 mt-1">Uruskan semua permohonan refund dari pengguna</p>
             </div>
             
-            <div class="flex items-center space-x-3">
+            <div class="flex space-x-3">
                 <a href="{{ route('admin.refunds.export') }}" 
-                   class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-                    📊 Export CSV
+                   class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">
+                    <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                    </svg>
+                    Export CSV
                 </a>
             </div>
         </div>
@@ -95,37 +98,36 @@
     </div>
 
     <!-- Filters and Search -->
-    <div class="bg-white rounded-lg shadow mb-6">
-        <form method="GET" action="{{ route('admin.refunds.index') }}" class="p-6">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <div>
-                    <label for="search" class="block text-sm font-medium text-gray-700 mb-2">Cari</label>
-                    <input type="text" id="search" name="search" value="{{ request('search') }}"
-                           placeholder="Nombor pesanan atau nama pengguna"
-                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500">
-                </div>
+    <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+        <form method="GET" action="{{ route('admin.refunds.index') }}" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div>
+                <label for="search" class="block text-sm font-medium text-gray-700 mb-2">Cari</label>
+                <input type="text" name="search" id="search" value="{{ request('search') }}" 
+                       placeholder="Nombor pesanan atau nama pengguna" 
+                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+            </div>
+            
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Status Permohonan</label>
+                <select name="status" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    <option value="">Semua Status</option>
+                    <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Tertunggak</option>
+                    <option value="approved" {{ request('status') == 'approved' ? 'selected' : '' }}>Diluluskan</option>
+                    <option value="rejected" {{ request('status') == 'rejected' ? 'selected' : '' }}>Ditolak</option>
+                </select>
+            </div>
+            
+            <div class="md:col-span-2 lg:col-span-3 flex space-x-3">
+                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition-colors">
+                    <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                    Cari
+                </button>
                 
-                <div>
-                    <label for="status" class="block text-sm font-medium text-gray-700 mb-2">Status</label>
-                    <select id="status" name="status" 
-                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500">
-                        <option value="">Semua Status</option>
-                        <option value="pending" {{ request('status') === 'pending' ? 'selected' : '' }}>Menunggu</option>
-                        <option value="approved" {{ request('status') === 'approved' ? 'selected' : '' }}>Diluluskan</option>
-                        <option value="rejected" {{ request('status') === 'rejected' ? 'selected' : '' }}>Ditolak</option>
-                        <option value="processing" {{ request('status') === 'processing' ? 'selected' : '' }}>Diproses</option>
-                        <option value="completed" {{ request('status') === 'completed' ? 'selected' : '' }}>Selesai</option>
-                    </select>
-                </div>
-                
-
-                
-                <div class="flex items-end">
-                    <button type="submit" 
-                            class="w-full bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">
-                        🔍 Cari
-                    </button>
-                </div>
+                <a href="{{ route('admin.refunds.index') }}" class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded-lg font-medium transition-colors">
+                    Reset
+                </a>
             </div>
         </form>
     </div>
@@ -230,8 +232,12 @@
                                 
                                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                     <a href="{{ route('admin.refunds.show', $refund->id) }}" 
-                                       class="text-red-600 hover:text-red-900 mr-3">
-                                        Lihat
+                                       class="text-blue-600 hover:text-blue-900 transition-colors duration-200" 
+                                       title="Lihat Butiran Refund">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                        </svg>
                                     </a>
                                 </td>
                             </tr>
