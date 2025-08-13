@@ -53,6 +53,16 @@ class Product extends Model
         return $this->hasMany(ProductVariation::class)->ordered();
     }
 
+    public function favourites()
+    {
+        return $this->hasMany(Favourite::class);
+    }
+
+    public function favouritedBy()
+    {
+        return $this->belongsToMany(User::class, 'favourites');
+    }
+
     public function activeVariations()
     {
         return $this->hasMany(ProductVariation::class)->active()->ordered();

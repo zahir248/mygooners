@@ -112,6 +112,16 @@ class User extends Authenticatable
         return $this->hasMany(Refund::class);
     }
 
+    public function favourites()
+    {
+        return $this->hasMany(Favourite::class);
+    }
+
+    public function favouriteProducts()
+    {
+        return $this->belongsToMany(Product::class, 'favourites');
+    }
+
     public function isAdmin()
     {
         return $this->role === 'admin' || $this->role === 'super_admin';

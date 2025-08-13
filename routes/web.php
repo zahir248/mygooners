@@ -14,6 +14,7 @@ use App\Http\Controllers\Client\BillingDetailController;
 use App\Http\Controllers\Client\ShippingDetailController;
 use App\Http\Controllers\Client\DirectCheckoutController;
 use App\Http\Controllers\Client\RefundController;
+use App\Http\Controllers\Client\FavouriteController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\AuthController as AdminAuthController;
 use App\Http\Controllers\Admin\ArticleController as AdminArticleController;
@@ -56,6 +57,16 @@ Route::prefix('cart')->group(function () {
     Route::delete('/remove/{item}', [CartController::class, 'remove'])->name('cart.remove');
     Route::delete('/clear', [CartController::class, 'clear'])->name('cart.clear');
     Route::get('/count', [CartController::class, 'count'])->name('cart.count');
+});
+
+// Favourites Routes
+Route::prefix('favourites')->middleware('auth')->group(function () {
+    Route::get('/', [FavouriteController::class, 'index'])->name('favourites.index');
+    Route::post('/add', [FavouriteController::class, 'store'])->name('favourites.store');
+    Route::delete('/remove', [FavouriteController::class, 'destroy'])->name('favourites.destroy');
+    Route::get('/check', [FavouriteController::class, 'check'])->name('favourites.check');
+    Route::get('/count', [FavouriteController::class, 'count'])->name('favourites.count');
+    Route::post('/flash-message', [FavouriteController::class, 'flashMessage'])->name('favourites.flash-message');
 });
 
 // Checkout Routes

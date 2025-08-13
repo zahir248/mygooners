@@ -625,6 +625,17 @@
                                         </svg>
                                         Permohonan Refund
                                     </a>
+                                    <a href="{{ route('favourites.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                        <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                                        </svg>
+                                        Kegemaran
+                                        @if(auth()->user()->favourites()->count() > 0)
+                                            <span class="favourites-count ml-auto bg-red-500 text-white text-xs rounded-full px-2 py-1">
+                                                {{ auth()->user()->favourites()->count() }}
+                                            </span>
+                                        @endif
+                                    </a>
                                     <a href="{{ route('addresses.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                         <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
@@ -804,6 +815,17 @@
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M6 10l6 6m-6-6l6-6"></path>
                                             </svg>
                                             Permohonan Refund
+                                        </a>
+                                        <a href="{{ route('favourites.index') }}" class="flex items-center text-sm text-gray-700 hover:text-red-600 transition-colors">
+                                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                                            </svg>
+                                            Kegemaran
+                                            @if(auth()->user()->favourites()->count() > 0)
+                                                <span class="ml-auto bg-red-500 text-white text-xs rounded-full px-2 py-1">
+                                                    {{ auth()->user()->favourites()->count() }}
+                                                </span>
+                                            @endif
                                         </a>
                                         <a href="{{ route('addresses.index') }}" class="flex items-center text-sm text-gray-700 hover:text-red-600 transition-colors">
                                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1374,5 +1396,8 @@
     </script>
     
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    
+    <!-- Favourites Script -->
+    <script src="{{ asset('js/favourites.js') }}"></script>
 </body>
 </html> 
