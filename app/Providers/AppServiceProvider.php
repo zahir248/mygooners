@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\App;
 use App\Models\Service;
 use App\Models\Product;
 
@@ -22,6 +23,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Set application locale to Malay
+        App::setLocale('ms');
+        
         // Share pending services and sellers count with all admin views
         View::composer('layouts.admin', function ($view) {
             $pendingServicesCount = Service::where('status', 'pending')->count();

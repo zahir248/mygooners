@@ -630,10 +630,13 @@
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
                                         </svg>
                                         Kegemaran
-                                        @if(auth()->user()->favourites()->count() > 0)
-                                            <span class="favourites-count ml-auto bg-red-500 text-white text-xs rounded-full px-2 py-1">
-                                                {{ auth()->user()->favourites()->count() }}
-                                            </span>
+                                        @if(auth()->check())
+                                            @php $favouritesCount = auth()->user()->favourites()->count(); @endphp
+                                            @if($favouritesCount > 0)
+                                                <span class="favourites-count ml-auto bg-red-500 text-white text-xs rounded-full px-2 py-1">
+                                                    {{ $favouritesCount }}
+                                                </span>
+                                            @endif
                                         @endif
                                     </a>
                                     <a href="{{ route('addresses.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
@@ -821,10 +824,13 @@
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
                                             </svg>
                                             Kegemaran
-                                            @if(auth()->user()->favourites()->count() > 0)
-                                                <span class="ml-auto bg-red-500 text-white text-xs rounded-full px-2 py-1">
-                                                    {{ auth()->user()->favourites()->count() }}
-                                                </span>
+                                            @if(auth()->check())
+                                                @php $favouritesCount = auth()->user()->favourites()->count(); @endphp
+                                                @if($favouritesCount > 0)
+                                                    <span class="ml-auto bg-red-500 text-white text-xs rounded-full px-2 py-1">
+                                                        {{ $favouritesCount }}
+                                                    </span>
+                                                @endif
                                             @endif
                                         </a>
                                         <a href="{{ route('addresses.index') }}" class="flex items-center text-sm text-gray-700 hover:text-red-600 transition-colors">

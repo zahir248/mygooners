@@ -184,7 +184,7 @@
                 </div>
 
                 <div class="mt-6 pt-6 border-t border-gray-200">
-                    <button class="text-red-600 hover:text-red-700 font-medium">
+                    <button onclick="openServiceReviewsModal()" class="text-red-600 hover:text-red-700 font-medium">
                         Lihat Semua Ulasan →
                     </button>
                 </div>
@@ -361,5 +361,198 @@ function copyToClipboard() {
         alert('Link copied to clipboard!');
     });
 }
+
+// Service Reviews Modal Functions
+function openServiceReviewsModal() {
+    const modal = document.getElementById('service-reviews-modal');
+    modal.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeServiceReviewsModal() {
+    const modal = document.getElementById('service-reviews-modal');
+    modal.classList.add('hidden');
+    document.body.style.overflow = 'auto';
+}
+
+function filterServiceReviews(rating) {
+    const reviewItems = document.querySelectorAll('.service-review-item');
+    const filterButtons = document.querySelectorAll('.service-filter-btn');
+    const noReviewsMessage = document.getElementById('service-no-reviews-message');
+    let visibleCount = 0;
+
+    // Update filter button styles
+    filterButtons.forEach(btn => {
+        btn.classList.remove('active', 'bg-red-600', 'text-white');
+        btn.classList.add('bg-gray-100', 'text-gray-700');
+    });
+
+    // Find and activate the clicked button
+    const clickedButton = event.target;
+    clickedButton.classList.remove('bg-gray-100', 'text-gray-700');
+    clickedButton.classList.add('active', 'bg-red-600', 'text-white');
+
+    // Filter reviews
+    reviewItems.forEach(item => {
+        if (rating === 'all' || parseInt(item.dataset.rating) === rating) {
+            item.style.display = 'block';
+            visibleCount++;
+        } else {
+            item.style.display = 'none';
+        }
+    });
+
+    // Show/hide no reviews message
+    if (visibleCount === 0) {
+        noReviewsMessage.classList.remove('hidden');
+    } else {
+        noReviewsMessage.classList.add('hidden');
+    }
+}
+
+// Close modal when clicking outside
+document.addEventListener('DOMContentLoaded', function() {
+    const serviceReviewsModal = document.getElementById('service-reviews-modal');
+    if (serviceReviewsModal) {
+        serviceReviewsModal.addEventListener('click', function(e) {
+            if (e.target === serviceReviewsModal) {
+                closeServiceReviewsModal();
+            }
+        });
+    }
+
+    // Close modal with Escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            const modal = document.getElementById('service-reviews-modal');
+            if (modal && !modal.classList.contains('hidden')) {
+                closeServiceReviewsModal();
+            }
+        }
+    });
+});
 </script>
+
+<!-- Service Reviews Modal -->
+<div id="service-reviews-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-2 sm:p-4">
+    <div class="bg-white rounded-xl shadow-2xl w-full max-w-4xl max-h-[85vh] sm:max-h-[80vh] overflow-hidden mx-2 my-4 sm:my-8">
+        <!-- Modal Header -->
+        <div class="flex items-center justify-between p-4 sm:p-6 border-b border-gray-200 flex-shrink-0">
+            <div class="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-4">
+                <h3 class="text-xl sm:text-2xl font-bold text-gray-900">Ulasan Perkhidmatan</h3>
+                <div class="flex items-center space-x-2">
+                    <div class="flex items-center">
+                        @for($i = 1; $i <= 5; $i++)
+                            <svg class="w-4 h-4 sm:w-5 sm:h-5 {{ $i <= $service->trust_score ? 'text-yellow-400' : 'text-gray-300' }}" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                            </svg>
+                        @endfor
+                        <span class="ml-2 text-base sm:text-lg font-bold text-gray-900">{{ number_format($service->trust_score, 1) }}</span>
+                        <span class="text-xs sm:text-sm text-gray-500">({{ $reviews->count() }} ulasan)</span>
+                    </div>
+                </div>
+            </div>
+            <button onclick="closeServiceReviewsModal()" class="text-gray-400 hover:text-gray-600 transition-colors p-1">
+                <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Modal Body -->
+        <div class="flex flex-col h-full">
+            <!-- Rating Filter - Fixed at top -->
+            <div class="p-4 sm:p-6 pb-3 sm:pb-4 border-b border-gray-200 flex-shrink-0">
+                <div class="flex flex-wrap items-center gap-2 sm:gap-3">
+                    <span class="text-xs sm:text-sm font-medium text-gray-700 w-full sm:w-auto mb-2 sm:mb-0">Tapis mengikut rating:</span>
+                    <button onclick="filterServiceReviews('all')" 
+                            class="service-filter-btn active px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-colors bg-red-600 text-white">
+                        Semua ({{ $reviews->count() }})
+                    </button>
+                    <button onclick="filterServiceReviews(5)" 
+                            class="service-filter-btn px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200">
+                        5★ ({{ $reviews->where('rating', 5)->count() }})
+                    </button>
+                    <button onclick="filterServiceReviews(4)" 
+                            class="service-filter-btn px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200">
+                        4★ ({{ $reviews->where('rating', 4)->count() }})
+                    </button>
+                    <button onclick="filterServiceReviews(3)" 
+                            class="service-filter-btn px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200">
+                        3★ ({{ $reviews->where('rating', 3)->count() }})
+                    </button>
+                    <button onclick="filterServiceReviews(2)" 
+                            class="service-filter-btn px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200">
+                        2★ ({{ $reviews->where('rating', 2)->count() }})
+                    </button>
+                    <button onclick="filterServiceReviews(1)" 
+                            class="service-filter-btn px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200">
+                        1★ ({{ $reviews->where('rating', 1)->count() }})
+                    </button>
+                </div>
+            </div>
+
+            <!-- Reviews List - Scrollable -->
+            <div class="flex-1 overflow-y-auto p-4 sm:p-6 pt-3 sm:pt-4" style="max-height: calc(85vh - 200px);">
+                <div id="service-reviews-list" class="space-y-4 sm:space-y-6">
+                    @foreach($reviews as $review)
+                        <div class="service-review-item border-b border-gray-200 pb-4 sm:pb-6 last:border-b-0" data-rating="{{ $review->rating }}">
+                            <div class="flex items-start space-x-3 sm:space-x-4">
+                                <!-- User Avatar -->
+                                <div class="flex-shrink-0">
+                                    <img src="https://ui-avatars.com/api/?name={{ urlencode($review->user->name) }}&size=48&background=dc2626&color=fff" 
+                                         alt="{{ $review->user->name }}" 
+                                         class="w-10 h-10 sm:w-12 sm:h-12 rounded-full border-2 border-gray-100 shadow-sm object-cover">
+                                </div>
+                                
+                                <!-- Review Content -->
+                                <div class="flex-1 min-w-0">
+                                    <!-- Review Header -->
+                                    <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-2 sm:mb-3">
+                                        <div class="flex-1">
+                                            <h4 class="font-semibold text-gray-900 text-base sm:text-lg mb-1">{{ $review->user->name }}</h4>
+                                            <div class="flex items-center space-x-2 sm:space-x-3 mb-2">
+                                                <!-- Rating Stars -->
+                                                <div class="flex items-center">
+                                                    @for($i = 1; $i <= 5; $i++)
+                                                        <svg class="w-3 h-3 sm:w-4 sm:h-4 {{ $i <= $review->rating ? 'text-yellow-400' : 'text-gray-300' }}" 
+                                                             fill="currentColor" viewBox="0 0 24 24">
+                                                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                                        </svg>
+                                                    @endfor
+                                                    <span class="ml-2 text-xs sm:text-sm font-medium text-gray-700">{{ $review->rating }}/5</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Review Date -->
+                                        <div class="text-right">
+                                            <span class="text-xs sm:text-sm text-gray-500">{{ $review->created_at->diffForHumans() }}</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Review Comment -->
+                                    <div class="bg-gray-50 rounded-lg p-3 sm:p-4">
+                                        <p class="text-gray-800 leading-relaxed text-xs sm:text-sm">{{ $review->comment }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+
+                <!-- No Reviews Message -->
+                <div id="service-no-reviews-message" class="hidden text-center py-8 sm:py-12">
+                    <div class="mx-auto w-12 h-12 sm:w-16 sm:h-16 bg-gray-100 rounded-full flex items-center justify-center mb-3 sm:mb-4">
+                        <svg class="w-6 h-6 sm:w-8 sm:h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-base sm:text-lg font-medium text-gray-900 mb-2">Tiada ulasan dijumpai</h3>
+                    <p class="text-gray-600 text-xs sm:text-sm">Tiada ulasan yang sepadan dengan penapis yang dipilih.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 @endpush 

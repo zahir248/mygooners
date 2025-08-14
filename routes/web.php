@@ -15,6 +15,7 @@ use App\Http\Controllers\Client\ShippingDetailController;
 use App\Http\Controllers\Client\DirectCheckoutController;
 use App\Http\Controllers\Client\RefundController;
 use App\Http\Controllers\Client\FavouriteController;
+use App\Http\Controllers\Client\ReviewController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\AuthController as AdminAuthController;
 use App\Http\Controllers\Admin\ArticleController as AdminArticleController;
@@ -25,6 +26,7 @@ use App\Http\Controllers\Admin\VideoController as AdminVideoController;
 use App\Http\Controllers\Admin\SellerRequestController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\RefundController as AdminRefundController;
+use App\Http\Controllers\Admin\ProductReviewController;
 
 // Home Page
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -47,6 +49,15 @@ Route::prefix('shop')->group(function () {
     Route::get('/', [ProductController::class, 'index'])->name('shop.index');
     Route::get('/category/{category}', [ProductController::class, 'category'])->name('shop.category');
     Route::get('/{slug}', [ProductController::class, 'show'])->name('shop.show');
+});
+
+// Product Reviews (requires authentication)
+Route::prefix('shop')->middleware('auth')->group(function () {
+    Route::get('/{product}/review', [ReviewController::class, 'create'])->name('reviews.create');
+    Route::post('/{product}/review', [ReviewController::class, 'store'])->name('reviews.store');
+    Route::get('/{product}/review/{review}/edit', [ReviewController::class, 'edit'])->name('reviews.edit');
+    Route::put('/{product}/review/{review}', [ReviewController::class, 'update'])->name('reviews.update');
+    Route::delete('/{product}/review/{review}', [ReviewController::class, 'destroy'])->name('reviews.destroy');
 });
 
 // Cart Routes
@@ -468,6 +479,17 @@ Route::prefix('refunds')->group(function () {
     Route::get('/stats', [AdminRefundController::class, 'getStats'])->name('admin.refunds.stats');
     Route::get('/{refund}', [AdminRefundController::class, 'show'])->name('admin.refunds.show');
     Route::patch('/{refund}/status', [AdminRefundController::class, 'updateStatus'])->name('admin.refunds.update-status');
+});
+
+// Admin Product Review Routes
+Route::prefix('reviews')->group(function () {
+    Route::get('/', [ProductReviewController::class, 'index'])->name('admin.reviews.index');
+    Route::get('/statistics', [ProductReviewController::class, 'statistics'])->name('admin.reviews.statistics');
+    Route::get('/{review}', [ProductReviewController::class, 'show'])->name('admin.reviews.show');
+    Route::patch('/{review}/approve', [ProductReviewController::class, 'approve'])->name('admin.reviews.approve');
+    Route::patch('/{review}/reject', [ProductReviewController::class, 'reject'])->name('admin.reviews.reject');
+    Route::delete('/{review}', [ProductReviewController::class, 'destroy'])->name('admin.reviews.destroy');
+    Route::post('/bulk-action', [ProductReviewController::class, 'bulkAction'])->name('admin.reviews.bulk-action');
 });
     
     // Users Management

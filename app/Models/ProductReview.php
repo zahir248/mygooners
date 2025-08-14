@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class ProductReview extends Model
 {
@@ -30,6 +31,26 @@ class ProductReview extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function getReviewerNameAttribute()
+    {
+        if ($this->user) {
+            return $this->user->name;
+        }
+        return 'Anonim'; // Anonymous in Malay
+    }
+
+    public function getReviewerAvatarAttribute()
+    {
+        if ($this->user && $this->user->profile_image) {
+            $profileImg = trim($this->user->profile_image);
+            if (Str::startsWith($profileImg, 'http')) {
+                return $profileImg;
+            }
+            return asset('storage/' . $profileImg);
+        }
+        return asset('images/profile-image-default.png');
     }
 
     public function scopeVerified($query)

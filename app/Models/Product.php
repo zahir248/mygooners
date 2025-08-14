@@ -40,7 +40,7 @@ class Product extends Model
 
     public function reviews()
     {
-        return $this->hasMany(ProductReview::class);
+        return $this->hasMany(ProductReview::class)->latest();
     }
 
     public function user()
@@ -101,6 +101,11 @@ class Product extends Model
     public function getAverageRatingAttribute()
     {
         return $this->reviews()->avg('rating') ?? 0;
+    }
+
+    public function getReviewsCountAttribute()
+    {
+        return $this->reviews()->count();
     }
 
     public function getDiscountPercentageAttribute()
