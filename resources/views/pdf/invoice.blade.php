@@ -7,369 +7,381 @@
     <style>
         body {
             font-family: Arial, Helvetica, sans-serif;
-            font-size: 12px;
-            line-height: 1.4;
-            color: #000;
+            font-size: 8px;
+            line-height: 1.2;
+            color: #333;
             margin: 0;
-            padding: 20px;
+            padding: 10px;
             background: #fff;
         }
         
-        .page-container {
+        .invoice-container {
+            max-width: 700px;
+            margin: 0 auto;
             background: white;
-            max-width: 800px;
-            margin: 0 auto 20px auto;
-            border: 1px solid #000;
-            border-radius: 0.5px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-        
-        .page-container:last-child {
-            margin-bottom: 0;
+            border: 1px solid #ccc;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
         
         .header {
             background: #1f2a38;
             color: white;
-            padding: 30px;
-            text-align: center;
-            border-bottom: 2px solid #000;
-            position: relative;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
         
         .company-logo {
-            font-size: 28px;
-            font-weight: bold;
-            margin-bottom: 5px;
-            letter-spacing: 2px;
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
         }
         
-        .company-tagline {
-            font-size: 14px;
+        .company-info h1 {
+            font-size: 18px;
+            font-weight: bold;
+            margin: 0 0 2px 0;
+            letter-spacing: 0.5px;
+        }
+        
+        .company-info p {
+            font-size: 9px;
+            margin: 0;
             opacity: 0.9;
         }
         
-        .invoice-badge {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: #fff;
-            color: #000;
-            padding: 8px 16px;
-            font-size: 12px;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            border: 1px solid #000;
-        }
+
         
         .content {
-            padding: 30px;
-        }
-        
-        .page-1 {
-            page-break-after: always;
-        }
-        
-        .page-2 {
-            page-break-after: always;
-        }
-        
-        .page-3 {
-            page-break-after: avoid;
+            padding: 15px 20px;
         }
         
         .invoice-header {
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 2px solid #000;
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .invoice-details {
+            flex: 1;
         }
         
         .invoice-number {
-            font-size: 20px;
+            font-size: 14px;
             font-weight: bold;
-            color: #000;
-            margin-bottom: 5px;
+            color: #1f2a38;
+            margin-bottom: 3px;
         }
         
         .order-number {
-            font-size: 14px;
-            color: #333;
-            margin-bottom: 5px;
+            font-size: 9px;
+            color: #666;
+            margin-bottom: 2px;
         }
         
         .date {
-            font-size: 14px;
-            color: #333;
+            font-size: 9px;
+            color: #666;
         }
         
-        .addresses {
+        .status-section {
+            text-align: right;
+        }
+        
+        .status-item {
+            margin-bottom: 5px;
             display: flex;
-            gap: 30px;
-            margin-bottom: 30px;
+            justify-content: flex-end;
+            align-items: center;
+        }
+        
+        .status-label {
+            font-size: 7px;
+            color: #666;
+            margin-right: 8px;
+            font-weight: bold;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 3px 6px;
+            font-size: 7px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            border-radius: 2px;
+            line-height: 1;
+            vertical-align: middle;
+        }
+        
+        .status-paid { background: #d4edda; color: #155724; }
+        .status-pending { background: #fff3cd; color: #856404; }
+        .status-processing { background: #fff3cd; color: #856404; }
+        .status-shipped { background: #d1ecf1; color: #0c5460; }
+        .status-delivered { background: #d4edda; color: #155724; }
+        
+        .addresses {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
         }
         
         .address-section {
-            flex: 1;
             background: #f9f9f9;
-            padding: 20px;
-            border: 1px solid #000;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
         }
         
         .address-title {
             font-weight: bold;
-            color: #000;
-            margin-bottom: 10px;
-            font-size: 14px;
+            color: #1f2a38;
+            margin-bottom: 5px;
+            font-size: 8px;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.3px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 3px;
         }
         
         .address-content {
-            font-size: 12px;
-            line-height: 1.5;
-            color: #000;
+            font-size: 7px;
+            line-height: 1.3;
+            color: #333;
         }
         
         .address-content strong {
-            color: #000;
+            color: #1f2a38;
             font-weight: bold;
         }
         
-        .payment-section {
+        .payment-info {
             background: #f9f9f9;
-            padding: 20px;
-            border: 1px solid #000;
-            margin-bottom: 30px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            margin-bottom: 15px;
         }
         
         .payment-title {
             font-weight: bold;
-            color: #000;
-            margin-bottom: 15px;
-            font-size: 14px;
+            color: #1f2a38;
+            margin-bottom: 5px;
+            font-size: 8px;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.3px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 3px;
         }
         
         .payment-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5px;
         }
         
         .payment-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 5px 0;
+            padding: 2px 0;
         }
         
         .payment-label {
             font-weight: bold;
-            color: #000;
+            color: #333;
+            font-size: 7px;
         }
         
         .payment-value {
             font-weight: bold;
-            color: #000;
+            color: #1f2a38;
+            font-size: 7px;
         }
         
-        .status-badge {
-            padding: 4px 8px;
-            font-size: 10px;
+        .fpl-section {
+            background: #e3f2fd;
+            padding: 10px;
+            border: 1px solid #bbdefb;
+            border-radius: 3px;
+            margin-bottom: 15px;
+        }
+        
+        .fpl-title {
             font-weight: bold;
+            color: #1565c0;
+            margin-bottom: 5px;
+            font-size: 8px;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            border: 1px solid #000;
-        }
-        
-        .status-paid {
-            background: #28a745;
-            color: #fff;
-        }
-        
-        .status-pending {
-            background: #ffc107;
-            color: #000;
-        }
-        
-        .status-processing {
-            background: #ffc107;
-            color: #000;
-        }
-        
-        .status-shipped {
-            background: #17a2b8;
-            color: #fff;
-        }
-        
-        .status-delivered {
-            background: #28a745;
-            color: #fff;
+            letter-spacing: 0.3px;
+            border-bottom: 1px solid #bbdefb;
+            padding-bottom: 3px;
         }
         
         .items-section {
-            margin-bottom: 30px;
+            margin-bottom: 15px;
+        }
+        
+        .section-title {
+            color: #1f2a38;
+            font-size: 10px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            border-bottom: 1px solid #1f2a38;
+            padding-bottom: 3px;
         }
         
         .items-table {
             width: 100%;
             border-collapse: collapse;
-            border: 1px solid #1f2a38;
-            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            margin-bottom: 12px;
+            font-size: 7px;
         }
         
         .items-table th {
             background: #1f2a38 !important;
             color: #fff !important;
-            padding: 12px 8px;
+            padding: 6px 4px;
             text-align: left;
             font-weight: bold;
-            font-size: 11px;
+            font-size: 7px;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.3px;
             border: 1px solid #1f2a38;
-            white-space: nowrap;
-            overflow: visible;
         }
         
         .items-table td {
-            padding: 10px 12px;
-            border: 1px solid #1f2a38;
-            font-size: 12px;
+            padding: 4px;
+            border: 1px solid #ddd;
+            font-size: 7px;
             vertical-align: middle;
         }
         
         .items-table tr:nth-child(even) {
-            background-color: #fff;
+            background-color: #f9f9f9;
         }
         
-        .items-table tr:nth-child(odd) {
-            background-color: #f8f9fa;
-        }
-        
-        .items-table .item-name {
-            width: 30%;
-            font-weight: bold;
-            color: #1f2a38;
-        }
-        
-        .items-table .item-variation {
-            width: 20%;
-            color: #666;
-            font-style: italic;
-        }
-        
-        .items-table .item-quantity {
-            width: 12%;
-            text-align: center;
-            font-weight: bold;
-            color: #1f2a38;
-        }
-        
-        .items-table .item-price {
-            width: 18%;
-            text-align: right;
-            font-weight: bold;
-            color: #1f2a38;
-        }
-        
-        .items-table .item-total {
-            width: 20%;
-            text-align: right;
-            font-weight: bold;
-            color: #1f2a38;
-        }
+        .items-table .item-name { width: 35%; font-weight: bold; color: #1f2a38; }
+        .items-table .item-variation { width: 25%; color: #666; font-style: italic; }
+        .items-table .item-quantity { width: 10%; text-align: center; font-weight: bold; }
+        .items-table .item-price { width: 15%; text-align: right; font-weight: bold; }
+        .items-table .item-total { width: 15%; text-align: right; font-weight: bold; color: #1f2a38; }
         
         .totals-section {
             display: flex;
             justify-content: flex-end;
-            margin-bottom: 30px;
+            margin-bottom: 15px;
         }
         
         .totals {
             background: #f9f9f9;
-            padding: 20px;
-            border: 1px solid #000;
-            width: 300px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            width: 200px;
         }
         
         .total-row {
             display: flex;
             justify-content: space-between;
-            padding: 5px 0;
-            font-size: 13px;
+            padding: 2px 0;
+            font-size: 8px;
         }
         
         .total-row.subtotal {
-            border-bottom: 1px solid #000;
-            padding-bottom: 10px;
-            margin-bottom: 10px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 4px;
+            margin-bottom: 4px;
             font-weight: bold;
         }
         
         .total-row.grand-total {
-            font-size: 16px;
+            font-size: 10px;
             font-weight: bold;
-            color: #000;
-            border-top: 2px solid #000;
-            padding-top: 10px;
-            margin-top: 10px;
+            color: #1f2a38;
+            border-top: 1px solid #1f2a38;
+            padding-top: 4px;
+            margin-top: 4px;
         }
         
         .footer {
             background: #1f2a38;
             color: white;
-            padding: 20px;
+            padding: 12px 20px;
             text-align: center;
-            border-top: 2px solid #000;
         }
         
         .footer-content {
-            margin-bottom: 15px;
-        }
-        
-        .footer-section {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
             margin-bottom: 10px;
         }
         
         .footer-section h4 {
-            font-size: 12px;
+            font-size: 8px;
             font-weight: bold;
-            margin-bottom: 5px;
+            margin-bottom: 3px;
             color: #fff;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.3px;
         }
         
         .footer-section p {
-            font-size: 11px;
+            font-size: 7px;
             opacity: 0.9;
-            line-height: 1.4;
+            line-height: 1.2;
+            margin: 0;
         }
         
         .footer-bottom {
-            border-top: 1px solid #fff;
-            padding-top: 15px;
-            font-size: 10px;
+            border-top: 1px solid #495057;
+            padding-top: 8px;
+            font-size: 7px;
             opacity: 0.8;
+        }
+        
+        .footer-bottom p {
+            margin: 1px 0;
         }
     </style>
 </head>
 <body>
-    <!-- PAGE 1: Header, Invoice Info, Addresses, Payment Info -->
-    <div class="page-container page-1">
+    <div class="invoice-container">
         <div class="header">
-            <div class="invoice-badge">INVOICE</div>
-            <div class="company-logo">MYGOONERS</div>
+            <div class="logo-section">
+                <img src="{{ public_path('images/official-logo.png') }}" alt="MyGooners Logo" class="company-logo">
+            </div>
         </div>
 
         <div class="content">
             <div class="invoice-header">
-                <div class="invoice-number">INVOICE #{{ $invoiceNumber }}</div>
-                <div class="order-number">Pesanan #{{ $order->order_number }}</div>
-                <div class="date">Tarikh: {{ $invoiceDate }} {{ now()->format('H:i') }}</div>
+                <div class="invoice-details">
+                    <div class="invoice-number">INVOICE #{{ $invoiceNumber }}</div>
+                    <div class="order-number">Pesanan #{{ $order->order_number }}</div>
+                    <div class="date">Tarikh: {{ $invoiceDate }} {{ now()->format('h:i A') }}</div>
+                </div>
+                <div class="status-section">
+                    <div class="status-item">
+                        <span class="status-label">Status Pembayaran:</span>
+                        <span class="status-badge status-{{ $order->payment_status }}">{{ $order->getPaymentStatusDisplayName() }}</span>
+                        <span class="status-label" style="margin-left: 20px;">Status Pesanan:</span>
+                        <span class="status-badge status-{{ $order->status }}">{{ $order->getOrderStatusDisplayName() }}</span>
+                    </div>
+                </div>
             </div>
 
             <div class="addresses">
@@ -398,7 +410,7 @@
                 </div>
             </div>
 
-            <div class="payment-section">
+            <div class="payment-info">
                 <div class="payment-title">Maklumat Pembayaran</div>
                 <div class="payment-grid">
                     <div class="payment-item">
@@ -406,19 +418,15 @@
                         <span class="payment-value">{{ $order->getPaymentMethodDisplayName() }}</span>
                     </div>
                     <div class="payment-item">
-                        <span class="payment-label">Status Pembayaran:</span>
-                        <span class="status-badge status-{{ $order->payment_status }}">{{ $order->getPaymentStatusDisplayName() }}</span>
-                    </div>
-                    <div class="payment-item">
-                        <span class="payment-label">Status Pesanan:</span>
-                        <span class="status-badge status-{{ $order->status }}">{{ $order->getOrderStatusDisplayName() }}</span>
+                        <span class="payment-label">Tarikh Pesanan:</span>
+                        <span class="payment-value">{{ $order->created_at->format('d/m/Y') }}</span>
                     </div>
                 </div>
             </div>
 
             @if($order->fpl_manager_name && $order->fpl_team_name)
-                <div class="payment-section">
-                    <div class="payment-title">Fantasy Premier League</div>
+                <div class="fpl-section">
+                    <div class="fpl-title">Fantasy Premier League</div>
                     <div class="payment-grid">
                         <div class="payment-item">
                             <span class="payment-label">Nama Manager:</span>
@@ -435,20 +443,15 @@
                     </div>
                 </div>
             @endif
-        </div>
-    </div>
 
-    <!-- PAGE 2: Items List and Totals -->
-    <div class="page-container page-2">
-        <div class="content">
             <div class="items-section">
-                <h3 style="color: #1f2a38; font-size: 16px; font-weight: bold; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px;">Senarai Item</h3>
+                <div class="section-title">Senarai Item</div>
                 <table class="items-table">
                     <thead>
                         <tr>
                             <th class="item-name">ITEM</th>
                             <th class="item-variation">VARIASI</th>
-                            <th class="item-quantity">QTY</th>
+                            <th class="item-quantity">KUANTITI</th>
                             <th class="item-price">HARGA</th>
                             <th class="item-total">JUMLAH</th>
                         </tr>
@@ -492,19 +495,16 @@
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- PAGE 3: Footer -->
-    <div class="page-container page-3">
         <div class="footer">
             <div class="footer-content">
                 <div class="footer-section">
                     <h4>Hubungi Kami</h4>
-                    <p>support@mygooners.com<br>+60 12-345 6789</p>
+                    <p>support@mygooners.my</p>
                 </div>
                 <div class="footer-section">
                     <h4>Lawati Kami</h4>
-                    <p>www.mygooners.com<br>Ikuti kami di media sosial</p>
+                    <p>www.mygooners.my<br>Ikuti kami di media sosial</p>
                 </div>
                 <div class="footer-section">
                     <h4>Sokongan</h4>

@@ -445,10 +445,10 @@ class InvoiceService
 
         foreach ($order->items as $item) {
             $html .= '<tr>
-                <td>' . ($item->product ? $item->product->name : 'Product') . '</td>
+                <td>' . ($item->product_name ?: 'Product') . '</td>
                 <td>' . $item->quantity . '</td>
                 <td>RM ' . number_format($item->price, 2) . '</td>
-                <td>RM ' . number_format($item->price * $item->quantity, 2) . '</td>
+                <td>RM ' . number_format($item->subtotal, 2) . '</td>
             </tr>';
         }
 
@@ -457,7 +457,7 @@ class InvoiceService
     </div>
     
     <div class="total">
-        <h3>Total: RM ' . number_format($order->total_amount, 2) . '</h3>
+        <h3>Total: RM ' . number_format($order->total, 2) . '</h3>
     </div>
     
     <div style="margin-top: 40px; text-align: center; color: #666;">
@@ -500,13 +500,13 @@ class InvoiceService
         $text .= "============\n";
         
         foreach ($order->items as $item) {
-            $text .= "- " . ($item->product ? $item->product->name : 'Product') . "\n";
+            $text .= "- " . ($item->product_name ?: 'Product') . "\n";
             $text .= "  Quantity: " . $item->quantity . "\n";
             $text .= "  Price: RM " . number_format($item->price, 2) . "\n";
-            $text .= "  Total: RM " . number_format($item->price * $item->quantity, 2) . "\n\n";
+            $text .= "  Total: RM " . number_format($item->subtotal, 2) . "\n\n";
         }
         
-        $text .= "TOTAL: RM " . number_format($order->total_amount, 2) . "\n\n";
+        $text .= "TOTAL: RM " . number_format($order->total, 2) . "\n\n";
         $text .= "Thank you for your order!\n";
         $text .= "MyGooners\n";
         
