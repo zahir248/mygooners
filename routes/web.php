@@ -567,6 +567,152 @@ Route::get('/variation-image/{filename}', function ($filename) {
     return response()->file($path);
 })->name('variation.image');
 
+// Test email route for cPanel SMTP testing
+Route::get('/test-email', function () {
+    // Set a shorter timeout for testing
+    set_time_limit(15);
+    
+    try {
+        // Test connection first
+        $transport = Mail::mailer()->getSymfonyTransport();
+        if (method_exists($transport, 'start')) {
+            $transport->start();
+        }
+        
+        Mail::raw('This is a test email from Laravel using cPanel SMTP.', function ($message) {
+            $message->to('muhdzahir248@gmail.com')
+                    ->subject('Laravel SMTP Test');
+        });
+        
+        return '✅ Test email sent successfully!';
+    } catch (\Exception $e) {
+        return '❌ Error: ' . $e->getMessage() . '<br><br>Check your .env file for correct SMTP settings:<br>' .
+               'MAIL_MAILER=smtp<br>' .
+               'MAIL_HOST=your-cpanel-server.com<br>' .
+               'MAIL_PORT=587 (or 465)<br>' .
+               'MAIL_USERNAME=your-email@yourdomain.com<br>' .
+               'MAIL_PASSWORD=your-password<br>' .
+               'MAIL_ENCRYPTION=tls (or ssl)<br>' .
+               'MAIL_FROM_ADDRESS=your-email@yourdomain.com';
+    }
+});
+
+// Test SMTP connection only (without sending email)
+Route::get('/test-smtp-connection', function () {
+    set_time_limit(20);
+    
+    // Get current mail configuration first
+    $config = config('mail.mailers.smtp');
+    $encryption = isset($config['encryption']) ? $config['encryption'] : 'not set';
+    $configInfo = "Current config: Host={$config['host']}, Port={$config['port']}, Encryption={$encryption}<br>";
+    
+    // Test basic socket connection first
+    $host = $config['host'];
+    $port = $config['port'];
+    
+    $socket = @fsockopen($host, $port, $errno, $errstr, 5);
+    if ($socket) {
+        fclose($socket);
+        $socketTest = "✅ Socket connection to {$host}:{$port} successful<br>";
+    } else {
+        $socketTest = "❌ Socket connection to {$host}:{$port} failed: {$errstr} (Error {$errno})<br>";
+    }
+    
+    // Return config and socket info immediately
+    $result = $configInfo . $socketTest;
+    
+    try {
+        // Try to get transport with a shorter timeout
+        $transport = Mail::mailer()->getSymfonyTransport();
+        if (method_exists($transport, 'start')) {
+            $transport->start();
+            return $result . '✅ SMTP connection successful!';
+        }
+        return $result . '⚠️ Transport method not available';
+    } catch (\Exception $e) {
+        return $result . '❌ SMTP Connection Error: ' . $e->getMessage();
+    }
+});
+
+// Simple ping test to check server reachability
+Route::get('/ping-test', function () {
+    $hosts = [
+        'mygooners.my',
+        'mail.mygooners.my',
+        'www.mygooners.my'
+    ];
+    
+    $results = [];
+    foreach ($hosts as $host) {
+        $start = microtime(true);
+        $socket = @fsockopen($host, 80, $errno, $errstr, 5);
+        $end = microtime(true);
+        
+        if ($socket) {
+            fclose($socket);
+            $results[] = "✅ {$host} - Reachable in " . round(($end - $start) * 1000, 2) . "ms";
+        } else {
+            $results[] = "❌ {$host} - Not reachable: {$errstr} (Error {$errno})";
+        }
+    }
+    
+    return implode('<br>', $results);
+});
+
+// Quick mail config check (no timeout risk)
+Route::get('/mail-config', function () {
+    $config = config('mail.mailers.smtp');
+    $encryption = isset($config['encryption']) ? $config['encryption'] : 'not set';
+    
+    $envVars = [
+        'MAIL_MAILER' => env('MAIL_MAILER'),
+        'MAIL_HOST' => env('MAIL_HOST'),
+        'MAIL_PORT' => env('MAIL_PORT'),
+        'MAIL_USERNAME' => env('MAIL_USERNAME'),
+        'MAIL_ENCRYPTION' => env('MAIL_ENCRYPTION'),
+        'MAIL_FROM_ADDRESS' => env('MAIL_FROM_ADDRESS'),
+        'MAIL_TIMEOUT' => env('MAIL_TIMEOUT')
+    ];
+    
+    $result = "<h3>Mail Configuration</h3>";
+    $result .= "<strong>Config Array:</strong><br>";
+    $result .= "Host: {$config['host']}, Port: {$config['port']}, Encryption: {$encryption}<br><br>";
+    
+    $result .= "<strong>Environment Variables:</strong><br>";
+    foreach ($envVars as $key => $value) {
+        $result .= "{$key}: " . ($value ?: 'not set') . "<br>";
+    }
+    
+    return $result;
+});
+
+// Test multiple SMTP configurations
+Route::get('/test-multiple-smtp', function () {
+    $configs = [
+        ['host' => 'mygooners.my', 'port' => 465, 'encryption' => 'ssl'],
+        ['host' => 'mail.mygooners.my', 'port' => 587, 'encryption' => 'tls'],
+        ['host' => 'mygooners.my', 'port' => 587, 'encryption' => 'tls'],
+        ['host' => 'mail.mygooners.my', 'port' => 465, 'encryption' => 'ssl'],
+    ];
+    
+    $results = [];
+    foreach ($configs as $config) {
+        $host = $config['host'];
+        $port = $config['port'];
+        $encryption = $config['encryption'];
+        
+        $socket = @fsockopen($host, $port, $errno, $errstr, 3);
+        if ($socket) {
+            fclose($socket);
+            $results[] = "✅ {$host}:{$port} ({$encryption}) - Connection successful";
+        } else {
+            $results[] = "❌ {$host}:{$port} ({$encryption}) - Failed: {$errstr} (Error {$errno})";
+        }
+    }
+    
+    return "<h3>SMTP Port Testing</h3>" . implode('<br>', $results);
+});
+
 // Fallback route for 404 errors
 Route::fallback(function () {
     return response()->view('errors.404', [], 404);
