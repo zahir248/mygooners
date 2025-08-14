@@ -44,6 +44,21 @@
             object-fit: contain;
         }
         
+        .logo-fallback {
+            width: 40px;
+            height: 40px;
+            background: #fff;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 8px;
+            font-weight: bold;
+            color: #1f2a38;
+            text-align: center;
+            line-height: 1.1;
+        }
+        
         .company-info h1 {
             font-size: 18px;
             font-weight: bold;
@@ -363,7 +378,40 @@
     <div class="invoice-container">
         <div class="header">
             <div class="logo-section">
-                <img src="{{ public_path('images/official-logo.png') }}" alt="MyGooners Logo" class="company-logo">
+                @php
+                    $possiblePaths = [
+                        '/home/mygooner/public_html/images/official-logo.png',
+                        public_path('images/official-logo.png'),
+                        base_path('public/images/official-logo.png'),
+                        storage_path('app/public/images/official-logo.png')
+                    ];
+                    
+                    $logoPath = null;
+                    $logoExists = false;
+                    $logoSize = 'N/A';
+                    
+                    foreach ($possiblePaths as $path) {
+                        if (file_exists($path)) {
+                            $logoPath = $path;
+                            $logoExists = true;
+                            $logoSize = filesize($path);
+                            break;
+                        }
+                    }
+                @endphp
+                @if($logoExists && $logoSize > 0)
+                    <img src="data:image/png;base64,{{ base64_encode(file_get_contents($logoPath)) }}" alt="MyGooners Logo" class="company-logo">
+                @else
+                    <div class="logo-fallback">
+                        MY<br>GOONERS<br>
+                        <small style="font-size: 6px; color: #666;">
+                            Checked paths:<br>
+                            @foreach($possiblePaths as $path)
+                                {{ $path }}: {{ file_exists($path) ? 'EXISTS' : 'NOT FOUND' }}<br>
+                            @endforeach
+                        </small>
+                    </div>
+                @endif
             </div>
         </div>
 

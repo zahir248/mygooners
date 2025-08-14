@@ -54,6 +54,7 @@ class InvoiceService
             storage_path('app/private/invoices'),
             storage_path('app/temp'),
             storage_path('fonts'),
+            storage_path('app/public/images'),
         ];
 
         foreach ($directories as $dir) {
@@ -61,6 +62,9 @@ class InvoiceService
                 mkdir($dir, 0755, true);
             }
         }
+        
+        // Copy logo to storage if it doesn't exist
+        $this->ensureLogoExists();
     }
 
     /**
@@ -77,6 +81,13 @@ class InvoiceService
             ]);
 
             $pdf->setPaper('A4', 'portrait');
+            $pdf->setOptions([
+                'isRemoteEnabled' => true,
+                'isPhpEnabled' => false,
+                'isJavascriptEnabled' => false,
+                'isHtml5ParserEnabled' => false,
+                'chroot' => base_path(),
+            ]);
             
             $filepath = $this->savePDF($pdf, $order);
             if ($filepath) {
@@ -97,11 +108,11 @@ class InvoiceService
         try {
             // Approach 2: Try with direct instantiation using correct constructor
             $dompdf = new \Dompdf\Dompdf([
-                'enable_remote' => false,
+                'enable_remote' => true,
                 'enable_php' => false,
                 'enable_javascript' => false,
                 'enable_html5_parser' => false,
-                'is_remote_enabled' => false,
+                'is_remote_enabled' => true,
                 'is_php_enabled' => false,
                 'is_javascript_enabled' => false,
                 'is_html5_parser_enabled' => false,
@@ -167,7 +178,7 @@ class InvoiceService
             // Approach 4: Try with minimal DomPDF configuration
             $dompdf = new \Dompdf\Dompdf();
             $dompdf->setOptions(new \Dompdf\Options([
-                'isRemoteEnabled' => false,
+                'isRemoteEnabled' => true,
                 'isPhpEnabled' => false,
                 'isJavascriptEnabled' => false,
                 'isHtml5ParserEnabled' => false,
@@ -511,6 +522,50 @@ class InvoiceService
         $text .= "MyGooners\n";
         
         return $text;
+    }
+
+    /**
+     * Ensure logo image exists in storage
+     */
+    private function ensureLogoExists()
+    {
+        $logoSource = public_path('images/official-logo.png');
+        $logoDest = storage_path('app/public/images/official-logo.png');
+        
+        Log::info('Logo check', [
+            'source_exists' => file_exists($logoSource),
+            'source_path' => $logoSource,
+            'dest_exists' => file_exists($logoDest),
+            'dest_path' => $logoDest,
+            'storage_writable' => is_writable(dirname($logoDest))
+        ]);
+        
+        // Only copy if source exists and destination doesn't
+        if (file_exists($logoSource) && !file_exists($logoDest)) {
+            try {
+                // Ensure destination directory exists
+                $destDir = dirname($logoDest);
+                if (!is_dir($destDir)) {
+                    mkdir($destDir, 0755, true);
+                }
+                
+                copy($logoSource, $logoDest);
+                Log::info('Logo copied to storage successfully', [
+                    'source' => $logoSource,
+                    'destination' => $logoDest
+                ]);
+            } catch (\Exception $e) {
+                Log::error('Failed to copy logo to storage', [
+                    'error' => $e->getMessage(),
+                    'source' => $logoSource,
+                    'destination' => $logoDest
+                ]);
+            }
+        } elseif (!file_exists($logoSource)) {
+            Log::warning('Logo source file not found', [
+                'source_path' => $logoSource
+            ]);
+        }
     }
 
     /**
