@@ -102,7 +102,7 @@
                         <label class="text-sm font-medium text-gray-600">Dokumen Pengenalan</label>
                         @if($user->id_document)
                             <div class="mt-2">
-                                <a href="{{ asset('storage/' . $user->id_document) }}" 
+                                <a href="{{ route('seller.document', ['filename' => basename($user->id_document)]) }}" 
                                    target="_blank"
                                    class="text-blue-600 hover:text-blue-800 text-sm font-medium">
                                     Lihat Dokumen
@@ -116,7 +116,7 @@
                         <label class="text-sm font-medium text-gray-600">Selfie dengan ID</label>
                         @if($user->selfie_with_id)
                             <div class="mt-2">
-                                <a href="{{ asset('storage/' . $user->selfie_with_id) }}" 
+                                <a href="{{ route('seller.image', ['filename' => basename($user->selfie_with_id)]) }}" 
                                    target="_blank"
                                    class="text-blue-600 hover:text-blue-800 text-sm font-medium">
                                     Lihat Gambar

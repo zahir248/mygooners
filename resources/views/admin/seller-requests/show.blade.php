@@ -150,7 +150,7 @@
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Dokumen Pengenalan</label>
                             @if($seller->id_document)
-                                <a href="{{ asset('storage/' . $seller->id_document) }}" target="_blank" 
+                                <a href="{{ route('seller.document', ['filename' => basename($seller->id_document)]) }}" target="_blank" 
                                    class="inline-flex items-center px-3 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                     <svg class="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
@@ -164,10 +164,10 @@
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Selfie dengan ID</label>
                             @if($seller->selfie_with_id)
-                                <a href="{{ asset('storage/' . $seller->selfie_with_id) }}" target="_blank" 
+                                <a href="{{ route('seller.image', ['filename' => basename($seller->selfie_with_id)]) }}" target="_blank" 
                                    class="inline-flex items-center px-3 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                     <svg class="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                                     </svg>
                                     Lihat Gambar
                                 </a>

@@ -589,6 +589,42 @@ Route::get('/variation-image/{filename}', function ($filename) {
     return response()->file($path);
 })->name('variation.image');
 
+// Serve seller documents directly from storage
+Route::get('/seller-document/{filename}', function ($filename) {
+    // Check multiple possible storage locations
+    $paths = [
+        storage_path('app/public/seller-documents/' . $filename),
+        storage_path('app/public/seller_ids/' . $filename),
+        storage_path('app/public/seller_selfies/' . $filename)
+    ];
+    
+    foreach ($paths as $path) {
+        if (file_exists($path)) {
+            return response()->file($path);
+        }
+    }
+    
+    abort(404);
+})->name('seller.document');
+
+// Serve seller images directly from storage
+Route::get('/seller-image/{filename}', function ($filename) {
+    // Check multiple possible storage locations
+    $paths = [
+        storage_path('app/public/seller-documents/' . $filename),
+        storage_path('app/public/seller_ids/' . $filename),
+        storage_path('app/public/seller_selfies/' . $filename)
+    ];
+    
+    foreach ($paths as $path) {
+        if (file_exists($path)) {
+            return response()->file($path);
+        }
+    }
+    
+    abort(404);
+})->name('seller.image');
+
 // Test email route for cPanel SMTP testing
 Route::get('/test-email', function () {
     // Set a shorter timeout for testing

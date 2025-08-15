@@ -201,7 +201,7 @@
                             @if($user->id_document)
                             <div class="bg-gray-50 p-3 rounded-lg">
                                 <p class="text-sm font-medium text-gray-700 mb-1">Dokumen Pengenalan</p>
-                                <a href="{{ asset('storage/' . $user->id_document) }}" 
+                                <a href="{{ route('seller.document', ['filename' => basename($user->id_document)]) }}" 
                                    target="_blank"
                                    class="text-blue-600 hover:text-blue-800 text-sm">
                                     Lihat Dokumen
@@ -211,7 +211,7 @@
                             @if($user->selfie_with_id)
                             <div class="bg-gray-50 p-3 rounded-lg">
                                 <p class="text-sm font-medium text-gray-700 mb-1">Selfie dengan ID</p>
-                                <a href="{{ asset('storage/' . $user->selfie_with_id) }}" 
+                                <a href="{{ route('seller.image', ['filename' => basename($user->selfie_with_id)]) }}" 
                                    target="_blank"
                                    class="text-blue-600 hover:text-blue-800 text-sm">
                                     Lihat Gambar

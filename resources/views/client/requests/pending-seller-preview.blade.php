@@ -116,7 +116,7 @@
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Kad Pengenalan / Sijil / Lesen Perniagaan</label>
                         @if($user->id_document)
-                            <a href="{{ Storage::url($user->id_document) }}" target="_blank" class="text-blue-600 hover:text-blue-800 underline">
+                            <a href="{{ route('seller.document', ['filename' => basename($user->id_document)]) }}" target="_blank" class="text-blue-600 hover:text-blue-800 underline">
                                 Lihat Dokumen
                             </a>
                         @else
@@ -126,7 +126,7 @@
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Selfie Bersama Kad Pengenalan</label>
                         @if($user->selfie_with_id)
-                            <a href="{{ Storage::url($user->selfie_with_id) }}" target="_blank" class="text-blue-600 hover:text-blue-800 underline">
+                            <a href="{{ route('seller.image', ['filename' => basename($user->selfie_with_id)]) }}" target="_blank" class="text-blue-600 hover:text-blue-800 underline">
                                 Lihat Gambar
                             </a>
                         @else
