@@ -7,7 +7,7 @@
 <!-- Open Graph Meta Tags -->
 <meta property="og:title" content="{{ $service->title }} - Arsenal Services Marketplace">
 <meta property="og:description" content="{{ $service->description }}">
-<meta property="og:image" content="{{ $service->images[0] }}">
+        <meta property="og:image" content="{{ route('service.image', basename($service->images[0])) }}">
 <meta property="og:type" content="website">
 <meta property="og:url" content="{{ request()->url() }}">
 <meta property="og:site_name" content="MyGooners">
@@ -16,7 +16,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="{{ $service->title }} - Arsenal Services Marketplace">
 <meta name="twitter:description" content="{{ $service->description }}">
-<meta name="twitter:image" content="{{ $service->images[0] }}">
+        <meta name="twitter:image" content="{{ route('service.image', basename($service->images[0])) }}">
 
 <!-- Additional Meta Tags -->
 <meta name="keywords" content="Arsenal, {{ implode(', ', $service->tags) }}, services, community">

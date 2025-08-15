@@ -20,13 +20,13 @@
         @if($service->images && is_array($service->images) && count($service->images) > 0)
         <div class="mb-8">
             <div class="relative h-96 rounded-xl overflow-hidden bg-gray-200 mb-4">
-                <img src="{{ asset('storage/' . $service->images[0]) }}" alt="{{ $service->title }}" class="w-full h-full object-cover">
+                <img src="{{ route('service.image', basename($service->images[0])) }}" alt="{{ $service->title }}" class="w-full h-full object-cover">
             </div>
             @if(count($service->images) > 1)
             <div class="grid grid-cols-4 gap-2">
                 @foreach(array_slice($service->images, 1) as $img)
                 <div class="aspect-square rounded-lg overflow-hidden bg-gray-200">
-                    <img src="{{ asset('storage/' . $img) }}" alt="{{ $service->title }}" class="w-full h-full object-cover hover:scale-105 transition-transform cursor-pointer">
+                    <img src="{{ route('service.image', basename($img)) }}" alt="{{ $service->title }}" class="w-full h-full object-cover hover:scale-105 transition-transform cursor-pointer">
                 </div>
                 @endforeach
             </div>

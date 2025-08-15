@@ -73,7 +73,7 @@
                                 <div class="mb-6">
                                     <div class="grid grid-cols-1 gap-4">
                                         <div class="aspect-w-16 aspect-h-9">
-                                            <img src="{{ $service->images[0] }}" 
+                                            <img src="{{ route('service.image', basename($service->images[0])) }}" 
                                                  alt="{{ $service->title }}" 
                                                  class="w-full h-64 object-cover rounded-lg">
                                         </div>

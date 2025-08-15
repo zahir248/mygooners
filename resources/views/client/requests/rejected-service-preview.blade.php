@@ -53,7 +53,7 @@
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                     @foreach($service->images as $image)
                     <div class="aspect-w-1 aspect-h-1">
-                        <img src="{{ asset('storage/' . $image) }}" 
+                        <img src="{{ route('service.image', basename($image)) }}" 
                              alt="Service Image" 
                              class="w-full h-32 object-cover rounded-lg">
                     </div>
