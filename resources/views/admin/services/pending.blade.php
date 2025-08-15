@@ -551,7 +551,8 @@ function openServiceModal(serviceId) {
                 if (data.original_service.images && data.original_service.images.length > 0) {
                     data.original_service.images.forEach(imageUrl => {
                         const imgDiv = document.createElement('div');
-                        imgDiv.innerHTML = `<img src="${imageUrl}" alt="Gambar Sedia Ada" class="w-full h-32 object-cover rounded-lg">`;
+                        const filename = imageUrl.split('/').pop(); // Extract filename from path
+                        imgDiv.innerHTML = `<img src="/service-image/${filename}" alt="Gambar Sedia Ada" class="w-full h-32 object-cover rounded-lg">`;
                         existingGrid.appendChild(imgDiv);
                     });
                 } else {
@@ -570,7 +571,8 @@ function openServiceModal(serviceId) {
                 if (data.images && data.images.length > 0) {
                     data.images.forEach(imageUrl => {
                         const imgDiv = document.createElement('div');
-                        imgDiv.innerHTML = `<img src="${imageUrl}" alt="Gambar Dicadangkan" class="w-full h-32 object-cover rounded-lg">`;
+                        const filename = imageUrl.split('/').pop(); // Extract filename from path
+                        imgDiv.innerHTML = `<img src="/service-image/${filename}" alt="Gambar Dicadangkan" class="w-full h-32 object-cover rounded-lg">`;
                         proposedGrid.appendChild(imgDiv);
                     });
                 } else {
@@ -588,7 +590,8 @@ function openServiceModal(serviceId) {
                 grid.className = 'grid grid-cols-2 md:grid-cols-4 gap-4 mb-4';
                 data.images.forEach(imageUrl => {
                     const imgDiv = document.createElement('div');
-                    imgDiv.innerHTML = `<img src="${imageUrl}" alt="Gambar" class="w-full h-32 object-cover rounded-lg">`;
+                    const filename = imageUrl.split('/').pop(); // Extract filename from path
+                    imgDiv.innerHTML = `<img src="/service-image/${filename}" alt="Gambar" class="w-full h-32 object-cover rounded-lg">`;
                     grid.appendChild(imgDiv);
                 });
                 imagesContainer.appendChild(grid);
@@ -611,15 +614,26 @@ function openServiceModal(serviceId) {
             
             // Profile Image
             if (data.user.profile_image) {
-                document.getElementById('profileImageSrc').src = '{{ asset("storage/") }}/' + data.user.profile_image;
+                // Check if it's a Google OAuth image URL or local storage path
+                if (data.user.profile_image.startsWith('http')) {
+                    // Google OAuth or external URL - use directly
+                    document.getElementById('profileImageSrc').src = data.user.profile_image;
+                } else {
+                    // Local storage path - extract filename and use profile image route
+                    const profileFilename = data.user.profile_image.split('/').pop();
+                    document.getElementById('profileImageSrc').src = '/profile-image/' + profileFilename;
+                }
                 profileImageDiv.classList.remove('hidden');
             } else {
-                profileImageDiv.classList.add('hidden');
+                // Use default profile image when profile_image is null
+                document.getElementById('profileImageSrc').src = '/images/profile-image-default.png';
+                profileImageDiv.classList.remove('hidden');
             }
             
             // ID Document
             if (data.user.id_document) {
-                document.getElementById('idDocumentSrc').src = '{{ asset("storage/") }}/' + data.user.id_document;
+                const idFilename = data.user.id_document.split('/').pop();
+                document.getElementById('idDocumentSrc').src = '/seller-document/' + idFilename;
                 idDocumentDiv.classList.remove('hidden');
             } else {
                 idDocumentDiv.classList.add('hidden');
@@ -627,7 +641,8 @@ function openServiceModal(serviceId) {
             
             // Selfie with ID
             if (data.user.selfie_with_id) {
-                document.getElementById('selfieWithIdSrc').src = '{{ asset("storage/") }}/' + data.user.selfie_with_id;
+                const selfieFilename = data.user.selfie_with_id.split('/').pop();
+                document.getElementById('selfieWithIdSrc').src = '/seller-image/' + selfieFilename;
                 selfieWithIdDiv.classList.remove('hidden');
             } else {
                 selfieWithIdDiv.classList.add('hidden');

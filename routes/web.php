@@ -625,6 +625,24 @@ Route::get('/seller-image/{filename}', function ($filename) {
     abort(404);
 })->name('seller.image');
 
+// Serve profile images directly from storage
+Route::get('/profile-image/{filename}', function ($filename) {
+    // Check multiple possible storage locations for profile images
+    $paths = [
+        storage_path('app/public/profile_images/' . $filename),
+        storage_path('app/public/profiles/' . $filename),
+        storage_path('app/public/users/' . $filename)
+    ];
+    
+    foreach ($paths as $path) {
+        if (file_exists($path)) {
+            return response()->file($path);
+        }
+    }
+    
+    abort(404);
+})->name('profile.image');
+
 // Test email route for cPanel SMTP testing
 Route::get('/test-email', function () {
     // Set a shorter timeout for testing
