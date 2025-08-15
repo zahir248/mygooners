@@ -169,7 +169,7 @@
                                 </a>
                             </h3>
                             <div class="text-right">
-                                <div class="text-lg font-bold text-red-600">RM {{ $service->pricing }}</div>
+                                <div class="text-lg font-bold text-red-600">{{ $service->pricing }}</div>
                             </div>
                         </div>
 
