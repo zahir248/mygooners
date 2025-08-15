@@ -195,15 +195,27 @@
 
                         <!-- Service Provider -->
                         <div class="flex items-center justify-between pt-4 border-t border-gray-200">
-                            <div class="flex items-center space-x-3">
-                                <img src="https://ui-avatars.com/api/?name={{ urlencode($service->user->name) }}&size=32&background=dc2626&color=fff" 
-                                     alt="{{ $service->user->name }}" 
-                                     class="w-8 h-8 rounded-full">
-                                <div>
-                                    <p class="text-sm font-medium text-gray-900">{{ $service->user->name }}</p>
-                                    <p class="text-xs text-gray-500">{{ $service->created_at->diffForHumans() }}</p>
-                                </div>
-                            </div>
+                                                         <div class="flex items-center space-x-3">
+                                 @if($service->user->profile_image)
+                                     @if(Str::startsWith($service->user->profile_image, 'http'))
+                                         <img src="{{ $service->user->profile_image }}" 
+                                              alt="{{ $service->user->name }}" 
+                                              class="w-8 h-8 rounded-full object-cover">
+                                     @else
+                                         <img src="{{ route('profile.image', basename($service->user->profile_image)) }}" 
+                                              alt="{{ $service->user->name }}" 
+                                              class="w-8 h-8 rounded-full object-cover">
+                                     @endif
+                                 @else
+                                     <img src="https://ui-avatars.com/api/?name={{ urlencode($service->user->name) }}&size=32&background=dc2626&color=fff" 
+                                          alt="{{ $service->user->name }}" 
+                                          class="w-8 h-8 rounded-full">
+                                 @endif
+                                 <div>
+                                     <p class="text-sm font-medium text-gray-900">{{ $service->user->name }}</p>
+                                     <p class="text-xs text-gray-500">{{ $service->created_at->diffForHumans() }}</p>
+                                 </div>
+                             </div>
                             <div class="flex items-center text-xs text-gray-500">
                                 <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
                                     <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path>

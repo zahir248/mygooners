@@ -259,7 +259,15 @@
                                 </div>
                                 <div class="flex items-center text-sm text-gray-500">
                                     @if($service->user)
-                                        <img src="https://ui-avatars.com/api/?name={{ urlencode($service->user->name) }}&size=24&background=dc2626&color=fff" alt="{{ $service->user->name }}" class="w-6 h-6 rounded-full mr-2">
+                                        @if($service->user->profile_image)
+                                            @if(Str::startsWith($service->user->profile_image, 'http'))
+                                                <img src="{{ $service->user->profile_image }}" alt="{{ $service->user->name }}" class="w-6 h-6 rounded-full mr-2 object-cover">
+                                            @else
+                                                <img src="{{ route('profile.image', basename($service->user->profile_image)) }}" alt="{{ $service->user->name }}" class="w-6 h-6 rounded-full mr-2 object-cover">
+                                            @endif
+                                        @else
+                                            <img src="https://ui-avatars.com/api/?name={{ urlencode($service->user->name) }}&size=24&background=dc2626&color=fff" alt="{{ $service->user->name }}" class="w-6 h-6 rounded-full mr-2">
+                                        @endif
                                         <span>{{ $service->user->name }}</span>
                                     @else
                                         <span>Pengguna Tidak Dikenali</span>

@@ -160,11 +160,23 @@
                 <div class="space-y-6">
                     @foreach($reviews as $review)
                         <div class="border-b border-gray-200 pb-6 last:border-b-0 last:pb-0">
-                            <div class="flex items-start space-x-4">
-                                <img src="https://ui-avatars.com/api/?name={{ urlencode($review->user->name) }}&size=40&background=dc2626&color=fff" 
-                                     alt="{{ $review->user->name }}" 
-                                     class="w-10 h-10 rounded-full">
-                                <div class="flex-1">
+                                                         <div class="flex items-start space-x-4">
+                                 @if($review->user->profile_image)
+                                     @if(Str::startsWith($review->user->profile_image, 'http'))
+                                         <img src="{{ $review->user->profile_image }}" 
+                                              alt="{{ $review->user->name }}" 
+                                              class="w-10 h-10 rounded-full object-cover">
+                                     @else
+                                         <img src="{{ route('profile.image', basename($review->user->profile_image)) }}" 
+                                              alt="{{ $review->user->name }}" 
+                                              class="w-10 h-10 rounded-full object-cover">
+                                     @endif
+                                 @else
+                                     <img src="https://ui-avatars.com/api/?name={{ urlencode($review->user->name) }}&size=40&background=dc2626&color=fff" 
+                                          alt="{{ $review->user->name }}" 
+                                          class="w-10 h-10 rounded-full">
+                                 @endif
+                                 <div class="flex-1">
                                     <div class="flex items-center space-x-2 mb-2">
                                         <h4 class="font-medium text-gray-900">{{ $review->user->name }}</h4>
                                         <div class="flex items-center">
@@ -201,11 +213,23 @@
                 </div>
 
                 <!-- Provider Info -->
-                <div class="flex items-center space-x-4 mb-6 p-4 bg-gray-50 rounded-lg">
-                    <img src="https://ui-avatars.com/api/?name={{ urlencode($service->user->name) }}&size=60&background=dc2626&color=fff" 
-                         alt="{{ $service->user->name }}" 
-                         class="w-15 h-15 rounded-full">
-                    <div class="flex-1">
+                                 <div class="flex items-center space-x-4 mb-6 p-4 bg-gray-50 rounded-lg">
+                     @if($service->user->profile_image)
+                         @if(Str::startsWith($service->user->profile_image, 'http'))
+                             <img src="{{ $service->user->profile_image }}" 
+                                  alt="{{ $service->user->name }}" 
+                                  class="w-15 h-15 rounded-full object-cover">
+                         @else
+                             <img src="{{ route('profile.image', basename($service->user->profile_image)) }}" 
+                                  alt="{{ $service->user->name }}" 
+                                  class="w-15 h-15 rounded-full object-cover">
+                         @endif
+                     @else
+                         <img src="https://ui-avatars.com/api/?name={{ urlencode($service->user->name) }}&size=60&background=dc2626&color=fff" 
+                              alt="{{ $service->user->name }}" 
+                              class="w-15 h-15 rounded-full">
+                     @endif
+                     <div class="flex-1">
                         <h3 class="font-bold text-gray-900">{{ $service->user->name }}</h3>
                         @if($service->user->is_verified)
                             <div class="flex items-center text-sm text-green-600 mb-1">
@@ -498,12 +522,24 @@ document.addEventListener('DOMContentLoaded', function() {
                     @foreach($reviews as $review)
                         <div class="service-review-item border-b border-gray-200 pb-4 sm:pb-6 last:border-b-0" data-rating="{{ $review->rating }}">
                             <div class="flex items-start space-x-3 sm:space-x-4">
-                                <!-- User Avatar -->
-                                <div class="flex-shrink-0">
-                                    <img src="https://ui-avatars.com/api/?name={{ urlencode($review->user->name) }}&size=48&background=dc2626&color=fff" 
-                                         alt="{{ $review->user->name }}" 
-                                         class="w-10 h-10 sm:w-12 sm:h-12 rounded-full border-2 border-gray-100 shadow-sm object-cover">
-                                </div>
+                                                                 <!-- User Avatar -->
+                                 <div class="flex-shrink-0">
+                                     @if($review->user->profile_image)
+                                         @if(Str::startsWith($review->user->profile_image, 'http'))
+                                             <img src="{{ $review->user->profile_image }}" 
+                                                  alt="{{ $review->user->name }}" 
+                                                  class="w-10 h-10 sm:w-12 sm:h-12 rounded-full border-2 border-gray-100 shadow-sm object-cover">
+                                         @else
+                                             <img src="{{ route('profile.image', basename($review->user->profile_image)) }}" 
+                                                  alt="{{ $review->user->name }}" 
+                                                  class="w-10 h-10 sm:w-12 sm:h-12 rounded-full border-2 border-gray-100 shadow-sm object-cover">
+                                         @endif
+                                     @else
+                                         <img src="https://ui-avatars.com/api/?name={{ urlencode($review->user->name) }}&size=48&background=dc2626&color=fff" 
+                                              alt="{{ $review->user->name }}" 
+                                              class="w-10 h-10 sm:w-12 sm:h-12 rounded-full border-2 border-gray-100 shadow-sm object-cover">
+                                     @endif
+                                 </div>
                                 
                                 <!-- Review Content -->
                                 <div class="flex-1 min-w-0">
