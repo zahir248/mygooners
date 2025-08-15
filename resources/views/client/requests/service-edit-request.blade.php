@@ -102,7 +102,7 @@
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                     @foreach($service->images as $index => $image)
                     <div class="relative">
-                        <img src="{{ Storage::url($image) }}" alt="Service Image" class="w-full h-24 object-cover rounded-lg">
+                        <img src="{{ route('service.image', basename($image)) }}" alt="Service Image" class="w-full h-24 object-cover rounded-lg">
                         <label class="absolute top-2 left-2">
                             <input type="checkbox" name="current_images[]" value="{{ $image }}" checked 
                                    class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
