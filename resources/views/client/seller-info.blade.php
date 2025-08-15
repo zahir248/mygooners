@@ -220,9 +220,9 @@
             <h3 class="text-xl font-bold mb-4">Dokumen ID</h3>
             @php $idDoc = $user->id_document; @endphp
             @if($idDoc && Str::endsWith(strtolower($idDoc), ['.jpg', '.jpeg', '.png', '.gif']))
-                <img src="{{ asset('storage/' . $idDoc) }}" alt="Dokumen ID" class="w-full max-w-md mx-auto rounded shadow">
+                <img src="{{ route('seller.document', ['filename' => basename($idDoc)]) }}" alt="Dokumen ID" class="w-full max-w-md mx-auto rounded shadow">
             @elseif($idDoc && Str::endsWith(strtolower($idDoc), ['.pdf']))
-                <embed src="{{ asset('storage/' . $idDoc) }}" type="application/pdf" class="w-full h-80 rounded shadow" />
+                <embed src="{{ route('seller.document', ['filename' => basename($idDoc)]) }}" type="application/pdf" class="w-full h-80 rounded shadow" />
             @else
                 <p class="text-gray-500">Tidak dapat memaparkan dokumen ini.</p>
             @endif
@@ -236,7 +236,7 @@
             <h3 class="text-xl font-bold mb-4">Selfie Bersama ID</h3>
             @php $selfie = $user->selfie_with_id; @endphp
             @if($selfie && Str::endsWith(strtolower($selfie), ['.jpg', '.jpeg', '.png', '.gif']))
-                <img src="{{ asset('storage/' . $selfie) }}" alt="Selfie ID" class="w-full max-w-md mx-auto rounded shadow">
+                <img src="{{ route('seller.image', ['filename' => basename($selfie)]) }}" alt="Selfie ID" class="w-full max-w-md mx-auto rounded shadow">
             @else
                 <p class="text-gray-500">Tidak dapat memaparkan selfie ini.</p>
             @endif
@@ -331,7 +331,7 @@
                         @if($idDoc)
                             <div class="mb-2">
                                 @if(Str::endsWith(strtolower($idDoc), ['.jpg', '.jpeg', '.png', '.gif']))
-                                    <img src="{{ asset('storage/' . $idDoc) }}" alt="ID Document" class="w-32 h-32 object-cover rounded border">
+                                    <img src="{{ route('seller.document', ['filename' => basename($idDoc)]) }}" alt="ID Document" class="w-32 h-32 object-cover rounded border">
                                 @elseif(Str::endsWith(strtolower($idDoc), ['.pdf']))
                                     <div class="w-32 h-32 bg-gray-100 rounded border flex items-center justify-center">
                                         <div class="text-center">
@@ -353,7 +353,7 @@
                         @php $selfie = $user->selfie_with_id; @endphp
                         @if($selfie)
                             <div class="mb-2">
-                                <img src="{{ asset('storage/' . $selfie) }}" alt="Selfie with ID" class="w-32 h-32 object-cover rounded border">
+                                <img src="{{ route('seller.image', ['filename' => basename($selfie)]) }}" alt="Selfie with ID" class="w-32 h-32 object-cover rounded border">
                                 <p class="text-xs text-gray-500 mt-1">Selfie semasa</p>
                             </div>
                         @endif

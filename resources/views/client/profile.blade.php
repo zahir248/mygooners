@@ -291,7 +291,7 @@
                 @php $idDoc = $user->id_document; @endphp
                 @if($idDoc)
                     @if(Str::endsWith(strtolower($idDoc), ['.jpg', '.jpeg', '.png', '.gif']))
-                        <img src="{{ asset('storage/' . $idDoc) }}" alt="ID Document" class="max-w-full max-h-96 object-contain rounded">
+                        <img src="{{ route('seller.document', ['filename' => basename($idDoc)]) }}" alt="ID Document" class="max-w-full max-h-96 object-contain rounded">
                     @elseif(Str::endsWith(strtolower($idDoc), ['.pdf']))
                         <div class="w-full h-96 bg-gray-100 rounded flex items-center justify-center">
                             <div class="text-center">
@@ -299,7 +299,7 @@
                                     <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd"/>
                                 </svg>
                                 <p class="text-gray-600">PDF Document</p>
-                                <a href="{{ asset('storage/' . $idDoc) }}" target="_blank" class="text-blue-600 hover:text-blue-800 mt-2 inline-block">Buka PDF</a>
+                                <a href="{{ route('seller.document', ['filename' => basename($idDoc)]) }}" target="_blank" class="text-blue-600 hover:text-blue-800 mt-2 inline-block">Buka PDF</a>
                             </div>
                         </div>
                     @endif
@@ -316,7 +316,7 @@
             <div class="flex justify-center">
                 @php $selfie = $user->selfie_with_id; @endphp
                 @if($selfie)
-                    <img src="{{ asset('storage/' . $selfie) }}" alt="Selfie with ID" class="max-w-full max-h-96 object-contain rounded">
+                    <img src="{{ route('seller.image', ['filename' => basename($selfie)]) }}" alt="Selfie with ID" class="max-w-full max-h-96 object-contain rounded">
                 @endif
             </div>
         </div>
@@ -409,23 +409,23 @@
                         <div>
                             <label class="block font-medium">Kad Pengenalan / Sijil / Lesen Perniagaan</label>
                             @php $idDoc = $user->id_document; @endphp
-                            @if($idDoc)
-                                <div class="mb-2">
-                                    @if(Str::endsWith(strtolower($idDoc), ['.jpg', '.jpeg', '.png', '.gif']))
-                                        <img src="{{ asset('storage/' . $idDoc) }}" alt="ID Document" class="w-32 h-32 object-cover rounded border">
-                                    @elseif(Str::endsWith(strtolower($idDoc), ['.pdf']))
-                                        <div class="w-32 h-32 bg-gray-100 rounded border flex items-center justify-center">
-                                            <div class="text-center">
-                                                <svg class="w-8 h-8 text-gray-400 mx-auto mb-1" fill="currentColor" viewBox="0 0 20 20">
-                                                    <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd"/>
-                                                </svg>
-                                                <span class="text-xs text-gray-500">PDF Document</span>
-                                            </div>
+                                                    @if($idDoc)
+                            <div class="mb-2">
+                                @if(Str::endsWith(strtolower($idDoc), ['.jpg', '.jpeg', '.png', '.gif']))
+                                    <img src="{{ route('seller.document', ['filename' => basename($idDoc)]) }}" alt="ID Document" class="w-32 h-32 object-cover rounded border">
+                                @elseif(Str::endsWith(strtolower($idDoc), ['.pdf']))
+                                    <div class="w-32 h-32 bg-gray-100 rounded border flex items-center justify-center">
+                                        <div class="text-center">
+                                            <svg class="w-8 h-8 text-gray-400 mx-auto mb-1" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd"/>
+                                            </svg>
+                                            <span class="text-xs text-gray-500">PDF Document</span>
                                         </div>
-                                    @endif
-                                    <p class="text-xs text-gray-500 mt-1">Dokumen semasa</p>
-                                </div>
-                            @endif
+                                    </div>
+                                @endif
+                                <p class="text-xs text-gray-500 mt-1">Dokumen semasa</p>
+                            </div>
+                        @endif
                             <input type="file" name="id_document" class="w-full border rounded p-2" accept="image/*,application/pdf">
                             <p class="text-xs text-gray-500 mt-1">Gantikan jika ingin kemaskini</p>
                         </div>
@@ -434,7 +434,7 @@
                             @php $selfie = $user->selfie_with_id; @endphp
                             @if($selfie)
                                 <div class="mb-2">
-                                    <img src="{{ asset('storage/' . $selfie) }}" alt="Selfie with ID" class="w-32 h-32 object-cover rounded border">
+                                    <img src="{{ route('seller.image', ['filename' => basename($selfie)]) }}" alt="Selfie with ID" class="w-32 h-32 object-cover rounded border">
                                     <p class="text-xs text-gray-500 mt-1">Selfie semasa</p>
                                 </div>
                             @endif
