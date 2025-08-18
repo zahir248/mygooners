@@ -5,8 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>Log Masuk Admin - MyGooners</title>
-    <meta name="description" content="Akses panel admin MyGooners">
+    <title>Lupa Kata Laluan Admin - MyGooners</title>
+    <meta name="description" content="Reset kata laluan admin MyGooners">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
+    <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
+    <link rel="apple-touch-icon" href="{{ asset('favicon.png') }}">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -54,10 +59,10 @@
                 </div>
             </div>
             <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
-                Log masuk ke panel admin
+                Lupa Kata Laluan?
             </h2>
             <p class="mt-2 text-center text-sm text-gray-600">
-                Akses sistem pentadbiran MyGooners
+                Masukkan alamat emel anda dan kami akan menghantar pautan untuk menetapkan semula kata laluan anda.
             </p>
         </div>
 
@@ -67,6 +72,18 @@
                 @if (session('status'))
                     <div class="mb-4 font-medium text-sm text-green-600 bg-green-50 border border-green-200 rounded p-3">
                         {{ session('status') }}
+                    </div>
+                @endif
+
+                @if (session('success'))
+                    <div class="mb-4 font-medium text-sm text-green-600 bg-green-50 border border-green-200 rounded p-3">
+                        {{ session('success') }}
+                    </div>
+                @endif
+
+                @if (session('error'))
+                    <div class="mb-4 font-medium text-sm text-red-600 bg-red-50 border border-red-200 rounded p-3">
+                        {{ session('error') }}
                     </div>
                 @endif
 
@@ -82,10 +99,8 @@
                     </div>
                 @endif
 
-                <form class="space-y-6" method="POST" action="{{ route('admin.login') }}">
+                <form class="space-y-6" method="POST" action="{{ route('admin.password.email') }}">
                     @csrf
-
-                    <!-- Email Address -->
                     <div>
                         <label for="email" class="block text-sm font-medium text-gray-700">
                             Alamat emel
@@ -95,64 +110,39 @@
                                    name="email" 
                                    type="email" 
                                    autocomplete="email" 
-                                   required
-                                                                       value="{{ old('email', 'support@mygooners.my') }}"
-                                   class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-admin-500 focus:border-admin-500 sm:text-sm transition-all"
+                                   required 
+                                   value="{{ old('email') }}"
+                                   class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-admin-500 focus:border-admin-500 sm:text-sm transition-all @error('email') border-red-500 @enderror"
                                    placeholder="admin@mygooners.com">
                         </div>
+                        @error('email')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
                     </div>
 
-                    <!-- Password -->
-                    <div>
-                        <label for="password" class="block text-sm font-medium text-gray-700">
-                            Kata laluan
-                        </label>
-                        <div class="mt-1">
-                            <input id="password" 
-                                   name="password" 
-                                   type="password" 
-                                   autocomplete="current-password" 
-                                   required
-                                   value="password"
-                                   class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-admin-500 focus:border-admin-500 sm:text-sm transition-all"
-                                   placeholder="••••••••">
-                        </div>
-                    </div>
-
-                    <!-- Remember Me -->
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center">
-                            <input id="remember" 
-                                   name="remember" 
-                                   type="checkbox" 
-                                   class="h-4 w-4 text-admin-600 focus:ring-admin-500 border-gray-300 rounded">
-                            <label for="remember" class="ml-2 block text-sm text-gray-900">
-                                Ingat saya
-                            </label>
-                        </div>
-
-                        <div class="text-sm">
-                            <a href="{{ route('admin.password.request') }}" class="font-medium text-admin-600 hover:text-admin-500 transition-colors">
-                                Lupa kata laluan?
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- Submit Button -->
                     <div>
                         <button type="submit" 
                                 class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-admin-700 hover:bg-admin-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-admin-500 transition-all">
                             <span class="absolute left-0 inset-y-0 flex items-center pl-3">
                                 <svg class="h-5 w-5 text-admin-500 group-hover:text-admin-400" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"></path>
+                                    <path d="M2.003 2a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2V4a2 2 0 00-2-2h-12zm0 2h12v12H2.003V4z" />
+                                    <path d="M10 9a1 1 0 00-1 1v3a1 1 0 102 0v-3a1 1 0 00-1-1zm0-2a1 1 0 100-2 1 1 0 000 2z" />
                                 </svg>
                             </span>
-                            Log masuk ke panel admin
+                            Hantar Pautan Reset
                         </button>
                     </div>
                 </form>
 
-
+                <!-- Back to Login -->
+                <div class="mt-6 text-center">
+                    <p class="text-sm text-gray-600">
+                        Ingat kata laluan anda? 
+                        <a href="{{ route('admin.login') }}" class="font-medium text-admin-600 hover:text-admin-500 transition-colors">
+                            Log masuk di sini
+                        </a>
+                    </p>
+                </div>
 
                 <!-- Back to Site -->
                 <div class="mt-4 text-center">
@@ -171,4 +161,4 @@
         </div>
     </div>
 </body>
-</html> 
+</html>

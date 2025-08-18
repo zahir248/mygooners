@@ -112,7 +112,12 @@ class User extends Authenticatable
      */
     public function sendPasswordResetNotification($token)
     {
-        $this->notify(new \App\Notifications\ResetPasswordNotification($token));
+        // Use admin notification for admin users, regular notification for others
+        if ($this->isAdmin()) {
+            $this->notify(new \App\Notifications\AdminResetPasswordNotification($token));
+        } else {
+            $this->notify(new \App\Notifications\ResetPasswordNotification($token));
+        }
     }
 
     public function orders()

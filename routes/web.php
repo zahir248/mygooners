@@ -418,6 +418,12 @@ Route::prefix('admin')->group(function () {
         Route::post('/login', [AdminAuthController::class, 'login']);
         Route::get('/register', [AdminAuthController::class, 'showRegisterForm'])->name('admin.register');
         Route::post('/register', [AdminAuthController::class, 'register']);
+        
+        // Admin Password Reset Routes
+        Route::get('/forgot-password', [AdminAuthController::class, 'showForgotPasswordForm'])->name('admin.password.request');
+        Route::post('/forgot-password', [AdminAuthController::class, 'sendResetLinkEmail'])->name('admin.password.email');
+        Route::get('/reset-password/{token}', [AdminAuthController::class, 'showResetPasswordForm'])->name('admin.password.reset');
+        Route::post('/reset-password', [AdminAuthController::class, 'resetPassword'])->name('admin.password.update');
     });
     
     Route::middleware('auth')->group(function () {
