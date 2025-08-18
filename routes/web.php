@@ -470,6 +470,15 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
         Route::put('/variations/{variationId}', [AdminProductController::class, 'updateVariation'])->name('admin.products.variations.update');
     });
     
+    // Product Reports
+    Route::prefix('product-reports')->group(function () {
+        Route::get('/', [\App\Http\Controllers\Admin\ProductReportController::class, 'index'])->name('admin.product-reports.index');
+        Route::get('/stock', [\App\Http\Controllers\Admin\ProductReportController::class, 'stockReport'])->name('admin.product-reports.stock');
+        Route::get('/sales', [\App\Http\Controllers\Admin\ProductReportController::class, 'salesReport'])->name('admin.product-reports.sales');
+        Route::get('/stock/export', [\App\Http\Controllers\Admin\ProductReportController::class, 'exportStockReport'])->name('admin.product-reports.stock.export');
+        Route::get('/sales/export', [\App\Http\Controllers\Admin\ProductReportController::class, 'exportSalesReport'])->name('admin.product-reports.sales.export');
+    });
+    
     // Orders Management
     Route::prefix('orders')->group(function () {
         Route::get('/', [OrderController::class, 'index'])->name('admin.orders.index');
