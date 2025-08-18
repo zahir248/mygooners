@@ -158,7 +158,7 @@
                                 <div class="flex items-center">
                                     <div class="flex-shrink-0 h-10 w-10">
                                         @if($data['product']->images && count($data['product']->images) > 0)
-                                            <img class="h-10 w-10 rounded-lg object-cover" src="{{ asset('storage/' . $data['product']->images[0]) }}" alt="{{ $data['product']->title }}">
+                                            <img class="h-10 w-10 rounded-lg object-cover" src="{{ route('product.image', basename($data['product']->images[0])) }}" alt="{{ $data['product']->title }}">
                                         @else
                                             <div class="h-10 w-10 rounded-lg bg-gray-200 flex items-center justify-center">
                                                 <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
