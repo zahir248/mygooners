@@ -299,6 +299,17 @@
                         </a>
                     </li>
 
+                    <!-- Newsletter -->
+                    <li>
+                        <a href="{{ route('admin.newsletter.index') }}" 
+                           class="flex items-center px-4 py-2 text-sm font-medium rounded-md transition-colors {{ request()->routeIs('admin.newsletter.*') ? 'bg-admin-700 text-white' : 'text-admin-300 hover:bg-admin-700 hover:text-white' }}">
+                            <svg class="mr-3 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                            </svg>
+                            Newsletter
+                        </a>
+                    </li>
+
                     <!-- Logs -->
                     <li>
                         <a href="{{ route('admin.logs.index') }}" 

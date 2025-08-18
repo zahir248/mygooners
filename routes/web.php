@@ -17,6 +17,7 @@ use App\Http\Controllers\Client\RefundController;
 use App\Http\Controllers\Client\FavouriteController;
 use App\Http\Controllers\Client\ReviewController;
 use App\Http\Controllers\Client\ServiceReviewController;
+use App\Http\Controllers\Client\NewsletterController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\AuthController as AdminAuthController;
 use App\Http\Controllers\Admin\ArticleController as AdminArticleController;
@@ -29,6 +30,7 @@ use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\RefundController as AdminRefundController;
 use App\Http\Controllers\Admin\ProductReviewController;
 use App\Http\Controllers\Admin\ServiceReviewController as AdminServiceReviewController;
+use App\Http\Controllers\Admin\NewsletterController as AdminNewsletterController;
 
 // Home Page
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -206,6 +208,13 @@ Route::get('/direct-checkout/stripe/return', [DirectCheckoutController::class, '
 Route::prefix('videos')->group(function () {
     Route::get('/', [VideoController::class, 'index'])->name('videos.index');
     Route::get('/{slug}', [VideoController::class, 'show'])->name('videos.show');
+});
+
+// Newsletter Routes
+Route::prefix('newsletter')->group(function () {
+    Route::post('/subscribe', [NewsletterController::class, 'subscribe'])->name('newsletter.subscribe');
+    Route::post('/unsubscribe', [NewsletterController::class, 'unsubscribe'])->name('newsletter.unsubscribe');
+    Route::get('/unsubscribe/{token}', [NewsletterController::class, 'unsubscribeByToken'])->name('newsletter.unsubscribe.token');
 });
 
 // Authentication Routes
@@ -584,6 +593,16 @@ Route::prefix('service-reviews')->group(function () {
         Route::get('/{id}/edit', [AdminVideoController::class, 'edit'])->name('admin.videos.edit');
         Route::put('/{id}', [AdminVideoController::class, 'update'])->name('admin.videos.update');
         Route::delete('/{id}', [AdminVideoController::class, 'destroy'])->name('admin.videos.destroy');
+    });
+    
+    // Newsletter Management
+    Route::prefix('newsletter')->group(function () {
+        Route::get('/', [AdminNewsletterController::class, 'index'])->name('admin.newsletter.index');
+        Route::get('/create', [AdminNewsletterController::class, 'create'])->name('admin.newsletter.create');
+        Route::post('/', [AdminNewsletterController::class, 'store'])->name('admin.newsletter.store');
+        Route::delete('/{newsletter}', [AdminNewsletterController::class, 'destroy'])->name('admin.newsletter.destroy');
+        Route::patch('/{newsletter}/toggle-status', [AdminNewsletterController::class, 'toggleStatus'])->name('admin.newsletter.toggle-status');
+        Route::get('/export', [AdminNewsletterController::class, 'export'])->name('admin.newsletter.export');
     });
 });
 

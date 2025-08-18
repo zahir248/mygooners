@@ -1010,19 +1010,50 @@
                         <h3 class="text-2xl font-bold text-white mb-2">Kekal Terkini, Gooner!</h3>
                         <p class="text-gray-300 mb-6">Dapatkan berita Arsenal terkini, kandungan eksklusif, dan kemas kini komuniti terus ke peti mel anda.</p>
                         
-                        <form class="space-y-4" action="#" method="POST">
+                        <form class="space-y-4" x-data="newsletterForm()" @submit.prevent="submitForm">
                             @csrf
                             <div>
                                 <input type="email" 
+                                       x-model="email"
                                        name="email" 
                                        placeholder="Masukkan alamat emel anda" 
                                        required
+                                       :disabled="loading"
                                        class="w-full px-4 py-3 rounded-lg border border-gray-600 bg-gray-800 text-white placeholder-gray-400 focus:ring-2 focus:ring-red-600 focus:border-transparent transition-all">
                             </div>
+                            
+                            <!-- Subscribe Button -->
                             <button type="submit" 
-                                    class="w-full bg-red-600 hover:bg-red-700 text-white font-semibold px-6 py-3 rounded-lg transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-red-600 focus:ring-offset-2 focus:ring-offset-gray-900">
-                                Langgan
+                                    x-show="!isSubscribed"
+                                    :disabled="loading"
+                                    class="w-full bg-red-600 hover:bg-red-700 disabled:bg-gray-600 text-white font-semibold px-6 py-3 rounded-lg transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-red-600 focus:ring-offset-2 focus:ring-offset-gray-900">
+                                <span x-show="!loading">Langgan</span>
+                                <span x-show="loading" class="flex items-center justify-center">
+                                    <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                    </svg>
+                                    Memproses...
+                                </span>
                             </button>
+                            
+                            <!-- Unsubscribe Button -->
+                            <button type="button" 
+                                    x-show="isSubscribed"
+                                    @click="unsubscribe()"
+                                    :disabled="loading"
+                                    class="w-full bg-gray-600 hover:bg-gray-700 disabled:bg-gray-500 text-white font-semibold px-6 py-3 rounded-lg transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-gray-600 focus:ring-offset-2 focus:ring-offset-gray-900">
+                                <span x-show="!loading">Berhenti Langgan</span>
+                                <span x-show="loading" class="flex items-center justify-center">
+                                    <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                    </svg>
+                                    Memproses...
+                                </span>
+                            </button>
+                            
+
                         </form>
                         
                         <div class="grid grid-cols-1 gap-2 mt-4 text-sm text-gray-400">
@@ -1403,7 +1434,199 @@
     
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     
+    <!-- Newsletter Form Script -->
+    <script>
+        function newsletterForm() {
+            return {
+                email: '',
+                loading: false,
+                isSubscribed: false,
+                
+                async submitForm() {
+                    this.loading = true;
+                    
+                    try {
+                        const response = await fetch('{{ route("newsletter.subscribe") }}', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                            },
+                            body: JSON.stringify({
+                                email: this.email
+                            })
+                        });
+                        
+                        const data = await response.json();
+                        
+                        if (data.success) {
+                            // Show success modal
+                            window.newsletterModal.showSuccess(data.message);
+                            this.isSubscribed = true;
+                        } else {
+                            // Check if it's already subscribed error
+                            if (data.message.includes('sudah dilanggani')) {
+                                this.isSubscribed = true;
+                                window.newsletterModal.showError(data.message);
+                            } else {
+                                // Show other error modal
+                                window.newsletterModal.showError(data.message);
+                            }
+                        }
+                    } catch (error) {
+                        // Show error modal
+                        window.newsletterModal.showError('Ralat sistem. Sila cuba lagi.');
+                    } finally {
+                        this.loading = false;
+                    }
+                },
+                
+                async unsubscribe() {
+                    if (!this.email) {
+                        window.newsletterModal.showError('Sila masukkan alamat emel anda.');
+                        return;
+                    }
+                    
+                    this.loading = true;
+                    
+                    try {
+                        const response = await fetch('{{ route("newsletter.unsubscribe") }}', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                            },
+                            body: JSON.stringify({
+                                email: this.email
+                            })
+                        });
+                        
+                        const data = await response.json();
+                        
+                        if (data.success) {
+                            // Show success modal
+                            window.newsletterModal.showSuccess(data.message);
+                            this.isSubscribed = false;
+                            this.email = '';
+                        } else {
+                            // Show error modal
+                            window.newsletterModal.showError(data.message);
+                        }
+                    } catch (error) {
+                        // Show error modal
+                        window.newsletterModal.showError('Ralat sistem. Sila cuba lagi.');
+                    } finally {
+                        this.loading = false;
+                    }
+                }
+            }
+        }
+
+        // Newsletter Modal Functions
+        window.newsletterModal = {
+            showSuccess(message) {
+                console.log('Showing success modal:', message); // Debug log
+                this.showModal('Berjaya!', message, 'success');
+            },
+            
+            showError(message) {
+                console.log('Showing error modal:', message); // Debug log
+                this.showModal('Perhatian', message, 'error');
+            },
+            
+            showModal(title, message, type) {
+                const modal = document.getElementById('newsletterModal');
+                const modalTitle = document.getElementById('modalTitle');
+                const modalMessage = document.getElementById('modalMessage');
+                const modalIcon = document.getElementById('modalIcon');
+                const modalButton = document.getElementById('modalButton');
+                
+                // Set content
+                modalTitle.textContent = title;
+                modalMessage.textContent = message;
+                
+                // Set icon and colors based on type
+                if (type === 'success') {
+                    modalIcon.className = 'flex items-center justify-center w-12 h-12 mx-auto bg-green-100 rounded-full';
+                    modalIcon.innerHTML = '<svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>';
+                    modalButton.className = 'bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors';
+                } else {
+                    modalIcon.className = 'flex items-center justify-center w-12 h-12 mx-auto bg-red-100 rounded-full';
+                    modalIcon.innerHTML = '<svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path></svg>';
+                    modalButton.className = 'bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors';
+                }
+                
+                // Show modal
+                modal.classList.remove('hidden');
+            },
+            
+            closeModal() {
+                console.log('Closing modal'); // Debug log
+                const modal = document.getElementById('newsletterModal');
+                modal.classList.add('hidden');
+            }
+        };
+
+        // Close modal when clicking outside
+        document.addEventListener('click', function(e) {
+            if (e.target.id === 'newsletterModal') {
+                window.newsletterModal.closeModal();
+            }
+        });
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                const modal = document.getElementById('newsletterModal');
+                if (!modal.classList.contains('hidden')) {
+                    window.newsletterModal.closeModal();
+                }
+            }
+        });
+
+        // Close modal when OK button is clicked (using event delegation)
+        document.addEventListener('click', function(e) {
+            if (e.target.id === 'modalButton') {
+                console.log('OK button clicked'); // Debug log
+                window.newsletterModal.closeModal();
+            }
+        });
+
+        // Initialize modal when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Newsletter modal initialized'); // Debug log
+            
+            // Test modal function (remove this after testing)
+            window.testModal = function() {
+                window.newsletterModal.showSuccess('Test message - subscription successful!');
+            };
+        });
+    </script>
+    
     <!-- Favourites Script -->
     <script src="{{ asset('js/favourites.js') }}"></script>
+
+    <!-- Newsletter Modal -->
+    <div id="newsletterModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50 hidden flex items-center justify-center">
+        <div class="relative p-5 border w-96 shadow-lg rounded-md bg-white mx-4">
+            <div class="mt-3">
+                <div id="modalIcon" class="flex items-center justify-center w-12 h-12 mx-auto rounded-full">
+                    <!-- Icon will be inserted by JavaScript -->
+                </div>
+                <div class="mt-4 text-center">
+                    <h3 id="modalTitle" class="text-lg font-medium text-gray-900"></h3>
+                    <div class="mt-2 px-7 py-3">
+                        <p id="modalMessage" class="text-sm text-gray-500"></p>
+                    </div>
+                </div>
+                <div class="flex justify-center px-4 py-3">
+                    <button id="modalButton" 
+                            class="text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                        OK
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html> 
