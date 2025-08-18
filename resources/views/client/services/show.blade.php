@@ -243,12 +243,15 @@
                 </div>
 
                 <div class="mt-6 sm:mt-8 pt-4 sm:pt-6 border-t border-gray-200">
+
+                    
                     @auth
-                        @php
-                            $userReview = $reviews->where('user_id', auth()->id())->first();
-                        @endphp
-                        
-                        @if($userReview)
+                        @if(auth()->id() != $service->user_id)
+                            @php
+                                $userReview = $reviews->where('user_id', auth()->id())->first();
+                            @endphp
+                            
+                            @if($userReview)
                             <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 sm:p-5">
                                 <div class="flex items-start space-x-4">
                                     <!-- User Avatar -->
@@ -318,11 +321,17 @@
                                     </div>
                                 </div>
                             </div>
+                            @else
+                                <a href="{{ route('service.reviews.create', $service) }}" 
+                                   class="inline-block bg-arsenal hover:bg-red-700 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-medium transition-colors text-sm sm:text-base">
+                                    Tulis Ulasan
+                                </a>
+                            @endif
                         @else
-                            <a href="{{ route('service.reviews.create', $service) }}" 
-                               class="inline-block bg-arsenal hover:bg-red-700 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-medium transition-colors text-sm sm:text-base">
-                                Tulis Ulasan
-                            </a>
+                            <div class="text-center py-4">
+                                <p class="text-gray-600 mb-2">Anda tidak boleh mengulas perkhidmatan anda sendiri</p>
+                                <p class="text-sm text-gray-500">Hanya pengguna lain yang boleh memberikan ulasan</p>
+                            </div>
                         @endif
                     @else
                         <div class="text-center">
