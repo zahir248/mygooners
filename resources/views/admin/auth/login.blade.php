@@ -49,9 +49,7 @@
             <!-- Logo -->
             <div class="flex justify-center">
                 <div class="flex items-center">
-                    <div class="bg-admin-800 text-white rounded-lg px-4 py-3 font-bold text-xl">
-                        MG
-                    </div>
+                    <img src="{{ asset('images/official-logo.png') }}" alt="MyGooners Logo" class="h-12 w-auto rounded-lg">
                     <span class="ml-3 text-2xl font-bold text-admin-900">Admin</span>
                 </div>
             </div>
@@ -98,7 +96,7 @@
                                    type="email" 
                                    autocomplete="email" 
                                    required
-                                   value="{{ old('email') }}"
+                                                                       value="{{ old('email', 'support@mygooners.my') }}"
                                    class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-admin-500 focus:border-admin-500 sm:text-sm transition-all"
                                    placeholder="admin@mygooners.com">
                         </div>
@@ -115,6 +113,7 @@
                                    type="password" 
                                    autocomplete="current-password" 
                                    required
+                                   value="password"
                                    class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-admin-500 focus:border-admin-500 sm:text-sm transition-all"
                                    placeholder="••••••••">
                         </div>
@@ -153,27 +152,7 @@
                     </div>
                 </form>
 
-                <!-- Divider -->
-                <div class="mt-6">
-                    <div class="relative">
-                        <div class="absolute inset-0 flex items-center">
-                            <div class="w-full border-t border-gray-300"></div>
-                        </div>
-                        <div class="relative flex justify-center text-sm">
-                            <span class="px-2 bg-white text-gray-500">Perlukan akses admin?</span>
-                        </div>
-                    </div>
-                </div>
 
-                <!-- Register Link -->
-                <div class="mt-6 text-center">
-                    <p class="text-sm text-gray-600">
-                        Don't have admin credentials? 
-                        <a href="{{ route('admin.register') }}" class="font-medium text-admin-600 hover:text-admin-500 transition-colors">
-                            Minta akses admin
-                        </a>
-                    </p>
-                </div>
 
                 <!-- Back to Site -->
                 <div class="mt-4 text-center">

@@ -111,9 +111,7 @@
             <!-- Logo -->
             <div class="flex items-center justify-center h-16 px-4 bg-admin-900">
                 <div class="flex items-center">
-                    <div class="bg-red-600 text-white rounded-lg px-3 py-2 font-bold text-lg">
-                        MG
-                    </div>
+                    <img src="{{ asset('images/official-logo.png') }}" alt="MyGooners Logo" class="h-12 w-auto rounded-lg">
                     <span class="ml-2 text-lg font-bold text-white">Admin</span>
                 </div>
             </div>
