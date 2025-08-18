@@ -10,6 +10,9 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Auth\Events\PasswordReset;
 use Laravel\Socialite\Facades\Socialite;
 
 class AuthController extends Controller
@@ -221,5 +224,68 @@ class AuthController extends Controller
             return redirect()->route('login')
                 ->with('error', $errorMessage);
         }
+    }
+
+    /**
+     * Show the form to request a password reset link.
+     */
+    public function showForgotPasswordForm()
+    {
+        return view('client.auth.forgot-password');
+    }
+
+    /**
+     * Send a reset link to the given user.
+     */
+    public function sendResetLinkEmail(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+        ]);
+
+        $status = Password::sendResetLink(
+            $request->only('email')
+        );
+
+        return $status === Password::RESET_LINK_SENT
+                    ? back()->with('success', 'Pautan reset kata laluan telah dihantar ke alamat emel anda.')
+                    : back()->with('error', 'Kami tidak dapat mencari pengguna dengan alamat emel tersebut.');
+    }
+
+    /**
+     * Show the form to reset password.
+     */
+    public function showResetPasswordForm(Request $request, $token)
+    {
+        return view('client.auth.reset-password', ['token' => $token, 'email' => $request->email]);
+    }
+
+    /**
+     * Reset the user's password.
+     */
+    public function resetPassword(Request $request)
+    {
+        $request->validate([
+            'token' => 'required',
+            'email' => 'required|email',
+            'password' => 'required|min:8|confirmed',
+        ]);
+
+        $status = Password::reset(
+            $request->only('email', 'password', 'password_confirmation', 'token'),
+            function ($user, $password) {
+                $user->forceFill([
+                    'password' => Hash::make($password)
+                ])->setRememberToken(Str::random(60));
+
+                $user->save();
+
+                event(new PasswordReset($user));
+            }
+        );
+
+        return $status === Password::PASSWORD_RESET
+                    ? redirect()->route('login')->with('success', 'Kata laluan anda telah berjaya ditetapkan semula. Sila log masuk dengan kata laluan baharu.')
+                    : back()->with('error', 'Token reset kata laluan tidak sah atau telah tamat tempoh.');
     }
 } 
