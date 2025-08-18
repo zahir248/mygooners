@@ -250,12 +250,14 @@
                 </div>
 
                 <div class="space-y-3 mb-6">
-                    <button class="w-full bg-arsenal hover:bg-arsenal text-white py-3 px-4 rounded-lg font-medium transition-colors">
+                    <a href="https://wa.me/60{{ preg_replace('/[^0-9]/', '', $service->user->phone) }}?text=Hi {{ $service->user->name }}!%0A%0ASaya berminat dengan perkhidmatan anda:%0A- {{ $service->title }}%0A- Harga: {{ $service->pricing }}%0A- Lokasi: {{ $service->location }}%0A%0ATerima kasih!" 
+                       target="_blank" 
+                       class="w-full bg-arsenal hover:bg-arsenal text-white py-3 px-4 rounded-lg font-medium transition-colors flex items-center justify-center">
+                        <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.488"/>
+                        </svg>
                         Hubungi Penyedia
-                    </button>
-                    <button class="w-full border border-gray-300 text-gray-700 py-3 px-4 rounded-lg font-medium hover:bg-gray-50 transition-colors">
-                        Hantar Mesej
-                    </button>
+                    </a>
                 </div>
 
                 <!-- Provider Bio -->
@@ -269,21 +271,64 @@
 
             <!-- Share Options -->
             <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
-                <h3 class="font-bold text-gray-900 mb-4">Kongsi Perkhidmatan Ini</h3>
-                <div class="flex space-x-3">
-                    <button onclick="shareOnFacebook()" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 px-3 rounded-lg text-sm font-medium transition-colors">
+                <h3 class="font-semibold text-gray-900 mb-4">Kongsi Perkhidmatan Ini</h3>
+                <div class="flex flex-wrap gap-3">
+                    <button onclick="shareOnFacebook()" class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors flex-1 min-w-[120px]">
                         Facebook
                     </button>
-                    <button onclick="shareOnTwitter()" class="flex-1 bg-sky-500 hover:bg-sky-600 text-white py-2 px-3 rounded-lg text-sm font-medium transition-colors">
+                    <button onclick="shareOnTwitter()" class="!bg-sky-500 !hover:bg-sky-600 !text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors flex-1 min-w-[120px] border-0" style="background-color: #0ea5e9 !important; color: white !important;">
                         Twitter
                     </button>
-                    <button onclick="shareOnLinkedIn()" class="flex-1 bg-blue-700 hover:bg-blue-800 text-white py-2 px-3 rounded-lg text-sm font-medium transition-colors">
-                        LinkedIn
+                    <button onclick="copyToClipboard()" class="border border-gray-300 text-gray-700 py-2 px-4 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors flex-1 min-w-[120px]">
+                        Salin Pautan
                     </button>
                 </div>
-                <button onclick="copyToClipboard()" class="w-full mt-3 border border-gray-300 text-gray-700 py-2 px-3 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors">
-                    Salin Pautan
-                </button>
+            </div>
+
+            <!-- Copy Link Modal -->
+            <div id="copy-link-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-2 sm:p-4">
+                <div class="bg-white rounded-xl shadow-2xl w-full max-w-md mx-2">
+                    <!-- Modal Header -->
+                    <div class="flex items-center justify-between p-4 sm:p-6 border-b border-gray-200">
+                        <h3 class="text-lg sm:text-xl font-bold text-gray-900">Salin Pautan</h3>
+                        <button onclick="closeCopyLinkModal()" class="text-gray-400 hover:text-gray-600 transition-colors p-1">
+                            <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <!-- Modal Body -->
+                    <div class="p-4 sm:p-6">
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Pautan Perkhidmatan:</label>
+                            <div class="flex items-center space-x-2">
+                                <input type="text" id="service-link-input" value="{{ request()->url() }}" 
+                                       class="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900 bg-gray-50" 
+                                       readonly>
+                                <button onclick="copyLinkToClipboard()" 
+                                        class="bg-arsenal hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                                    Salin
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center space-x-2 text-sm text-gray-600">
+                            <svg class="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span>Pautan telah disalin ke papan klip</span>
+                        </div>
+                    </div>
+
+                    <!-- Modal Footer -->
+                    <div class="flex justify-end p-4 sm:p-6 pt-0 border-t border-gray-200">
+                        <button onclick="closeCopyLinkModal()" 
+                                class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                            Tutup
+                        </button>
+                    </div>
+                </div>
             </div>
 
             <!-- Report/Safety -->
@@ -370,19 +415,49 @@ function shareOnFacebook() {
 
 function shareOnTwitter() {
     const url = encodeURIComponent(window.location.href);
-    const text = encodeURIComponent('Check out this service from a fellow Arsenal fan: {{ $service->title }}');
+    const text = encodeURIComponent('Check out this Arsenal service: {{ $service->title }}');
     window.open(`https://twitter.com/intent/tweet?url=${url}&text=${text}`, '_blank', 'width=600,height=400');
 }
 
-function shareOnLinkedIn() {
-    const url = encodeURIComponent(window.location.href);
-    const title = encodeURIComponent('{{ $service->title }} - Arsenal Services Marketplace');
-    window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${url}`, '_blank', 'width=600,height=400');
+function copyToClipboard() {
+    const modal = document.getElementById('copy-link-modal');
+    modal.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
 }
 
-function copyToClipboard() {
-    navigator.clipboard.writeText(window.location.href).then(function() {
-        alert('Link copied to clipboard!');
+function closeCopyLinkModal() {
+    const modal = document.getElementById('copy-link-modal');
+    modal.classList.add('hidden');
+    document.body.style.overflow = 'auto';
+}
+
+function copyLinkToClipboard() {
+    const linkInput = document.getElementById('service-link-input');
+    linkInput.select();
+    linkInput.setSelectionRange(0, 99999); // For mobile devices
+    
+    navigator.clipboard.writeText(linkInput.value).then(function() {
+        // Show success message
+        const successMessage = document.querySelector('#copy-link-modal .text-gray-600');
+        successMessage.innerHTML = `
+            <svg class="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+            </svg>
+            <span class="text-green-600 font-medium">Pautan berjaya disalin!</span>
+        `;
+        
+        // Reset message after 3 seconds
+        setTimeout(() => {
+            successMessage.innerHTML = `
+                <svg class="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                </svg>
+                <span>Pautan telah disalin ke papan klip</span>
+            `;
+        }, 3000);
+    }).catch(function(err) {
+        console.error('Could not copy text: ', err);
+        alert('Gagal menyalin pautan. Sila cuba lagi.');
     });
 }
 
