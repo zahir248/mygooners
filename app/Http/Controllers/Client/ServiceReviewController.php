@@ -81,7 +81,7 @@ class ServiceReviewController extends Controller
     public function edit(Service $service, ServiceReview $review)
     {
         // Check if user owns this review
-        if ($review->user_id !== Auth::id()) {
+        if ((int)$review->user_id !== Auth::id()) {
             abort(403, 'Anda hanya boleh mengedit ulasan anda sendiri.');
         }
 
@@ -94,7 +94,7 @@ class ServiceReviewController extends Controller
     public function update(Request $request, Service $service, ServiceReview $review)
     {
         // Check if user owns this review
-        if ($review->user_id !== Auth::id()) {
+        if ((int)$review->user_id !== Auth::id()) {
             abort(403, 'Anda hanya boleh mengemas kini ulasan anda sendiri.');
         }
 
@@ -130,7 +130,7 @@ class ServiceReviewController extends Controller
     public function destroy(Service $service, ServiceReview $review)
     {
         // Check if user owns this review
-        if ($review->user_id !== Auth::id()) {
+        if ((int)$review->user_id !== Auth::id()) {
             abort(403, 'Anda hanya boleh memadam ulasan anda sendiri.');
         }
 
