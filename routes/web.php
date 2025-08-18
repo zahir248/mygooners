@@ -16,6 +16,7 @@ use App\Http\Controllers\Client\DirectCheckoutController;
 use App\Http\Controllers\Client\RefundController;
 use App\Http\Controllers\Client\FavouriteController;
 use App\Http\Controllers\Client\ReviewController;
+use App\Http\Controllers\Client\ServiceReviewController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\AuthController as AdminAuthController;
 use App\Http\Controllers\Admin\ArticleController as AdminArticleController;
@@ -27,6 +28,7 @@ use App\Http\Controllers\Admin\SellerRequestController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\RefundController as AdminRefundController;
 use App\Http\Controllers\Admin\ProductReviewController;
+use App\Http\Controllers\Admin\ServiceReviewController as AdminServiceReviewController;
 
 // Home Page
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -58,6 +60,15 @@ Route::prefix('shop')->middleware('auth')->group(function () {
     Route::get('/{product}/review/{review}/edit', [ReviewController::class, 'edit'])->name('reviews.edit');
     Route::put('/{product}/review/{review}', [ReviewController::class, 'update'])->name('reviews.update');
     Route::delete('/{product}/review/{review}', [ReviewController::class, 'destroy'])->name('reviews.destroy');
+});
+
+// Service Reviews (requires authentication)
+Route::prefix('services')->middleware('auth')->group(function () {
+    Route::get('/{service}/review', [ServiceReviewController::class, 'create'])->name('service.reviews.create');
+    Route::post('/{service}/review', [ServiceReviewController::class, 'store'])->name('service.reviews.store');
+    Route::get('/{service}/review/{review}/edit', [ServiceReviewController::class, 'edit'])->name('service.reviews.edit');
+    Route::put('/{service}/review/{review}', [ServiceReviewController::class, 'update'])->name('service.reviews.update');
+    Route::delete('/{service}/review/{review}', [ServiceReviewController::class, 'destroy'])->name('service.reviews.destroy');
 });
 
 // Cart Routes
@@ -490,6 +501,17 @@ Route::prefix('reviews')->group(function () {
     Route::patch('/{review}/reject', [ProductReviewController::class, 'reject'])->name('admin.reviews.reject');
     Route::delete('/{review}', [ProductReviewController::class, 'destroy'])->name('admin.reviews.destroy');
     Route::post('/bulk-action', [ProductReviewController::class, 'bulkAction'])->name('admin.reviews.bulk-action');
+});
+
+// Admin Service Review Routes
+Route::prefix('service-reviews')->group(function () {
+    Route::get('/', [AdminServiceReviewController::class, 'index'])->name('admin.service-reviews.index');
+    Route::get('/statistics', [AdminServiceReviewController::class, 'statistics'])->name('admin.service-reviews.statistics');
+    Route::get('/{review}', [AdminServiceReviewController::class, 'show'])->name('admin.service-reviews.show');
+    Route::patch('/{review}/approve', [AdminServiceReviewController::class, 'approve'])->name('admin.service-reviews.approve');
+    Route::patch('/{review}/reject', [AdminServiceReviewController::class, 'reject'])->name('admin.service-reviews.reject');
+    Route::delete('/{review}', [AdminServiceReviewController::class, 'destroy'])->name('admin.service-reviews.destroy');
+    Route::post('/bulk-action', [AdminServiceReviewController::class, 'bulkAction'])->name('admin.service-reviews.bulk-action');
 });
     
     // Users Management

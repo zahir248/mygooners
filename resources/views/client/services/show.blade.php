@@ -56,7 +56,7 @@
                     @else
                         <div class="w-full h-full bg-gray-200 flex items-center justify-center">
                             <svg class="w-16 h-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586.58622 0 012.8280L166m-2-2l1.586.58622 0 012.828 0L2014m-6-6h0.01M6 20h12a2 20 002-2V6a2 20 00-2-2H6a2 2 00-22220                   </svg>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586.58622 0 012.8280L166m-2-2l1.586.58622 0 012.828 0L2014m-6-6h01M6 20h12a220 002-2V6a22002                   </svg>
                         </div>
                     @endif
                     @if($service->is_verified)
@@ -141,64 +141,199 @@
             </div>
 
             <!-- Reviews Section -->
-            <div class="bg-white rounded-xl shadow-lg p-8 mb-8">
-                <div class="flex items-center justify-between mb-6">
-                    <h2 class="text-2xl font-bold text-gray-900">Ulasan Pelanggan</h2>
+            <div class="bg-white rounded-xl shadow-lg p-4 sm:p-6 lg:p-8 mb-8">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 sm:gap-0 mb-6 sm:mb-8">
+                    <h2 class="text-2xl sm:text-3xl font-bold text-gray-900">Ulasan Pelanggan</h2>
                     <div class="flex items-center space-x-2">
                         <div class="flex items-center">
                             @for($i = 1; $i <= 5; $i++)
-                                <svg class="w-5 h-5 {{ $i <= $service->trust_score ? 'text-yellow-400' : 'text-gray-300' }}" fill="currentColor" viewBox="0 0 20 20">
+                                <svg class="w-5 h-5 sm:w-6 sm:h-6 {{ $i <= $service->trust_score ? 'text-yellow-400' : 'text-gray-300' }}" fill="currentColor" viewBox="0 0 20 20">
                                     <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
                                 </svg>
                             @endfor
                         </div>
-                        <span class="text-lg font-semibold text-gray-900">{{ number_format($service->trust_score, 1) }}</span>
-                        <span class="text-gray-500">({{ $reviews->count() }} ulasan)</span>
+                        <span class="text-xl sm:text-2xl font-bold text-gray-900">{{ number_format($service->trust_score, 1) }}</span>
+                        <span class="text-sm sm:text-base text-gray-500">({{ $reviews->count() }} ulasan)</span>
                     </div>
                 </div>
 
-                <div class="space-y-6">
-                    @foreach($reviews as $review)
-                        <div class="border-b border-gray-200 pb-6 last:border-b-0 last:pb-0">
-                                                         <div class="flex items-start space-x-4">
+                <div class="space-y-6 sm:space-y-8">
+                    @if($reviews->count() > 0)
+                        @foreach($reviews->take(3) as $review)
+                        <div class="border-b border-gray-200 pb-6 sm:pb-8 last:border-b-0 last:pb-0">
+                                <div class="flex items-start space-x-4 sm:space-x-5">
+                                    <!-- User Avatar -->
+                                    <div class="flex-shrink-0">
                                  @if($review->user->profile_image)
                                      @if(Str::startsWith($review->user->profile_image, 'http'))
                                          <img src="{{ $review->user->profile_image }}" 
                                               alt="{{ $review->user->name }}" 
-                                              class="w-10 h-10 rounded-full object-cover">
+                                                     class="w-12 h-12 sm:w-14 sm:h-14 rounded-full border-2 border-gray-100 shadow-sm object-cover">
                                      @else
                                          <img src="{{ route('profile.image', basename($review->user->profile_image)) }}" 
                                               alt="{{ $review->user->name }}" 
-                                              class="w-10 h-10 rounded-full object-cover">
+                                                     class="w-12 h-12 sm:w-14 sm:h-14 rounded-full border-2 border-gray-100 shadow-sm object-cover">
                                      @endif
                                  @else
-                                     <img src="https://ui-avatars.com/api/?name={{ urlencode($review->user->name) }}&size=40&background=dc2626&color=fff" 
+                                            <img src="https://ui-avatars.com/api/?name={{ urlencode($review->user->name) }}&size=56&background=dc2626&color=fff" 
                                           alt="{{ $review->user->name }}" 
-                                          class="w-10 h-10 rounded-full">
+                                                 class="w-12 h-12 sm:w-14 sm:h-14 rounded-full border-2 border-gray-100 shadow-sm object-cover">
                                  @endif
+                                    </div>
+                                
+                                    <!-- Review Content -->
+                                    <div class="flex-1 min-w-0">
+                                        <!-- Review Header -->
+                                        <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-3">
                                  <div class="flex-1">
-                                    <div class="flex items-center space-x-2 mb-2">
-                                        <h4 class="font-medium text-gray-900">{{ $review->user->name }}</h4>
+                                                <h4 class="font-semibold text-gray-900 text-base sm:text-lg mb-1">{{ $review->user->name }}</h4>
+                                                <div class="flex items-center space-x-3 mb-2">
+                                                    <!-- Rating Stars -->
                                         <div class="flex items-center">
                                             @for($i = 1; $i <= 5; $i++)
-                                                <svg class="w-4 h-4 {{ $i <= $review->rating ? 'text-yellow-400' : 'text-gray-300' }}" fill="currentColor" viewBox="0 0 20 20">
-                                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                                                            <svg class="w-4 h-4 sm:w-5 sm:h-5 {{ $i <= $review->rating ? 'text-yellow-400' : 'text-gray-300' }}" 
+                                                                 fill="currentColor" viewBox="0 0 24 24">
+                                                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
                                                 </svg>
                                             @endfor
+                                                        <span class="ml-2 text-sm font-medium text-gray-700">{{ $review->rating }}/5</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <!-- Review Date -->
+                                            <div class="text-right">
+                                                <span class="text-xs sm:text-sm text-gray-500">{{ $review->created_at->diffForHumans() }}</span>
+                                            </div>
                                         </div>
-                                        <span class="text-sm text-gray-500">{{ $review->created_at->diffForHumans() }}</span>
+                                        
+                                        <!-- Review Comment -->
+                                        <div class="bg-gray-50 rounded-lg p-4 sm:p-5">
+                                            <p class="text-gray-800 leading-relaxed text-sm sm:text-base">{{ $review->comment }}</p>
+                                        </div>
                                     </div>
-                                    <p class="text-gray-700 leading-relaxed">{{ $review->comment }}</p>
                                 </div>
                             </div>
+                        @endforeach
+                    @else
+                        <div class="text-center py-12">
+                            <div class="mx-auto w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+                                <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-lg font-medium text-gray-900 mb-2">Tiada ulasan lagi</h3>
+                            <p class="text-gray-600 text-sm sm:text-base">Jadilah yang pertama untuk berkongsi pengalaman anda dengan perkhidmatan ini!</p>
                         </div>
-                    @endforeach
+                    @endif
+                    
+                    <!-- Show "View All Reviews" button if there are more than 3 reviews -->
+                    @if($reviews->count() > 3)
+                        <div class="text-center pt-4">
+                            <button onclick="openServiceReviewsModal()" 
+                                    class="inline-flex items-center px-6 py-3 bg-arsenal hover:bg-red-700 text-white rounded-lg font-medium transition-colors">
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                </svg>
+                                Lihat Semua Ulasan ({{ $reviews->count() }})
+                            </button>
+                        </div>
+                    @endif
                 </div>
 
-                <div class="mt-6 pt-6 border-t border-gray-200">
-                    <button onclick="openServiceReviewsModal()" class="text-red-600 hover:text-red-700 font-medium">
-                        Lihat Semua Ulasan →
+                <div class="mt-6 sm:mt-8 pt-4 sm:pt-6 border-t border-gray-200">
+                    @auth
+                        @php
+                            $userReview = $reviews->where('user_id', auth()->id())->first();
+                        @endphp
+                        
+                        @if($userReview)
+                            <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 sm:p-5">
+                                <div class="flex items-start space-x-4">
+                                    <!-- User Avatar -->
+                                    <div class="flex-shrink-0">
+                                        @php $profileImg = trim(auth()->user()->profile_image ?? ''); @endphp
+                                        @if($profileImg !== '')
+                                            @if(Str::startsWith($profileImg, 'http'))
+                                                <img src="{{ $profileImg }}" alt="Anda" 
+                                                     class="w-12 h-12 sm:w-14 sm:h-14 rounded-full border-2 border-blue-200 shadow-sm object-cover">
+                                            @else
+                                                <img src="{{ asset('storage/' . $profileImg) }}" alt="Anda" 
+                                                     class="w-12 h-12 sm:w-14 sm:h-14 rounded-full border-2 border-blue-200 shadow-sm object-cover">
+                                            @endif
+                                        @else
+                                            <img src="{{ asset('images/profile-image-default.png') }}" alt="Anda" 
+                                                 class="w-12 h-12 sm:w-14 sm:h-14 rounded-full border-2 border-blue-200 shadow-sm object-cover">
+                                        @endif
+                                    </div>
+                                    
+                                    <!-- Review Content -->
+                                    <div class="flex-1 min-w-0">
+                                        <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-3">
+                                            <div class="flex-1">
+                                                <h4 class="font-semibold text-blue-900 text-base sm:text-lg mb-1">Anda</h4>
+                                                <p class="text-blue-700 text-sm mb-2">Ulasan anda untuk perkhidmatan ini</p>
+                                                <div class="flex items-center space-x-3 mb-2">
+                                                    <!-- Rating Stars -->
+                                                    <div class="flex items-center">
+                                                        @for($i = 1; $i <= 5; $i++)
+                                                            <svg class="w-4 h-4 sm:w-5 sm:h-5 {{ $i <= $userReview->rating ? 'text-yellow-400' : 'text-gray-300' }}" 
+                                                                 fill="currentColor" viewBox="0 0 20 20">
+                                                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                                                            </svg>
+                                                        @endfor
+                                                        <span class="ml-2 text-sm font-medium text-blue-700">{{ $userReview->rating }}/5</span>
+                                                    </div>
+                                                    
+                                                    <!-- Review Date -->
+                                                    <span class="text-xs sm:text-sm text-blue-600">{{ $userReview->created_at->diffForHumans() }}</span>
+                                                </div>
+                                            </div>
+                                            
+                                            <!-- Action Buttons -->
+                                            <div class="flex space-x-3">
+                                                <a href="{{ route('service.reviews.edit', [$service, $userReview]) }}" 
+                                                   class="inline-flex items-center px-3 py-2 border border-blue-300 text-blue-700 rounded-lg text-sm font-medium hover:bg-blue-50 transition-colors">
+                                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                                    </svg>
+                                                    Sunting
+                                                </a>
+                                                <button type="button" 
+                                                        onclick="openDeleteReviewModal({{ $userReview->id }})" 
+                                                        class="inline-flex items-center px-3 py-2 border border-red-300 text-red-700 rounded-lg text-sm font-medium hover:bg-red-50 transition-colors">
+                                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                                    </svg>
+                                                    Padam
                     </button>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Review Comment -->
+                                        <div class="bg-white rounded-lg p-4 border border-blue-100">
+                                            <p class="text-gray-800 leading-relaxed text-sm sm:text-base">{{ $userReview->comment }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @else
+                            <a href="{{ route('service.reviews.create', $service) }}" 
+                               class="inline-block bg-arsenal hover:bg-red-700 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-medium transition-colors text-sm sm:text-base">
+                                Tulis Ulasan
+                            </a>
+                        @endif
+                    @else
+                        <div class="text-center">
+                            <p class="text-gray-600 mb-3">Log masuk untuk menulis ulasan</p>
+                            <a href="{{ route('login') }}" 
+                               class="inline-block bg-arsenal hover:bg-red-700 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-medium transition-colors text-sm sm:text-base">
+                                Log Masuk
+                            </a>
+                            <p class="text-sm text-gray-500 mt-2">Atau <a href="{{ route('register') }}" class="text-arsenal hover:text-red-700 underline">daftar akaun baru</a></p>
+                        </div>
+                    @endauth
                 </div>
             </div>
         </div>
@@ -326,7 +461,7 @@
                         <button onclick="closeCopyLinkModal()" 
                                 class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
                             Tutup
-                        </button>
+                </button>
                     </div>
                 </div>
             </div>
@@ -461,6 +596,20 @@ function copyLinkToClipboard() {
     });
 }
 
+function openDeleteReviewModal(reviewId) {
+    const deleteReviewForm = document.getElementById('delete-review-form');
+    deleteReviewForm.action = `/services/{{ $service->slug }}/review/${reviewId}`;
+    const deleteReviewModal = document.getElementById('delete-review-modal');
+    deleteReviewModal.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeDeleteReviewModal() {
+    const deleteReviewModal = document.getElementById('delete-review-modal');
+    deleteReviewModal.classList.add('hidden');
+    document.body.style.overflow = 'auto';
+}
+
 // Service Reviews Modal Functions
 function openServiceReviewsModal() {
     const modal = document.getElementById('service-reviews-modal');
@@ -526,6 +675,27 @@ document.addEventListener('DOMContentLoaded', function() {
             const modal = document.getElementById('service-reviews-modal');
             if (modal && !modal.classList.contains('hidden')) {
                 closeServiceReviewsModal();
+            }
+        }
+    });
+
+    // Delete Review Modal Event Listeners
+    const deleteReviewModal = document.getElementById('delete-review-modal');
+    if (deleteReviewModal) {
+        // Close modal when clicking outside
+        deleteReviewModal.addEventListener('click', function(e) {
+            if (e.target === deleteReviewModal) {
+                closeDeleteReviewModal();
+            }
+        });
+    }
+
+    // Close delete modal with Escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            const deleteModal = document.getElementById('delete-review-modal');
+            if (deleteModal && !deleteModal.classList.contains('hidden')) {
+                closeDeleteReviewModal();
             }
         }
     });
@@ -663,6 +833,56 @@ document.addEventListener('DOMContentLoaded', function() {
                     <p class="text-gray-600 text-xs sm:text-sm">Tiada ulasan yang sepadan dengan penapis yang dipilih.</p>
                 </div>
             </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Review Modal -->
+<div id="delete-review-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-xl shadow-2xl max-w-md w-full">
+        <!-- Modal Header -->
+        <div class="flex items-center justify-between p-6 border-b border-gray-200">
+            <h3 class="text-lg font-semibold text-gray-900">Padam Ulasan</h3>
+            <button onclick="closeDeleteReviewModal()" class="text-gray-400 hover:text-gray-600 transition-colors">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Modal Body -->
+        <div class="p-6">
+            <div class="flex items-start space-x-4">
+                <div class="flex-shrink-0">
+                    <div class="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center">
+                        <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.34 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                        </svg>
+                    </div>
+                </div>
+                <div class="flex-1">
+                    <h4 class="text-base font-medium text-gray-900 mb-2">Adakah anda pasti?</h4>
+                    <p class="text-sm text-gray-600">
+                        Tindakan ini tidak boleh dibatalkan. Ulasan anda akan dipadamkan secara kekal dan tidak dapat dipulihkan.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Footer -->
+        <div class="flex items-center justify-end space-x-3 p-6 border-t border-gray-200">
+            <button onclick="closeDeleteReviewModal()" 
+                    class="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
+                Batal
+            </button>
+            <form id="delete-review-form" method="POST" class="inline">
+                @csrf
+                @method('DELETE')
+                <button type="submit" 
+                        class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors">
+                    Padam Ulasan
+                </button>
+            </form>
         </div>
     </div>
 </div>

@@ -66,4 +66,18 @@ class Service extends Model
     {
         return $this->reviews()->avg('rating') ?? 0;
     }
+
+    /**
+     * Update the service trust score based on approved reviews
+     */
+    public function updateTrustScore()
+    {
+        $averageRating = $this->reviews()
+            ->where('status', 'approved')
+            ->avg('rating') ?? 0;
+        
+        $this->update(['trust_score' => round($averageRating, 2)]);
+        
+        return $this->trust_score;
+    }
 } 

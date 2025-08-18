@@ -47,11 +47,14 @@ class ServiceController extends Controller
 
     public function show($slug)
     {
+        // Find the service by slug
         $service = Service::with(['user', 'reviews.user'])
-            ->where('status', 'active')
-            ->where('is_verified', true)
             ->where('slug', $slug)
-            ->firstOrFail();
+            ->first();
+
+        if (!$service) {
+            abort(404, 'Perkhidmatan tidak dijumpai.');
+        }
 
         // Increment view count
         $service->increment('views_count');
@@ -64,6 +67,7 @@ class ServiceController extends Controller
             ->orderBy('created_at', 'desc')
             ->limit(6)
             ->get();
+            
         return view('client.services.show', compact('service', 'reviews', 'relatedServices'));
     }
 } 

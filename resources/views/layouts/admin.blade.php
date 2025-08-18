@@ -156,9 +156,9 @@
                     </li>
 
                     <!-- Services -->
-                    <li x-data="{ open: {{ request()->routeIs('admin.services.*') ? 'true' : 'false' }} }">
+                    <li x-data="{ open: {{ request()->routeIs('admin.services.*') || request()->routeIs('admin.service-reviews.*') ? 'true' : 'false' }} }">
                         <button @click="open = !open" type="button"
-                                class="flex items-center w-full px-4 py-2 text-sm font-medium rounded-md transition-colors {{ request()->routeIs('admin.services.*') ? 'bg-admin-700 text-white' : 'text-admin-300 hover:bg-admin-700 hover:text-white' }}">
+                                class="flex items-center w-full px-4 py-2 text-sm font-medium rounded-md transition-colors {{ request()->routeIs('admin.services.*') || request()->routeIs('admin.service-reviews.*') ? 'bg-admin-700 text-white' : 'text-admin-300 hover:bg-admin-700 hover:text-white' }}">
                             <svg class="mr-3 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0V6a2 2 0 012 2v6a2 2 0 01-2 2H8a2 2 0 01-2-2V8a2 2 0 012-2h8z"></path>
                             </svg>
@@ -185,29 +185,41 @@
                                     @endif
                                 </a>
                             </li>
+                            <li>
+                                <a href="{{ route('admin.service-reviews.index') }}"
+                                   class="flex items-center px-4 py-2 text-sm font-medium rounded-md transition-colors {{ request()->routeIs('admin.service-reviews.*') ? 'bg-admin-700 text-white' : 'text-admin-300 hover:bg-admin-700 hover:text-white' }}">
+                                    Ulasan Perkhidmatan
+                                </a>
+                            </li>
                         </ul>
                     </li>
 
                     <!-- Products -->
-                    <li>
-                        <a href="{{ route('admin.products.index') }}" 
-                           class="flex items-center px-4 py-2 text-sm font-medium rounded-md transition-colors {{ request()->routeIs('admin.products.*') ? 'bg-admin-700 text-white' : 'text-admin-300 hover:bg-admin-700 hover:text-white' }}">
+                    <li x-data="{ open: {{ request()->routeIs('admin.products.*') || request()->routeIs('admin.reviews.*') ? 'true' : 'false' }} }">
+                        <button @click="open = !open" type="button"
+                                class="flex items-center w-full px-4 py-2 text-sm font-medium rounded-md transition-colors {{ request()->routeIs('admin.products.*') || request()->routeIs('admin.reviews.*') ? 'bg-admin-700 text-white' : 'text-admin-300 hover:bg-admin-700 hover:text-white' }}">
                             <svg class="mr-3 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
                             </svg>
                             Produk
-                        </a>
-                    </li>
-
-                    <!-- Reviews -->
-                    <li>
-                        <a href="{{ route('admin.reviews.index') }}" 
-                           class="flex items-center px-4 py-2 text-sm font-medium rounded-md transition-colors {{ request()->routeIs('admin.reviews.*') ? 'bg-admin-700 text-white' : 'text-admin-300 hover:bg-admin-700 hover:text-white' }}">
-                            <svg class="mr-3 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                            <svg class="ml-auto h-4 w-4 transform transition-transform duration-200" :class="{ 'rotate-90': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                             </svg>
-                            Ulasan Produk
-                        </a>
+                        </button>
+                        <ul x-show="open" class="ml-8 mt-1 space-y-1" x-cloak>
+                            <li>
+                                <a href="{{ route('admin.products.index') }}"
+                                   class="flex items-center px-4 py-2 text-sm font-medium rounded-md transition-colors {{ request()->routeIs('admin.products.index') ? 'bg-admin-700 text-white' : 'text-admin-300 hover:bg-admin-700 hover:text-white' }}">
+                                    Semua Produk
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ route('admin.reviews.index') }}"
+                                   class="flex items-center px-4 py-2 text-sm font-medium rounded-md transition-colors {{ request()->routeIs('admin.reviews.*') ? 'bg-admin-700 text-white' : 'text-admin-300 hover:bg-admin-700 hover:text-white' }}">
+                                    Ulasan Produk
+                                </a>
+                            </li>
+                        </ul>
                     </li>
 
                     <!-- Orders -->
