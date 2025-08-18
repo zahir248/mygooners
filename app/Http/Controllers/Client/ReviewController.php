@@ -78,7 +78,7 @@ class ReviewController extends Controller
     public function edit(Product $product, ProductReview $review)
     {
         // Check if user owns this review
-        if ($review->user_id !== Auth::id()) {
+        if ((int)$review->user_id !== Auth::id()) {
             abort(403, 'Anda hanya boleh mengedit ulasan anda sendiri.');
         }
 
@@ -91,7 +91,7 @@ class ReviewController extends Controller
     public function update(Request $request, Product $product, ProductReview $review)
     {
         // Check if user owns this review
-        if ($review->user_id !== Auth::id()) {
+        if ((int)$review->user_id !== Auth::id()) {
             abort(403, 'Anda hanya boleh mengemas kini ulasan anda sendiri.');
         }
 
@@ -124,7 +124,7 @@ class ReviewController extends Controller
     public function destroy(Product $product, ProductReview $review)
     {
         // Check if user owns this review
-        if ($review->user_id !== Auth::id()) {
+        if ((int)$review->user_id !== Auth::id()) {
             abort(403, 'Anda hanya boleh memadamkan ulasan anda sendiri.');
         }
 
