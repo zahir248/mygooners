@@ -13,6 +13,7 @@ use App\Models\ServiceReview;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
 {
@@ -269,5 +270,61 @@ class AdminController extends Controller
         ];
 
         return response()->json($stats);
+    }
+
+    // Admin Profile Page
+    public function profile()
+    {
+        $admin = auth()->user();
+        
+        // Get admin statistics
+        $stats = [
+            'total_articles_managed' => Article::count(), // Articles don't have user_id, so count all
+            'total_published_articles' => Article::where('status', 'published')->count(),
+            'total_services_managed' => Service::count(),
+            'total_products_managed' => Product::count(),
+            'total_users_managed' => User::count(),
+            'last_login' => $admin->last_login ? Carbon::parse($admin->last_login)->diffForHumans() : 'Never',
+            'member_since' => $admin->created_at->diffForHumans(),
+        ];
+
+        return view('admin.profile', compact('admin', 'stats'));
+    }
+
+    // Update Admin Profile
+    public function updateProfile(Request $request)
+    {
+        $admin = auth()->user();
+        
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users,email,' . $admin->id,
+            'current_password' => 'nullable|required_with:new_password',
+            'new_password' => 'nullable|min:8|confirmed',
+        ], [
+            'name.required' => 'Nama diperlukan',
+            'email.required' => 'Emel diperlukan',
+            'email.email' => 'Format emel tidak sah',
+            'email.unique' => 'Emel ini sudah digunakan',
+            'current_password.required_with' => 'Kata laluan semasa diperlukan untuk menukar kata laluan',
+            'new_password.min' => 'Kata laluan baru mesti sekurang-kurangnya 8 aksara',
+            'new_password.confirmed' => 'Pengesahan kata laluan tidak sepadan',
+        ]);
+
+        // Update basic info
+        $admin->name = $request->name;
+        $admin->email = $request->email;
+
+        // Update password if provided
+        if ($request->filled('new_password')) {
+            if (!Hash::check($request->current_password, $admin->password)) {
+                return back()->withErrors(['current_password' => 'Kata laluan semasa tidak sah']);
+            }
+            $admin->password = Hash::make($request->new_password);
+        }
+
+        $admin->save();
+
+        return redirect()->route('admin.profile')->with('success', 'Profil berjaya dikemas kini!');
     }
 } 

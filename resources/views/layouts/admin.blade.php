@@ -376,8 +376,7 @@
                                     <div class="px-4 py-2 text-xs text-gray-500 border-b border-gray-100">
                                         Pentadbir
                                     </div>
-                                    <a href="{{ route('dashboard') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profil Saya</a>
-                                    <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Tetapan</a>
+                                    <a href="{{ route('admin.profile') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profil Saya</a>
                                     <div class="border-t border-gray-100"></div>
                                     <form method="POST" action="{{ route('admin.logout') }}">
                                         @csrf

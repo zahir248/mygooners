@@ -429,6 +429,8 @@ Route::prefix('admin')->group(function () {
 Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::get('/dashboard/stats', [AdminController::class, 'getDashboardStats'])->name('admin.dashboard.stats');
+    Route::get('/profile', [AdminController::class, 'profile'])->name('admin.profile');
+    Route::put('/profile', [AdminController::class, 'updateProfile'])->name('admin.profile.update');
     
     // Articles Management
     Route::prefix('articles')->group(function () {
