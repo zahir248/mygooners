@@ -201,6 +201,23 @@
         </div>
     </div>
 
+    <!-- AdSense Ad Section 1 -->
+    <div class="mb-8">
+        <div class="bg-white rounded-xl shadow-lg p-6 text-center">
+            <div class="text-sm text-gray-500 mb-2">Iklan</div>
+            <!-- MyGoonersMy AdSense Ad -->
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-1340046473498925"
+                 data-ad-slot="7291074183"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+            <script>
+                 (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div>
+    </div>
+
     <!-- Services Section -->
     <section class="mb-16">
         <div class="flex items-center justify-between mb-8">
@@ -289,6 +306,23 @@
             </div>
         @endif
     </section>
+
+    <!-- AdSense Ad Section 2 -->
+    <div class="mb-8">
+        <div class="bg-white rounded-xl shadow-lg p-6 text-center">
+            <div class="text-sm text-gray-500 mb-2">Iklan</div>
+            <!-- MyGoonersMy AdSense Ad -->
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-1340046473498925"
+                 data-ad-slot="7291074183"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+            <script>
+                 (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div>
+    </div>
 
     <!-- Shop Section -->
     <section class="mb-16">
