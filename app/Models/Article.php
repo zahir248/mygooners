@@ -109,7 +109,7 @@ class Article extends Model
     }
 
     /**
-     * Get content with line breaks converted to HTML
+     * Get content with HTML formatting
      */
     public function getFormattedContentAttribute()
     {
@@ -117,7 +117,14 @@ class Article extends Model
             return '';
         }
         
-        // Split content by line breaks to create paragraphs
+        // If content contains HTML tags, sanitize and return it (from TinyMCE)
+        if (strip_tags($this->content) !== $this->content) {
+            // Allow only safe HTML tags for rich text content
+            $allowedTags = '<p><br><strong><b><em><i><u><a><ul><ol><li><h1><h2><h3><h4><h5><h6><blockquote><pre><code><img><div><span>';
+            return strip_tags($this->content, $allowedTags);
+        }
+        
+        // Fallback for plain text content - convert line breaks to HTML
         $paragraphs = preg_split('/\n/', $this->content);
         
         $formattedContent = '';

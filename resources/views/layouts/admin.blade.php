@@ -94,6 +94,9 @@
         }
     </style>
 
+    <!-- TinyMCE Editor -->
+    <script src="https://cdn.tiny.cloud/1/3vf2qw510hkb7l80jjypd0t694x1b55gkqojfdh0n1uhtg9h/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
+    
     @stack('styles')
 </head>
 <body class="h-full">
