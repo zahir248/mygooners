@@ -149,6 +149,25 @@
                 {!! $article->formatted_content !!}
             </div>
 
+            <!-- AdSense Ad Section - Above Tags -->
+            <div class="mt-12 pt-8 border-t border-gray-200">
+                <div class="mb-8">
+                    <div class="bg-white rounded-xl shadow-lg p-6 text-center">
+                        <div class="text-sm text-gray-500 mb-2">Iklan</div>
+                        <!-- MyGoonersMy AdSense Ad -->
+                        <ins class="adsbygoogle"
+                             style="display:block"
+                             data-ad-client="ca-pub-1340046473498925"
+                             data-ad-slot="7291074183"
+                             data-ad-format="auto"
+                             data-full-width-responsive="true"></ins>
+                        <script>
+                             (adsbygoogle = window.adsbygoogle || []).push({});
+                        </script>
+                    </div>
+                </div>
+            </div>
+
             <!-- Tags -->
             @if($article->tags && is_array($article->tags) && count($article->tags) > 0)
                 <div class="mt-12 pt-8 border-t border-gray-200">
@@ -255,6 +274,25 @@
                    class="bg-arsenal hover:bg-arsenal text-white px-8 py-3 rounded-lg font-medium transition-colors">
                     Lihat Semua Artikel
                 </a>
+            </div>
+            
+            <!-- AdSense Ad Section - Below Lihat Semua Artikel Button -->
+            <div class="mt-12 pt-8 border-t border-gray-200">
+                <div class="mb-8">
+                    <div class="bg-white rounded-xl shadow-lg p-6 text-center">
+                        <div class="text-sm text-gray-500 mb-2">Iklan</div>
+                        <!-- MyGoonersMy AdSense Ad -->
+                        <ins class="adsbygoogle"
+                             style="display:block"
+                             data-ad-client="ca-pub-1340046473498925"
+                             data-ad-slot="7291074183"
+                             data-ad-format="auto"
+                             data-full-width-responsive="true"></ins>
+                        <script>
+                             (adsbygoogle = window.adsbygoogle || []).push({});
+                        </script>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
