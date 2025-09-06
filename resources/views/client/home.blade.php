@@ -15,7 +15,7 @@
                 Selamat Datang ke <span class="text-yellow-300">MyGooners</span>
             </h1>
             <p class="text-xl md:text-2xl mb-8 text-red-100 max-w-3xl mx-auto">
-                Komuniti peminat Arsenal terbaik yang menampilkan berita terkini, video eksklusif, perkhidmatan dipercayai, dan barangan tulen.
+                Komuniti peminat Arsenal terbaik yang menampilkan berita terkini, video eksklusif, perkhidmatan dipercayai dan barangan tulen.
             </p>
             <div class="flex flex-col sm:flex-row justify-center gap-4">
                 <a href="{{ route('blog.index') }}" class="bg-white text-red-600 hover:bg-gray-100 px-8 py-3 rounded-lg font-semibold text-lg transition-colors">
