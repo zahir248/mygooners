@@ -325,4 +325,33 @@ class ArticleController extends Controller
         return redirect()->route('admin.articles.index')
             ->with('success', 'Article deleted successfully!');
     }
+
+    public function preview(Request $request)
+    {
+        // Create a temporary article object for preview
+        $article = new Article();
+        $article->title = $request->input('title', 'Untitled Article');
+        $article->content = $request->input('content', '');
+        $article->excerpt = $request->input('excerpt', '');
+        $article->category = $request->input('category') ?: 'Uncategorized';
+        $article->is_featured = $request->has('is_featured');
+        $article->youtube_video_id = $request->input('youtube_video_id', '');
+        $article->tags = $request->input('keywords') ? array_map('trim', explode(',', $request->input('keywords'))) : [];
+        $article->created_at = now();
+        $article->published_at = now();
+        $article->views_count = 0;
+
+        // Handle cover image preview
+        if ($request->hasFile('cover_image')) {
+            $image = $request->file('cover_image');
+            $filename = 'preview_' . time() . '.' . $image->getClientOriginalExtension();
+            $path = $image->storeAs('articles', $filename, 'public');
+            $article->cover_image = $path;
+        }
+
+        // Generate slug for preview
+        $article->slug = Str::slug($article->title);
+
+        return view('admin.articles.preview', compact('article'));
+    }
 } 
