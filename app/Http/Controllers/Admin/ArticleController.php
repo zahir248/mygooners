@@ -57,7 +57,9 @@ class ArticleController extends Controller
             'Women\'s Team',
             'Transfer Rumours',
             'Analysis',
-            'History'
+            'History',
+            'Berita EPL',
+            'Perkembangan Kelab'
         ];
 
         return view('admin.articles.create', compact('categories'));
@@ -201,7 +203,9 @@ class ArticleController extends Controller
             'Women\'s Team',
             'Transfer Rumours',
             'Analysis',
-            'History'
+            'History',
+            'Berita EPL',
+            'Perkembangan Kelab'
         ];
 
         return view('admin.articles.edit', compact('article', 'categories'));
