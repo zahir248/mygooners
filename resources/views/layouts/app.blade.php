@@ -51,6 +51,106 @@
             border-color: #dc2626 !important;
         }
         
+        /* Article Content Styling - Fallback for deployed versions */
+        .article-content h1 {
+            font-size: 2.25rem !important;
+            font-weight: 700 !important;
+            line-height: 1.2 !important;
+            margin-top: 2rem !important;
+            margin-bottom: 1rem !important;
+            color: #111827 !important;
+        }
+
+        .article-content h2 {
+            font-size: 1.875rem !important;
+            font-weight: 600 !important;
+            line-height: 1.3 !important;
+            margin-top: 1.5rem !important;
+            margin-bottom: 0.75rem !important;
+            color: #111827 !important;
+        }
+
+        .article-content h3 {
+            font-size: 1.5rem !important;
+            font-weight: 600 !important;
+            line-height: 1.4 !important;
+            margin-top: 1.25rem !important;
+            margin-bottom: 0.5rem !important;
+            color: #111827 !important;
+        }
+
+        .article-content h4 {
+            font-size: 1.25rem !important;
+            font-weight: 600 !important;
+            line-height: 1.4 !important;
+            margin-top: 1rem !important;
+            margin-bottom: 0.5rem !important;
+            color: #111827 !important;
+        }
+
+        .article-content h5 {
+            font-size: 1.125rem !important;
+            font-weight: 600 !important;
+            line-height: 1.4 !important;
+            margin-top: 0.75rem !important;
+            margin-bottom: 0.5rem !important;
+            color: #111827 !important;
+        }
+
+        .article-content h6 {
+            font-size: 1rem !important;
+            font-weight: 600 !important;
+            line-height: 1.4 !important;
+            margin-top: 0.75rem !important;
+            margin-bottom: 0.5rem !important;
+            color: #111827 !important;
+        }
+
+        .article-content p {
+            margin-bottom: 1rem !important;
+            color: #374151 !important;
+            line-height: 1.7 !important;
+        }
+
+        .article-content strong {
+            font-weight: 700 !important;
+            color: #111827 !important;
+        }
+
+        .article-content em {
+            font-style: italic !important;
+        }
+
+        .article-content u {
+            text-decoration: underline !important;
+        }
+
+        .article-content a {
+            color: #dc2626 !important;
+            text-decoration: none !important;
+        }
+
+        .article-content a:hover {
+            text-decoration: underline !important;
+        }
+
+        .article-content ul, .article-content ol {
+            margin-bottom: 1rem !important;
+            padding-left: 1.5rem !important;
+        }
+
+        .article-content li {
+            margin-bottom: 0.25rem !important;
+        }
+
+        .article-content blockquote {
+            border-left: 4px solid #dc2626 !important;
+            padding-left: 1rem !important;
+            margin: 1.5rem 0 !important;
+            color: #6b7280 !important;
+            font-style: italic !important;
+        }
+        
         .hover\:bg-arsenal:hover {
             background-color: #b91c1c !important;
         }

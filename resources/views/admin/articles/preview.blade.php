@@ -241,7 +241,7 @@
                 @endif
 
                 <!-- Article Content -->
-                <div class="max-w-none">
+                <div class="max-w-none article-content">
                     {!! $article->formatted_content ?: '<p class="text-gray-500 italic">No content provided yet.</p>' !!}
                 </div>
 

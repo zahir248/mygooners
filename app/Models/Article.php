@@ -146,30 +146,30 @@ class Article extends Model
     }
     
     /**
-     * Add Bootstrap classes to headings for proper styling
+     * Add inline styles to headings for proper styling (works on all deployments)
      */
     private function addBootstrapClassesToHeadings($content)
     {
-        // Add Bootstrap classes to headings
-        $content = preg_replace('/<h1([^>]*)>/', '<h1$1 class="text-4xl font-bold text-gray-900 mb-4 mt-6">', $content);
-        $content = preg_replace('/<h2([^>]*)>/', '<h2$1 class="text-3xl font-bold text-gray-900 mb-3 mt-5">', $content);
-        $content = preg_replace('/<h3([^>]*)>/', '<h3$1 class="text-2xl font-semibold text-gray-900 mb-3 mt-4">', $content);
-        $content = preg_replace('/<h4([^>]*)>/', '<h4$1 class="text-xl font-semibold text-gray-900 mb-2 mt-3">', $content);
-        $content = preg_replace('/<h5([^>]*)>/', '<h5$1 class="text-lg font-semibold text-gray-900 mb-2 mt-3">', $content);
-        $content = preg_replace('/<h6([^>]*)>/', '<h6$1 class="text-base font-semibold text-gray-900 mb-2 mt-2">', $content);
+        // Add inline styles to headings
+        $content = preg_replace('/<h1([^>]*)>/', '<h1$1 style="font-size: 2.25rem; font-weight: 700; line-height: 1.2; margin-top: 2rem; margin-bottom: 1rem; color: #111827;">', $content);
+        $content = preg_replace('/<h2([^>]*)>/', '<h2$1 style="font-size: 1.875rem; font-weight: 600; line-height: 1.3; margin-top: 1.5rem; margin-bottom: 0.75rem; color: #111827;">', $content);
+        $content = preg_replace('/<h3([^>]*)>/', '<h3$1 style="font-size: 1.5rem; font-weight: 600; line-height: 1.4; margin-top: 1.25rem; margin-bottom: 0.5rem; color: #111827;">', $content);
+        $content = preg_replace('/<h4([^>]*)>/', '<h4$1 style="font-size: 1.25rem; font-weight: 600; line-height: 1.4; margin-top: 1rem; margin-bottom: 0.5rem; color: #111827;">', $content);
+        $content = preg_replace('/<h5([^>]*)>/', '<h5$1 style="font-size: 1.125rem; font-weight: 600; line-height: 1.4; margin-top: 0.75rem; margin-bottom: 0.5rem; color: #111827;">', $content);
+        $content = preg_replace('/<h6([^>]*)>/', '<h6$1 style="font-size: 1rem; font-weight: 600; line-height: 1.4; margin-top: 0.75rem; margin-bottom: 0.5rem; color: #111827;">', $content);
         
-        // Add Bootstrap classes to paragraphs
-        $content = preg_replace('/<p([^>]*)>/', '<p$1 class="mb-4 text-gray-700 leading-relaxed">', $content);
+        // Add inline styles to paragraphs
+        $content = preg_replace('/<p([^>]*)>/', '<p$1 style="margin-bottom: 1rem; color: #374151; line-height: 1.7;">', $content);
         
-        // Add Bootstrap classes to other elements
-        $content = preg_replace('/<strong([^>]*)>/', '<strong$1 class="font-bold text-gray-900">', $content);
-        $content = preg_replace('/<em([^>]*)>/', '<em$1 class="italic">', $content);
-        $content = preg_replace('/<u([^>]*)>/', '<u$1 class="underline">', $content);
-        $content = preg_replace('/<a([^>]*)>/', '<a$1 class="text-red-600 hover:text-red-700 hover:underline">', $content);
-        $content = preg_replace('/<ul([^>]*)>/', '<ul$1 class="mb-4 pl-6 list-disc">', $content);
-        $content = preg_replace('/<ol([^>]*)>/', '<ol$1 class="mb-4 pl-6 list-decimal">', $content);
-        $content = preg_replace('/<li([^>]*)>/', '<li$1 class="mb-1">', $content);
-        $content = preg_replace('/<blockquote([^>]*)>/', '<blockquote$1 class="border-l-4 border-red-600 pl-4 my-4 text-gray-600 italic">', $content);
+        // Add inline styles to other elements
+        $content = preg_replace('/<strong([^>]*)>/', '<strong$1 style="font-weight: 700; color: #111827;">', $content);
+        $content = preg_replace('/<em([^>]*)>/', '<em$1 style="font-style: italic;">', $content);
+        $content = preg_replace('/<u([^>]*)>/', '<u$1 style="text-decoration: underline;">', $content);
+        $content = preg_replace('/<a([^>]*)>/', '<a$1 style="color: #dc2626; text-decoration: none;">', $content);
+        $content = preg_replace('/<ul([^>]*)>/', '<ul$1 style="margin-bottom: 1rem; padding-left: 1.5rem; list-style-type: disc;">', $content);
+        $content = preg_replace('/<ol([^>]*)>/', '<ol$1 style="margin-bottom: 1rem; padding-left: 1.5rem; list-style-type: decimal;">', $content);
+        $content = preg_replace('/<li([^>]*)>/', '<li$1 style="margin-bottom: 0.25rem;">', $content);
+        $content = preg_replace('/<blockquote([^>]*)>/', '<blockquote$1 style="border-left: 4px solid #dc2626; padding-left: 1rem; margin: 1.5rem 0; color: #6b7280; font-style: italic;">', $content);
         
         return $content;
     }

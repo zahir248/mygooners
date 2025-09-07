@@ -145,7 +145,7 @@
             @endif
 
             <!-- Article Content -->
-            <div class="max-w-none">
+            <div class="max-w-none article-content">
                 {!! $article->formatted_content !!}
             </div>
 
