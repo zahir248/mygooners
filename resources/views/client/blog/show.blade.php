@@ -145,7 +145,7 @@
             @endif
 
             <!-- Article Content -->
-            <div class="prose prose-lg max-w-none prose-headings:text-gray-900 prose-p:text-gray-700 prose-a:text-red-600 prose-a:no-underline hover:prose-a:underline prose-strong:text-gray-900 prose-blockquote:border-red-600 prose-blockquote:text-gray-600">
+            <div class="max-w-none">
                 {!! $article->formatted_content !!}
             </div>
 

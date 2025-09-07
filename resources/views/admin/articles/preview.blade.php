@@ -9,25 +9,105 @@
         .prose {
             max-width: none;
         }
-        .prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6 {
+        
+        /* Custom styles for article content headings */
+        .prose h1 {
+            font-size: 2.25rem;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
             color: #111827;
         }
-        .prose p {
-            color: #374151;
+
+        .prose h2 {
+            font-size: 1.875rem;
+            font-weight: 600;
+            line-height: 1.3;
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            color: #111827;
         }
+
+        .prose h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            line-height: 1.4;
+            margin-top: 1.25rem;
+            margin-bottom: 0.5rem;
+            color: #111827;
+        }
+
+        .prose h4 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            line-height: 1.4;
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
+            color: #111827;
+        }
+
+        .prose h5 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            line-height: 1.4;
+            margin-top: 0.75rem;
+            margin-bottom: 0.5rem;
+            color: #111827;
+        }
+
+        .prose h6 {
+            font-size: 1rem;
+            font-weight: 600;
+            line-height: 1.4;
+            margin-top: 0.75rem;
+            margin-bottom: 0.5rem;
+            color: #111827;
+        }
+
+        .prose p {
+            margin-bottom: 1rem;
+            color: #374151;
+            line-height: 1.7;
+        }
+
+        .prose strong {
+            font-weight: 700;
+            color: #111827;
+        }
+
+        .prose em {
+            font-style: italic;
+        }
+
+        .prose u {
+            text-decoration: underline;
+        }
+
         .prose a {
             color: #dc2626;
             text-decoration: none;
         }
+
         .prose a:hover {
             text-decoration: underline;
         }
-        .prose strong {
-            color: #111827;
+
+        .prose ul, .prose ol {
+            margin-bottom: 1rem;
+            padding-left: 1.5rem;
         }
+
+        .prose li {
+            margin-bottom: 0.25rem;
+        }
+
         .prose blockquote {
             border-left: 4px solid #dc2626;
+            padding-left: 1rem;
+            margin: 1.5rem 0;
             color: #6b7280;
+            font-style: italic;
         }
     </style>
 </head>
@@ -161,7 +241,7 @@
                 @endif
 
                 <!-- Article Content -->
-                <div class="prose prose-lg max-w-none prose-headings:text-gray-900 prose-p:text-gray-700 prose-a:text-red-600 prose-a:no-underline hover:prose-a:underline prose-strong:text-gray-900 prose-blockquote:border-red-600 prose-blockquote:text-gray-600">
+                <div class="max-w-none">
                     {!! $article->formatted_content ?: '<p class="text-gray-500 italic">No content provided yet.</p>' !!}
                 </div>
 

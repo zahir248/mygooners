@@ -121,7 +121,12 @@ class Article extends Model
         if (strip_tags($this->content) !== $this->content) {
             // Allow only safe HTML tags for rich text content
             $allowedTags = '<p><br><strong><b><em><i><u><a><ul><ol><li><h1><h2><h3><h4><h5><h6><blockquote><pre><code><img><div><span>';
-            return strip_tags($this->content, $allowedTags);
+            $content = strip_tags($this->content, $allowedTags);
+            
+            // Add Bootstrap classes to headings for proper styling
+            $content = $this->addBootstrapClassesToHeadings($content);
+            
+            return $content;
         }
         
         // Fallback for plain text content - convert line breaks to HTML
@@ -138,5 +143,34 @@ class Article extends Model
         }
         
         return $formattedContent;
+    }
+    
+    /**
+     * Add Bootstrap classes to headings for proper styling
+     */
+    private function addBootstrapClassesToHeadings($content)
+    {
+        // Add Bootstrap classes to headings
+        $content = preg_replace('/<h1([^>]*)>/', '<h1$1 class="text-4xl font-bold text-gray-900 mb-4 mt-6">', $content);
+        $content = preg_replace('/<h2([^>]*)>/', '<h2$1 class="text-3xl font-bold text-gray-900 mb-3 mt-5">', $content);
+        $content = preg_replace('/<h3([^>]*)>/', '<h3$1 class="text-2xl font-semibold text-gray-900 mb-3 mt-4">', $content);
+        $content = preg_replace('/<h4([^>]*)>/', '<h4$1 class="text-xl font-semibold text-gray-900 mb-2 mt-3">', $content);
+        $content = preg_replace('/<h5([^>]*)>/', '<h5$1 class="text-lg font-semibold text-gray-900 mb-2 mt-3">', $content);
+        $content = preg_replace('/<h6([^>]*)>/', '<h6$1 class="text-base font-semibold text-gray-900 mb-2 mt-2">', $content);
+        
+        // Add Bootstrap classes to paragraphs
+        $content = preg_replace('/<p([^>]*)>/', '<p$1 class="mb-4 text-gray-700 leading-relaxed">', $content);
+        
+        // Add Bootstrap classes to other elements
+        $content = preg_replace('/<strong([^>]*)>/', '<strong$1 class="font-bold text-gray-900">', $content);
+        $content = preg_replace('/<em([^>]*)>/', '<em$1 class="italic">', $content);
+        $content = preg_replace('/<u([^>]*)>/', '<u$1 class="underline">', $content);
+        $content = preg_replace('/<a([^>]*)>/', '<a$1 class="text-red-600 hover:text-red-700 hover:underline">', $content);
+        $content = preg_replace('/<ul([^>]*)>/', '<ul$1 class="mb-4 pl-6 list-disc">', $content);
+        $content = preg_replace('/<ol([^>]*)>/', '<ol$1 class="mb-4 pl-6 list-decimal">', $content);
+        $content = preg_replace('/<li([^>]*)>/', '<li$1 class="mb-1">', $content);
+        $content = preg_replace('/<blockquote([^>]*)>/', '<blockquote$1 class="border-l-4 border-red-600 pl-4 my-4 text-gray-600 italic">', $content);
+        
+        return $content;
     }
 } 

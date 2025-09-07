@@ -16,7 +16,7 @@ The editor provides the following formatting capabilities:
 - **Text Alignment**: Left, center, right, justify
 - **Lists**: Bulleted and numbered lists
 - **Links**: Create clickable URL links
-- **Text Colors**: Background and text color options
+- **Text Colors**: Text color (forecolor) and background color options
 - **Headings**: H1-H6 heading styles
 - **Code**: Inline code formatting
 - **Blockquotes**: Quote formatting
@@ -35,7 +35,7 @@ tinymce.init({
         'insertdatetime', 'media', 'table', 'help', 'wordcount'
     ],
     toolbar: 'undo redo | blocks | ' +
-        'bold italic backcolor | alignleft aligncenter ' +
+        'bold italic underline | forecolor backcolor | alignleft aligncenter ' +
         'alignright alignjustify | bullist numlist outdent indent | ' +
         'removeformat | help | link',
     content_style: 'body { font-family: -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif; font-size: 14px; }',
@@ -95,6 +95,9 @@ tinymce.init({
 3. **Supported Formatting**:
    - **Bold Text**: Select text and click the Bold button (B)
    - **Italic Text**: Select text and click the Italic button (I)
+   - **Underline Text**: Select text and click the Underline button (U)
+   - **Text Color**: Select text and click the Text Color button (A), then choose a color
+   - **Background Color**: Select text and click the Background Color button, then choose a color
    - **Links**: Select text and click the Link button, then enter URL
    - **Lists**: Use the bullet or numbered list buttons
    - **Headings**: Use the format dropdown to select heading levels
