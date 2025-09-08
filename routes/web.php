@@ -620,12 +620,61 @@ Route::get('/article-image/{filename}', function ($filename) {
 
 // Serve article content images directly from storage
 Route::get('/article-content-image/{filename}', function ($filename) {
+    // Check multiple possible storage locations for article content images
+    $paths = [
+        storage_path('app/public/article-content/' . $filename),
+        storage_path('app/public/articles/' . $filename),
+        storage_path('app/public/' . $filename),
+        public_path('storage/article-content/' . $filename),
+        public_path('storage/articles/' . $filename),
+        public_path('storage/' . $filename)
+    ];
+    
+    foreach ($paths as $path) {
+        if (file_exists($path)) {
+            return response()->file($path);
+        }
+    }
+    
+    // Log the missing file for debugging
+    \Log::warning('Article content image not found', [
+        'filename' => $filename,
+        'checked_paths' => $paths
+    ]);
+    
+    abort(404);
+})->name('article.content.image');
+
+// Fallback route for article content images (alternative path)
+Route::get('/storage/article-content/{filename}', function ($filename) {
     $path = storage_path('app/public/article-content/' . $filename);
     if (!file_exists($path)) {
         abort(404);
     }
     return response()->file($path);
-})->name('article.content.image');
+})->name('article.content.storage');
+
+// Debug route for article content images (for troubleshooting)
+Route::get('/debug-article-images', function () {
+    $articleContentDir = storage_path('app/public/article-content/');
+    $publicStorageDir = public_path('storage/article-content/');
+    
+    $files = [];
+    if (is_dir($articleContentDir)) {
+        $files['storage_files'] = scandir($articleContentDir);
+    }
+    if (is_dir($publicStorageDir)) {
+        $files['public_files'] = scandir($publicStorageDir);
+    }
+    
+    return response()->json([
+        'storage_path' => $articleContentDir,
+        'public_path' => $publicStorageDir,
+        'storage_exists' => is_dir($articleContentDir),
+        'public_exists' => is_dir($publicStorageDir),
+        'files' => $files
+    ]);
+})->name('debug.article.images');
 
 // Serve video thumbnails directly from storage
 Route::get('/video-thumbnail/{filename}', function ($filename) {

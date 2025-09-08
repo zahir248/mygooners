@@ -433,17 +433,17 @@ class ArticleController extends Controller
                 ]);
                 
                 if ($stored) {
-                    // Use relative URL to avoid domain issues
-                    $relativeUrl = '/storage/' . $filename;
+                    // Use custom route for better cPanel compatibility
+                    $customUrl = url('/article-content-image/' . basename($filename));
                     
                     \Log::info('Image upload successful', [
-                        'relative_url' => $relativeUrl,
+                        'custom_url' => $customUrl,
                         'filename' => $filename,
                         'basename' => basename($filename)
                     ]);
                     
                     return response()->json([
-                        'location' => $relativeUrl
+                        'location' => $customUrl
                     ], 200);
                 }
             }
