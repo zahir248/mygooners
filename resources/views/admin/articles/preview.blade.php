@@ -124,49 +124,27 @@
             vertical-align: top !important;
         }
         
-        /* Social Media Embed Styles */
-        .social-embed {
+        
+        /* Inline Embed Styles */
+        .article-content .inline-embed {
             margin: 20px 0;
             border-radius: 8px;
             overflow: hidden;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            background: #f8f9fa;
+            padding: 15px;
         }
         
-        .social-embed iframe {
+        .article-content .inline-embed iframe {
             width: 100% !important;
             max-width: 100% !important;
             border: none !important;
             border-radius: 8px;
         }
         
-        .twitter-embed {
-            background: #f8f9fa;
-            padding: 15px;
-        }
-        
-        .facebook-embed {
-            background: #f0f2f5;
-            padding: 15px;
-        }
-        
-        .instagram-embed {
-            background: #fafafa;
-            padding: 15px;
-        }
-        
-        .tiktok-embed {
-            background: #f8f9fa;
-            padding: 15px;
-        }
-        
-        .custom-embed {
-            background: #f8f9fa;
-            padding: 15px;
-        }
-        
-        /* Responsive adjustments */
+        /* Responsive adjustments for inline embeds */
         @media (max-width: 768px) {
-            .social-embed {
+            .article-content .inline-embed {
                 margin: 15px 0;
                 padding: 10px;
             }
@@ -332,44 +310,6 @@
                 <div class="max-w-none article-content">
                     {!! $article->formatted_content ?: '<p class="text-gray-500 italic">No content provided yet.</p>' !!}
                 </div>
-
-                <!-- Social Media Embeds -->
-                @if($article->twitter_embed || $article->facebook_embed || $article->instagram_embed || $article->tiktok_embed || $article->custom_embed)
-                    <div class="mt-12 pt-8 border-t border-gray-200">
-                        <h3 class="text-sm font-medium text-gray-900 mb-6">Social Media Content</h3>
-                        <div class="space-y-6">
-                            @if($article->twitter_embed)
-                                <div class="social-embed twitter-embed">
-                                    {!! $article->twitter_embed !!}
-                                </div>
-                            @endif
-                            
-                            @if($article->facebook_embed)
-                                <div class="social-embed facebook-embed">
-                                    {!! $article->facebook_embed !!}
-                                </div>
-                            @endif
-                            
-                            @if($article->instagram_embed)
-                                <div class="social-embed instagram-embed">
-                                    {!! $article->instagram_embed !!}
-                                </div>
-                            @endif
-                            
-                            @if($article->tiktok_embed)
-                                <div class="social-embed tiktok-embed">
-                                    {!! $article->tiktok_embed !!}
-                                </div>
-                            @endif
-                            
-                            @if($article->custom_embed)
-                                <div class="social-embed custom-embed">
-                                    {!! $article->custom_embed !!}
-                                </div>
-                            @endif
-                        </div>
-                    </div>
-                @endif
 
                 <!-- Tags -->
                 @if($article->tags && is_array($article->tags) && count($article->tags) > 0)

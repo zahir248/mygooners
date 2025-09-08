@@ -124,9 +124,12 @@ class Article extends Model
         
         // If content contains HTML tags, sanitize and return it (from TinyMCE)
         if (strip_tags($this->content) !== $this->content) {
+            // Process embed codes within content first
+            $content = $this->processInlineEmbeds($this->content);
+            
             // Allow only safe HTML tags for rich text content, including class attributes
-            $allowedTags = '<p><br><strong><b><em><i><u><a><ul><ol><li><h1><h2><h3><h4><h5><h6><blockquote><pre><code><img><div><span>';
-            $content = strip_tags($this->content, $allowedTags);
+            $allowedTags = '<p><br><strong><b><em><i><u><a><ul><ol><li><h1><h2><h3><h4><h5><h6><blockquote><pre><code><img><div><span><iframe><script>';
+            $content = strip_tags($content, $allowedTags);
             
             // Preserve class attributes for images (for side-by-side layout)
             $content = $this->preserveImageClasses($content);
@@ -182,6 +185,44 @@ class Article extends Model
         return $content;
     }
     
+    /**
+     * Process inline embed codes within content
+     */
+    private function processInlineEmbeds($content)
+    {
+        // Process Twitter embeds
+        if ($this->twitter_embed) {
+            $wrappedEmbed = '<div class="inline-embed">' . $this->twitter_embed . '</div>';
+            $content = str_replace('[TWITTER_EMBED]', $wrappedEmbed, $content);
+        }
+        
+        // Process Facebook embeds
+        if ($this->facebook_embed) {
+            $wrappedEmbed = '<div class="inline-embed">' . $this->facebook_embed . '</div>';
+            $content = str_replace('[FACEBOOK_EMBED]', $wrappedEmbed, $content);
+        }
+        
+        // Process Instagram embeds
+        if ($this->instagram_embed) {
+            $wrappedEmbed = '<div class="inline-embed">' . $this->instagram_embed . '</div>';
+            $content = str_replace('[INSTAGRAM_EMBED]', $wrappedEmbed, $content);
+        }
+        
+        // Process TikTok embeds
+        if ($this->tiktok_embed) {
+            $wrappedEmbed = '<div class="inline-embed">' . $this->tiktok_embed . '</div>';
+            $content = str_replace('[TIKTOK_EMBED]', $wrappedEmbed, $content);
+        }
+        
+        // Process custom embeds
+        if ($this->custom_embed) {
+            $wrappedEmbed = '<div class="inline-embed">' . $this->custom_embed . '</div>';
+            $content = str_replace('[CUSTOM_EMBED]', $wrappedEmbed, $content);
+        }
+        
+        return $content;
+    }
+
     /**
      * Preserve class attributes for images to maintain side-by-side layout
      */

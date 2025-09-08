@@ -377,7 +377,8 @@ document.addEventListener('DOMContentLoaded', function() {
         toolbar: 'undo redo | blocks | ' +
             'bold italic underline | forecolor backcolor | alignleft aligncenter ' +
             'alignright alignjustify | bullist numlist outdent indent | ' +
-            'removeformat | help | link | image | styleselect',
+            'removeformat | help | link | image | styleselect | ' +
+            'embedtwitter embedfacebook embedinstagram embedtiktok embedcustom',
         content_style: 'body { font-family: -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif; font-size: 14px; } img { max-width: 100%; height: auto; } .image-side-by-side { display: inline-block; margin: 5px; vertical-align: top; width: 48%; } .image-full-width { display: block; width: 100%; margin: 10px 0; } .image-centered { display: block; margin: 10px auto; text-align: center; }',
         branding: false,
         promotion: false,
@@ -444,6 +445,47 @@ document.addEventListener('DOMContentLoaded', function() {
         setup: function (editor) {
             editor.on('change', function () {
                 editor.save();
+            });
+            
+            // Add custom embed buttons
+            editor.ui.registry.addButton('embedtwitter', {
+                text: 'Twitter',
+                tooltip: 'Insert Twitter Embed',
+                onAction: function () {
+                    editor.insertContent('<p>[TWITTER_EMBED]</p>');
+                }
+            });
+            
+            editor.ui.registry.addButton('embedfacebook', {
+                text: 'Facebook',
+                tooltip: 'Insert Facebook Embed',
+                onAction: function () {
+                    editor.insertContent('<p>[FACEBOOK_EMBED]</p>');
+                }
+            });
+            
+            editor.ui.registry.addButton('embedinstagram', {
+                text: 'Instagram',
+                tooltip: 'Insert Instagram Embed',
+                onAction: function () {
+                    editor.insertContent('<p>[INSTAGRAM_EMBED]</p>');
+                }
+            });
+            
+            editor.ui.registry.addButton('embedtiktok', {
+                text: 'TikTok',
+                tooltip: 'Insert TikTok Embed',
+                onAction: function () {
+                    editor.insertContent('<p>[TIKTOK_EMBED]</p>');
+                }
+            });
+            
+            editor.ui.registry.addButton('embedcustom', {
+                text: 'Custom',
+                tooltip: 'Insert Custom Embed',
+                onAction: function () {
+                    editor.insertContent('<p>[CUSTOM_EMBED]</p>');
+                }
             });
         }
     });

@@ -51,18 +51,35 @@ For any other platform that provides embed codes:
 2. Paste it into the "Custom Embed Code" field
 
 ### 3. Display
-The social media embeds will be displayed:
-- **Above the tags section** in both admin preview and public article pages
-- **Above the ad banner section** (which appears between social media content and tags)
-- With proper styling and responsive design
-- Each embed type has its own styling (Twitter, Facebook, Instagram, TikTok, Custom)
+You can embed social media content **directly within your article content**:
+
+**How to Use:**
+1. **Add Embed Codes**: First, paste your embed codes in the "Social Media Embeds" section of the form
+2. **Insert in Content**: In the TinyMCE editor, click where you want the embed to appear
+3. **Use Embed Buttons**: Click the appropriate embed button (Twitter, Facebook, Instagram, TikTok, Custom) in the toolbar
+4. **Result**: A placeholder `[TWITTER_EMBED]` (or similar) will be inserted in your content
+5. **Save Article**: When you save, the placeholder will be replaced with the actual embed
+
+**Example Workflow:**
+1. Paste Twitter embed code in "Twitter/X Embed Code" field
+2. In article content, write: "Here's what happened on Twitter:"
+3. Click the "Twitter" button in TinyMCE toolbar
+4. Continue writing: "This shows the community reaction."
+5. Save the article - the Twitter embed will appear between those two sentences
+
+**Benefits:**
+- ✅ **Precise Control**: Place embeds exactly where you want them
+- ✅ **Better Flow**: Integrate social media content naturally into your narrative
+- ✅ **Flexible Layout**: Mix embeds with text, images, and other content
+- ✅ **Professional Look**: Embeds appear seamlessly within the article flow
 
 **Display Order:**
-1. Article content
-2. Social media embeds
-3. Ad banner section
-4. Tags section
-5. Social sharing section
+1. Article content (with inline embeds if any)
+2. Ad banner section
+3. Tags section
+4. Social sharing section
+
+**Note:** The separate "Social Media Content" section has been removed since inline embeds provide better control and user experience.
 
 ## Technical Details
 
