@@ -137,6 +137,91 @@
                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                 @enderror
             </div>
+
+            <!-- Social Media Embeds -->
+            <div class="space-y-4">
+                <h4 class="text-lg font-medium text-gray-900">Social Media Embeds</h4>
+                
+                <!-- Twitter Embed -->
+                <div>
+                    <label for="twitter_embed" class="block text-sm font-medium text-gray-700 mb-2">
+                        Twitter/X Embed Code
+                    </label>
+                    <textarea name="twitter_embed" 
+                              id="twitter_embed" 
+                              rows="3"
+                              class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-red-500 focus:border-red-500 @error('twitter_embed') border-red-500 @enderror"
+                              placeholder="Paste Twitter embed code here...">{{ old('twitter_embed', $article->twitter_embed) }}</textarea>
+                    <p class="mt-1 text-sm text-gray-500">Pilihan: Embed code dari Twitter/X</p>
+                    @error('twitter_embed')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Facebook Embed -->
+                <div>
+                    <label for="facebook_embed" class="block text-sm font-medium text-gray-700 mb-2">
+                        Facebook Embed Code
+                    </label>
+                    <textarea name="facebook_embed" 
+                              id="facebook_embed" 
+                              rows="3"
+                              class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-red-500 focus:border-red-500 @error('facebook_embed') border-red-500 @enderror"
+                              placeholder="Paste Facebook embed code here...">{{ old('facebook_embed', $article->facebook_embed) }}</textarea>
+                    <p class="mt-1 text-sm text-gray-500">Pilihan: Embed code dari Facebook</p>
+                    @error('facebook_embed')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Instagram Embed -->
+                <div>
+                    <label for="instagram_embed" class="block text-sm font-medium text-gray-700 mb-2">
+                        Instagram Embed Code
+                    </label>
+                    <textarea name="instagram_embed" 
+                              id="instagram_embed" 
+                              rows="3"
+                              class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-red-500 focus:border-red-500 @error('instagram_embed') border-red-500 @enderror"
+                              placeholder="Paste Instagram embed code here...">{{ old('instagram_embed', $article->instagram_embed) }}</textarea>
+                    <p class="mt-1 text-sm text-gray-500">Pilihan: Embed code dari Instagram</p>
+                    @error('instagram_embed')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- TikTok Embed -->
+                <div>
+                    <label for="tiktok_embed" class="block text-sm font-medium text-gray-700 mb-2">
+                        TikTok Embed Code
+                    </label>
+                    <textarea name="tiktok_embed" 
+                              id="tiktok_embed" 
+                              rows="3"
+                              class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-red-500 focus:border-red-500 @error('tiktok_embed') border-red-500 @enderror"
+                              placeholder="Paste TikTok embed code here...">{{ old('tiktok_embed', $article->tiktok_embed) }}</textarea>
+                    <p class="mt-1 text-sm text-gray-500">Pilihan: Embed code dari TikTok</p>
+                    @error('tiktok_embed')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Custom Embed -->
+                <div>
+                    <label for="custom_embed" class="block text-sm font-medium text-gray-700 mb-2">
+                        Custom Embed Code
+                    </label>
+                    <textarea name="custom_embed" 
+                              id="custom_embed" 
+                              rows="3"
+                              class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-red-500 focus:border-red-500 @error('custom_embed') border-red-500 @enderror"
+                              placeholder="Paste any custom embed code here...">{{ old('custom_embed', $article->custom_embed) }}</textarea>
+                    <p class="mt-1 text-sm text-gray-500">Pilihan: Custom embed code untuk platform lain</p>
+                    @error('custom_embed')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
+            </div>
         </div>
     </div>
 
