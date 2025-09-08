@@ -453,6 +453,7 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
         Route::get('/create', [AdminArticleController::class, 'create'])->name('admin.articles.create');
         Route::post('/', [AdminArticleController::class, 'store'])->name('admin.articles.store');
         Route::post('/preview', [AdminArticleController::class, 'preview'])->name('admin.articles.preview');
+        Route::get('/{id}/preview', [AdminArticleController::class, 'previewExisting'])->name('admin.articles.preview-existing');
         Route::get('/{id}/edit', [AdminArticleController::class, 'edit'])->name('admin.articles.edit');
         Route::put('/{id}', [AdminArticleController::class, 'update'])->name('admin.articles.update');
         Route::delete('/{id}', [AdminArticleController::class, 'destroy'])->name('admin.articles.destroy');

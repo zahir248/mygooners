@@ -11,15 +11,6 @@
             <p class="mt-2 text-sm text-gray-700">Kemaskini artikel: {{ $article->title }}</p>
         </div>
         <div class="mt-4 sm:mt-0 flex space-x-3">
-            <a href="{{ route('blog.show', $article->slug) }}" 
-               target="_blank"
-               class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
-                <svg class="-ml-1 mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                </svg>
-                Pratonton
-            </a>
             <a href="{{ route('admin.articles.index') }}" 
                class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
                 <svg class="-ml-1 mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -314,15 +305,15 @@
            class="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
             Batal
         </a>
-        <button type="button" 
-                id="preview-btn"
-                class="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+        <a href="{{ route('admin.articles.preview-existing', $article->id) }}" 
+           target="_blank"
+           class="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
             <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
             </svg>
             Pratonton
-        </button>
+        </a>
         <button type="submit" 
                 class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
             Kemaskini Artikel
@@ -391,120 +382,5 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-// Preview functionality
-document.addEventListener('DOMContentLoaded', function() {
-    const previewBtn = document.getElementById('preview-btn');
-    if (previewBtn) {
-        previewBtn.addEventListener('click', function(e) {
-            e.preventDefault(); // Prevent default form submission
-            
-            // Create a new form specifically for preview
-            const originalForm = document.querySelector('form');
-            console.log('Original form found:', originalForm);
-            console.log('Form action:', originalForm ? originalForm.action : 'No form');
-            
-            const previewForm = document.createElement('form');
-            previewForm.method = 'POST';
-            previewForm.action = '{{ route("admin.articles.preview") }}';
-            previewForm.target = '_blank';
-            previewForm.enctype = 'multipart/form-data';
-            previewForm.style.display = 'none';
-            
-            // Add CSRF token
-            const csrfToken = document.createElement('input');
-            csrfToken.type = 'hidden';
-            csrfToken.name = '_token';
-            csrfToken.value = '{{ csrf_token() }}';
-            previewForm.appendChild(csrfToken);
-            
-            // Get all form inputs and copy them
-            let inputs = originalForm ? originalForm.querySelectorAll('input, textarea, select') : [];
-            console.log('Found inputs in form:', inputs.length);
-            
-            // Also check for inputs in the entire document
-            const allInputs = document.querySelectorAll('input, textarea, select');
-            console.log('All inputs in document:', allInputs.length);
-            
-            // If no inputs found in form, use all inputs in document (excluding the preview button)
-            if (inputs.length <= 1) {
-                inputs = Array.from(allInputs).filter(input => 
-                    input.id !== 'preview-btn' && 
-                    input.type !== 'button' && 
-                    input.type !== 'submit' &&
-                    input.name && 
-                    input.name !== ''
-                );
-                console.log('Using all document inputs (filtered):', inputs.length);
-            }
-            
-            inputs.forEach(function(input, index) {
-                console.log(`Input ${index}:`, input.name, input.type, input.value);
-                
-                if (input.type === 'file') {
-                    // Handle file inputs
-                    if (input.files && input.files.length > 0) {
-                        const fileInput = document.createElement('input');
-                        fileInput.type = 'file';
-                        fileInput.name = input.name;
-                        fileInput.files = input.files;
-                        previewForm.appendChild(fileInput);
-                        console.log('Added file input:', input.name);
-                    }
-                } else if (input.type === 'checkbox') {
-                    // Handle checkboxes
-                    if (input.checked) {
-                        const checkbox = document.createElement('input');
-                        checkbox.type = 'hidden';
-                        checkbox.name = input.name;
-                        checkbox.value = input.value;
-                        previewForm.appendChild(checkbox);
-                        console.log('Added checkbox:', input.name, input.value);
-                    }
-                } else if (input.type === 'radio') {
-                    // Handle radio buttons
-                    if (input.checked) {
-                        const radio = document.createElement('input');
-                        radio.type = 'hidden';
-                        radio.name = input.name;
-                        radio.value = input.value;
-                        previewForm.appendChild(radio);
-                        console.log('Added radio:', input.name, input.value);
-                    }
-                } else if (input.tagName === 'TEXTAREA') {
-                    // Handle textareas
-                    const textarea = document.createElement('input');
-                    textarea.type = 'hidden';
-                    textarea.name = input.name;
-                    textarea.value = input.value;
-                    previewForm.appendChild(textarea);
-                    console.log('Added textarea:', input.name, input.value);
-                } else if (input.tagName === 'SELECT') {
-                    // Handle select dropdowns
-                    const select = document.createElement('input');
-                    select.type = 'hidden';
-                    select.name = input.name;
-                    select.value = input.value;
-                    previewForm.appendChild(select);
-                    console.log('Added select:', input.name, input.value);
-                } else {
-                    // Handle text inputs
-                    const newInput = document.createElement('input');
-                    newInput.type = 'hidden';
-                    newInput.name = input.name;
-                    newInput.value = input.value;
-                    previewForm.appendChild(newInput);
-                    console.log('Added input:', input.name, input.value);
-                }
-            });
-            
-            console.log('Preview form created with inputs:', previewForm.querySelectorAll('input').length);
-            
-            // Add form to document and submit
-            document.body.appendChild(previewForm);
-            previewForm.submit();
-            document.body.removeChild(previewForm);
-        });
-    }
-});
 </script>
 @endpush 

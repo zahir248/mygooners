@@ -358,4 +358,13 @@ class ArticleController extends Controller
 
         return view('admin.articles.preview', compact('article'));
     }
+
+    public function previewExisting($id)
+    {
+        // Find the article by ID (regardless of status)
+        $article = Article::findOrFail($id);
+        
+        // Return the same preview view as the create preview
+        return view('admin.articles.preview', compact('article'));
+    }
 } 
