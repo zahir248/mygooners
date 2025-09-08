@@ -338,10 +338,70 @@ document.addEventListener('DOMContentLoaded', function() {
         toolbar: 'undo redo | blocks | ' +
             'bold italic underline | forecolor backcolor | alignleft aligncenter ' +
             'alignright alignjustify | bullist numlist outdent indent | ' +
-            'removeformat | help | link',
-        content_style: 'body { font-family: -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif; font-size: 14px; }',
+            'removeformat | help | link | image | styleselect',
+        content_style: 'body { font-family: -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif; font-size: 14px; } img { max-width: 100%; height: auto; } .image-side-by-side { display: inline-block; margin: 5px; vertical-align: top; width: 48%; } .image-full-width { display: block; width: 100%; margin: 10px 0; } .image-centered { display: block; margin: 10px auto; text-align: center; }',
         branding: false,
         promotion: false,
+        automatic_uploads: false,
+        file_picker_types: 'image',
+        image_advtab: true,
+        image_uploadtab: false,
+        image_style_formats: [
+            {title: 'Side by Side', selector: 'img', classes: 'image-side-by-side'},
+            {title: 'Full Width', selector: 'img', classes: 'image-full-width'},
+            {title: 'Centered', selector: 'img', classes: 'image-centered'}
+        ],
+        file_picker_callback: function (callback, value, meta) {
+            if (meta.filetype === 'image') {
+                var input = document.createElement('input');
+                input.setAttribute('type', 'file');
+                input.setAttribute('accept', 'image/*');
+                
+                input.onchange = function () {
+                    var file = this.files[0];
+                    if (file) {
+                        var formData = new FormData();
+                        formData.append('file', file);
+                        formData.append('_token', '{{ csrf_token() }}');
+                        
+                        var xhr = new XMLHttpRequest();
+                        xhr.open('POST', '{{ route("admin.articles.upload-image") }}', true);
+                        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+                        
+                        xhr.onload = function () {
+                            console.log('Upload response:', xhr.responseText);
+                            if (xhr.status === 200) {
+                                try {
+                                    var response = JSON.parse(xhr.responseText);
+                                    console.log('Parsed response:', response);
+                                    if (response.location) {
+                                        console.log('Image URL:', response.location);
+                                        callback(response.location, {
+                                            title: file.name
+                                        });
+                                    } else {
+                                        alert('Upload failed: Invalid response');
+                                    }
+                                } catch (e) {
+                                    console.error('JSON parse error:', e);
+                                    alert('Upload failed: Invalid response format');
+                                }
+                            } else {
+                                alert('Upload failed with status: ' + xhr.status);
+                            }
+                        };
+                        
+                        xhr.onerror = function () {
+                            alert('Network error during upload');
+                        };
+                        
+                        xhr.send(formData);
+                    }
+                };
+                
+                input.click();
+            }
+        },
         setup: function (editor) {
             editor.on('change', function () {
                 editor.save();

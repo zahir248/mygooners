@@ -457,6 +457,7 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
         Route::get('/{id}/edit', [AdminArticleController::class, 'edit'])->name('admin.articles.edit');
         Route::put('/{id}', [AdminArticleController::class, 'update'])->name('admin.articles.update');
         Route::delete('/{id}', [AdminArticleController::class, 'destroy'])->name('admin.articles.destroy');
+        Route::post('/upload-image', [AdminArticleController::class, 'uploadImage'])->name('admin.articles.upload-image');
     });
     
     // Services Management
@@ -616,6 +617,15 @@ Route::get('/article-image/{filename}', function ($filename) {
     }
     return response()->file($path);
 })->name('article.image');
+
+// Serve article content images directly from storage
+Route::get('/article-content-image/{filename}', function ($filename) {
+    $path = storage_path('app/public/article-content/' . $filename);
+    if (!file_exists($path)) {
+        abort(404);
+    }
+    return response()->file($path);
+})->name('article.content.image');
 
 // Serve video thumbnails directly from storage
 Route::get('/video-thumbnail/{filename}', function ($filename) {

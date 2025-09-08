@@ -84,6 +84,46 @@
             text-decoration: underline;
         }
 
+        /* Image layout styles */
+        .article-content img {
+            max-width: 100%;
+            height: auto;
+        }
+        
+        .article-content .image-side-by-side {
+            display: inline-block !important;
+            margin: 5px !important;
+            vertical-align: top !important;
+            width: 48% !important;
+            float: left !important;
+        }
+        
+        .article-content .image-full-width {
+            display: block !important;
+            width: 100% !important;
+            margin: 10px 0 !important;
+            clear: both !important;
+        }
+        
+        .article-content .image-centered {
+            display: block !important;
+            margin: 10px auto !important;
+            text-align: center !important;
+            clear: both !important;
+        }
+
+        /* Force side-by-side layout for images in paragraphs */
+        .article-content p {
+            overflow: hidden;
+        }
+        
+        .article-content p img.image-side-by-side {
+            display: inline-block !important;
+            width: 48% !important;
+            margin: 5px !important;
+            vertical-align: top !important;
+        }
+
         .prose a {
             color: #dc2626;
             text-decoration: none;

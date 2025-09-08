@@ -119,9 +119,12 @@ class Article extends Model
         
         // If content contains HTML tags, sanitize and return it (from TinyMCE)
         if (strip_tags($this->content) !== $this->content) {
-            // Allow only safe HTML tags for rich text content
+            // Allow only safe HTML tags for rich text content, including class attributes
             $allowedTags = '<p><br><strong><b><em><i><u><a><ul><ol><li><h1><h2><h3><h4><h5><h6><blockquote><pre><code><img><div><span>';
             $content = strip_tags($this->content, $allowedTags);
+            
+            // Preserve class attributes for images (for side-by-side layout)
+            $content = $this->preserveImageClasses($content);
             
             // Add Bootstrap classes to headings for proper styling
             $content = $this->addBootstrapClassesToHeadings($content);
@@ -170,6 +173,36 @@ class Article extends Model
         $content = preg_replace('/<ol([^>]*)>/', '<ol$1 style="margin-bottom: 1rem; padding-left: 1.5rem; list-style-type: decimal;">', $content);
         $content = preg_replace('/<li([^>]*)>/', '<li$1 style="margin-bottom: 0.25rem;">', $content);
         $content = preg_replace('/<blockquote([^>]*)>/', '<blockquote$1 style="border-left: 4px solid #dc2626; padding-left: 1rem; margin: 1.5rem 0; color: #6b7280; font-style: italic;">', $content);
+        
+        return $content;
+    }
+    
+    /**
+     * Preserve class attributes for images to maintain side-by-side layout
+     */
+    private function preserveImageClasses($content)
+    {
+        // Extract class attributes from original content before strip_tags
+        preg_match_all('/<img[^>]*class=["\']([^"\']*)["\'][^>]*>/i', $this->content, $matches);
+        
+        if (!empty($matches[0])) {
+            foreach ($matches[0] as $index => $originalImg) {
+                $classValue = $matches[1][$index];
+                
+                // Find the corresponding img tag in the processed content
+                preg_match_all('/<img[^>]*>/i', $content, $processedImgs);
+                
+                if (isset($processedImgs[0][$index])) {
+                    $processedImg = $processedImgs[0][$index];
+                    
+                    // Add class attribute to the processed img tag
+                    $newImg = preg_replace('/<img([^>]*)>/i', '<img$1 class="' . $classValue . '">', $processedImg);
+                    
+                    // Replace in content
+                    $content = str_replace($processedImg, $newImg, $content);
+                }
+            }
+        }
         
         return $content;
     }

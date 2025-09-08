@@ -93,7 +93,18 @@ class ArticleController extends Controller
         ]);
 
         $data = $request->all();
-        $data['slug'] = Str::slug($request->title);
+        
+        // Generate unique slug
+        $baseSlug = Str::slug($request->title);
+        $slug = $baseSlug;
+        $counter = 1;
+        
+        while (Article::where('slug', $slug)->exists()) {
+            $slug = $baseSlug . '-' . $counter;
+            $counter++;
+        }
+        
+        $data['slug'] = $slug;
         $data['is_featured'] = $request->has('is_featured');
         
         // Handle cover image upload with debugging
@@ -230,7 +241,18 @@ class ArticleController extends Controller
         $article = Article::findOrFail($id);
         
         $data = $request->all();
-        $data['slug'] = Str::slug($request->title);
+        
+        // Generate unique slug (excluding current article)
+        $baseSlug = Str::slug($request->title);
+        $slug = $baseSlug;
+        $counter = 1;
+        
+        while (Article::where('slug', $slug)->where('id', '!=', $id)->exists()) {
+            $slug = $baseSlug . '-' . $counter;
+            $counter++;
+        }
+        
+        $data['slug'] = $slug;
         $data['is_featured'] = $request->has('is_featured');
         
         // Handle cover image upload with debugging
@@ -366,5 +388,73 @@ class ArticleController extends Controller
         
         // Return the same preview view as the create preview
         return view('admin.articles.preview', compact('article'));
+    }
+
+    public function uploadImage(Request $request)
+    {
+        try {
+            \Log::info('Image upload request received', [
+                'has_file' => $request->hasFile('file'),
+                'files' => $request->allFiles()
+            ]);
+
+            $request->validate([
+                'file' => 'required|image|mimes:jpeg,png,jpg,gif|max:10240'
+            ]);
+
+            if ($request->hasFile('file')) {
+                $image = $request->file('file');
+                
+                // Ensure the directory exists
+                $directory = 'article-content';
+                if (!Storage::disk('public')->exists($directory)) {
+                    Storage::disk('public')->makeDirectory($directory);
+                }
+                
+                // Generate unique filename
+                $filename = $directory . '/' . time() . '_' . Str::random(10) . '.' . $image->getClientOriginalExtension();
+                
+                \Log::info('Attempting to store image', [
+                    'filename' => $filename,
+                    'original_name' => $image->getClientOriginalName(),
+                    'size' => $image->getSize()
+                ]);
+                
+                // Store the file
+                $stored = Storage::disk('public')->putFileAs(
+                    $directory, 
+                    $image, 
+                    basename($filename)
+                );
+                
+                \Log::info('Image storage result', [
+                    'stored' => $stored,
+                    'exists' => Storage::disk('public')->exists($filename)
+                ]);
+                
+                if ($stored) {
+                    // Use relative URL to avoid domain issues
+                    $relativeUrl = '/storage/' . $filename;
+                    
+                    \Log::info('Image upload successful', [
+                        'relative_url' => $relativeUrl,
+                        'filename' => $filename,
+                        'basename' => basename($filename)
+                    ]);
+                    
+                    return response()->json([
+                        'location' => $relativeUrl
+                    ], 200);
+                }
+            }
+            
+            \Log::error('Image upload failed - no file or storage failed');
+            return response()->json(['error' => 'Upload failed'], 400);
+        } catch (\Exception $e) {
+            \Log::error('Image upload error: ' . $e->getMessage(), [
+                'trace' => $e->getTraceAsString()
+            ]);
+            return response()->json(['error' => 'Upload failed: ' . $e->getMessage()], 500);
+        }
     }
 } 
