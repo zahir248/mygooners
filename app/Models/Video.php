@@ -57,6 +57,9 @@ class Video extends Model
 
     public function getThumbnailUrlAttribute()
     {
-        return $this->thumbnail ?: "https://img.youtube.com/vi/" . $this->youtube_video_id . "/maxresdefault.jpg";
+        if ($this->thumbnail) {
+            return route('video.thumbnail', $this->thumbnail);
+        }
+        return "https://img.youtube.com/vi/" . $this->youtube_video_id . "/maxresdefault.jpg";
     }
 } 

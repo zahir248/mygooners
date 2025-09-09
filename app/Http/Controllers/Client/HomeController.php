@@ -22,10 +22,14 @@ class HomeController extends Controller
             ->take(4)
             ->get();
 
-        // Fetch featured video (most recent published video)
-        $featuredVideo = Video::where('status', 'published')
+        // Fetch featured videos (published)
+        $featuredVideos = Video::where('status', 'published')
+            ->orderBy('is_featured', 'desc')
             ->orderBy('published_at', 'desc')
-            ->first();
+            ->orderBy('views_count', 'desc')
+            ->take(4)
+            ->get();
+
 
         // Fetch recent active services
         $newServices = Service::where('status', 'active')
@@ -43,6 +47,6 @@ class HomeController extends Controller
             ->take(3)
             ->get();
 
-        return view('client.home', compact('featuredArticles', 'featuredVideo', 'newServices', 'popularProducts'));
+        return view('client.home', compact('featuredArticles', 'featuredVideos', 'newServices', 'popularProducts'));
     }
 } 
