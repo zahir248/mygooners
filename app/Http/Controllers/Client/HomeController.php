@@ -14,7 +14,8 @@ class HomeController extends Controller
     public function index()
     {
         // Fetch featured articles (published)
-        $featuredArticles = Article::where('status', 'published')
+        $featuredArticles = Article::with('author')
+            ->where('status', 'published')
             ->orderBy('is_featured', 'desc')
             ->orderBy('published_at', 'desc')
             ->orderBy('views_count', 'desc')

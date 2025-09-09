@@ -14,7 +14,8 @@ class ArticleController extends Controller
         $search = $request->get('search');
         
         // Query articles from database
-        $query = Article::where('status', 'published')
+        $query = Article::with('author')
+                       ->where('status', 'published')
                        ->where('published_at', '<=', now())
                        ->orderBy('is_featured', 'desc')
                        ->orderBy('published_at', 'desc');
@@ -51,7 +52,8 @@ class ArticleController extends Controller
     public function show($slug)
     {
         // Find article by slug
-        $article = Article::where('slug', $slug)
+        $article = Article::with('author')
+                         ->where('slug', $slug)
                          ->where('status', 'published')
                          ->where('published_at', '<=', now())
                          ->firstOrFail();
@@ -60,7 +62,8 @@ class ArticleController extends Controller
         $article->increment('views_count');
 
         // Get related articles (same category, excluding current article)
-        $relatedArticles = Article::where('status', 'published')
+        $relatedArticles = Article::with('author')
+                                 ->where('status', 'published')
                                  ->where('published_at', '<=', now())
                                  ->where('category', $article->category)
                                  ->where('id', '!=', $article->id)
@@ -70,7 +73,8 @@ class ArticleController extends Controller
 
         // If not enough related articles in same category, get recent articles
         if ($relatedArticles->count() < 3) {
-            $additionalArticles = Article::where('status', 'published')
+            $additionalArticles = Article::with('author')
+                                       ->where('status', 'published')
                                        ->where('published_at', '<=', now())
                                        ->where('id', '!=', $article->id)
                                        ->whereNotIn('id', $relatedArticles->pluck('id'))

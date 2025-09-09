@@ -40,7 +40,7 @@ class ArticleController extends Controller
             $query->where('is_featured', true);
         }
         
-        $articles = $query->orderBy('created_at', 'desc')->get();
+        $articles = $query->with('author')->orderBy('created_at', 'desc')->get();
         
         // Get unique categories for filter dropdown
         $categories = Article::distinct()->pluck('category')->sort()->values();
@@ -98,6 +98,9 @@ class ArticleController extends Controller
         ]);
 
         $data = $request->all();
+        
+        // Automatically set the author to the logged-in user
+        $data['author_id'] = auth()->id();
         
         // Generate unique slug
         $baseSlug = Str::slug($request->title);
@@ -252,6 +255,9 @@ class ArticleController extends Controller
         
         $data = $request->all();
         
+        // Automatically set the author to the logged-in user
+        $data['author_id'] = auth()->id();
+        
         // Generate unique slug (excluding current article)
         $baseSlug = Str::slug($request->title);
         $slug = $baseSlug;
@@ -376,6 +382,10 @@ class ArticleController extends Controller
         $article->created_at = now();
         $article->published_at = now();
         $article->views_count = 0;
+        
+        // Set author for preview (current logged-in user)
+        $article->author_id = auth()->id();
+        $article->setRelation('author', auth()->user());
 
         // Handle cover image preview
         if ($request->hasFile('cover_image')) {
@@ -393,8 +403,8 @@ class ArticleController extends Controller
 
     public function previewExisting($id)
     {
-        // Find the article by ID (regardless of status)
-        $article = Article::findOrFail($id);
+        // Find the article by ID (regardless of status) with author relationship
+        $article = Article::with('author')->findOrFail($id);
         
         // Return the same preview view as the create preview
         return view('admin.articles.preview', compact('article'));

@@ -30,7 +30,8 @@ class Article extends Model
         'meta_description',
         'keywords',
         'views_count',
-        'status'
+        'status',
+        'author_id'
     ];
 
     protected $casts = [
@@ -68,6 +69,14 @@ class Article extends Model
     public function getRouteKeyName()
     {
         return 'slug';
+    }
+
+    /**
+     * Get the author of the article
+     */
+    public function author()
+    {
+        return $this->belongsTo(User::class, 'author_id');
     }
 
     public function getCoverImageUrlAttribute()

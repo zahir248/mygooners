@@ -154,4 +154,9 @@ class User extends Authenticatable
     {
         return !empty($this->google_id);
     }
+
+    public function articles()
+    {
+        return $this->hasMany(Article::class, 'author_id');
+    }
 }
