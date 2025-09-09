@@ -119,49 +119,51 @@
         <div class="space-y-6 flex flex-col h-full">
 
             <!-- Recent Articles List -->
-            <div class="bg-white rounded-xl shadow-lg overflow-hidden flex flex-col flex-grow">
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden flex flex-col h-full">
                 <div class="p-4 border-b border-gray-200">
                     <h3 class="text-lg font-bold text-gray-900">Artikel Terkini</h3>
                 </div>
-                @if($featuredArticles->count() > 0)
-                    <div class="divide-y divide-gray-200 flex-grow">
-                        @foreach($featuredArticles->take(3) as $article)
-                            <div class="p-4 hover:bg-gray-50 transition-colors">
-                                <div class="flex space-x-3">
-                                    @if($article->cover_image)
-                                        <img src="{{ route('article.image', basename($article->cover_image)) }}" alt="{{ $article->title }}" class="w-16 h-16 object-cover rounded-lg flex-shrink-0">
-                                    @else
-                                        <div class="w-16 h-16 bg-gray-200 rounded-lg flex-shrink-0 flex items-center justify-center">
-                                            <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                                            </svg>
-                                        </div>
-                                    @endif
-                                    <div class="flex-1 min-w-0">
-                                        <h4 class="text-sm font-semibold text-gray-900 mb-1">
-                                            <a href="{{ route('blog.show', $article->slug) }}" class="hover:text-red-600 transition-colors">
-                                                {{ Str::limit($article->title, 60) }}
-                                            </a>
-                                        </h4>
-                                        <div class="flex items-center text-xs text-gray-500">
-                                            <span class="bg-gray-100 text-gray-600 px-2 py-1 rounded-full text-xs">{{ $article->category ?: 'Berita' }}</span>
-                                            <span class="mx-2">•</span>
-                                            <span>{{ $article->published_at ? $article->published_at->diffForHumans() : $article->created_at->diffForHumans() }}</span>
+                <div class="flex flex-col flex-grow">
+                    @if($featuredArticles->count() > 0)
+                        <div class="divide-y divide-gray-200 flex-grow">
+                            @foreach($featuredArticles->take(3) as $article)
+                                <div class="p-4 hover:bg-gray-50 transition-colors">
+                                    <div class="flex space-x-3">
+                                        @if($article->cover_image)
+                                            <img src="{{ route('article.image', basename($article->cover_image)) }}" alt="{{ $article->title }}" class="w-16 h-16 object-cover rounded-lg flex-shrink-0">
+                                        @else
+                                            <div class="w-16 h-16 bg-gray-200 rounded-lg flex-shrink-0 flex items-center justify-center">
+                                                <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                                </svg>
+                                            </div>
+                                        @endif
+                                        <div class="flex-1 min-w-0">
+                                            <h4 class="text-sm font-semibold text-gray-900 mb-1">
+                                                <a href="{{ route('blog.show', $article->slug) }}" class="hover:text-red-600 transition-colors">
+                                                    {{ Str::limit($article->title, 60) }}
+                                                </a>
+                                            </h4>
+                                            <div class="flex items-center text-xs text-gray-500">
+                                                <span class="bg-gray-100 text-gray-600 px-2 py-1 rounded-full text-xs">{{ $article->category ?: 'Berita' }}</span>
+                                                <span class="mx-2">•</span>
+                                                <span>{{ $article->published_at ? $article->published_at->diffForHumans() : $article->created_at->diffForHumans() }}</span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        @endforeach
+                            @endforeach
+                        </div>
+                    @else
+                        <div class="p-6 flex-grow flex items-center justify-center">
+                            <p class="text-gray-600 text-sm text-center">Tiada artikel tambahan untuk dipaparkan.</p>
+                        </div>
+                    @endif
+                    <div class="p-4 bg-gray-50 mt-auto">
+                        <a href="{{ route('blog.index') }}" class="text-red-600 hover:text-red-700 font-medium text-sm">
+                            Lihat Semua Artikel →
+                        </a>
                     </div>
-                @else
-                    <div class="p-6 text-center">
-                        <p class="text-gray-600 text-sm">Tiada artikel tambahan untuk dipaparkan.</p>
-                    </div>
-                @endif
-                <div class="p-4 bg-gray-50">
-                    <a href="{{ route('blog.index') }}" class="text-red-600 hover:text-red-700 font-medium text-sm">
-                        Lihat Semua Artikel →
-                    </a>
                 </div>
             </div>
         </div>
@@ -276,48 +278,50 @@
             <!-- Sidebar Content -->
             <div class="space-y-6 flex flex-col h-full">
                 <!-- Recent Videos List -->
-                <div class="bg-white rounded-xl shadow-lg overflow-hidden flex flex-col flex-grow">
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden flex flex-col h-full">
                     <div class="p-4 border-b border-gray-200">
                         <h3 class="text-lg font-bold text-gray-900">Video Terkini</h3>
                     </div>
-                    @if($featuredVideos->count() > 1)
-                        <div class="divide-y divide-gray-200 flex-grow">
-                            @foreach($featuredVideos->skip(1)->take(3) as $video)
-                                <div class="p-4 hover:bg-gray-50 transition-colors">
-                                    <div class="flex space-x-3">
-                                        <div class="relative flex-shrink-0">
-                                            <img src="{{ $video->thumbnail_url }}" alt="{{ $video->title }}" class="w-16 h-16 object-cover rounded-lg">
-                                            <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center rounded-lg">
-                                                <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path>
-                                                </svg>
+                    <div class="flex flex-col flex-grow">
+                        @if($featuredVideos->count() > 1)
+                            <div class="divide-y divide-gray-200 flex-grow">
+                                @foreach($featuredVideos->skip(1)->take(3) as $video)
+                                    <div class="p-4 hover:bg-gray-50 transition-colors">
+                                        <div class="flex space-x-3">
+                                            <div class="relative flex-shrink-0">
+                                                <img src="{{ $video->thumbnail_url }}" alt="{{ $video->title }}" class="w-16 h-16 object-cover rounded-lg">
+                                                <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center rounded-lg">
+                                                    <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path>
+                                                    </svg>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="flex-1 min-w-0">
-                                            <h4 class="text-sm font-semibold text-gray-900 mb-1">
-                                                <a href="{{ route('videos.show', $video->slug) }}" class="hover:text-red-600 transition-colors">
-                                                    {{ Str::limit($video->title, 60) }}
-                                                </a>
-                                            </h4>
-                                            <div class="flex items-center text-xs text-gray-500">
-                                                <span class="bg-gray-100 text-gray-600 px-2 py-1 rounded-full text-xs">Video</span>
-                                                <span class="mx-2">•</span>
-                                                <span>{{ $video->published_at ? $video->published_at->diffForHumans() : $video->created_at->diffForHumans() }}</span>
+                                            <div class="flex-1 min-w-0">
+                                                <h4 class="text-sm font-semibold text-gray-900 mb-1">
+                                                    <a href="{{ route('videos.show', $video->slug) }}" class="hover:text-red-600 transition-colors">
+                                                        {{ Str::limit($video->title, 60) }}
+                                                    </a>
+                                                </h4>
+                                                <div class="flex items-center text-xs text-gray-500">
+                                                    <span class="bg-gray-100 text-gray-600 px-2 py-1 rounded-full text-xs">Video</span>
+                                                    <span class="mx-2">•</span>
+                                                    <span>{{ $video->published_at ? $video->published_at->diffForHumans() : $video->created_at->diffForHumans() }}</span>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            @endforeach
+                                @endforeach
+                            </div>
+                        @else
+                            <div class="p-6 flex-grow flex items-center justify-center">
+                                <p class="text-gray-600 text-sm text-center">Tiada video tambahan untuk dipaparkan.</p>
+                            </div>
+                        @endif
+                        <div class="p-4 bg-gray-50 mt-auto">
+                            <a href="{{ route('videos.index') }}" class="text-red-600 hover:text-red-700 font-medium text-sm">
+                                Lihat Semua Video →
+                            </a>
                         </div>
-                    @else
-                        <div class="p-6 text-center">
-                            <p class="text-gray-600 text-sm">Tiada video tambahan untuk dipaparkan.</p>
-                        </div>
-                    @endif
-                    <div class="p-4 bg-gray-50">
-                        <a href="{{ route('videos.index') }}" class="text-red-600 hover:text-red-700 font-medium text-sm">
-                            Lihat Semua Video →
-                        </a>
                     </div>
                 </div>
             </div>
@@ -423,51 +427,53 @@
             <!-- Sidebar Content -->
             <div class="space-y-6 flex flex-col h-full">
                 <!-- Recent Services List -->
-                <div class="bg-white rounded-xl shadow-lg overflow-hidden flex flex-col flex-grow">
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden flex flex-col h-full">
                     <div class="p-4 border-b border-gray-200">
                         <h3 class="text-lg font-bold text-gray-900">Perkhidmatan Terkini</h3>
                     </div>
-                    @if($newServices->count() > 1)
-                        <div class="divide-y divide-gray-200 flex-grow">
-                            @foreach($newServices->skip(1)->take(3) as $service)
-                                <div class="p-4 hover:bg-gray-50 transition-colors">
-                                    <div class="flex space-x-3">
-                                        <div class="flex-shrink-0">
-                                            <div class="w-16 h-16 bg-gray-200 rounded-lg flex items-center justify-center">
-                                                <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0V6a2 2 0 012 2v6a2 2 0 01-2 2H8a2 2 0 01-2-2V8a2 2 0 012-2V6"></path>
-                                                </svg>
+                    <div class="flex flex-col flex-grow">
+                        @if($newServices->count() > 1)
+                            <div class="divide-y divide-gray-200 flex-grow">
+                                @foreach($newServices->skip(1)->take(3) as $service)
+                                    <div class="p-4 hover:bg-gray-50 transition-colors">
+                                        <div class="flex space-x-3">
+                                            <div class="flex-shrink-0">
+                                                <div class="w-16 h-16 bg-gray-200 rounded-lg flex items-center justify-center">
+                                                    <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0V6a2 2 0 012 2v6a2 2 0 01-2 2H8a2 2 0 01-2-2V8a2 2 0 012-2V6"></path>
+                                                    </svg>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="flex-1 min-w-0">
-                                            <h4 class="text-sm font-semibold text-gray-900 mb-1">
-                                                <a href="{{ route('services.show', $service->slug) }}" class="hover:text-red-600 transition-colors">
-                                                    {{ Str::limit($service->title, 60) }}
-                                                </a>
-                                            </h4>
-                                            <div class="flex items-center text-xs text-gray-500 mb-1">
-                                                <span class="bg-gray-100 text-gray-600 px-2 py-1 rounded-full text-xs">{{ $service->category ?: 'Perkhidmatan' }}</span>
-                                                @if($service->is_verified)
-                                                    <span class="ml-2 bg-green-100 text-green-600 px-2 py-1 rounded-full text-xs">✓</span>
-                                                @endif
-                                            </div>
-                                            <div class="text-xs text-gray-500">
-                                                <span class="font-medium text-red-600">{{ $service->pricing ?: 'Harga Rundingan' }}</span>
+                                            <div class="flex-1 min-w-0">
+                                                <h4 class="text-sm font-semibold text-gray-900 mb-1">
+                                                    <a href="{{ route('services.show', $service->slug) }}" class="hover:text-red-600 transition-colors">
+                                                        {{ Str::limit($service->title, 60) }}
+                                                    </a>
+                                                </h4>
+                                                <div class="flex items-center text-xs text-gray-500 mb-1">
+                                                    <span class="bg-gray-100 text-gray-600 px-2 py-1 rounded-full text-xs">{{ $service->category ?: 'Perkhidmatan' }}</span>
+                                                    @if($service->is_verified)
+                                                        <span class="ml-2 bg-green-100 text-green-600 px-2 py-1 rounded-full text-xs">✓</span>
+                                                    @endif
+                                                </div>
+                                                <div class="text-xs text-gray-500">
+                                                    <span class="font-medium text-red-600">{{ $service->pricing ?: 'Harga Rundingan' }}</span>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            @endforeach
+                                @endforeach
+                            </div>
+                        @else
+                            <div class="p-6 flex-grow flex items-center justify-center">
+                                <p class="text-gray-600 text-sm text-center">Tiada perkhidmatan tambahan untuk dipaparkan.</p>
+                            </div>
+                        @endif
+                        <div class="p-4 bg-gray-50 mt-auto">
+                            <a href="{{ route('services.index') }}" class="text-red-600 hover:text-red-700 font-medium text-sm">
+                                Lihat Semua Perkhidmatan →
+                            </a>
                         </div>
-                    @else
-                        <div class="p-6 text-center">
-                            <p class="text-gray-600 text-sm">Tiada perkhidmatan tambahan untuk dipaparkan.</p>
-                        </div>
-                    @endif
-                    <div class="p-4 bg-gray-50">
-                        <a href="{{ route('services.index') }}" class="text-red-600 hover:text-red-700 font-medium text-sm">
-                            Lihat Semua Perkhidmatan →
-                        </a>
                     </div>
                 </div>
             </div>
@@ -587,60 +593,62 @@
             <!-- Sidebar Content -->
             <div class="space-y-6 flex flex-col h-full">
                 <!-- Recent Products List -->
-                <div class="bg-white rounded-xl shadow-lg overflow-hidden flex flex-col flex-grow">
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden flex flex-col h-full">
                     <div class="p-4 border-b border-gray-200">
                         <h3 class="text-lg font-bold text-gray-900">Produk Terkini</h3>
                     </div>
-                    @if($popularProducts->count() > 1)
-                        <div class="divide-y divide-gray-200 flex-grow">
-                            @foreach($popularProducts->skip(1)->take(3) as $product)
-                                <div class="p-4 hover:bg-gray-50 transition-colors">
-                                    <div class="flex space-x-3">
-                                        <div class="flex-shrink-0">
-                                            @if($product->images && count($product->images) > 0)
-                                                <img src="{{ route('product.image', basename($product->images[0])) }}" alt="{{ $product->title }}" class="w-16 h-16 object-cover rounded-lg">
-                                            @else
-                                                <div class="w-16 h-16 bg-gray-200 rounded-lg flex items-center justify-center">
-                                                    <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                                                    </svg>
-                                                </div>
-                                            @endif
-                                        </div>
-                                        <div class="flex-1 min-w-0">
-                                            <h4 class="text-sm font-semibold text-gray-900 mb-1">
-                                                <a href="{{ route('shop.show', $product->slug) }}" class="hover:text-red-600 transition-colors">
-                                                    {{ Str::limit($product->title, 60) }}
-                                                </a>
-                                            </h4>
-                                            <div class="flex items-center text-xs text-gray-500 mb-1">
-                                                <span class="bg-gray-100 text-gray-600 px-2 py-1 rounded-full text-xs">{{ $product->category ?: 'Produk' }}</span>
-                                                @if($product->sale_price)
-                                                    <span class="ml-2 bg-red-100 text-red-600 px-2 py-1 rounded-full text-xs">SALE</span>
+                    <div class="flex flex-col flex-grow">
+                        @if($popularProducts->count() > 1)
+                            <div class="divide-y divide-gray-200 flex-grow">
+                                @foreach($popularProducts->skip(1)->take(3) as $product)
+                                    <div class="p-4 hover:bg-gray-50 transition-colors">
+                                        <div class="flex space-x-3">
+                                            <div class="flex-shrink-0">
+                                                @if($product->images && count($product->images) > 0)
+                                                    <img src="{{ route('product.image', basename($product->images[0])) }}" alt="{{ $product->title }}" class="w-16 h-16 object-cover rounded-lg">
+                                                @else
+                                                    <div class="w-16 h-16 bg-gray-200 rounded-lg flex items-center justify-center">
+                                                        <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                                        </svg>
+                                                    </div>
                                                 @endif
                                             </div>
-                                            <div class="text-xs text-gray-500">
-                                                @if($product->sale_price)
-                                                    <span class="font-medium text-red-600">RM{{ number_format($product->sale_price, 2) }}</span>
-                                                    <span class="text-gray-400 line-through ml-1">RM{{ number_format($product->price, 2) }}</span>
-                                                @else
-                                                    <span class="font-medium text-gray-900">RM{{ number_format($product->price, 2) }}</span>
-                                                @endif
+                                            <div class="flex-1 min-w-0">
+                                                <h4 class="text-sm font-semibold text-gray-900 mb-1">
+                                                    <a href="{{ route('shop.show', $product->slug) }}" class="hover:text-red-600 transition-colors">
+                                                        {{ Str::limit($product->title, 60) }}
+                                                    </a>
+                                                </h4>
+                                                <div class="flex items-center text-xs text-gray-500 mb-1">
+                                                    <span class="bg-gray-100 text-gray-600 px-2 py-1 rounded-full text-xs">{{ $product->category ?: 'Produk' }}</span>
+                                                    @if($product->sale_price)
+                                                        <span class="ml-2 bg-red-100 text-red-600 px-2 py-1 rounded-full text-xs">SALE</span>
+                                                    @endif
+                                                </div>
+                                                <div class="text-xs text-gray-500">
+                                                    @if($product->sale_price)
+                                                        <span class="font-medium text-red-600">RM{{ number_format($product->sale_price, 2) }}</span>
+                                                        <span class="text-gray-400 line-through ml-1">RM{{ number_format($product->price, 2) }}</span>
+                                                    @else
+                                                        <span class="font-medium text-gray-900">RM{{ number_format($product->price, 2) }}</span>
+                                                    @endif
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            @endforeach
+                                @endforeach
+                            </div>
+                        @else
+                            <div class="p-6 flex-grow flex items-center justify-center">
+                                <p class="text-gray-600 text-sm text-center">Tiada produk tambahan untuk dipaparkan.</p>
+                            </div>
+                        @endif
+                        <div class="p-4 bg-gray-50 mt-auto">
+                            <a href="{{ route('shop.index') }}" class="text-red-600 hover:text-red-700 font-medium text-sm">
+                                Lihat Semua Produk →
+                            </a>
                         </div>
-                    @else
-                        <div class="p-6 text-center">
-                            <p class="text-gray-600 text-sm">Tiada produk tambahan untuk dipaparkan.</p>
-                        </div>
-                    @endif
-                    <div class="p-4 bg-gray-50">
-                        <a href="{{ route('shop.index') }}" class="text-red-600 hover:text-red-700 font-medium text-sm">
-                            Lihat Semua Produk →
-                        </a>
                     </div>
                 </div>
             </div>
