@@ -51,6 +51,12 @@ class ArticleController extends Controller
     public function create()
     {
         $categories = [
+            'Berita Bolasepak',
+            'Antarabangsa',
+            'La Liga',
+            'Serie A',
+            'Bundesliga',
+            'Ligue 1',
             'Transfer News',
             'Match Reports',
             'Training',
@@ -216,6 +222,12 @@ class ArticleController extends Controller
         $article = Article::findOrFail($id);
 
         $categories = [
+            'Berita Bolasepak',
+            'Antarabangsa',
+            'La Liga',
+            'Serie A',
+            'Bundesliga',
+            'Ligue 1',
             'Transfer News',
             'Match Reports',
             'Training',
