@@ -158,7 +158,7 @@
         <!-- Articles Grid -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
             @foreach($articles->skip($articles->first() && $articles->first()->is_featured && !$search && !$category ? 1 : 0) as $article)
-                <article class="bg-white rounded-xl shadow-lg overflow-hidden group hover:shadow-xl transition-shadow">
+                <article class="bg-white rounded-xl shadow-lg overflow-hidden group hover:shadow-xl transition-all duration-300">
                     <div class="relative">
                         @if($article->cover_image)
                             <img src="{{ route('article.image', basename($article->cover_image)) }}" 
@@ -171,18 +171,16 @@
                                 </svg>
                             </div>
                         @endif
-                        <div class="absolute top-4 left-4">
+                        <div class="absolute top-4 left-4 flex gap-2">
                             <span class="bg-red-600 text-white px-3 py-1 rounded-full text-sm font-medium">
                                 {{ $article->category }}
                             </span>
-                        </div>
-                        @if($article->is_featured)
-                            <div class="absolute top-4 right-4">
-                                <span class="bg-yellow-400 text-gray-900 px-2 py-1 rounded-full text-xs font-bold">
+                            @if($article->is_featured)
+                                <span class="bg-yellow-400 text-gray-900 px-3 py-1 rounded-full text-sm font-bold">
                                     UTAMA
                                 </span>
-                            </div>
-                        @endif
+                            @endif
+                        </div>
                         @if($article->youtube_video_id)
                             <div class="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                                 <svg class="w-12 h-12 text-white" fill="currentColor" viewBox="0 0 24 24">
@@ -191,38 +189,28 @@
                             </div>
                         @endif
                     </div>
-                    <div class="p-4 sm:p-6">
-                        <h3 class="text-lg sm:text-xl font-bold text-gray-900 mb-3 group-hover:text-red-600 transition-colors line-clamp-2">
+                    <div class="p-6">
+                        <h3 class="text-lg font-bold text-gray-900 mb-3 group-hover:text-red-600 transition-colors line-clamp-2 leading-tight">
                             <a href="{{ route('blog.show', $article->slug) }}">
                                 {{ $article->title }}
                             </a>
                         </h3>
-                        <p class="text-gray-600 mb-4 leading-relaxed text-sm sm:text-base line-clamp-3">
+                        <p class="text-gray-600 mb-4 leading-relaxed text-sm line-clamp-3">
                             {{ Str::limit($article->excerpt, 120) }}
                         </p>
-                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-                            <div class="flex items-center text-xs sm:text-sm text-gray-500">
-                                @if($article->author)
-                                    <svg class="w-3 h-3 sm:w-4 sm:h-4 mr-1 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>
-                                    </svg>
-                                    <span class="font-medium text-gray-700 truncate">{{ $article->author->name }}</span>
-                                    <span class="mx-2 hidden sm:inline">•</span>
-                                @endif
-                                <svg class="w-3 h-3 sm:w-4 sm:h-4 mr-1 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path>
-                                </svg>
-                                <span class="truncate">{{ $article->published_at->diffForHumans() }}</span>
-                            </div>
-                            <div class="flex items-center text-xs sm:text-sm text-gray-500">
-                                <svg class="w-3 h-3 sm:w-4 sm:h-4 mr-1 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                                    <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path>
-                                    <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"></path>
-                                </svg>
-                                {{ number_format($article->views_count) }}
-                            </div>
+                        <div class="flex items-center text-sm text-gray-500 mb-4">
+                            <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span>{{ $article->published_at->diffForHumans() }}</span>
+                            <span class="mx-2">•</span>
+                            <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path>
+                                <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            {{ number_format($article->views_count) }}
                         </div>
-                        <div class="mt-4 flex flex-wrap gap-1 sm:gap-2">
+                        <div class="flex flex-wrap gap-1">
                             @foreach(array_slice($article->tags, 0, 3) as $tag)
                                 <span class="bg-gray-100 text-gray-600 px-2 py-1 rounded-full text-xs">
                                     #{{ $tag }}

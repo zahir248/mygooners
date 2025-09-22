@@ -60,18 +60,16 @@
                                 </svg>
                             </div>
                         @endif
-                        <div class="absolute top-4 left-4">
+                        <div class="absolute top-4 left-4 flex gap-2">
                             <span class="bg-red-600 text-white px-3 py-1 rounded-full text-sm font-medium">
                                 {{ $article->category ?: 'Berita' }}
                             </span>
-                        </div>
-                        @if($article->is_featured)
-                            <div class="absolute top-4 right-4">
+                            @if($article->is_featured)
                                 <span class="bg-yellow-400 text-gray-900 px-3 py-1 rounded-full text-sm font-bold">
                                     UTAMA
                                 </span>
-                            </div>
-                        @endif
+                            @endif
+                        </div>
                     </div>
                     <div class="p-6 flex flex-col flex-grow">
                         <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-3">
@@ -82,12 +80,21 @@
                         <p class="text-gray-600 mb-4 text-lg leading-relaxed flex-grow">
                             {{ $article->excerpt ?: Str::limit(strip_tags($article->content), 200) }}
                         </p>
+                        @if($article->tags && count($article->tags) > 0)
+                            <div class="flex flex-wrap gap-1 mb-4">
+                                @foreach(array_slice($article->tags, 0, 3) as $tag)
+                                    <span class="bg-gray-100 text-gray-600 px-2 py-1 rounded-full text-xs">
+                                        #{{ $tag }}
+                                    </span>
+                                @endforeach
+                            </div>
+                        @endif
                         <div class="flex items-center justify-between mt-auto">
                             <div class="flex items-center text-sm text-gray-500">
                                 <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path>
                                 </svg>
-                                {{ $article->published_at ? $article->published_at->diffForHumans() : $article->created_at->diffForHumans() }}
+                                <span>{{ $article->published_at ? $article->published_at->diffForHumans() : $article->created_at->diffForHumans() }}</span>
                                 <span class="mx-2">•</span>
                                 <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
                                     <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path>
@@ -95,7 +102,7 @@
                                 </svg>
                                 {{ number_format($article->views_count ?? 0) }} tontonan
                             </div>
-                            <a href="{{ route('blog.show', $article->slug) }}" class="text-red-600 hover:text-red-700 font-medium">
+                            <a href="{{ route('blog.show', $article->slug) }}" class="text-red-600 hover:text-red-700 font-medium transition-colors">
                                 Baca Lagi →
                             </a>
                         </div>
