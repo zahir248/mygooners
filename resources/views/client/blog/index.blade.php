@@ -9,9 +9,9 @@
 <!-- Search and Filter Section -->
 <div class="bg-white border-b border-gray-200">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <div class="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
+        <div class="flex flex-col lg:flex-row lg:items-center gap-4">
             <!-- Search -->
-            <div class="flex-1 max-w-lg">
+            <div class="w-full lg:w-80 flex-shrink-0">
                 <form action="{{ route('blog.index') }}" method="GET" class="relative">
                     <input type="text" 
                            name="search" 
@@ -30,17 +30,55 @@
             </div>
 
             <!-- Category Filter -->
-            <div class="flex flex-wrap gap-2">
-                <a href="{{ route('blog.index') }}" 
-                   class="px-4 py-2 rounded-full text-sm font-medium transition-colors {{ !$category ? 'bg-arsenal text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' }}">
-                    Semua Kategori
-                </a>
-                @foreach($categories as $cat)
-                    <a href="{{ route('blog.category', strtolower(str_replace(' ', '-', $cat))) }}" 
-                       class="px-4 py-2 rounded-full text-sm font-medium transition-colors {{ strtolower($category) === strtolower(str_replace(' ', '-', $cat)) ? 'bg-arsenal text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' }}">
-                        {{ $cat }}
-                    </a>
-                @endforeach
+            <div class="relative w-full lg:flex-1">
+                @if(count($categories) > 6)
+                    <!-- Navigation with arrows -->
+                    <div class="flex items-center space-x-2">
+                        <button type="button" 
+                                class="p-2 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-600 hover:text-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0" 
+                                id="prevCategories" 
+                                disabled>
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                            </svg>
+                        </button>
+                        <div class="overflow-hidden flex-1 min-w-0">
+                            <div class="flex space-x-2 transition-transform duration-300 ease-in-out" id="categoryScroll">
+                                <a href="{{ route('blog.index') }}" 
+                                   class="flex-shrink-0 px-3 py-2 rounded-full text-sm font-medium transition-colors {{ !$category ? 'bg-arsenal text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' }}">
+                                    Semua Kategori
+                                </a>
+                                @foreach($categories as $cat)
+                                    <a href="{{ route('blog.category', strtolower(str_replace(' ', '-', $cat))) }}" 
+                                       class="flex-shrink-0 px-3 py-2 rounded-full text-sm font-medium transition-colors {{ strtolower($category) === strtolower(str_replace(' ', '-', $cat)) ? 'bg-arsenal text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' }}">
+                                        {{ $cat }}
+                                    </a>
+                                @endforeach
+                            </div>
+                        </div>
+                        <button type="button" 
+                                class="p-2 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-600 hover:text-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0" 
+                                id="nextCategories">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </button>
+                    </div>
+                @else
+                    <!-- Regular display for 6 or fewer categories -->
+                    <div class="flex flex-wrap gap-2">
+                        <a href="{{ route('blog.index') }}" 
+                           class="px-3 py-2 rounded-full text-sm font-medium transition-colors {{ !$category ? 'bg-arsenal text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' }}">
+                            Semua Kategori
+                        </a>
+                        @foreach($categories as $cat)
+                            <a href="{{ route('blog.category', strtolower(str_replace(' ', '-', $cat))) }}" 
+                               class="px-3 py-2 rounded-full text-sm font-medium transition-colors {{ strtolower($category) === strtolower(str_replace(' ', '-', $cat)) ? 'bg-arsenal text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' }}">
+                                {{ $cat }}
+                            </a>
+                        @endforeach
+                    </div>
+                @endif
             </div>
         </div>
     </div>
@@ -52,23 +90,23 @@
         <!-- Featured Article (if first article is featured) -->
         @if($articles->first() && $articles->first()->is_featured && !$search && !$category)
             @php $featuredArticle = $articles->first() @endphp
-            <div class="mb-12">
+            <div class="mb-8 lg:mb-12">
                 <div class="bg-white rounded-xl shadow-lg overflow-hidden">
-                    <div class="md:flex">
-                        <div class="md:w-1/2">
-                                                    @if($featuredArticle->cover_image)
-                            <img src="{{ route('article.image', basename($featuredArticle->cover_image)) }}" 
-                                 alt="{{ $featuredArticle->title }}" 
-                                 class="w-full h-64 md:h-full object-cover">
-                        @else
-                            <div class="w-full h-64 md:h-full bg-gray-200 flex items-center justify-center">
-                                <svg class="w-16 h-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                                </svg>
-                            </div>
-                        @endif
+                    <div class="flex flex-col lg:flex-row">
+                        <div class="w-full lg:w-1/2">
+                            @if($featuredArticle->cover_image)
+                                <img src="{{ route('article.image', basename($featuredArticle->cover_image)) }}" 
+                                     alt="{{ $featuredArticle->title }}" 
+                                     class="w-full h-64 lg:h-full object-cover">
+                            @else
+                                <div class="w-full h-64 lg:h-full bg-gray-200 flex items-center justify-center">
+                                    <svg class="w-16 h-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                    </svg>
+                                </div>
+                            @endif
                         </div>
-                        <div class="md:w-1/2 p-8">
+                        <div class="w-full lg:w-1/2 p-4 sm:p-6 lg:p-8">
                             <div class="flex items-center mb-4">
                                 <span class="bg-red-600 text-white px-3 py-1 rounded-full text-sm font-medium">
                                     {{ $featuredArticle->category }}
@@ -118,7 +156,7 @@
         @endif
 
         <!-- Articles Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
             @foreach($articles->skip($articles->first() && $articles->first()->is_featured && !$search && !$category ? 1 : 0) as $article)
                 <article class="bg-white rounded-xl shadow-lg overflow-hidden group hover:shadow-xl transition-shadow">
                     <div class="relative">
@@ -153,38 +191,38 @@
                             </div>
                         @endif
                     </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold text-gray-900 mb-3 group-hover:text-red-600 transition-colors">
+                    <div class="p-4 sm:p-6">
+                        <h3 class="text-lg sm:text-xl font-bold text-gray-900 mb-3 group-hover:text-red-600 transition-colors line-clamp-2">
                             <a href="{{ route('blog.show', $article->slug) }}">
                                 {{ $article->title }}
                             </a>
                         </h3>
-                        <p class="text-gray-600 mb-4 leading-relaxed">
+                        <p class="text-gray-600 mb-4 leading-relaxed text-sm sm:text-base line-clamp-3">
                             {{ Str::limit($article->excerpt, 120) }}
                         </p>
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center text-sm text-gray-500">
+                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                            <div class="flex items-center text-xs sm:text-sm text-gray-500">
                                 @if($article->author)
-                                    <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                    <svg class="w-3 h-3 sm:w-4 sm:h-4 mr-1 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                                         <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>
                                     </svg>
-                                    <span class="font-medium text-gray-700">{{ $article->author->name }}</span>
-                                    <span class="mx-2">•</span>
+                                    <span class="font-medium text-gray-700 truncate">{{ $article->author->name }}</span>
+                                    <span class="mx-2 hidden sm:inline">•</span>
                                 @endif
-                                <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                <svg class="w-3 h-3 sm:w-4 sm:h-4 mr-1 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path>
                                 </svg>
-                                {{ $article->published_at->diffForHumans() }}
+                                <span class="truncate">{{ $article->published_at->diffForHumans() }}</span>
                             </div>
-                            <div class="flex items-center text-sm text-gray-500">
-                                <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                            <div class="flex items-center text-xs sm:text-sm text-gray-500">
+                                <svg class="w-3 h-3 sm:w-4 sm:h-4 mr-1 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                                     <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path>
                                     <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"></path>
                                 </svg>
                                 {{ number_format($article->views_count) }}
                             </div>
                         </div>
-                        <div class="mt-4 flex flex-wrap gap-2">
+                        <div class="mt-4 flex flex-wrap gap-1 sm:gap-2">
                             @foreach(array_slice($article->tags, 0, 3) as $tag)
                                 <span class="bg-gray-100 text-gray-600 px-2 py-1 rounded-full text-xs">
                                     #{{ $tag }}
@@ -198,18 +236,18 @@
 
         <!-- Pagination -->
         @if($articles->hasPages())
-            <div class="mt-12">
+            <div class="mt-8 lg:mt-12">
                 {{ $articles->appends(request()->query())->links() }}
-        </div>
+            </div>
         @endif
     @else
         <!-- No Articles Found -->
-        <div class="text-center py-16">
-            <svg class="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div class="text-center py-12 lg:py-16">
+            <svg class="w-12 h-12 sm:w-16 sm:h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
             </svg>
-            <h3 class="text-xl font-medium text-gray-900 mb-2">Tiada artikel dijumpai</h3>
-            <p class="text-gray-600 mb-6">
+            <h3 class="text-lg sm:text-xl font-medium text-gray-900 mb-2">Tiada artikel dijumpai</h3>
+            <p class="text-sm sm:text-base text-gray-600 mb-6 px-4">
                 @if($search)
                     Tiada artikel sepadan dengan carian anda untuk "{{ $search }}"
                 @elseif($category)
@@ -230,4 +268,65 @@
 
 @push('scripts')
 <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const prevBtn = document.getElementById('prevCategories');
+    const nextBtn = document.getElementById('nextCategories');
+    const categoryScroll = document.getElementById('categoryScroll');
+    
+    if (prevBtn && nextBtn && categoryScroll) {
+        const scrollContainer = categoryScroll.parentElement;
+        const scrollAmount = 200; // Adjust scroll amount as needed
+        let currentPosition = 0;
+        let maxScroll = 0;
+        
+        // Calculate max scroll
+        function calculateMaxScroll() {
+            maxScroll = Math.max(0, categoryScroll.scrollWidth - scrollContainer.clientWidth);
+        }
+        
+        // Update button states
+        function updateButtons() {
+            prevBtn.disabled = currentPosition <= 0;
+            nextBtn.disabled = currentPosition >= maxScroll;
+        }
+        
+        // Previous button click
+        prevBtn.addEventListener('click', function() {
+            if (currentPosition > 0) {
+                currentPosition = Math.max(0, currentPosition - scrollAmount);
+                categoryScroll.style.transform = `translateX(-${currentPosition}px)`;
+                updateButtons();
+            }
+        });
+        
+        // Next button click
+        nextBtn.addEventListener('click', function() {
+            if (currentPosition < maxScroll) {
+                currentPosition = Math.min(maxScroll, currentPosition + scrollAmount);
+                categoryScroll.style.transform = `translateX(-${currentPosition}px)`;
+                updateButtons();
+            }
+        });
+        
+        // Initialize
+        calculateMaxScroll();
+        updateButtons();
+        
+        // Handle window resize
+        let resizeTimeout;
+        window.addEventListener('resize', function() {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(function() {
+                calculateMaxScroll();
+                if (currentPosition > maxScroll) {
+                    currentPosition = maxScroll;
+                    categoryScroll.style.transform = `translateX(-${currentPosition}px)`;
+                }
+                updateButtons();
+            }, 100);
+        });
+    }
+});
+</script>
 @endpush 

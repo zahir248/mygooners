@@ -51,21 +51,20 @@ class ArticleController extends Controller
     public function create()
     {
         $categories = [
-            'Berita Bolasepak',
+            'Perkembangan Kelab',
+            'EPL',
+            'UCL',
+            'Bolasepak',
+            'Piala Dunia',
+            'Euro',
+            'Berita Perpindahan',
+            'Analisis',
+            'Bundesliga',
+            'Serie A',
+            'Ligue 1',
             'Antarabangsa',
             'La Liga',
-            'Serie A',
-            'Bundesliga',
-            'Ligue 1',
-            'Transfer News',
-            'Match Reports',
-            'Training',
-            'Women\'s Team',
-            'Transfer Rumours',
-            'Analysis',
-            'History',
-            'Berita EPL',
-            'Perkembangan Kelab'
+            'Lain-lain'
         ];
 
         return view('admin.articles.create', compact('categories'));
@@ -222,21 +221,20 @@ class ArticleController extends Controller
         $article = Article::findOrFail($id);
 
         $categories = [
-            'Berita Bolasepak',
+            'Perkembangan Kelab',
+            'EPL',
+            'UCL',
+            'Bolasepak',
+            'Piala Dunia',
+            'Euro',
+            'Berita Perpindahan',
+            'Analisis',
+            'Bundesliga',
+            'Serie A',
+            'Ligue 1',
             'Antarabangsa',
             'La Liga',
-            'Serie A',
-            'Bundesliga',
-            'Ligue 1',
-            'Transfer News',
-            'Match Reports',
-            'Training',
-            'Women\'s Team',
-            'Transfer Rumours',
-            'Analysis',
-            'History',
-            'Berita EPL',
-            'Perkembangan Kelab'
+            'Lain-lain'
         ];
 
         return view('admin.articles.edit', compact('article', 'categories'));

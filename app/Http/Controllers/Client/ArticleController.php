@@ -95,6 +95,32 @@ class ArticleController extends Controller
 
     public function category($category)
     {
-        return $this->index(request()->merge(['category' => $category]));
+        // Convert URL-encoded category back to original format
+        $originalCategory = str_replace('-', ' ', $category);
+        
+        // Get all available categories to find the exact match
+        $availableCategories = Article::where('status', 'published')
+                                    ->where('published_at', '<=', now())
+                                    ->distinct()
+                                    ->pluck('category')
+                                    ->filter()
+                                    ->values()
+                                    ->toArray();
+        
+        // Find the exact category match (case-insensitive)
+        $matchedCategory = null;
+        foreach ($availableCategories as $cat) {
+            if (strtolower(str_replace(' ', '-', $cat)) === strtolower($category)) {
+                $matchedCategory = $cat;
+                break;
+            }
+        }
+        
+        // If no exact match found, try direct conversion
+        if (!$matchedCategory) {
+            $matchedCategory = ucwords($originalCategory);
+        }
+        
+        return $this->index(request()->merge(['category' => $matchedCategory]));
     }
 } 
