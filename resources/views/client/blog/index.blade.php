@@ -31,54 +31,39 @@
 
             <!-- Category Filter -->
             <div class="relative w-full lg:flex-1">
-                @if(count($categories) > 6)
-                    <!-- Navigation with arrows -->
-                    <div class="flex items-center space-x-2">
-                        <button type="button" 
-                                class="p-2 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-600 hover:text-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0" 
-                                id="prevCategories" 
-                                disabled>
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-                            </svg>
-                        </button>
-                        <div class="overflow-hidden flex-1 min-w-0">
-                            <div class="flex space-x-2 transition-transform duration-300 ease-in-out" id="categoryScroll">
-                                <a href="{{ route('blog.index') }}" 
-                                   class="flex-shrink-0 px-3 py-2 rounded-full text-sm font-medium transition-colors {{ !$category ? 'bg-arsenal text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' }}">
-                                    Semua Kategori
-                                </a>
-                                @foreach($categories as $cat)
-                                    <a href="{{ route('blog.category', strtolower(str_replace(' ', '-', $cat))) }}" 
-                                       class="flex-shrink-0 px-3 py-2 rounded-full text-sm font-medium transition-colors {{ strtolower($category) === strtolower(str_replace(' ', '-', $cat)) ? 'bg-arsenal text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' }}">
-                                        {{ $cat }}
-                                    </a>
-                                @endforeach
-                            </div>
-                        </div>
-                        <button type="button" 
-                                class="p-2 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-600 hover:text-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0" 
-                                id="nextCategories">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                            </svg>
-                        </button>
-                    </div>
-                @else
-                    <!-- Regular display for 6 or fewer categories -->
-                    <div class="flex flex-wrap gap-2">
-                        <a href="{{ route('blog.index') }}" 
-                           class="px-3 py-2 rounded-full text-sm font-medium transition-colors {{ !$category ? 'bg-arsenal text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' }}">
-                            Semua Kategori
-                        </a>
-                        @foreach($categories as $cat)
-                            <a href="{{ route('blog.category', strtolower(str_replace(' ', '-', $cat))) }}" 
-                               class="px-3 py-2 rounded-full text-sm font-medium transition-colors {{ strtolower($category) === strtolower(str_replace(' ', '-', $cat)) ? 'bg-arsenal text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' }}">
-                                {{ $cat }}
+                <div class="flex items-center space-x-2">
+                    <button type="button" 
+                            class="p-2 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-600 hover:text-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0" 
+                            id="prevCategories" 
+                            disabled>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                        </svg>
+                    </button>
+                    <div class="overflow-hidden flex-1 min-w-0">
+                        <div class="flex space-x-2 transition-transform duration-300 ease-in-out" id="categoryScroll">
+                            <a href="{{ route('blog.index') }}" 
+                               class="flex-shrink-0 px-3 py-2 rounded-full text-sm font-medium transition-colors {{ !$category ? 'bg-arsenal text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' }}">
+                                Semua Kategori
                             </a>
-                        @endforeach
+                            @foreach($categories as $index => $cat)
+                                <a href="{{ route('blog.category', strtolower(str_replace(' ', '-', $cat))) }}" 
+                                   class="flex-shrink-0 px-3 py-2 rounded-full text-sm font-medium transition-colors {{ strtolower($category) === strtolower(str_replace(' ', '-', $cat)) ? 'bg-arsenal text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' }}"
+                                   style="{{ $index >= 6 ? 'display: none;' : '' }}">
+                                    {{ $cat }}
+                                </a>
+                            @endforeach
+                        </div>
                     </div>
-                @endif
+                    <button type="button" 
+                            class="p-2 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-600 hover:text-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0" 
+                            id="nextCategories"
+                            {{ count($categories) <= 6 ? 'disabled' : '' }}>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -263,55 +248,59 @@ document.addEventListener('DOMContentLoaded', function() {
     const categoryScroll = document.getElementById('categoryScroll');
     
     if (prevBtn && nextBtn && categoryScroll) {
-        const scrollContainer = categoryScroll.parentElement;
-        const scrollAmount = 200; // Adjust scroll amount as needed
-        let currentPosition = 0;
-        let maxScroll = 0;
+        const categoryLinks = categoryScroll.querySelectorAll('a');
+        const visibleCount = 6;
+        let currentPage = 0;
+        const totalPages = Math.ceil((categoryLinks.length - 1) / visibleCount); // -1 for "Semua Kategori"
         
-        // Calculate max scroll
-        function calculateMaxScroll() {
-            maxScroll = Math.max(0, categoryScroll.scrollWidth - scrollContainer.clientWidth);
-        }
-        
-        // Update button states
-        function updateButtons() {
-            prevBtn.disabled = currentPosition <= 0;
-            nextBtn.disabled = currentPosition >= maxScroll;
+        function showCategories(page) {
+            const start = page * visibleCount + 1; // +1 to skip "Semua Kategori"
+            const end = start + visibleCount;
+            
+            // Always show "Semua Kategori"
+            categoryLinks[0].style.display = '';
+            
+            // Show/hide other categories based on current page
+            for (let i = 1; i < categoryLinks.length; i++) {
+                if (i >= start && i < end) {
+                    categoryLinks[i].style.display = '';
+                } else {
+                    categoryLinks[i].style.display = 'none';
+                }
+            }
+            
+            // Update button states
+            prevBtn.disabled = page === 0;
+            nextBtn.disabled = page >= totalPages - 1;
         }
         
         // Previous button click
         prevBtn.addEventListener('click', function() {
-            if (currentPosition > 0) {
-                currentPosition = Math.max(0, currentPosition - scrollAmount);
-                categoryScroll.style.transform = `translateX(-${currentPosition}px)`;
-                updateButtons();
+            if (currentPage > 0) {
+                currentPage--;
+                showCategories(currentPage);
             }
         });
         
         // Next button click
         nextBtn.addEventListener('click', function() {
-            if (currentPosition < maxScroll) {
-                currentPosition = Math.min(maxScroll, currentPosition + scrollAmount);
-                categoryScroll.style.transform = `translateX(-${currentPosition}px)`;
-                updateButtons();
+            if (currentPage < totalPages - 1) {
+                currentPage++;
+                showCategories(currentPage);
             }
         });
         
         // Initialize
-        calculateMaxScroll();
-        updateButtons();
+        showCategories(0);
         
         // Handle window resize
         let resizeTimeout;
         window.addEventListener('resize', function() {
             clearTimeout(resizeTimeout);
             resizeTimeout = setTimeout(function() {
-                calculateMaxScroll();
-                if (currentPosition > maxScroll) {
-                    currentPosition = maxScroll;
-                    categoryScroll.style.transform = `translateX(-${currentPosition}px)`;
-                }
-                updateButtons();
+                // Reset to first page on resize
+                currentPage = 0;
+                showCategories(currentPage);
             }, 100);
         });
     }
