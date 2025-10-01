@@ -9,14 +9,23 @@
     <meta property="og:url" content="{{ url()->current() }}">
     <meta property="og:title" content="{{ $article->title }}">
     <meta property="og:description" content="{{ $article->excerpt }}">
-    <meta property="og:image" content="{{ $article->cover_image ? route('article.image', basename($article->cover_image)) : '' }}">
+    <meta property="og:image" content="{{ $article->cover_image ? url('article-image/' . basename($article->cover_image)) : '' }}">
+    <meta property="og:image:secure_url" content="{{ $article->cover_image ? url('article-image/' . basename($article->cover_image)) : '' }}">
+    <meta property="og:site_name" content="MyGooners">
+    <meta property="og:locale" content="ms_MY">
+    @if($article->author)
+    <meta property="article:author" content="{{ $article->author->name }}">
+    @endif
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:type" content="image/png">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="{{ url()->current() }}">
     <meta property="twitter:title" content="{{ $article->title }}">
     <meta property="twitter:description" content="{{ $article->excerpt }}">
-    <meta property="twitter:image" content="{{ $article->cover_image ? route('article.image', basename($article->cover_image)) : '' }}">
+    <meta property="twitter:image" content="{{ $article->cover_image ? url('article-image/' . basename($article->cover_image)) : '' }}">
 
     <!-- Article specific -->
     <meta property="article:published_time" content="{{ $article->published_at->toISOString() }}">
