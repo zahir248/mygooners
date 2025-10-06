@@ -372,20 +372,28 @@ document.addEventListener('DOMContentLoaded', function() {
         plugins: [
             'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
             'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
-            'insertdatetime', 'media', 'table', 'help', 'wordcount'
+            'insertdatetime', 'media', 'table', 'help', 'wordcount', 'caption'
         ],
         toolbar: 'undo redo | blocks | ' +
             'bold italic underline | forecolor backcolor | alignleft aligncenter ' +
             'alignright alignjustify | bullist numlist outdent indent | ' +
             'removeformat | help | link | image | styleselect | ' +
             'embedtwitter embedfacebook embedinstagram embedtiktok embedcustom',
-        content_style: 'body { font-family: -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif; font-size: 14px; } img { max-width: 100%; height: auto; } .image-side-by-side { display: inline-block; margin: 5px; vertical-align: top; width: 48%; } .image-full-width { display: block; width: 100%; margin: 10px 0; } .image-centered { display: block; margin: 10px auto; text-align: center; }',
+        content_style: 'body { font-family: -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif; font-size: 14px; } img { max-width: 100%; height: auto; } .image-side-by-side { display: inline-block; margin: 5px; vertical-align: top; width: 48%; } .image-full-width { display: block; width: 100%; margin: 10px 0; } .image-centered { display: block; margin: 10px auto; text-align: center; } figure.image { display: block !important; margin: 1em auto !important; text-align: center !important; max-width: 100% !important; } figure.image img { display: block !important; margin: 0 auto !important; } figure.image figcaption { display: block !important; text-align: center !important; word-wrap: break-word !important; overflow-wrap: break-word !important; padding: 5px !important; font-style: italic !important; max-width: 100% !important; margin: 0 auto !important; }',
+        image_class_list: [
+            { title: 'Centered', value: 'image-centered' }
+        ],
+        image_default_size: '100%',
+        image_title: true,
+        image_caption: true,
+        image_default_align: 'center',
         branding: false,
         promotion: false,
         automatic_uploads: false,
         file_picker_types: 'image',
         image_advtab: true,
         image_uploadtab: false,
+        image_caption: true,
         image_style_formats: [
             {title: 'Side by Side', selector: 'img', classes: 'image-side-by-side'},
             {title: 'Full Width', selector: 'img', classes: 'image-full-width'},

@@ -10,6 +10,67 @@
             max-width: none;
         }
         
+        /* Image and Caption Styles */
+        .article-content figure.image,
+        .article-content .image,
+        .article-content p:has(> img),
+        .article-content p:has(> figure) {
+            display: block !important;
+            margin: 2em auto !important;
+            text-align: center !important;
+            max-width: 70% !important;
+            width: auto !important;
+        }
+        
+        .article-content figure.image img,
+        .article-content .image img,
+        .article-content p > img,
+        .article-content figure > img {
+            display: block !important;
+            max-width: 100% !important;
+            height: auto !important;
+            margin: 0 auto !important;
+            border-radius: 4px !important;
+        }
+        
+        /* Force center alignment for images */
+        .article-content img,
+        .article-content figure {
+            margin-left: auto !important;
+            margin-right: auto !important;
+            display: block !important;
+            max-width: 70% !important;
+        }
+        
+        /* Style for paragraphs to ensure proper alignment */
+        .article-content p {
+            margin-left: 0 !important;
+            margin-right: 0 !important;
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+            width: 100% !important;
+        }
+
+        /* Caption styles with proper indentation */
+        .article-content figure.image figcaption,
+        .article-content .image figcaption {
+            display: block !important;
+            text-align: center !important;
+            word-wrap: break-word !important;
+            overflow-wrap: break-word !important;
+            padding: 12px 0 !important;
+            font-style: italic !important;
+            width: 60% !important;
+            margin-left: 20% !important;
+            margin-right: 20% !important;
+            color: #666 !important;
+            font-size: 0.9em !important;
+            line-height: 1.4 !important;
+            white-space: normal !important;
+            border-top: 1px solid #eee !important;
+            position: relative !important;
+        }
+        
         /* Custom styles for article content headings */
         .prose h1 {
             font-size: 2.25rem;

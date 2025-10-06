@@ -137,11 +137,20 @@ class Article extends Model
             $content = $this->processInlineEmbeds($this->content);
             
             // Allow only safe HTML tags for rich text content, including class attributes
-            $allowedTags = '<p><br><strong><b><em><i><u><a><ul><ol><li><h1><h2><h3><h4><h5><h6><blockquote><pre><code><img><div><span><iframe><script>';
+            $allowedTags = '<p><br><strong><b><em><i><u><a><ul><ol><li><h1><h2><h3><h4><h5><h6><blockquote><pre><code><img><div><span><iframe><script><figure><figcaption>';
             $content = strip_tags($content, $allowedTags);
             
             // Preserve class attributes for images (for side-by-side layout)
             $content = $this->preserveImageClasses($content);
+            
+            // Clean up any duplicate class attributes
+            $content = $this->cleanupDuplicateClasses($content);
+            
+            // Ensure figure tags have proper class attributes for captions
+            $content = $this->ensureFigureClasses($content);
+            
+            // Add inline styles to captions to ensure they work
+            $content = $this->addInlineCaptionStyles($content);
             
             // Add Bootstrap classes to headings for proper styling
             $content = $this->addBootstrapClassesToHeadings($content);
@@ -233,16 +242,16 @@ class Article extends Model
     }
 
     /**
-     * Preserve class attributes for images to maintain side-by-side layout
+     * Preserve class attributes for images and figures to maintain side-by-side layout and captions
      */
     private function preserveImageClasses($content)
     {
-        // Extract class attributes from original content before strip_tags
-        preg_match_all('/<img[^>]*class=["\']([^"\']*)["\'][^>]*>/i', $this->content, $matches);
+        // Preserve class attributes for img tags
+        preg_match_all('/<img[^>]*class=["\']([^"\']*)["\'][^>]*>/i', $this->content, $imgMatches);
         
-        if (!empty($matches[0])) {
-            foreach ($matches[0] as $index => $originalImg) {
-                $classValue = $matches[1][$index];
+        if (!empty($imgMatches[0])) {
+            foreach ($imgMatches[0] as $index => $originalImg) {
+                $classValue = $imgMatches[1][$index];
                 
                 // Find the corresponding img tag in the processed content
                 preg_match_all('/<img[^>]*>/i', $content, $processedImgs);
@@ -258,6 +267,144 @@ class Article extends Model
                 }
             }
         }
+        
+        // Preserve class attributes for figure tags
+        preg_match_all('/<figure[^>]*class=["\']([^"\']*)["\'][^>]*>/i', $this->content, $figureMatches);
+        
+        if (!empty($figureMatches[0])) {
+            foreach ($figureMatches[0] as $index => $originalFigure) {
+                $classValue = $figureMatches[1][$index];
+                
+                // Find the corresponding figure tag in the processed content
+                preg_match_all('/<figure[^>]*>/i', $content, $processedFigures);
+                
+                if (isset($processedFigures[0][$index])) {
+                    $processedFigure = $processedFigures[0][$index];
+                    
+                    // Check if the processed figure already has a class attribute
+                    if (strpos($processedFigure, 'class=') === false) {
+                        // Add class attribute to the processed figure tag
+                        $newFigure = preg_replace('/<figure([^>]*)>/i', '<figure$1 class="' . $classValue . '">', $processedFigure);
+                        
+                        // Replace in content
+                        $content = str_replace($processedFigure, $newFigure, $content);
+                    }
+                }
+            }
+        }
+        
+        return $content;
+    }
+    
+    /**
+     * Clean up duplicate class attributes and malformed HTML
+     */
+    private function cleanupDuplicateClasses($content)
+    {
+        // Fix duplicate class attributes on figure tags
+        $content = preg_replace('/<figure\s+class="([^"]*)"\s+class="([^"]*)"/', '<figure class="$1"', $content);
+        
+        // Fix duplicate class attributes on img tags
+        $content = preg_replace('/<img([^>]*?)class="([^"]*)"([^>]*?)class="([^"]*)"/', '<img$1class="$2"$3', $content);
+        
+        // Clean up malformed img tags with trailing spaces
+        $content = preg_replace('/<img([^>]*?)\s+>/', '<img$1>', $content);
+        
+        return $content;
+    }
+    
+    /**
+     * Ensure figure tags have proper class attributes for captions
+     */
+    private function ensureFigureClasses($content)
+    {
+        // Find all figure tags that contain figcaption but don't have class="image"
+        preg_match_all('/<figure[^>]*>.*?<figcaption[^>]*>.*?<\/figcaption>.*?<\/figure>/is', $content, $matches);
+        
+        foreach ($matches[0] as $figure) {
+            // Check if the figure already has a class attribute
+            if (strpos($figure, 'class=') === false) {
+                // Add class="image" to figure tags that contain figcaption
+                $newFigure = str_replace('<figure', '<figure class="image"', $figure);
+                $content = str_replace($figure, $newFigure, $content);
+            }
+        }
+        
+        // Also handle cases where images might be in paragraphs with captions as separate paragraphs
+        // Look for patterns like <p><img...></p><p>caption text</p>
+        $content = preg_replace_callback(
+            '/(<p[^>]*><img[^>]*><\/p>)\s*(<p[^>]*>([^<]+)<\/p>)/i',
+            function($matches) {
+                $imgParagraph = $matches[1];
+                $captionParagraph = $matches[2];
+                $captionText = $matches[3];
+                
+                // Extract any existing classes from the img tag
+                preg_match('/class="([^"]*)"/', $imgParagraph, $classMatches);
+                $imgClasses = $classMatches ? $classMatches[1] : 'image-centered';
+                
+                // Create new img tag with proper classes
+                $imgTag = preg_replace('/class="[^"]*"/', 'class="' . $imgClasses . '"', $imgParagraph);
+                
+                // Wrap in figure with proper structure
+                $result = '<figure class="image">' . $imgTag . '<figcaption>' . $captionText . '</figcaption></figure>';
+                
+                return $result;
+            },
+            $content
+        );
+        
+        return $content;
+    }
+    
+    /**
+     * Add inline styles to captions and images to ensure they work with Tailwind CSS
+     */
+    private function addInlineCaptionStyles($content)
+    {
+        // Add inline styles to figcaption elements
+        $content = preg_replace_callback(
+            '/<figcaption([^>]*)>(.*?)<\/figcaption>/is',
+            function($matches) {
+                $attributes = $matches[1];
+                $text = $matches[2];
+                
+                // Add inline styles to ensure caption styling works
+                $style = 'style="display: block !important; text-align: center !important; font-style: italic !important; color: #666 !important; font-size: 0.9em !important; padding: 12px 0 !important; border-top: 1px solid #eee !important; width: 60% !important; margin: 0 auto !important; background: transparent !important; font-weight: normal !important; line-height: 1.4 !important;"';
+                
+                return '<figcaption' . $attributes . ' ' . $style . '>' . $text . '</figcaption>';
+            },
+            $content
+        );
+        
+        // Add inline styles to figure elements to ensure they're centered
+        $content = preg_replace_callback(
+            '/<figure([^>]*)>(.*?)<\/figure>/is',
+            function($matches) {
+                $attributes = $matches[1];
+                $content = $matches[2];
+                
+                // Add inline styles to ensure figure is centered
+                $style = 'style="display: block !important; margin: 2em auto !important; text-align: center !important; max-width: 70% !important; width: auto !important;"';
+                
+                return '<figure' . $attributes . ' ' . $style . '>' . $content . '</figure>';
+            },
+            $content
+        );
+        
+        // Add inline styles to img elements to ensure they're centered
+        $content = preg_replace_callback(
+            '/<img([^>]*)>/is',
+            function($matches) {
+                $attributes = $matches[1];
+                
+                // Add inline styles to ensure image is centered
+                $style = 'style="display: block !important; max-width: 100% !important; height: auto !important; margin: 0 auto !important; border-radius: 4px !important;"';
+                
+                return '<img' . $attributes . ' ' . $style . '>';
+            },
+            $content
+        );
         
         return $content;
     }
