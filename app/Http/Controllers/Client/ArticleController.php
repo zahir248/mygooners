@@ -72,28 +72,22 @@ class ArticleController extends Controller
         // Increment view count
         $article->increment('views_count');
 
-        // Get related articles (same category, excluding current article)
-        $relatedArticles = Article::with('author')
-                                 ->where('status', 'published')
-                                 ->where('published_at', '<=', now())
-                                 ->where('category', $article->category)
-                                 ->where('id', '!=', $article->id)
-                                 ->orderBy('published_at', 'desc')
-                                 ->limit(3)
-                                 ->get();
-
-        // If not enough related articles in same category, get recent articles
-        if ($relatedArticles->count() < 3) {
-            $additionalArticles = Article::with('author')
-                                       ->where('status', 'published')
-                                       ->where('published_at', '<=', now())
-                                       ->where('id', '!=', $article->id)
-                                       ->whereNotIn('id', $relatedArticles->pluck('id'))
-                                       ->orderBy('published_at', 'desc')
-                                       ->limit(3 - $relatedArticles->count())
-                                       ->get();
-            
-            $relatedArticles = $relatedArticles->merge($additionalArticles);
+        // Get related articles based on tags only (excluding current article)
+        $relatedArticles = collect();
+        
+        if ($article->tags && count($article->tags) > 0) {
+            $relatedArticles = Article::with('author')
+                                     ->where('status', 'published')
+                                     ->where('published_at', '<=', now())
+                                     ->where('id', '!=', $article->id)
+                                     ->where(function($query) use ($article) {
+                                         foreach ($article->tags as $tag) {
+                                             $query->orWhereJsonContains('tags', $tag);
+                                         }
+                                     })
+                                     ->orderBy('published_at', 'desc')
+                                     ->limit(3)
+                                     ->get();
         }
 
         // Ensure relatedArticles is always a collection
