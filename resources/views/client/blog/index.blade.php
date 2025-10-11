@@ -69,6 +69,89 @@
     </div>
 </div>
 
+<!-- Top Viewed Articles Section -->
+@if($topViewedArticles->count() > 0)
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+        <div class="p-4 border-b border-gray-200">
+            <div class="flex items-center justify-between">
+                <h3 class="text-lg font-bold text-gray-900">
+                    Pilihan Pembaca
+                </h3>
+                <div class="text-sm text-gray-500">
+                    {{ $topViewedArticles->count() }} artikel teratas
+                </div>
+            </div>
+        </div>
+        <div class="flex flex-col flex-grow">
+            <div class="divide-y divide-gray-200 flex-grow">
+                @foreach($topViewedArticles as $index => $article)
+                    <div class="p-4 hover:bg-gray-50 transition-colors">
+                        <div class="flex space-x-3">
+                            <div class="flex items-center space-x-2">
+                                <span class="bg-red-600 text-white px-2 py-1 rounded-full text-xs font-bold min-w-[28px] text-center">
+                                    #{{ $index + 1 }}
+                                </span>
+                                @if($article->cover_image)
+                                    <img src="{{ route('article.image', basename($article->cover_image)) }}" 
+                                         alt="{{ $article->title }}" 
+                                         class="w-16 h-16 object-cover rounded-lg flex-shrink-0">
+                                @else
+                                    <div class="w-16 h-16 bg-gray-200 rounded-lg flex-shrink-0 flex items-center justify-center">
+                                        <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                        </svg>
+                                    </div>
+                                @endif
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <div class="flex items-center justify-between mb-1">
+                                    <h4 class="text-sm font-semibold text-gray-900">
+                                        <a href="{{ route('blog.show', $article->slug) }}" class="hover:text-red-600 transition-colors">
+                                            <span class="hidden lg:inline">{{ $article->title }}</span>
+                                            <span class="lg:hidden">{{ Str::limit($article->title, 60) }}</span>
+                                        </a>
+                                    </h4>
+                                    <div class="flex items-center text-xs text-gray-500">
+                                        <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path>
+                                            <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"></path>
+                                        </svg>
+                                        <span>{{ number_format($article->views_count) }}</span>
+                                    </div>
+                                </div>
+                                <div class="flex items-center text-xs text-gray-500 mb-2">
+                                    <span class="bg-red-200 text-red-800 px-2 py-1 rounded-full text-xs">{{ $article->category }}</span>
+                                    <span class="mx-2">•</span>
+                                    <span>{{ $article->published_at->diffForHumans() }}</span>
+                                </div>
+                                @if($article->author)
+                                    <div class="flex items-center text-xs text-gray-500 mb-2">
+                                        <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>
+                                        </svg>
+                                        <span>{{ $article->author->name }}</span>
+                                    </div>
+                                @endif
+                                @if($article->tags && count($article->tags) > 0)
+                                    <div class="flex flex-wrap gap-1">
+                                        @foreach(array_slice($article->tags, 0, 3) as $tag)
+                                            <span class="bg-gray-100 text-gray-600 px-2 py-1 rounded-full text-xs">
+                                                #{{ $tag }}
+                                            </span>
+                                        @endforeach
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    </div>
+</div>
+@endif
+
 <!-- Main Content -->
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
     @if($articles->count() > 0)

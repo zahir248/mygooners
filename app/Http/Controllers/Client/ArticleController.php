@@ -45,8 +45,19 @@ class ArticleController extends Controller
                             ->filter()
                             ->values()
                             ->toArray();
+
+        // Get top 5 most viewed articles (only show when not searching or filtering by category)
+        $topViewedArticles = collect();
+        if (!$search && !$category) {
+            $topViewedArticles = Article::with('author')
+                                      ->where('status', 'published')
+                                      ->where('published_at', '<=', now())
+                                      ->orderBy('views_count', 'desc')
+                                      ->limit(5)
+                                      ->get();
+        }
         
-        return view('client.blog.index', compact('articles', 'categories', 'category', 'search'));
+        return view('client.blog.index', compact('articles', 'categories', 'category', 'search', 'topViewedArticles'));
     }
 
     public function show($slug)
