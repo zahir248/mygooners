@@ -62,7 +62,8 @@ class VideoController extends Controller
 
     public function create()
     {
-        $categories = [
+        // Existing video categories
+        $videoCategories = [
             'Match Highlights' => 'Match Highlights',
             'Player Interviews' => 'Player Interviews',
             'Manager Press Conferences' => 'Manager Press Conferences',
@@ -72,6 +73,27 @@ class VideoController extends Controller
             'Analysis' => 'Analysis',
             'News' => 'News'
         ];
+
+        // Article categories
+        $articleCategories = [
+            'Perkembangan Kelab' => 'Perkembangan Kelab',
+            'EPL' => 'EPL',
+            'UCL' => 'UCL',
+            'Bolasepak' => 'Bolasepak',
+            'Piala Dunia' => 'Piala Dunia',
+            'Euro' => 'Euro',
+            'Berita Perpindahan' => 'Berita Perpindahan',
+            'Analisis' => 'Analisis',
+            'Bundesliga' => 'Bundesliga',
+            'Serie A' => 'Serie A',
+            'Ligue 1' => 'Ligue 1',
+            'Antarabangsa' => 'Antarabangsa',
+            'La Liga' => 'La Liga',
+            'Lain-lain' => 'Lain-lain'
+        ];
+
+        // Combine video and article categories
+        $categories = array_merge($videoCategories, $articleCategories);
 
         return view('admin.videos.create', compact('categories'));
     }
@@ -184,7 +206,8 @@ class VideoController extends Controller
     {
         $video = Video::findOrFail($id);
         
-        $categories = [
+        // Existing video categories
+        $videoCategories = [
             'Match Highlights' => 'Match Highlights',
             'Player Interviews' => 'Player Interviews',
             'Manager Press Conferences' => 'Manager Press Conferences',
@@ -194,6 +217,27 @@ class VideoController extends Controller
             'Analysis' => 'Analysis',
             'News' => 'News'
         ];
+
+        // Article categories
+        $articleCategories = [
+            'Perkembangan Kelab' => 'Perkembangan Kelab',
+            'EPL' => 'EPL',
+            'UCL' => 'UCL',
+            'Bolasepak' => 'Bolasepak',
+            'Piala Dunia' => 'Piala Dunia',
+            'Euro' => 'Euro',
+            'Berita Perpindahan' => 'Berita Perpindahan',
+            'Analisis' => 'Analisis',
+            'Bundesliga' => 'Bundesliga',
+            'Serie A' => 'Serie A',
+            'Ligue 1' => 'Ligue 1',
+            'Antarabangsa' => 'Antarabangsa',
+            'La Liga' => 'La Liga',
+            'Lain-lain' => 'Lain-lain'
+        ];
+
+        // Combine video and article categories
+        $categories = array_merge($videoCategories, $articleCategories);
 
         return view('admin.videos.edit', compact('video', 'categories'));
     }
