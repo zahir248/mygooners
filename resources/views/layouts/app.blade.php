@@ -666,10 +666,10 @@
                             Video
                         </a>
                         <a href="{{ route('services.index') }}" class="text-gray-900 hover:text-red-600 px-3 py-2 text-sm font-medium transition-colors {{ request()->routeIs('services.*') ? 'text-red-600 border-b-2 border-red-600' : '' }}">
-                            Perkhidmatan
+                            Komuniti
                         </a>
                         <a href="{{ route('shop.index') }}" class="text-gray-900 hover:text-red-600 px-3 py-2 text-sm font-medium transition-colors {{ request()->routeIs('shop.*') ? 'text-red-600 border-b-2 border-red-600' : '' }}">
-                            Kedai
+                            Kedai Kami
                         </a>
                     </nav>
 
@@ -856,13 +856,13 @@
                                 <svg class="w-5 h-5 mr-3 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
                                 </svg>
-                                Perkhidmatan
+                                Komuniti
                             </a>
                             <a href="{{ route('shop.index') }}" class="flex items-center px-4 py-2 text-base font-medium text-gray-900 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors">
                                 <svg class="w-5 h-5 mr-3 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
                                 </svg>
-                                Kedai
+                                Kedai Kami
                             </a>
                             
                             <!-- Auth buttons for non-logged in users -->
@@ -1105,8 +1105,8 @@
                         <div>
                             <h3 class="text-lg font-semibold mb-4">Komuniti</h3>
                             <ul class="space-y-2 text-sm">
-                                <li><a href="{{ route('services.index') }}" class="text-gray-300 hover:text-white transition-colors">Perkhidmatan</a></li>
-                                <li><a href="{{ route('shop.index') }}" class="text-gray-300 hover:text-white transition-colors">Kedai</a></li>
+                                <li><a href="{{ route('services.index') }}" class="text-gray-300 hover:text-white transition-colors">Komuniti</a></li>
+                                <li><a href="{{ route('shop.index') }}" class="text-gray-300 hover:text-white transition-colors">Kedai Kami</a></li>
                                 <li><a href="{{ route('register') }}" class="text-gray-300 hover:text-white transition-colors">Sertai Komuniti</a></li>
                             </ul>
                             
