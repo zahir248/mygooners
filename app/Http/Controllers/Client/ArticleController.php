@@ -46,18 +46,28 @@ class ArticleController extends Controller
                             ->values()
                             ->toArray();
 
-        // Get top 5 most viewed articles (only show when not searching or filtering by category)
+        // Get top viewed articles for Pilihan Pembaca section (only show when not searching or filtering by category)
+        $topViewedArticle = null;
         $topViewedArticles = collect();
         if (!$search && !$category) {
-            $topViewedArticles = Article::with('author')
+            // Get the top 1 most viewed article for left section
+            $topViewedArticle = Article::with('author')
                                       ->where('status', 'published')
                                       ->where('published_at', '<=', now())
                                       ->orderBy('views_count', 'desc')
-                                      ->limit(5)
+                                      ->first();
+            
+            // Get the next top 4 articles for right section
+            $topViewedArticles = Article::with('author')
+                                      ->where('status', 'published')
+                                      ->where('published_at', '<=', now())
+                                      ->where('id', '!=', $topViewedArticle ? $topViewedArticle->id : null)
+                                      ->orderBy('views_count', 'desc')
+                                      ->limit(4)
                                       ->get();
         }
         
-        return view('client.blog.index', compact('articles', 'categories', 'category', 'search', 'topViewedArticles'));
+        return view('client.blog.index', compact('articles', 'categories', 'category', 'search', 'topViewedArticle', 'topViewedArticles'));
     }
 
     public function show($slug)
