@@ -607,7 +607,8 @@ class RequestController extends Controller
             return redirect()->route('dashboard')->with('error', 'Permohonan penjual tidak ditemui.');
         }
 
-        $validated = $request->validate([
+        // Create validation rules based on business type
+        $validationRules = [
             'business_name' => 'required|string|max:255',
             'business_type' => 'required|string|max:255',
             'business_registration' => 'nullable|string|max:255',
@@ -618,8 +619,16 @@ class RequestController extends Controller
             'skills' => 'required|string|max:1000',
             'service_areas' => 'required|string|max:500',
             'id_document' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
-            'selfie_with_id' => 'nullable|file|mimes:jpg,jpeg,png|max:2048'
-        ]);
+        ];
+        
+        // Make selfie_with_id conditional based on business_type
+        if ($request->business_type !== 'company') {
+            $validationRules['selfie_with_id'] = 'required|file|mimes:jpg,jpeg,png|max:2048';
+        } else {
+            $validationRules['selfie_with_id'] = 'nullable|file|mimes:jpg,jpeg,png|max:2048';
+        }
+        
+        $validated = $request->validate($validationRules);
 
         // Check if any changes were made
         $hasChanges = false;

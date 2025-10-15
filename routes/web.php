@@ -273,7 +273,9 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/dashboard/become-seller', function (\Illuminate\Http\Request $request) {
         $user = auth()->user();
-        $validated = $request->validate([
+        
+        // Create validation rules based on business type
+        $validationRules = [
             'bio' => 'required|string',
             'location' => 'required|string',
             'phone' => 'required|string',
@@ -287,8 +289,16 @@ Route::middleware('auth')->group(function () {
             'skills' => 'required|string',
             'service_areas' => 'required|string',
             'id_document' => 'required|file|mimes:jpg,jpeg,png,pdf',
-            'selfie_with_id' => 'required|file|mimes:jpg,jpeg,png',
-        ]);
+        ];
+        
+        // Make selfie_with_id conditional based on business_type
+        if ($request->business_type !== 'company') {
+            $validationRules['selfie_with_id'] = 'required|file|mimes:jpg,jpeg,png';
+        } else {
+            $validationRules['selfie_with_id'] = 'nullable|file|mimes:jpg,jpeg,png';
+        }
+        
+        $validated = $request->validate($validationRules);
         // Handle file uploads
         if ($request->hasFile('id_document')) {
             $validated['id_document'] = $request->file('id_document')->store('seller_ids', 'public');
@@ -310,7 +320,7 @@ Route::middleware('auth')->group(function () {
         $user->skills = $validated['skills'];
         $user->service_areas = $validated['service_areas'];
         $user->id_document = $validated['id_document'];
-        $user->selfie_with_id = $validated['selfie_with_id'];
+        $user->selfie_with_id = $validated['selfie_with_id'] ?? null;
         $user->seller_status = 'pending';
         $user->seller_application_date = now();
         $user->save();
