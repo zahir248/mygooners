@@ -1,0 +1,74 @@
+Create comprehensive Software Developer Offboarding Documentation for my [PROJECT_NAME] project.
+
+Analyze my codebase and create documentation with these sections:
+
+1. Executive Summary (For Non-Technical Stakeholders)
+   - What the system does in plain language
+   - Who uses it (user types/roles)
+   - Key business processes
+   - Main features
+   - System status
+
+2. Getting Started Guide (For New Developers)
+   - Prerequisites checklist
+   - Step-by-step setup with explanations
+   - First day checklist
+   - Learning path (first week)
+   - Common first-time issues and solutions
+   - Framework/language basics explained
+
+3. Project & System
+   - High-Level Architecture (with ASCII diagrams, not Unicode)
+   - Technology stack with "why" explanations
+   - Project Setup Guide
+   - API Documentation
+   - Coding Standards
+
+4. Code-Level
+   - Work-in-Progress Report (Completed/In-Progress/Pending)
+   - Critical Code Areas
+   - Known Bugs & Limitations
+
+5. Troubleshooting Guide
+   - Common issues by category
+   - Solutions
+   - Debugging tips
+
+6. DevOps & Infrastructure
+   - Deployment Process
+   - Server/Cloud Documentation
+   - Environment Configuration
+
+7. Database
+   - Database Schema (ERD)
+   - Migration History
+
+8. Operations
+   - Common Tasks (Step-by-Step Guides)
+   - User/Admin Manual
+   - Maintenance Tasks
+
+9. Access & Accounts
+   - Credential Inventory
+   - Security notes
+
+10. Glossary of Terms
+    - Technical terms explained simply
+    - Business terms
+    - Acronyms
+
+11. Master Handover Document
+    - Project summary
+    - Quick links
+    - Handover checklist
+
+REQUIREMENTS:
+- Use plain language for non-technical readers
+- Add "why" explanations, not just "what" and "how"
+- Use ASCII art for diagrams (not Unicode box-drawing characters)
+- Include code examples
+- Make it accessible for both technical and non-technical readers
+- Format as Markdown
+
+Start by exploring the codebase, then create the documentation following this structure.
+
