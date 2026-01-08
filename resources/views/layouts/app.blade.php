@@ -713,7 +713,7 @@
                                         @if(Str::startsWith(auth()->user()->profile_image, 'http'))
                                             <img class="h-7 w-7 md:h-8 md:w-8 rounded-full object-cover" src="{{ auth()->user()->profile_image }}" alt="{{ auth()->user()->name }}">
                                         @else
-                                            <img class="h-7 w-7 md:h-8 md:w-8 rounded-full object-cover" src="{{ asset('storage/' . auth()->user()->profile_image) }}" alt="{{ auth()->user()->name }}">
+                                            <img class="h-7 w-7 md:h-8 md:w-8 rounded-full object-cover" src="{{ route('profile.image', basename(auth()->user()->profile_image)) }}" alt="{{ auth()->user()->name }}">
                                         @endif
                                     @else
                                         <img class="h-7 w-7 md:h-8 md:w-8 rounded-full bg-gray-300" src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->name) }}&background=dc2626&color=fff" alt="{{ auth()->user()->name }}">
@@ -910,10 +910,10 @@
                                             @if(Str::startsWith(auth()->user()->profile_image, 'http'))
                                                 <img class="h-10 w-10 rounded-full object-cover mr-3" src="{{ auth()->user()->profile_image }}" alt="{{ auth()->user()->name }}">
                                             @else
-                                                <img class="h-10 w-10 rounded-full object-cover mr-3" src="{{ asset('storage/' . auth()->user()->profile_image) }}" alt="{{ auth()->user()->name }}">
+                                                <img class="h-10 w-10 rounded-full object-cover mr-3" src="{{ route('profile.image', basename(auth()->user()->profile_image)) }}" alt="{{ auth()->user()->name }}">
                                             @endif
                                         @else
-                                            <img class="h-10 w-10 rounded-full bg-gray-300 mr-3" src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->profile_image) }}&background=dc2626&color=fff" alt="{{ auth()->user()->name }}">
+                                            <img class="h-10 w-10 rounded-full bg-gray-300 mr-3" src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->name) }}&background=dc2626&color=fff" alt="{{ auth()->user()->name }}">
                                         @endif
                                         <div>
                                             <div class="text-sm font-medium text-gray-900">{{ auth()->user()->name }}</div>

@@ -38,7 +38,7 @@
                     @if(Str::startsWith($profileImg, 'http'))
                         <img src="{{ $profileImg }}" alt="Avatar" class="w-20 h-20 sm:w-24 sm:h-24 rounded-full shadow-md object-cover mx-auto sm:mx-0">
                     @else
-                        <img src="{{ asset('storage/' . $profileImg) }}" alt="Avatar" class="w-20 h-20 sm:w-24 sm:h-24 rounded-full shadow-md object-cover mx-auto sm:mx-0">
+                        <img src="{{ route('profile.image', basename($profileImg)) }}" alt="Avatar" class="w-20 h-20 sm:w-24 sm:h-24 rounded-full shadow-md object-cover mx-auto sm:mx-0">
                     @endif
                 @else
                     <img src="{{ asset('images/profile-image-default.png') }}" alt="Avatar" class="w-20 h-20 sm:w-24 sm:h-24 rounded-full shadow-md object-cover mx-auto sm:mx-0">
@@ -286,7 +286,7 @@
                                 @if(Str::startsWith($profileImg, 'http'))
                                     <img src="{{ $profileImg }}" alt="Profile Image" class="w-20 h-20 sm:w-16 sm:h-16 rounded-full mb-3 object-cover border-2 border-gray-200">
                                 @else
-                                    <img src="{{ asset('storage/' . $profileImg) }}" alt="Profile Image" class="w-20 h-20 sm:w-16 sm:h-16 rounded-full mb-3 object-cover border-2 border-gray-200">
+                                    <img src="{{ route('profile.image', basename($profileImg)) }}" alt="Profile Image" class="w-20 h-20 sm:w-16 sm:h-16 rounded-full mb-3 object-cover border-2 border-gray-200">
                                 @endif
                             @else
                                 <img src="{{ asset('images/profile-image-default.png') }}" alt="Profile Image" class="w-20 h-20 sm:w-16 sm:h-16 rounded-full mb-3 object-cover border-2 border-gray-200">

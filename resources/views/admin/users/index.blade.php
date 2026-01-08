@@ -153,7 +153,7 @@
                                             @if(Str::startsWith($user->profile_image, 'http'))
                                                 <img class="h-10 w-10 rounded-full object-cover" src="{{ $user->profile_image }}" alt="{{ $user->name }}">
                                             @else
-                                                <img class="h-10 w-10 rounded-full object-cover" src="{{ asset('storage/' . $user->profile_image) }}" alt="{{ $user->name }}">
+                                                <img class="h-10 w-10 rounded-full object-cover" src="{{ route('profile.image', basename($user->profile_image)) }}" alt="{{ $user->name }}">
                                             @endif
                                         @else
                                             <div class="h-10 w-10 rounded-full bg-gray-300 flex items-center justify-center">
