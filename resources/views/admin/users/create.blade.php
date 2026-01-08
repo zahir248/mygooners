@@ -54,6 +54,7 @@
                     <label for="role" class="block text-sm font-medium text-gray-700 mb-2">Peranan <span class="text-red-500">*</span></label>
                     <select name="role" id="role" required class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-red-500 focus:border-red-500 @error('role') border-red-500 @enderror">
                         <option value="user" {{ old('role') == 'user' ? 'selected' : '' }}>Pengguna</option>
+                        <option value="writer" {{ old('role') == 'writer' ? 'selected' : '' }}>Writer</option>
                         <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>Admin</option>
                         <option value="super_admin" {{ old('role') == 'super_admin' ? 'selected' : '' }}>Super Admin</option>
                     </select>

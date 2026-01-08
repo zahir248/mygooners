@@ -54,6 +54,7 @@
                 <select name="role" class="border border-gray-300 rounded-md px-3 py-2 focus:ring-red-500 focus:border-red-500 sm:text-sm">
                     <option value="">Semua Peranan</option>
                     <option value="user" {{ request('role') === 'user' ? 'selected' : '' }}>Pengguna</option>
+                    <option value="writer" {{ request('role') === 'writer' ? 'selected' : '' }}>Writer</option>
                     <option value="admin" {{ request('role') === 'admin' ? 'selected' : '' }}>Admin</option>
                     <option value="super_admin" {{ request('role') === 'super_admin' ? 'selected' : '' }}>Super Admin</option>
                 </select>
@@ -176,6 +177,10 @@
                                 @elseif($user->role === 'admin')
                                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
                                         Admin
+                                    </span>
+                                @elseif($user->role === 'writer')
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                        Penulis
                                     </span>
                                 @else
                                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
