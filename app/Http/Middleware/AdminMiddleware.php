@@ -24,8 +24,8 @@ class AdminMiddleware
 
         $user = Auth::user();
         
-        // Check if user has admin or super_admin role
-        if (!in_array($user->role, ['admin', 'super_admin'])) {
+        // Check if user has admin, super_admin, or writer role
+        if (!in_array($user->role, ['admin', 'super_admin', 'writer'])) {
             return redirect()->route('home')->with('error', 'You do not have permission to access the admin area.');
         }
 

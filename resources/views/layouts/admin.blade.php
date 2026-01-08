@@ -115,13 +115,14 @@
             <div class="flex items-center justify-center h-16 px-4 bg-admin-900">
                 <div class="flex items-center">
                     <img src="{{ asset('images/official-logo.png') }}" alt="MyGooners Logo" class="h-12 w-auto rounded-lg">
-                    <span class="ml-2 text-lg font-bold text-white">Admin</span>
+                    <span class="ml-2 text-lg font-bold text-white">{{ auth()->user()->role === 'writer' ? 'Writer' : 'Admin' }}</span>
                 </div>
             </div>
 
             <!-- Navigation -->
             <nav class="mt-8 px-4">
                 <ul class="space-y-2">
+                    @if(auth()->user()->role !== 'writer')
                     <!-- Dashboard -->
                     <li>
                         <a href="{{ route('admin.dashboard') }}" 
@@ -133,6 +134,7 @@
                             Panel Kawalan
                         </a>
                     </li>
+                    @endif
 
                     <!-- Articles -->
                     <li>
@@ -145,6 +147,7 @@
                         </a>
                     </li>
 
+                    @if(auth()->user()->role !== 'writer')
                     <!-- Videos -->
                     <li>
                         <a href="{{ route('admin.videos.index') }}" 
@@ -323,6 +326,7 @@
                             Log Sistem
                         </a>
                     </li>
+                    @endif
 
                     <!-- Divider -->
                     <li class="border-t border-admin-700 my-4"></li>
@@ -386,7 +390,7 @@
                                 <div x-show="open" @click.away="open = false" x-cloak 
                                      class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 ring-1 ring-black ring-opacity-5">
                                     <div class="px-4 py-2 text-xs text-gray-500 border-b border-gray-100">
-                                        Pentadbir
+                                        {{ auth()->user()->role === 'writer' ? 'Penulis' : 'Pentadbir' }}
                                     </div>
                                     <a href="{{ route('admin.profile') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profil Saya</a>
                                     <div class="border-t border-gray-100"></div>

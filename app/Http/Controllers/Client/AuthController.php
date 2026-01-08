@@ -32,8 +32,12 @@ class AuthController extends Controller
         if (Auth::attempt($request->only('email', 'password'), $request->filled('remember'))) {
             $request->session()->regenerate();
             // Update last_login timestamp
-            Auth::user()->update(['last_login' => now()]);
-            return redirect()->intended(route('dashboard'))
+            $user = Auth::user();
+            $user->update(['last_login' => now()]);
+            
+            // Redirect based on user role
+            $redirectRoute = $this->getRedirectRouteForUser($user);
+            return redirect()->intended($redirectRoute)
                 ->with('success', 'Selamat kembali! Anda telah berjaya log masuk.');
         }
 
@@ -206,7 +210,10 @@ class AuthController extends Controller
             Auth::login($user, true);
             // Update last_login timestamp
             $user->update(['last_login' => now()]);
-            return redirect()->route('dashboard')->with('success', 'Selamat kembali! Anda telah berjaya log masuk.');
+            
+            // Redirect based on user role
+            $redirectRoute = $this->getRedirectRouteForUser($user);
+            return redirect($redirectRoute)->with('success', 'Selamat kembali! Anda telah berjaya log masuk.');
 
         } catch (\Exception $e) {
             Log::error('Google Callback Error:', [
@@ -287,5 +294,23 @@ class AuthController extends Controller
         return $status === Password::PASSWORD_RESET
                     ? redirect()->route('login')->with('success', 'Kata laluan anda telah berjaya ditetapkan semula. Sila log masuk dengan kata laluan baharu.')
                     : back()->with('error', 'Token reset kata laluan tidak sah atau telah tamat tempoh.');
+    }
+
+    /**
+     * Get the appropriate redirect route based on user role.
+     * Writers are redirected to admin articles.
+     *
+     * @param User $user
+     * @return string
+     */
+    private function getRedirectRouteForUser(User $user)
+    {
+        // If user has role 'writer', redirect to admin articles
+        if ($user->role === 'writer') {
+            return route('admin.articles.index');
+        }
+        
+        // Default redirect to client dashboard
+        return route('dashboard');
     }
 } 

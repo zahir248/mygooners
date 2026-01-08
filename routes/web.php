@@ -451,7 +451,7 @@ Route::prefix('admin')->group(function () {
 });
 
 // Protected Admin Routes
-Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
+Route::prefix('admin')->middleware(['auth', 'admin', 'writer'])->group(function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::get('/dashboard/stats', [AdminController::class, 'getDashboardStats'])->name('admin.dashboard.stats');
     Route::get('/profile', [AdminController::class, 'profile'])->name('admin.profile');
