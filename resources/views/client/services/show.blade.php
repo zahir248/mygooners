@@ -168,16 +168,16 @@
                                      @if(Str::startsWith($review->user->profile_image, 'http'))
                                          <img src="{{ $review->user->profile_image }}" 
                                               alt="{{ $review->user->name }}" 
-                                                     class="w-12 h-12 sm:w-14 sm:h-14 rounded-full border-2 border-gray-100 shadow-sm object-cover">
+                                                     class="w-12 h-12 sm:w-14 sm:h-14 rounded-full border-2 border-gray-100 shadow-sm object-cover object-center">
                                      @else
                                          <img src="{{ route('profile.image', basename($review->user->profile_image)) }}" 
                                               alt="{{ $review->user->name }}" 
-                                                     class="w-12 h-12 sm:w-14 sm:h-14 rounded-full border-2 border-gray-100 shadow-sm object-cover">
+                                                     class="w-12 h-12 sm:w-14 sm:h-14 rounded-full border-2 border-gray-100 shadow-sm object-cover object-center">
                                      @endif
                                  @else
                                             <img src="https://ui-avatars.com/api/?name={{ urlencode($review->user->name) }}&size=56&background=dc2626&color=fff" 
                                           alt="{{ $review->user->name }}" 
-                                                 class="w-12 h-12 sm:w-14 sm:h-14 rounded-full border-2 border-gray-100 shadow-sm object-cover">
+                                                 class="w-12 h-12 sm:w-14 sm:h-14 rounded-full border-2 border-gray-100 shadow-sm object-cover object-center">
                                  @endif
                                     </div>
                                 
@@ -260,14 +260,14 @@
                                         @if($profileImg !== '')
                                             @if(Str::startsWith($profileImg, 'http'))
                                                 <img src="{{ $profileImg }}" alt="Anda" 
-                                                     class="w-12 h-12 sm:w-14 sm:h-14 rounded-full border-2 border-blue-200 shadow-sm object-cover">
+                                                     class="w-12 h-12 sm:w-14 sm:h-14 rounded-full border-2 border-blue-200 shadow-sm object-cover object-center">
                                             @else
                                                 <img src="{{ asset('storage/' . $profileImg) }}" alt="Anda" 
-                                                     class="w-12 h-12 sm:w-14 sm:h-14 rounded-full border-2 border-blue-200 shadow-sm object-cover">
+                                                     class="w-12 h-12 sm:w-14 sm:h-14 rounded-full border-2 border-blue-200 shadow-sm object-cover object-center">
                                             @endif
                                         @else
                                             <img src="{{ asset('images/profile-image-default.png') }}" alt="Anda" 
-                                                 class="w-12 h-12 sm:w-14 sm:h-14 rounded-full border-2 border-blue-200 shadow-sm object-cover">
+                                                 class="w-12 h-12 sm:w-14 sm:h-14 rounded-full border-2 border-blue-200 shadow-sm object-cover object-center">
                                         @endif
                                     </div>
                                     
@@ -362,16 +362,16 @@
                          @if(Str::startsWith($service->user->profile_image, 'http'))
                              <img src="{{ $service->user->profile_image }}" 
                                   alt="{{ $service->user->name }}" 
-                                  class="w-15 h-15 rounded-full object-cover">
+                                  class="w-16 h-16 rounded-full object-cover object-center border-2 border-gray-200 shadow-sm">
                          @else
                              <img src="{{ route('profile.image', basename($service->user->profile_image)) }}" 
                                   alt="{{ $service->user->name }}" 
-                                  class="w-15 h-15 rounded-full object-cover">
+                                  class="w-16 h-16 rounded-full object-cover object-center border-2 border-gray-200 shadow-sm">
                          @endif
                      @else
-                         <img src="https://ui-avatars.com/api/?name={{ urlencode($service->user->name) }}&size=60&background=dc2626&color=fff" 
+                         <img src="https://ui-avatars.com/api/?name={{ urlencode($service->user->name) }}&size=64&background=dc2626&color=fff" 
                               alt="{{ $service->user->name }}" 
-                              class="w-15 h-15 rounded-full">
+                              class="w-16 h-16 rounded-full object-cover object-center border-2 border-gray-200 shadow-sm">
                      @endif
                      <div class="flex-1">
                         <h3 class="font-bold text-gray-900">{{ $service->user->name }}</h3>
@@ -774,16 +774,16 @@ document.addEventListener('DOMContentLoaded', function() {
                                          @if(Str::startsWith($review->user->profile_image, 'http'))
                                              <img src="{{ $review->user->profile_image }}" 
                                                   alt="{{ $review->user->name }}" 
-                                                  class="w-10 h-10 sm:w-12 sm:h-12 rounded-full border-2 border-gray-100 shadow-sm object-cover">
+                                                  class="w-10 h-10 sm:w-12 sm:h-12 rounded-full border-2 border-gray-100 shadow-sm object-cover object-center">
                                          @else
                                              <img src="{{ route('profile.image', basename($review->user->profile_image)) }}" 
                                                   alt="{{ $review->user->name }}" 
-                                                  class="w-10 h-10 sm:w-12 sm:h-12 rounded-full border-2 border-gray-100 shadow-sm object-cover">
+                                                  class="w-10 h-10 sm:w-12 sm:h-12 rounded-full border-2 border-gray-100 shadow-sm object-cover object-center">
                                          @endif
                                      @else
                                          <img src="https://ui-avatars.com/api/?name={{ urlencode($review->user->name) }}&size=48&background=dc2626&color=fff" 
                                               alt="{{ $review->user->name }}" 
-                                              class="w-10 h-10 sm:w-12 sm:h-12 rounded-full border-2 border-gray-100 shadow-sm object-cover">
+                                              class="w-10 h-10 sm:w-12 sm:h-12 rounded-full border-2 border-gray-100 shadow-sm object-cover object-center">
                                      @endif
                                  </div>
                                 

@@ -200,16 +200,16 @@
                                      @if(Str::startsWith($service->user->profile_image, 'http'))
                                          <img src="{{ $service->user->profile_image }}" 
                                               alt="{{ $service->user->name }}" 
-                                              class="w-8 h-8 rounded-full object-cover">
+                                              class="w-8 h-8 rounded-full object-cover object-center border border-gray-200">
                                      @else
                                          <img src="{{ route('profile.image', basename($service->user->profile_image)) }}" 
                                               alt="{{ $service->user->name }}" 
-                                              class="w-8 h-8 rounded-full object-cover">
+                                              class="w-8 h-8 rounded-full object-cover object-center border border-gray-200">
                                      @endif
                                  @else
                                      <img src="https://ui-avatars.com/api/?name={{ urlencode($service->user->name) }}&size=32&background=dc2626&color=fff" 
                                           alt="{{ $service->user->name }}" 
-                                          class="w-8 h-8 rounded-full">
+                                          class="w-8 h-8 rounded-full object-cover object-center border border-gray-200">
                                  @endif
                                  <div>
                                      <p class="text-sm font-medium text-gray-900">{{ $service->user->name }}</p>
