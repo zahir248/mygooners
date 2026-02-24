@@ -104,12 +104,17 @@ class AuthController extends Controller
      */
     public function logout(Request $request)
     {
+        $user = Auth::user();
+        $isWriter = $user && $user->role === 'writer';
+
         Auth::logout();
 
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect()->route('admin.login');
+        return $isWriter
+            ? redirect()->route('home')
+            : redirect()->route('admin.login');
     }
 
     /**

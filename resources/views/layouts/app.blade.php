@@ -506,6 +506,7 @@
     </style>
 
     @stack('styles')
+    @stack('head')
 </head>
 <body class="h-full bg-gray-50 font-sans antialiased">
     <div class="min-h-full">
