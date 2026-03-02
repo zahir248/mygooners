@@ -42,8 +42,26 @@ class ArticleController extends Controller
         
         $articles = $query->with('author')->orderBy('created_at', 'desc')->get();
         
-        // Get unique categories for filter dropdown
-        $categories = Article::distinct()->pluck('category')->sort()->values();
+        // Categories for filter dropdown (same list as create/edit)
+        $categories = [
+            'Perkembangan Kelab',
+            'EPL',
+            'UCL',
+            'Bolasepak',
+            'Piala Dunia',
+            'Euro',
+            'Berita Perpindahan',
+            'Analisis',
+            'Bundesliga',
+            'Serie A',
+            'Ligue 1',
+            'Antarabangsa',
+            'La Liga',
+            'Futsal',
+            'Liga Malaysia',
+            'Shopee Cup',
+            'Lain-lain'
+        ];
 
         return view('admin.articles.index', compact('articles', 'categories'));
     }
@@ -64,6 +82,9 @@ class ArticleController extends Controller
             'Ligue 1',
             'Antarabangsa',
             'La Liga',
+            'Futsal',
+            'Liga Malaysia',
+            'Shopee Cup',
             'Lain-lain'
         ];
 
@@ -234,6 +255,9 @@ class ArticleController extends Controller
             'Ligue 1',
             'Antarabangsa',
             'La Liga',
+            'Futsal',
+            'Liga Malaysia',
+            'Shopee Cup',
             'Lain-lain'
         ];
 
