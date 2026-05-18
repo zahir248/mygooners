@@ -21,9 +21,25 @@ class ToyyibPayService
     /**
      * Create a new bill in ToyyibPay
      */
-    public function createBill($orderOrCheckoutData, $returnUrl = null, $isRetryPayment = false)
+    public function createBill($orderOrCheckoutData, $returnUrl = null, $isRetryPayment = false, $callbackUrl = null)
     {
         try {
+            if (empty($this->userSecretKey) || empty($this->categoryCode) || empty($this->baseUrl)) {
+                Log::error('ToyyibPay config missing', [
+                    'has_secret_key' => !empty($this->userSecretKey),
+                    'has_category_code' => !empty($this->categoryCode),
+                    'has_base_url' => !empty($this->baseUrl),
+                ]);
+
+                return [
+                    'success' => false,
+                    'message' => 'Konfigurasi ToyyibPay tidak lengkap. Sila semak TOYYIBPAY_SECRET_KEY, TOYYIBPAY_CATEGORY_CODE, TOYYIBPAY_BASE_URL.',
+                    'error_code' => 'TOYYIBPAY_CONFIG_MISSING',
+                    'status_code' => null,
+                    'raw_response' => null,
+                ];
+            }
+
             $httpClient = Http::asForm();
             
             // Disable SSL verification in development environment
@@ -33,6 +49,7 @@ class ToyyibPayService
             
             // Use provided return URL or default to regular checkout
             $returnUrl = $returnUrl ?: route('checkout.toyyibpay.return');
+            $callbackUrl = $callbackUrl ?: route('checkout.toyyibpay.callback');
             
             // Handle both order objects and checkout data arrays
             if (is_array($orderOrCheckoutData)) {
@@ -62,9 +79,9 @@ class ToyyibPayService
                 'billDescription' => 'Pembayaran untuk pesanan ' . $orderNumber,
                 'billPriceSetting' => 1, // Fixed amount
                 'billPayorInfo' => 1, // Collect customer info
-                'billAmount' => $total * 100, // Convert to cents
+                'billAmount' => (int) round($total * 100), // Convert RM to sen
                 'billReturnUrl' => $returnUrl,
-                'billCallbackUrl' => route('checkout.toyyibpay.callback'),
+                'billCallbackUrl' => $callbackUrl,
                 'billExternalReferenceNo' => $orderNumber,
                 'billTo' => $shippingName,
                 'billEmail' => $shippingEmail,
@@ -83,7 +100,7 @@ class ToyyibPayService
                 'order_id' => $orderId,
                 'order_number' => $orderNumber,
                 'url' => $this->baseUrl . '/index.php/api/createBill',
-                'data' => $requestData
+                'data' => array_merge($requestData, ['userSecretKey' => '[MASKED]'])
             ]);
 
             $response = $httpClient->post($this->baseUrl . '/index.php/api/createBill', $requestData);
@@ -139,28 +156,64 @@ class ToyyibPayService
                 }
             }
 
+            $rawBody = $response->body();
+            $responseData = $response->json();
+            $specificMessage = $this->extractToyyibPayErrorMessage($responseData, $rawBody);
+
             Log::error('ToyyibPay create bill failed', [
                 'order_id' => $orderId,
                 'order_number' => $orderNumber,
-                'response' => $response->body()
+                'status' => $response->status(),
+                'response' => $rawBody,
+                'specific_message' => $specificMessage
             ]);
 
             return [
                 'success' => false,
-                'message' => 'Gagal membuat bil pembayaran'
+                'message' => $specificMessage,
+                'error_code' => 'TOYYIBPAY_CREATE_BILL_FAILED',
+                'status_code' => $response->status(),
+                'raw_response' => $rawBody,
             ];
 
         } catch (\Exception $e) {
             Log::error('ToyyibPay create bill exception', [
-                'order_id' => $order->id,
+                'order_id' => $orderId ?? null,
                 'error' => $e->getMessage()
             ]);
 
             return [
                 'success' => false,
-                'message' => 'Ralat sistem pembayaran'
+                'message' => 'Ralat sistem pembayaran: ' . $e->getMessage(),
+                'error_code' => 'TOYYIBPAY_EXCEPTION',
+                'status_code' => null,
+                'raw_response' => null,
             ];
         }
+    }
+
+    private function extractToyyibPayErrorMessage($responseData, ?string $rawBody): string
+    {
+        if (is_array($responseData)) {
+            if (isset($responseData[0]['msg']) && is_string($responseData[0]['msg']) && $responseData[0]['msg'] !== '') {
+                return $responseData[0]['msg'];
+            }
+            if (isset($responseData[0]['Message']) && is_string($responseData[0]['Message']) && $responseData[0]['Message'] !== '') {
+                return $responseData[0]['Message'];
+            }
+            if (isset($responseData['msg']) && is_string($responseData['msg']) && $responseData['msg'] !== '') {
+                return $responseData['msg'];
+            }
+            if (isset($responseData['message']) && is_string($responseData['message']) && $responseData['message'] !== '') {
+                return $responseData['message'];
+            }
+        }
+
+        if (!empty($rawBody)) {
+            return 'Gagal membuat bil pembayaran. Respons gateway: ' . mb_substr($rawBody, 0, 500);
+        }
+
+        return 'Gagal membuat bil pembayaran.';
     }
 
     /**

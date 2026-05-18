@@ -647,7 +647,7 @@ Route::get('/article-content-image/{filename}', function ($filename) {
     }
     
     // Log the missing file for debugging
-    \Log::warning('Article content image not found', [
+    Log::warning('Article content image not found', [
         'filename' => $filename,
         'checked_paths' => $paths
     ]);
