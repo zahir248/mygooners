@@ -19,6 +19,7 @@ class Order extends Model
         'total',
         'payment_method',
         'payment_status',
+        'payment_completed_at',
         'shipping_name',
         'shipping_email',
         'shipping_phone',
@@ -44,11 +45,16 @@ class Order extends Model
         'stripe_payment_intent_id',
         'shipped_at',
         'delivered_at',
+        'is_received',
+        'received_at',
     ];
 
     protected $casts = [
         'shipped_at' => 'datetime',
         'delivered_at' => 'datetime',
+        'payment_completed_at' => 'datetime',
+        'received_at' => 'datetime',
+        'is_received' => 'boolean',
     ];
 
     public function user()

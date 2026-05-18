@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\URL;
 
 class ProductReview extends Model
 {
@@ -13,9 +14,11 @@ class ProductReview extends Model
     protected $fillable = [
         'product_id',
         'user_id',
+        'order_id',
+        'order_item_id',
         'rating',
         'comment',
-        'is_verified'
+        'is_verified',
     ];
 
     protected $casts = [
@@ -33,6 +36,16 @@ class ProductReview extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function order()
+    {
+        return $this->belongsTo(Order::class);
+    }
+
+    public function photos()
+    {
+        return $this->hasMany(ProductReviewPhoto::class);
+    }
+
     public function getReviewerNameAttribute()
     {
         if ($this->user) {
@@ -43,14 +56,30 @@ class ProductReview extends Model
 
     public function getReviewerAvatarAttribute()
     {
-        if ($this->user && $this->user->profile_image) {
-            $profileImg = trim($this->user->profile_image);
-            if (Str::startsWith($profileImg, 'http')) {
-                return $profileImg;
-            }
-            return asset('storage/' . $profileImg);
+        return $this->getReviewerAvatarUrlAttribute() ?? asset('images/profile-image-default.png');
+    }
+
+    public function getReviewerAvatarUrlAttribute()
+    {
+        $profileImg = trim((string) optional($this->user)->profile_image);
+        if ($profileImg === '') {
+            return null;
         }
-        return asset('images/profile-image-default.png');
+
+        if (Str::startsWith($profileImg, ['http://', 'https://'])) {
+            return $profileImg;
+        }
+
+        if (Str::startsWith($profileImg, ['profile_images/', 'profiles/', 'users/'])) {
+            return URL::to('/profile-image/' . basename($profileImg));
+        }
+
+        return URL::to('/storage/' . ltrim($profileImg, '/'));
+    }
+
+    public function getPhotoUrlsAttribute(): array
+    {
+        return $this->photos->map(fn ($photo) => $photo->image_url)->filter()->values()->all();
     }
 
     public function scopeVerified($query)

@@ -894,10 +894,9 @@ class CheckoutController extends Controller
                     }
                 }
 
-                // Update order status based on payment result
+                // Update payment status based on payment result; admin controls order status progression
                 if ($paymentResult['success'] && $paymentResult['paid']) {
                     $order->update([
-                        'status' => 'processing',
                         'payment_status' => 'paid'
                     ]);
                     
@@ -1044,7 +1043,7 @@ class CheckoutController extends Controller
             // Handle response based on payment result
             if ($paymentResult['success'] && $paymentResult['paid']) {
                 return redirect()->route('checkout.success', $order->id)
-                               ->with('success', 'Pembayaran berjaya! Pesanan anda sedang diproses.');
+                               ->with('success', 'Pembayaran berjaya! Pesanan anda telah direkodkan.');
             } else {
                 // Payment failed - redirect to retry payment
                 return redirect()->route('checkout.show-retry-payment', $order->id)
@@ -1282,9 +1281,8 @@ class CheckoutController extends Controller
                     ]);
                 }
 
-                // Update order status to paid and processing
+                // Update order payment status only; keep order status pending for admin action
                 $order->update([
-                    'status' => 'processing',
                     'payment_status' => 'paid'
                 ]);
 
@@ -1347,7 +1345,7 @@ class CheckoutController extends Controller
                 }
 
                 return redirect()->route('checkout.success', $order->id)
-                               ->with('success', 'Pembayaran berjaya! Pesanan anda sedang diproses.');
+                               ->with('success', 'Pembayaran berjaya! Pesanan anda telah direkodkan.');
 
             } catch (\Exception $e) {
                 DB::rollBack();

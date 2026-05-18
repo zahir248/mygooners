@@ -922,9 +922,8 @@ class DirectCheckoutController extends Controller
                         }
                     }
 
-                    // Update order status to paid and processing
+                    // Update payment status only; admin controls order status progression
                     $order->update([
-                        'status' => 'processing',
                         'payment_status' => 'paid'
                     ]);
                 } else {
@@ -936,7 +935,7 @@ class DirectCheckoutController extends Controller
                         $order = Order::create([
                             'order_number' => (new Order())->generateOrderNumber(),
                             'user_id' => auth()->id(),
-                            'status' => 'processing',
+                            'status' => 'pending',
                             'subtotal' => $pendingCheckout['subtotal'],
                             'shipping_cost' => $pendingCheckout['shipping_cost'],
                             'tax' => $pendingCheckout['tax'],
@@ -1023,7 +1022,7 @@ class DirectCheckoutController extends Controller
                 }
 
                 return redirect()->route('direct-checkout.success', $order->id)
-                               ->with('success', 'Pembayaran berjaya! Pesanan anda sedang diproses.');
+                               ->with('success', 'Pembayaran berjaya! Pesanan anda telah direkodkan.');
 
             } catch (\Exception $e) {
                 DB::rollBack();
@@ -1319,9 +1318,8 @@ class DirectCheckoutController extends Controller
                     'payment_intent_id' => $paymentIntentId
                 ]);
 
-                // Update the existing order to paid status
+                // Update payment status only; keep order status pending for admin action
                 $existingOrder->update([
-                    'status' => 'processing',
                     'payment_status' => 'paid'
                 ]);
 
@@ -1348,7 +1346,7 @@ class DirectCheckoutController extends Controller
                 }
 
                 return redirect()->route('direct-checkout.success', $existingOrder->id)
-                               ->with('success', 'Pembayaran berjaya! Pesanan anda sedang diproses.');
+                               ->with('success', 'Pembayaran berjaya! Pesanan anda telah direkodkan.');
             }
 
             // If no existing order found, show error
@@ -1376,9 +1374,8 @@ class DirectCheckoutController extends Controller
                                ->with('error', 'Pesanan tidak dijumpai. Sila cuba lagi.');
             }
 
-            // Update the existing order with payment success
+            // Update the existing order with payment success; keep order status pending
             $order->update([
-                'status' => 'processing',
                 'payment_status' => 'paid',
                 'stripe_payment_intent_id' => $paymentIntentId
             ]);
@@ -1431,7 +1428,7 @@ class DirectCheckoutController extends Controller
             ]);
 
             return redirect()->route('direct-checkout.success', $order->id)
-                           ->with('success', 'Pembayaran berjaya! Pesanan anda sedang diproses.');
+                           ->with('success', 'Pembayaran berjaya! Pesanan anda telah direkodkan.');
 
         } catch (\Exception $e) {
             DB::rollBack();
