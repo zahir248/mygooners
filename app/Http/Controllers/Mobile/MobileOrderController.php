@@ -169,7 +169,7 @@ class MobileOrderController extends Controller
         if (!$this->canAccessInvoice($order)) {
             return response()->json([
                 'success' => false,
-                'message' => 'Invoice is not available for this order.',
+                'message' => 'Unable to download invoice. Please try again later.',
             ], 422);
         }
 
@@ -214,7 +214,7 @@ class MobileOrderController extends Controller
 
                 return response()->json([
                     'success' => false,
-                    'message' => 'Failed to generate invoice.',
+                    'message' => 'Unable to download invoice. Please try again later.',
                 ], 500);
             }
 
@@ -240,7 +240,7 @@ class MobileOrderController extends Controller
 
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to download invoice.',
+                'message' => 'Unable to download invoice. Please try again later.',
             ], 500);
         }
     }
@@ -270,7 +270,7 @@ class MobileOrderController extends Controller
 
         $validator = Validator::make($request->all(), [
             'product_id' => 'required|integer|exists:products,id',
-            'order_item_id' => 'nullable|integer|exists:order_items,id',
+            'order_item_id' => 'required|integer|exists:order_items,id',
             'rating' => 'required|integer|min:1|max:5',
             'comment' => 'nullable|string',
             'photos' => 'nullable|array|max:5',
@@ -286,7 +286,7 @@ class MobileOrderController extends Controller
         }
 
         $productId = (int) $request->input('product_id');
-        $orderItemId = $request->filled('order_item_id') ? (int) $request->input('order_item_id') : null;
+        $orderItemId = (int) $request->input('order_item_id');
         $orderedProductIds = $order->items->pluck('product_id')->map(fn ($value) => (int) $value)->all();
 
         if (!in_array($productId, $orderedProductIds, true)) {
@@ -296,41 +296,39 @@ class MobileOrderController extends Controller
             ], 403);
         }
 
-        $targetOrderItem = null;
-        if ($orderItemId !== null) {
-            $targetOrderItem = $order->items->first(fn (OrderItem $item) => (int) $item->id === $orderItemId);
-            if (!$targetOrderItem) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'The selected order item does not belong to this order.',
-                ], 422);
-            }
+        $targetOrderItem = $order->items->first(fn (OrderItem $item) => (int) $item->id === $orderItemId);
+        if (!$targetOrderItem) {
+            return response()->json([
+                'success' => false,
+                'message' => 'The selected order item does not belong to this order.',
+            ], 422);
+        }
 
-            if ((int) $targetOrderItem->product_id !== $productId) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'The selected order item does not match the product.',
-                ], 422);
-            }
+        if ((int) $targetOrderItem->product_id !== $productId) {
+            return response()->json([
+                'success' => false,
+                'message' => 'The selected order item does not match the product.',
+            ], 422);
         }
 
         $hasOrderIdColumn = Schema::hasColumn('product_reviews', 'order_id');
         $hasOrderItemIdColumn = Schema::hasColumn('product_reviews', 'order_item_id');
 
-        $reviewExistsQuery = ProductReview::query()
-            ->where('user_id', $request->user()->id)
-            ->where('product_id', $productId);
-
-        if ($hasOrderIdColumn) {
-            $reviewExistsQuery->where('order_id', $order->id);
+        $reviewExistsQuery = ProductReview::query()->where('user_id', $request->user()->id);
+        if ($hasOrderItemIdColumn) {
+            $reviewExistsQuery->where('order_item_id', $orderItemId);
+        } else {
+            $reviewExistsQuery->where('product_id', $productId);
+            if ($hasOrderIdColumn) {
+                $reviewExistsQuery->where('order_id', $order->id);
+            }
         }
-
         $reviewExists = $reviewExistsQuery->exists();
 
         if ($reviewExists) {
             return response()->json([
                 'success' => false,
-                'message' => 'You have already reviewed this order.',
+                'message' => 'You have already submitted a review for this item.',
             ], 422);
         }
 
@@ -345,7 +343,7 @@ class MobileOrderController extends Controller
         if ($hasOrderIdColumn) {
             $reviewPayload['order_id'] = $order->id;
         }
-        if ($hasOrderItemIdColumn && $orderItemId !== null) {
+        if ($hasOrderItemIdColumn) {
             $reviewPayload['order_item_id'] = $orderItemId;
         }
 

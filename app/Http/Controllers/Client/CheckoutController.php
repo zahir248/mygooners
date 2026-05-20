@@ -108,6 +108,24 @@ class CheckoutController extends Controller
             return redirect()->route('cart.index')->with('error', 'Troli anda kosong.');
         }
 
+        foreach ($cart->items as $item) {
+            $isVariationItem = !empty($item->product_variation_id);
+            $availableStock = $isVariationItem
+                ? (int) optional($item->variation)->stock_quantity
+                : (int) optional($item->product)->calculated_stock;
+
+            if ($availableStock <= 0) {
+                return redirect()->route('cart.index')->with(
+                    'error',
+                    $isVariationItem ? 'Selected size is out of stock.' : 'This product is currently out of stock.'
+                );
+            }
+
+            if ($availableStock < (int) $item->quantity) {
+                return redirect()->route('cart.index')->with('error', 'Requested quantity exceeds available stock.');
+            }
+        }
+
         try {
             DB::beginTransaction();
 
@@ -987,6 +1005,9 @@ class CheckoutController extends Controller
                         // Reduce stock for product variation
                         $variation = \App\Models\ProductVariation::find($item->product_variation_id);
                         if ($variation) {
+                            if ((int) $variation->stock_quantity < (int) $item->quantity) {
+                                throw new \Exception('Selected size is out of stock.');
+                            }
                             $variation->decrement('stock_quantity', $item->quantity);
                             \Log::info('Stock reduced for variation', [
                                 'variation_id' => $variation->id,
@@ -999,6 +1020,9 @@ class CheckoutController extends Controller
                         // Reduce stock for base product
                         $product = \App\Models\Product::find($item->product_id);
                         if ($product) {
+                            if ((int) $product->calculated_stock < (int) $item->quantity) {
+                                throw new \Exception('This product is currently out of stock.');
+                            }
                             $product->decrement('stock_quantity', $item->quantity);
                             \Log::info('Stock reduced for product', [
                                 'product_id' => $product->id,
@@ -1292,6 +1316,9 @@ class CheckoutController extends Controller
                         // Reduce stock for product variation
                         $variation = \App\Models\ProductVariation::find($item->product_variation_id);
                         if ($variation) {
+                            if ((int) $variation->stock_quantity < (int) $item->quantity) {
+                                throw new \Exception('Selected size is out of stock.');
+                            }
                             $variation->decrement('stock_quantity', $item->quantity);
                             \Log::info('Stock reduced for variation', [
                                 'variation_id' => $variation->id,
@@ -1304,6 +1331,9 @@ class CheckoutController extends Controller
                         // Reduce stock for base product
                         $product = \App\Models\Product::find($item->product_id);
                         if ($product) {
+                            if ((int) $product->calculated_stock < (int) $item->quantity) {
+                                throw new \Exception('This product is currently out of stock.');
+                            }
                             $product->decrement('stock_quantity', $item->quantity);
                             \Log::info('Stock reduced for product', [
                                 'product_id' => $product->id,
@@ -1352,7 +1382,7 @@ class CheckoutController extends Controller
                 \Log::error('Error updating order after payment: ' . $e->getMessage());
                 
                 return redirect()->route('checkout.orders')
-                               ->with('error', 'Ralat semasa memproses pesanan. Sila hubungi kami.');
+                               ->with('error', 'Unable to process your order. Please check your cart and try again.');
             }
         } else {
             // Payment failed or user clicked back - preserve order for retry
@@ -1483,7 +1513,7 @@ class CheckoutController extends Controller
                     'order_id' => $orderId,
                     'user_id' => auth()->id()
                 ]);
-                return back()->with('error', 'Gagal menjana invois. Sila cuba lagi.');
+                return back()->with('error', 'Unable to download invoice. Please try again later.');
             }
             
             // Check if file exists
@@ -1493,7 +1523,7 @@ class CheckoutController extends Controller
                     'user_id' => auth()->id(),
                     'filepath' => $pdfPath
                 ]);
-                return back()->with('error', 'Fail invois tidak dijumpai. Sila cuba lagi.');
+                return back()->with('error', 'Unable to download invoice. Please try again later.');
             }
             
             // Get the filename from the path
@@ -1515,7 +1545,8 @@ class CheckoutController extends Controller
                 'user_id' => auth()->id()
             ]);
             
-            return back()->with('error', 'Gagal memuat turun invois. Sila cuba lagi.');
+            return back()->with('error', 'Unable to download invoice. Please try again later.');
+            
         }
     }
 
@@ -1549,7 +1580,7 @@ class CheckoutController extends Controller
                     'order_id' => $orderId,
                     'user_id' => auth()->id()
                 ]);
-                return back()->with('error', 'Gagal menjana invois. Sila cuba lagi.');
+                return back()->with('error', 'Unable to download invoice. Please try again later.');
             }
             
             // Check if file exists
@@ -1559,7 +1590,7 @@ class CheckoutController extends Controller
                     'user_id' => auth()->id(),
                     'filepath' => $pdfPath
                 ]);
-                return back()->with('error', 'Fail invois tidak dijumpai. Sila cuba lagi.');
+                return back()->with('error', 'Unable to download invoice. Please try again later.');
             }
             
             // Get the filename and determine content type
@@ -1580,7 +1611,7 @@ class CheckoutController extends Controller
                 'user_id' => auth()->id()
             ]);
             
-            return back()->with('error', 'Gagal memaparkan invois. Sila cuba lagi.');
+            return back()->with('error', 'Unable to download invoice. Please try again later.');
         }
     }
 
@@ -1598,3 +1629,4 @@ class CheckoutController extends Controller
         }
     }
 }
+

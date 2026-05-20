@@ -14,7 +14,7 @@ class ProductReviewController extends Controller
      */
     public function index(Request $request)
     {
-        $query = ProductReview::with(['product', 'user']);
+        $query = ProductReview::with(['product', 'user', 'photos']);
 
         // Filter by product
         if ($request->filled('product_id')) {
@@ -48,7 +48,7 @@ class ProductReviewController extends Controller
      */
     public function show(ProductReview $review)
     {
-        $review->load(['product', 'user']);
+        $review->load(['product', 'user', 'photos']);
         return view('admin.reviews.show', compact('review'));
     }
 

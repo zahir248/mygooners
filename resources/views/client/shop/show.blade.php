@@ -205,10 +205,10 @@ use Illuminate\Support\Str;
                     @endif
                 </div>
 
-                                            @if($imageData['type'] === 'product' && $product->stock_quantity <= 5)
+                                            @if($imageData['type'] === 'product' && $product->calculated_stock <= 5)
                     <div class="absolute bottom-4 left-4">
                         <span class="bg-orange-500 text-white px-4 py-2 rounded-full text-sm font-medium">
-                            Hanya {{ $product->stock_quantity }} tinggal dalam stok
+                            Hanya {{ $product->calculated_stock }} tinggal dalam stok
                         </span>
                     </div>
                 @endif
@@ -384,8 +384,8 @@ use Illuminate\Support\Str;
                                     <span class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900">RM{{ number_format($product->price, 2) }}</span>
                                 @endif
                                 <div class="mt-2">
-                                    @if($product->stock_quantity > 0)
-                                        <span class="text-green-600 font-medium text-sm sm:text-base">✓ Dalam Stok ({{ $product->stock_quantity }} tersedia)</span>
+                                    @if($product->calculated_stock > 0)
+                                        <span class="text-green-600 font-medium text-sm sm:text-base">✓ Dalam Stok ({{ $product->calculated_stock }} tersedia)</span>
                                     @else
                                         <span class="text-red-600 font-medium text-sm sm:text-base">✗ Kehabisan Stok</span>
                                     @endif
@@ -402,8 +402,8 @@ use Illuminate\Support\Str;
                                 <span class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900">RM{{ number_format($product->price, 2) }}</span>
                             @endif
                             <div class="mt-2">
-                                @if($product->stock_quantity > 0)
-                                    <span class="text-green-600 font-medium text-sm sm:text-base">✓ Dalam Stok ({{ $product->stock_quantity }} tersedia)</span>
+                                @if($product->calculated_stock > 0)
+                                    <span class="text-green-600 font-medium text-sm sm:text-base">✓ Dalam Stok ({{ $product->calculated_stock }} tersedia)</span>
                                 @else
                                     <span class="text-red-600 font-medium text-sm sm:text-base">✗ Kehabisan Stok</span>
                                 @endif
@@ -442,8 +442,9 @@ use Illuminate\Support\Str;
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                         @foreach($product->activeVariations as $variation)
-                            <div class="border border-gray-200 rounded-lg p-4 hover:border-red-500 transition-all duration-200 cursor-pointer variation-option relative {{ $selectedVariantId == $variation->id ? 'border-red-500 active' : '' }}" 
+                            <div class="border border-gray-200 rounded-lg p-4 transition-all duration-200 variation-option relative {{ $selectedVariantId == $variation->id ? 'border-red-500 active' : '' }} {{ $variation->stock_quantity <= 0 ? 'opacity-60 cursor-not-allowed bg-gray-50' : 'hover:border-red-500 cursor-pointer' }}" 
                                     data-variation-id="{{ $variation->id }}"
+                                 data-out-of-stock="{{ $variation->stock_quantity <= 0 ? '1' : '0' }}"
                                  onclick="toggleVariation({{ $variation->id }})"
                                  title="{{ $selectedVariantId == $variation->id ? 'Klik untuk buang pilihan' : 'Klik untuk pilih varian ini' }}">
                                 <!-- Selection indicator (hidden) -->
@@ -455,6 +456,9 @@ use Illuminate\Support\Str;
                                 <div class="flex items-center justify-center">
                                     <h4 class="font-medium text-gray-900 text-center">{{ $variation->name }}</h4>
                                 </div>
+                                @if($variation->stock_quantity <= 0)
+                                    <p class="text-center text-xs text-red-600 mt-2">No Stock</p>
+                                @endif
                             </div>
                         @endforeach
                     </div>
@@ -484,14 +488,14 @@ use Illuminate\Support\Str;
                     $allVariationsOutOfStock = $product->activeVariations->every(function($variation) {
                         return $variation->stock_quantity <= 0;
                     });
-                    $baseProductOutOfStock = $product->stock_quantity <= 0;
+                    $baseProductOutOfStock = $product->calculated_stock <= 0;
                     $everythingOutOfStock = $allVariationsOutOfStock && $baseProductOutOfStock;
                 @endphp
                 
                 <div class="flex items-center space-x-4 mb-4">
                     <div>
                         <label for="quantity" class="block text-sm font-medium text-gray-700 mb-2">Kuantiti</label>
-                        <select id="quantity" class="border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-transparent w-full sm:w-auto">
+                        <select id="quantity" class="border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-transparent w-full sm:w-auto" {{ $everythingOutOfStock ? 'disabled' : '' }}>
                             @for($i = 1; $i <= 10; $i++)
                                 <option value="{{ $i }}">{{ $i }}</option>
                             @endfor
@@ -505,7 +509,7 @@ use Illuminate\Support\Str;
                         <div class="flex flex-col sm:flex-row gap-3">
                             @if($everythingOutOfStock)
                                 <button class="flex-1 bg-gray-300 text-gray-600 py-3 sm:py-4 px-4 sm:px-6 rounded-lg font-bold text-base sm:text-lg cursor-not-allowed" disabled>
-                                    Kehabisan Stok
+                                    No Stock
                                 </button>
                                 <button class="flex-1 border-2 border-gray-300 text-gray-600 py-3 sm:py-4 px-4 sm:px-6 rounded-lg font-bold text-base sm:text-lg cursor-not-allowed" disabled>
                                     Maklumkan Apabila Tersedia
@@ -520,7 +524,7 @@ use Illuminate\Support\Str;
                             @endif
                         </div>
                     @else
-                        @if($product->stock_quantity > 0)
+                        @if($product->calculated_stock > 0)
                             <button onclick="addToCartSimple()" class="w-full bg-arsenal hover:bg-arsenal text-white py-3 sm:py-4 px-4 sm:px-6 rounded-lg font-bold text-base sm:text-lg transition-colors">
                                 Tambah ke Troli
                             </button>
@@ -529,7 +533,7 @@ use Illuminate\Support\Str;
                             </button>
                         @else
                             <button class="w-full bg-gray-300 text-gray-600 py-3 sm:py-4 px-4 sm:px-6 rounded-lg font-bold text-base sm:text-lg cursor-not-allowed" disabled>
-                                Kehabisan Stok
+                                No Stock
                             </button>
                             <button class="w-full border-2 border-gray-300 text-gray-600 py-3 sm:py-4 px-4 sm:px-6 rounded-lg font-bold text-base sm:text-lg cursor-not-allowed" disabled>
                                 Maklumkan Apabila Tersedia
@@ -665,6 +669,15 @@ use Illuminate\Support\Str;
                                     <!-- Review Comment -->
                                     <div class="bg-gray-50 rounded-lg p-4 sm:p-5">
                                         <p class="text-gray-800 leading-relaxed text-sm sm:text-base">{{ $review->comment }}</p>
+                                        @if($review->photos->count() > 0)
+                                            <div class="grid grid-cols-3 gap-2 mt-3">
+                                                @foreach($review->photos as $photo)
+                                                    <a href="{{ $photo->image_url }}" target="_blank" rel="noopener noreferrer">
+                                                        <img src="{{ $photo->image_url }}" alt="Review Photo" class="w-full h-20 sm:h-24 object-cover rounded-lg border border-gray-200">
+                                                    </a>
+                                                @endforeach
+                                            </div>
+                                        @endif
                                     </div>
                             </div>
                         </div>
@@ -769,6 +782,15 @@ use Illuminate\Support\Str;
                                     <!-- Review Comment -->
                                     <div class="bg-white rounded-lg p-4 border border-blue-100">
                                         <p class="text-gray-800 leading-relaxed text-sm sm:text-base">{{ $userReview->comment }}</p>
+                                        @if($userReview->photos->count() > 0)
+                                            <div class="grid grid-cols-3 gap-2 mt-3">
+                                                @foreach($userReview->photos as $photo)
+                                                    <a href="{{ $photo->image_url }}" target="_blank" rel="noopener noreferrer">
+                                                        <img src="{{ $photo->image_url }}" alt="Review Photo" class="w-full h-20 sm:h-24 object-cover rounded-lg border border-gray-200">
+                                                    </a>
+                                                @endforeach
+                                            </div>
+                                        @endif
                                     </div>
                                 </div>
                             </div>
@@ -1097,6 +1119,12 @@ function changeMainImage(imageSrc, thumbnail, variationId = null) {
 }
 
 function toggleVariation(variationId) {
+    const variationOption = document.querySelector(`.variation-option[data-variation-id="${variationId}"]`);
+    if (variationOption && variationOption.getAttribute('data-out-of-stock') === '1') {
+        alert('Selected size is out of stock.');
+        return;
+    }
+
     // Check if we're currently on a variant page
     const urlParams = new URLSearchParams(window.location.search);
     const currentVariant = urlParams.get('variant');
@@ -1376,8 +1404,8 @@ function resetProductPrice() {
                     Jimat RM{{ number_format($product->price - $product->sale_price, 2) }}
                 </span>
                 <div class="mt-2">
-                    @if($product->stock_quantity > 0)
-                        <span class="text-green-600 font-medium">✓ Dalam Stok ({{ $product->stock_quantity }} tersedia)</span>
+                    @if($product->calculated_stock > 0)
+                        <span class="text-green-600 font-medium">✓ Dalam Stok ({{ $product->calculated_stock }} tersedia)</span>
                     @else
                         <span class="text-red-600 font-medium">✗ Kehabisan Stok</span>
                     @endif
@@ -1390,8 +1418,8 @@ function resetProductPrice() {
                 </div>
                 <span class="text-4xl font-bold text-gray-900">RM{{ number_format($product->price, 2) }}</span>
                 <div class="mt-2">
-                    @if($product->stock_quantity > 0)
-                        <span class="text-green-600 font-medium">✓ Dalam Stok ({{ $product->stock_quantity }} tersedia)</span>
+                    @if($product->calculated_stock > 0)
+                        <span class="text-green-600 font-medium">✓ Dalam Stok ({{ $product->calculated_stock }} tersedia)</span>
                     @else
                         <span class="text-red-600 font-medium">✗ Kehabisan Stok</span>
                     @endif
@@ -1407,8 +1435,8 @@ function resetProductPrice() {
                     Jimat RM{{ number_format($product->price - $product->sale_price, 2) }}
                 </span>
                 <div class="mt-2">
-                    @if($product->stock_quantity > 0)
-                        <span class="text-green-600 font-medium">✓ Dalam Stok ({{ $product->stock_quantity }} tersedia)</span>
+                    @if($product->calculated_stock > 0)
+                        <span class="text-green-600 font-medium">✓ Dalam Stok ({{ $product->calculated_stock }} tersedia)</span>
                     @else
                         <span class="text-red-600 font-medium">✗ Kehabisan Stok</span>
                     @endif
@@ -1418,8 +1446,8 @@ function resetProductPrice() {
             priceDisplay.innerHTML = `
                 <span class="text-4xl font-bold text-gray-900">RM{{ number_format($product->price, 2) }}</span>
                 <div class="mt-2">
-                    @if($product->stock_quantity > 0)
-                        <span class="text-green-600 font-medium">✓ Dalam Stok ({{ $product->stock_quantity }} tersedia)</span>
+                    @if($product->calculated_stock > 0)
+                        <span class="text-green-600 font-medium">✓ Dalam Stok ({{ $product->calculated_stock }} tersedia)</span>
                     @else
                         <span class="text-red-600 font-medium">✗ Kehabisan Stok</span>
                     @endif
@@ -1456,7 +1484,7 @@ function enableAddToCart() {
         }
     } else {
         // No variation selected - check if base product has stock
-        const baseProductStock = {{ $product->stock_quantity }};
+        const baseProductStock = {{ $product->calculated_stock }};
         if (baseProductStock > 0) {
             addToCartBtn.textContent = 'Tambah ke Troli';
             addToCartBtn.className = 'flex-1 bg-arsenal hover:bg-arsenal text-white py-4 px-6 rounded-lg font-bold text-lg transition-colors';
@@ -1568,9 +1596,9 @@ function addToCart() {
         } : 'null');
         
         // Validate stock
-        const stockQuantity = selectedVariation ? selectedVariation.stock_quantity : {{ $product->stock_quantity }};
+        const stockQuantity = selectedVariation ? selectedVariation.stock_quantity : {{ $product->calculated_stock }};
         if (stockQuantity < quantity) {
-            alert('Stok tidak mencukupi');
+            alert('Requested quantity exceeds available stock.');
             return;
         }
         
@@ -1636,9 +1664,9 @@ function addToCartSimple() {
         });
         
         // Validate stock
-        const stockQuantity = {{ $product->stock_quantity }};
+        const stockQuantity = {{ $product->calculated_stock }};
         if (stockQuantity < quantity) {
-            alert('Stok tidak mencukupi');
+            alert('Requested quantity exceeds available stock.');
             return;
         }
         
@@ -1715,9 +1743,9 @@ function buyNow() {
         const variationId = selectedVariation ? selectedVariation.id : null;
         
         // Validate stock
-        const stockQuantity = selectedVariation ? selectedVariation.stock_quantity : {{ $product->stock_quantity }};
+        const stockQuantity = selectedVariation ? selectedVariation.stock_quantity : {{ $product->calculated_stock }};
         if (stockQuantity < quantity) {
-            alert('Stok tidak mencukupi');
+            alert('Requested quantity exceeds available stock.');
             return;
         }
         
@@ -1736,9 +1764,9 @@ function buyNowSimple() {
         const productId = {{ $product->id }};
         
         // Validate stock
-        const stockQuantity = {{ $product->stock_quantity }};
+        const stockQuantity = {{ $product->calculated_stock }};
         if (stockQuantity < quantity) {
-            alert('Stok tidak mencukupi');
+            alert('Requested quantity exceeds available stock.');
             return;
         }
         
@@ -2139,6 +2167,15 @@ document.addEventListener('DOMContentLoaded', function() {
                                     <!-- Review Comment -->
                                     <div class="bg-gray-50 rounded-lg p-3 sm:p-4">
                                         <p class="text-gray-800 leading-relaxed text-xs sm:text-sm">{{ $review->comment }}</p>
+                                        @if($review->photos->count() > 0)
+                                            <div class="grid grid-cols-3 gap-2 mt-3">
+                                                @foreach($review->photos as $photo)
+                                                    <a href="{{ $photo->image_url }}" target="_blank" rel="noopener noreferrer">
+                                                        <img src="{{ $photo->image_url }}" alt="Review Photo" class="w-full h-20 object-cover rounded-lg border border-gray-200">
+                                                    </a>
+                                                @endforeach
+                                            </div>
+                                        @endif
                                     </div>
                                 </div>
                             </div>
@@ -2161,3 +2198,4 @@ document.addEventListener('DOMContentLoaded', function() {
     </div>
 </div>
 @endpush 
+

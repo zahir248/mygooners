@@ -63,15 +63,35 @@ class ProductController extends Controller
             $averageRating = $product->reviews->count() > 0
                 ? round((float) $product->reviews->avg('rating'), 1)
                 : 4.5;
+            $priceData = $this->getPricePayload($product);
 
             return [
                 'id' => $product->id,
                 'product_name' => $product->title,
-                'price' => $this->getDisplayPrice($product),
+                'price' => $priceData['price'],
+                'original_price' => $priceData['original_price'],
+                'sale_price' => $priceData['sale_price'],
+                'display_price' => $priceData['display_price'],
                 'image' => $primaryImage,
                 'description_summary' => Str::limit(strip_tags((string) $product->description), 120),
                 'category' => $product->category,
                 'stock_quantity' => $this->getStockQuantity($product),
+                'total_stock' => (int) $product->total_stock,
+                'is_in_stock' => (bool) $product->is_in_stock,
+                'is_out_of_stock' => (bool) $product->is_out_of_stock,
+                'stock_label' => $product->stock_label,
+                'variations' => $product->activeVariations->map(function ($variation) {
+                    return [
+                        'id' => $variation->id,
+                        'name' => $variation->name,
+                        'price' => $variation->price !== null ? (float) $variation->price : null,
+                        'sale_price' => $variation->sale_price !== null ? (float) $variation->sale_price : null,
+                        'stock_quantity' => (int) $variation->stock_quantity,
+                        'is_in_stock' => (bool) $variation->is_in_stock,
+                        'is_out_of_stock' => (bool) $variation->is_out_of_stock,
+                        'stock_label' => $variation->stock_label,
+                    ];
+                })->values(),
                 'star_rating' => $averageRating,
             ];
         });
@@ -131,16 +151,16 @@ class ProductController extends Controller
         $hasRealReviews = $product->reviews->isNotEmpty();
         $starRating = $hasRealReviews
             ? round((float) $product->reviews->avg('rating'), 1)
-            : 4.5;
+            : 0.0;
 
-        $customerReviews = $hasRealReviews
-            ? $product->reviews->map(function ($review) {
+        $customerReviews = $product->reviews->map(function ($review) {
                 return [
                     'review_id' => $review->id,
                     'id' => $review->id,
                     'reviewer_name' => $review->reviewer_name,
                     'reviewer_avatar' => $review->reviewer_avatar,
                     'reviewer_avatar_url' => $review->reviewer_avatar_url,
+                    'profile_image_url' => $review->reviewer_avatar_url,
                     'rating' => (int) $review->rating,
                     'comment' => $review->comment,
                     'date' => optional($review->created_at)->format('Y-m-d'),
@@ -149,8 +169,7 @@ class ProductController extends Controller
                     'is_verified_purchase' => (bool) $review->is_verified,
                     'created_at' => optional($review->created_at)->toIso8601String(),
                 ];
-            })->values()
-            : collect($this->fallbackReviews());
+            })->values();
 
         $images = $this->resolveAllImages($product);
         $primaryImage = $images[0] ?? null;
@@ -159,10 +178,7 @@ class ProductController extends Controller
         if ($usesSizeFallback) {
             $placeholderFields[] = 'size_options';
         }
-        if (!$hasRealReviews) {
-            $placeholderFields[] = 'star_rating';
-            $placeholderFields[] = 'customer_reviews';
-        }
+        $priceData = $this->getPricePayload($product);
 
         return response()->json([
             'success' => true,
@@ -171,17 +187,23 @@ class ProductController extends Controller
                 'id' => $product->id,
                 'product_name' => $product->title,
                 'slug' => $product->slug,
-                'price' => $this->getDisplayPrice($product),
-                'original_price' => (float) $product->price,
-                'sale_price' => $product->sale_price !== null ? (float) $product->sale_price : null,
+                'price' => $priceData['price'],
+                'original_price' => $priceData['original_price'],
+                'sale_price' => $priceData['sale_price'],
+                'display_price' => $priceData['display_price'],
                 'image' => $primaryImage,
                 'images' => $images,
                 'description' => $product->description,
                 'size_options' => $sizeOptions->all(),
                 'stock_quantity' => $this->getStockQuantity($product),
+                'total_stock' => (int) $product->total_stock,
+                'is_in_stock' => (bool) $product->is_in_stock,
+                'is_out_of_stock' => (bool) $product->is_out_of_stock,
+                'stock_label' => $product->stock_label,
                 'star_rating' => $starRating,
                 'customer_reviews' => $customerReviews,
-                'reviews_count' => $hasRealReviews ? $product->reviews->count() : count($this->fallbackReviews()),
+                'reviews' => $customerReviews,
+                'reviews_count' => $product->reviews->count(),
                 'category' => $product->category,
                 'variation_label' => $product->variation_label ?: 'Size',
                 'variations' => $product->activeVariations->map(function ($variation) {
@@ -192,6 +214,9 @@ class ProductController extends Controller
                         'price' => $variation->price !== null ? (float) $variation->price : null,
                         'sale_price' => $variation->sale_price !== null ? (float) $variation->sale_price : null,
                         'stock_quantity' => (int) $variation->stock_quantity,
+                        'is_in_stock' => (bool) $variation->is_in_stock,
+                        'is_out_of_stock' => (bool) $variation->is_out_of_stock,
+                        'stock_label' => $variation->stock_label,
                         'images' => $this->resolveVariationImages($variation->images ?? []),
 
                     ];
@@ -202,8 +227,8 @@ class ProductController extends Controller
             'meta' => [
                 'field_sources' => [
                     'size_options' => $usesSizeFallback ? 'placeholder_default' : 'database_product_variations',
-                    'star_rating' => $hasRealReviews ? 'database_product_reviews' : 'placeholder_default',
-                    'customer_reviews' => $hasRealReviews ? 'database_product_reviews' : 'placeholder_default',
+                    'star_rating' => 'database_product_reviews',
+                    'customer_reviews' => 'database_product_reviews',
                 ],
                 'placeholder_fields' => $placeholderFields,
             ],
@@ -214,24 +239,26 @@ class ProductController extends Controller
 
     private function getDisplayPrice(Product $product): float
     {
-        if ($product->activeVariations->isNotEmpty()) {
-            $finalPrices = $product->activeVariations->map(function ($variation) {
-                return (float) ($variation->sale_price ?? $variation->price ?? $product->sale_price ?? $product->price);
-            });
-
-            return (float) $finalPrices->min();
-        }
-
         return (float) ($product->sale_price ?? $product->price);
+    }
+
+    private function getPricePayload(Product $product): array
+    {
+        $originalPrice = (float) $product->price;
+        $salePrice = $product->sale_price !== null ? (float) $product->sale_price : null;
+        $displayPrice = (float) ($salePrice ?? $originalPrice);
+
+        return [
+            'price' => $displayPrice,
+            'original_price' => $originalPrice,
+            'sale_price' => $salePrice,
+            'display_price' => $displayPrice,
+        ];
     }
 
     private function getStockQuantity(Product $product): int
     {
-        if ($product->activeVariations->isNotEmpty()) {
-            return (int) $product->activeVariations->sum('stock_quantity');
-        }
-
-        return (int) $product->stock_quantity;
+        return (int) $product->calculated_stock;
     }
 
     private function resolvePrimaryImage(Product $product): ?string
@@ -284,37 +311,4 @@ class ProductController extends Controller
         })->filter()->values()->all();
     }
 
-    private function fallbackReviews(): array
-    {
-        return [
-            [
-                'id' => null,
-                'review_id' => null,
-                'reviewer_name' => 'MyGooners Customer',
-                'reviewer_avatar' => asset('images/profile-image-default.png'),
-                'reviewer_avatar_url' => null,
-                'rating' => 5,
-                'comment' => 'Great product quality and fast delivery. Worth buying.',
-                'date' => null,
-                'photos' => [],
-                'is_verified' => false,
-                'is_verified_purchase' => false,
-                'created_at' => null,
-            ],
-            [
-                'id' => null,
-                'review_id' => null,
-                'reviewer_name' => 'Arsenal Fan',
-                'reviewer_avatar' => asset('images/profile-image-default.png'),
-                'reviewer_avatar_url' => null,
-                'rating' => 4,
-                'comment' => 'Good fit and comfortable material. Recommended.',
-                'date' => null,
-                'photos' => [],
-                'is_verified' => false,
-                'is_verified_purchase' => false,
-                'created_at' => null,
-            ],
-        ];
-    }
 }

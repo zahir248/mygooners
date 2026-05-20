@@ -66,6 +66,19 @@ use Illuminate\Support\Str;
                         </div>
                     </div>
 
+                    @if($review->photos->count() > 0)
+                        <div class="mb-6">
+                            <label class="block text-sm font-medium text-gray-700 mb-3">Gambar Ulasan</label>
+                            <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                                @foreach($review->photos as $photo)
+                                    <a href="{{ $photo->image_url }}" target="_blank" rel="noopener noreferrer">
+                                        <img src="{{ $photo->image_url }}" alt="Review Photo" class="w-full h-28 object-cover rounded-lg border border-gray-200">
+                                    </a>
+                                @endforeach
+                            </div>
+                        </div>
+                    @endif
+
                     <!-- Dates -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
@@ -91,16 +104,10 @@ use Illuminate\Support\Str;
                 <div class="px-6 py-4">
                     <div class="flex items-center mb-6">
                         @if($review->user)
-                            @if($review->user->profile_image)
-                                @if(Str::startsWith($review->user->profile_image, 'http'))
-                                    <img src="{{ $review->user->profile_image }}" 
-                                         alt="{{ $review->user->name }}" 
-                                         class="w-20 h-20 rounded-full mr-4 object-cover">
-                                @else
-                                    <img src="{{ asset('storage/' . $review->user->profile_image) }}" 
-                                         alt="{{ $review->user->name }}" 
-                                         class="w-20 h-20 rounded-full mr-4 object-cover">
-                                @endif
+                            @if($review->reviewer_avatar_url)
+                                <img src="{{ $review->reviewer_avatar_url }}" 
+                                     alt="{{ $review->user->name }}" 
+                                     class="w-20 h-20 rounded-full mr-4 object-cover">
                             @else
                                 <div class="w-20 h-20 rounded-full mr-4 bg-red-100 flex items-center justify-center">
                                     <span class="text-2xl font-bold text-red-600">{{ substr($review->user->name, 0, 1) }}</span>

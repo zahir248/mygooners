@@ -49,7 +49,7 @@
 
         <!-- Review Form -->
         <div class="bg-white rounded-xl shadow-lg p-6 sm:p-8">
-            <form action="{{ route('reviews.update', [$product, $review]) }}" method="POST">
+            <form action="{{ route('reviews.update', [$product, $review]) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
                 
@@ -72,6 +72,33 @@
                         <span id="rating-text">{{ $review->rating == 1 ? 'Lemah' : ($review->rating == 2 ? 'Sederhana' : ($review->rating == 3 ? 'Baik' : ($review->rating == 4 ? 'Sangat Baik' : 'Cemerlang'))) }}</span>
                     </div>
                     @error('rating')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <div class="mb-6">
+                    <label for="photos" class="block text-sm font-medium text-gray-700 mb-2">Gambar Ulasan (Pilihan)</label>
+                    @if($review->photos->count() > 0)
+                        <div class="grid grid-cols-3 gap-2 mb-3">
+                            @foreach($review->photos as $photo)
+                                <img src="{{ $photo->image_url }}" alt="Review Photo" class="w-full h-24 object-cover rounded-lg border border-gray-200">
+                            @endforeach
+                        </div>
+                        <p class="text-xs text-gray-500 mb-2">Memuat naik gambar baharu akan menggantikan semua gambar sedia ada.</p>
+                    @endif
+                    <input
+                        id="photos"
+                        name="photos[]"
+                        type="file"
+                        accept="image/jpeg,image/png,image/webp"
+                        multiple
+                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-arsenal focus:border-transparent"
+                    >
+                    <p class="mt-1 text-xs text-gray-500">Maksimum 5 gambar (jpg, jpeg, png, webp), setiap satu sehingga 4MB.</p>
+                    @error('photos')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                    @error('photos.*')
                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                     @enderror
                 </div>

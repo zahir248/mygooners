@@ -60,19 +60,11 @@ class MobilePaymentController extends Controller
                 'return_url' => 'nullable|url',
             ]);
         } catch (ValidationException $e) {
-            $payload = [
+            return response()->json([
                 'success' => false,
-                'message' => 'Data checkout tidak sah.',
+                'message' => 'Unable to process your order. Please check your cart and try again.',
                 'errors' => $e->errors(),
-            ];
-
-            if (app()->isLocal()) {
-                $payload['debug'] = [
-                    'received_payload' => $request->all(),
-                ];
-            }
-
-            return response()->json($payload, 422);
+            ], 422);
         }
 
         try {
@@ -112,7 +104,7 @@ class MobilePaymentController extends Controller
                         DB::rollBack();
                         return response()->json([
                             'success' => false,
-                            'message' => 'Variasi produk tidak sah.',
+                            'message' => 'Something went wrong. Please try again.',
                             'product_variation_id' => $item['product_variation_id'],
                         ], 422);
                     }
@@ -121,7 +113,7 @@ class MobilePaymentController extends Controller
                         DB::rollBack();
                         return response()->json([
                             'success' => false,
-                            'message' => 'Stok variasi tidak mencukupi.',
+                            'message' => 'Selected size is out of stock.',
                             'product_variation_id' => $variation->id,
                             'available_stock' => (int) $variation->stock_quantity,
                         ], 422);
@@ -134,7 +126,7 @@ class MobilePaymentController extends Controller
                         DB::rollBack();
                         return response()->json([
                             'success' => false,
-                            'message' => 'Stok produk tidak mencukupi.',
+                            'message' => 'This product is currently out of stock.',
                             'product_id' => $product->id,
                             'available_stock' => (int) $product->stock_quantity,
                         ], 422);
@@ -165,16 +157,12 @@ class MobilePaymentController extends Controller
 
             if (abs($serverTotal - $clientTotal) > 0.01) {
                 DB::rollBack();
-                $response = [
+                return response()->json([
                     'success' => false,
-                    'message' => 'Jumlah pembayaran tidak sepadan antara aplikasi dan pelayan.',
+                    'message' => 'Unable to process your order. Please check your cart and try again.',
                     'expected_total' => $serverTotal,
                     'received_total' => $clientTotal,
-                ];
-                if (app()->isLocal()) {
-                    $response['debug'] = $debugContext;
-                }
-                return response()->json($response, 422);
+                ], 422);
             }
 
             $order = Order::create([
@@ -219,27 +207,11 @@ class MobilePaymentController extends Controller
 
             if (!$paymentResult['success']) {
                 DB::rollBack();
-                $response = [
+                return response()->json([
                     'success' => false,
-                    'message' => $paymentResult['message'] ?? 'Gagal mencipta bil ToyyibPay.',
+                    'message' => $paymentResult['message'] ?? 'Something went wrong. Please try again.',
                     'error_code' => $paymentResult['error_code'] ?? 'TOYYIBPAY_CREATE_BILL_FAILED',
-                ];
-
-                if (app()->isLocal()) {
-                    $response['debug'] = array_merge($debugContext, [
-                        'toyyibpay_status_code' => $paymentResult['status_code'] ?? null,
-                        'toyyibpay_raw_response' => $paymentResult['raw_response'] ?? null,
-                        'callback_url' => $callbackUrl,
-                        'return_url' => $returnUrl,
-                        'toyyibpay_config' => [
-                            'secret_key_present' => !empty(config('services.toyyibpay.user_secret_key')),
-                            'category_code_present' => !empty(config('services.toyyibpay.category_code')),
-                            'base_url' => config('services.toyyibpay.base_url'),
-                        ],
-                    ]);
-                }
-
-                return response()->json($response, 422);
+                ], 422);
             }
 
             $order->update([
@@ -262,20 +234,10 @@ class MobilePaymentController extends Controller
                 'error' => $e->getMessage(),
             ]);
 
-            $response = [
+            return response()->json([
                 'success' => false,
-                'message' => 'Ralat semasa mencipta pembayaran.',
-            ];
-
-            if (app()->isLocal()) {
-                $response['debug'] = [
-                    'exception' => $e->getMessage(),
-                    'trace_line' => $e->getLine(),
-                    'trace_file' => $e->getFile(),
-                ];
-            }
-
-            return response()->json($response, 500);
+                'message' => 'Something went wrong. Please try again.',
+            ], 500);
         }
     }
 
@@ -388,7 +350,7 @@ class MobilePaymentController extends Controller
 
                 return response()->json([
                     'success' => false,
-                    'message' => $verification['message'] ?? 'Gagal mengesahkan pembayaran ToyyibPay.',
+                    'message' => 'Payment is not completed yet.',
                     'order_id' => $lockedOrder->id,
                     'bill_code' => $billCode,
                     'payment_status' => $lockedOrder->payment_status,

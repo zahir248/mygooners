@@ -107,24 +107,9 @@ class MobileProfileController extends Controller
             'bio' => $user->bio,
             'location' => $user->location,
             'profile_image' => $user->profile_image,
-            'profile_image_url' => $this->buildProfileImageUrl($request, $user->profile_image),
+            'profile_image_url' => $user->profile_image_url,
             'created_at' => optional($user->created_at)?->toISOString(),
         ];
-    }
-
-    private function buildProfileImageUrl(Request $request, ?string $profileImage): ?string
-    {
-        if (!$profileImage) {
-            return null;
-        }
-
-        if (str_starts_with($profileImage, 'http://') || str_starts_with($profileImage, 'https://')) {
-            return $profileImage;
-        }
-
-        $baseUrl = rtrim(config('app.url') ?: $request->getSchemeAndHttpHost(), '/');
-
-        return $baseUrl . '/profile-image/' . basename($profileImage);
     }
 
     private function isLocalStoredImage(?string $path): bool

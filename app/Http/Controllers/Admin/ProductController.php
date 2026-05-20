@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Product;
+use App\Models\ProductVariation;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -45,13 +46,46 @@ class ProductController extends Controller
         if ($request->filled('stock')) {
             switch ($request->stock) {
                 case 'in_stock':
-                    $query->where('stock_quantity', '>', 10);
+                    $query->where(function ($q) {
+                        $q->where(function ($baseProductQuery) {
+                            $baseProductQuery
+                                ->whereDoesntHave('activeVariations')
+                                ->where('stock_quantity', '>', 10);
+                        })->orWhereHas('activeVariations', function ($variationQuery) {
+                            $variationQuery
+                                ->selectRaw('product_id')
+                                ->groupBy('product_id')
+                                ->havingRaw('SUM(stock_quantity) > 10');
+                        });
+                    });
                     break;
                 case 'low_stock':
-                    $query->whereBetween('stock_quantity', [1, 10]);
+                    $query->where(function ($q) {
+                        $q->where(function ($baseProductQuery) {
+                            $baseProductQuery
+                                ->whereDoesntHave('activeVariations')
+                                ->whereBetween('stock_quantity', [1, 10]);
+                        })->orWhereHas('activeVariations', function ($variationQuery) {
+                            $variationQuery
+                                ->selectRaw('product_id')
+                                ->groupBy('product_id')
+                                ->havingRaw('SUM(stock_quantity) BETWEEN 1 AND 10');
+                        });
+                    });
                     break;
                 case 'out_of_stock':
-                    $query->where('stock_quantity', 0);
+                    $query->where(function ($q) {
+                        $q->where(function ($baseProductQuery) {
+                            $baseProductQuery
+                                ->whereDoesntHave('activeVariations')
+                                ->where('stock_quantity', '<=', 0);
+                        })->orWhereHas('activeVariations', function ($variationQuery) {
+                            $variationQuery
+                                ->selectRaw('product_id')
+                                ->groupBy('product_id')
+                                ->havingRaw('SUM(stock_quantity) <= 0');
+                        });
+                    });
                     break;
             }
         }
@@ -79,7 +113,10 @@ class ProductController extends Controller
             'Other' => 'Lain-lain'
         ];
 
-        return view('admin.products.create', compact('categories'));
+        $hasActiveVariations = false;
+        $calculatedVariationStock = 0;
+
+        return view('admin.products.create', compact('categories', 'hasActiveVariations', 'calculatedVariationStock'));
     }
 
     public function store(Request $request)
@@ -117,7 +154,7 @@ class ProductController extends Controller
         $product->category = $request->category;
         $product->price = $request->price;
         $product->sale_price = $request->sale_price;
-        $product->stock_quantity = $request->stock_quantity;
+        $product->stock_quantity = (int) $request->stock_quantity;
         $product->tags = $request->tags ? explode(',', $request->tags) : [];
         $product->meta_title = $request->meta_title;
         $product->meta_description = $request->meta_description;
@@ -181,6 +218,8 @@ class ProductController extends Controller
             }
         }
 
+        $this->syncProductStockFromVariations($product, (int) $request->stock_quantity);
+
         return redirect()->route('admin.products.index')->with('success', 'Produk berjaya dicipta.');
     }
 
@@ -231,6 +270,8 @@ class ProductController extends Controller
     public function edit($id)
     {
         $product = Product::with(['variations'])->findOrFail($id);
+        $hasActiveVariations = $product->activeVariations()->exists();
+        $calculatedVariationStock = (int) $product->activeVariations()->sum('stock_quantity');
 
         $categories = [
             'Jerseys' => 'Jersi',
@@ -241,7 +282,7 @@ class ProductController extends Controller
             'Other' => 'Lain-lain'
         ];
 
-        return view('admin.products.edit', compact('product', 'categories'));
+        return view('admin.products.edit', compact('product', 'categories', 'hasActiveVariations', 'calculatedVariationStock'));
     }
 
     public function update(Request $request, $id)
@@ -289,7 +330,7 @@ class ProductController extends Controller
         $product->category = $request->category;
         $product->price = $request->price;
         $product->sale_price = $request->sale_price;
-        $product->stock_quantity = $request->stock_quantity;
+        $manualStockQuantity = (int) $request->stock_quantity;
         $product->tags = $request->tags ? explode(',', $request->tags) : [];
         
         $product->meta_title = $request->meta_title;
@@ -377,6 +418,8 @@ class ProductController extends Controller
             }
         }
 
+        $this->syncProductStockFromVariations($product, $manualStockQuantity);
+
         return redirect()->route('admin.products.index')->with('success', 'Produk berjaya dikemas kini.');
     }
 
@@ -453,7 +496,8 @@ class ProductController extends Controller
 
     public function deleteVariation($variationId)
     {
-        $variation = \App\Models\ProductVariation::findOrFail($variationId);
+        $variation = ProductVariation::findOrFail($variationId);
+        $product = $variation->product;
         
         // Delete variation images from storage
         if ($variation->images) {
@@ -464,17 +508,24 @@ class ProductController extends Controller
 
         $variation->delete();
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Variasi produk berjaya dipadam.'
-        ]);
+        $this->syncProductStockFromVariations($product, (int) $product->stock_quantity);
+
+        if (request()->expectsJson() || request()->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Product variation deleted successfully.'
+            ]);
+        }
+
+        return redirect()->back()->with('success', 'Product variation deleted successfully.');
     }
 
     public function getVariationForEdit($variationId)
     {
-        $variation = \App\Models\ProductVariation::findOrFail($variationId);
+        $variation = ProductVariation::findOrFail($variationId);
         
         return response()->json([
+            'success' => true,
             'variation' => $variation,
             'images' => $variation->images ? array_map(function($image) {
                 return $image ? route('variation.image', basename($image)) : null;
@@ -484,7 +535,7 @@ class ProductController extends Controller
 
     public function updateVariation(Request $request, $variationId)
     {
-        $variation = \App\Models\ProductVariation::findOrFail($variationId);
+        $variation = ProductVariation::findOrFail($variationId);
         
         $request->validate([
             'name' => 'required|string|max:255',
@@ -493,7 +544,7 @@ class ProductController extends Controller
             'sale_price' => 'nullable|numeric|min:0',
             'stock_quantity' => 'required|integer|min:0',
             'is_active' => 'boolean',
-            'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:10240',
+            'new_images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:10240',
         ]);
 
         $variation->name = $request->name;
@@ -504,9 +555,9 @@ class ProductController extends Controller
         $variation->is_active = $request->has('is_active');
 
         // Handle image uploads
-        if ($request->hasFile('images')) {
+        if ($request->hasFile('new_images')) {
             $images = [];
-            foreach ($request->file('images') as $image) {
+            foreach ($request->file('new_images') as $image) {
                 $filename = 'variations/' . time() . '_' . Str::slug($variation->name) . '_' . Str::random(6) . '.' . $image->getClientOriginalExtension();
                 $stored = Storage::disk('public')->putFileAs(
                     dirname($filename),
@@ -520,11 +571,48 @@ class ProductController extends Controller
             $variation->images = $images;
         }
 
-        $variation->save();
+        try {
+            $variation->save();
+            $this->syncProductStockFromVariations($variation->product, (int) $variation->product->stock_quantity);
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Variasi produk berjaya dikemas kini.'
-        ]);
+            if ($request->expectsJson() || $request->ajax()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Product variation updated successfully.'
+                ]);
+            }
+
+            return redirect()->back()->with('success', 'Product variation updated successfully.');
+        } catch (\Throwable $e) {
+            \Log::error('Unable to update variation', [
+                'variation_id' => $variationId,
+                'error' => $e->getMessage(),
+            ]);
+
+            if ($request->expectsJson() || $request->ajax()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Unable to update variation. Please try again.',
+                ], 500);
+            }
+
+            return redirect()->back()->with('error', 'Unable to update variation. Please try again.');
+        }
     }
-} 
+
+    private function syncProductStockFromVariations(Product $product, int $manualStockIfNoVariation): void
+    {
+        $activeVariationsTotal = (int) $product->activeVariations()->sum('stock_quantity');
+
+        if ($product->activeVariations()->exists()) {
+            if ((int) $product->stock_quantity !== $activeVariationsTotal) {
+                $product->updateQuietly(['stock_quantity' => $activeVariationsTotal]);
+            }
+            return;
+        }
+
+        if ((int) $product->stock_quantity !== $manualStockIfNoVariation) {
+            $product->updateQuietly(['stock_quantity' => $manualStockIfNoVariation]);
+        }
+    }
+}

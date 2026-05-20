@@ -143,16 +143,10 @@
                             <td class="px-6 py-4">
                                 <div class="flex items-start space-x-3">
                                     <div class="flex-shrink-0 h-10 w-10">
-                                        @if($review->user && $review->user->profile_image)
-                                            @if(Str::startsWith($review->user->profile_image, 'http'))
-                                                <img src="{{ $review->user->profile_image }}" 
-                                                     alt="{{ $review->user->name }}" 
-                                                     class="h-10 w-10 rounded-full object-cover">
-                                            @else
-                                                <img src="{{ asset('storage/' . $review->user->profile_image) }}" 
-                                             alt="{{ $review->user->name }}" 
-                                                     class="h-10 w-10 rounded-full object-cover">
-                                            @endif
+                                        @if($review->user && $review->reviewer_avatar_url)
+                                            <img src="{{ $review->reviewer_avatar_url }}" 
+                                                 alt="{{ $review->user->name }}" 
+                                                 class="h-10 w-10 rounded-full object-cover">
                                         @elseif($review->user)
                                             <div class="h-10 w-10 rounded-full bg-red-600 flex items-center justify-center">
                                                 <span class="text-sm font-medium text-white">{{ substr($review->user->name, 0, 1) }}</span>
@@ -222,6 +216,15 @@
                                 <div class="text-sm text-gray-900 max-w-xs">
                                     {{ Str::limit($review->comment, 100) }}
                                 </div>
+                                @if($review->photos->count() > 0)
+                                    <div class="grid grid-cols-3 gap-1 mt-2 max-w-xs">
+                                        @foreach($review->photos as $photo)
+                                            <a href="{{ $photo->image_url }}" target="_blank" rel="noopener noreferrer">
+                                                <img src="{{ $photo->image_url }}" alt="Review Photo" class="w-full h-14 object-cover rounded border border-gray-200">
+                                            </a>
+                                        @endforeach
+                                    </div>
+                                @endif
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                 <div>

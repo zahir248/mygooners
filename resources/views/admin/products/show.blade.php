@@ -129,17 +129,17 @@ use Illuminate\Support\Str;
                                 <div>
                                     <dt class="text-sm font-medium text-gray-500">Stok</dt>
                                     <dd class="mt-1 text-sm text-gray-900">
-                                        @if($product->stock_quantity > 10)
+                                        @if($product->calculated_stock > 10)
                                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                                {{ $product->stock_quantity }} Dalam Stok
+                                                {{ $product->calculated_stock }} Dalam Stok
                                             </span>
-                                        @elseif($product->stock_quantity > 0)
+                                        @elseif($product->calculated_stock > 0)
                                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                                                {{ $product->stock_quantity }} Stok Rendah
+                                                {{ $product->calculated_stock }} Stok Rendah
                                             </span>
                                         @else
                                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
-                                                Kehabisan Stok
+                                                No Stock
                                             </span>
                                         @endif
                                     </dd>
@@ -332,7 +332,7 @@ use Illuminate\Support\Str;
                         </div>
                         <div class="flex items-center justify-between">
                             <span class="text-sm font-medium text-gray-500">Stok Semasa</span>
-                            <span class="text-sm text-gray-900">{{ $product->stock_quantity }} unit</span>
+                            <span class="text-sm text-gray-900">{{ $product->calculated_stock }} unit</span>
                         </div>
                     </div>
                 </div>
@@ -629,3 +629,4 @@ use Illuminate\Support\Str;
     }
 </script>
 @endsection 
+

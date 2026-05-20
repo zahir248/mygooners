@@ -547,10 +547,16 @@
                                     </span>
                                 </div>
                             @endif
-                            @if($product->stock_quantity <= 5 && $product->stock_quantity > 0)
+                            @if($product->is_out_of_stock)
+                                <div class="absolute bottom-4 left-4">
+                                    <span class="bg-red-600 text-white px-3 py-1 rounded-full text-sm font-medium">
+                                        No Stock
+                                    </span>
+                                </div>
+                            @elseif($product->calculated_stock <= 5 && $product->calculated_stock > 0)
                                 <div class="absolute bottom-4 left-4">
                                     <span class="bg-orange-500 text-white px-3 py-1 rounded-full text-sm font-medium">
-                                        Hanya {{ $product->stock_quantity }} lagi
+                                        Hanya {{ $product->calculated_stock }} lagi
                                     </span>
                                 </div>
                             @endif

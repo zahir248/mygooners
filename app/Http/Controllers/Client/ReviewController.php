@@ -6,7 +6,11 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\ProductReview;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Storage;
 
 class ReviewController extends Controller
 {
@@ -49,6 +53,8 @@ class ReviewController extends Controller
         $validated = $request->validate([
             'rating' => 'required|integer|min:1|max:5',
             'comment' => 'required|string|min:10|max:1000',
+            'photos' => 'nullable|array|max:5',
+            'photos.*' => 'image|mimes:jpg,jpeg,png,webp|max:4096',
         ], [
             'rating.required' => 'Rating diperlukan.',
             'rating.integer' => 'Rating mesti nombor bulat.',
@@ -57,16 +63,37 @@ class ReviewController extends Controller
             'comment.required' => 'Komen diperlukan.',
             'comment.min' => 'Komen mesti sekurang-kurangnya 10 aksara.',
             'comment.max' => 'Komen tidak boleh melebihi 1000 aksara.',
+            'photos.max' => 'Maksimum 5 gambar dibenarkan.',
+            'photos.*.image' => 'Fail mesti imej yang sah.',
         ]);
 
-        // Create the review
-        ProductReview::create([
-            'product_id' => $product->id,
-            'user_id' => Auth::id(),
-            'rating' => $validated['rating'],
-            'comment' => $validated['comment'],
-            'is_verified' => true, // Reviews are automatically verified
-        ]);
+        try {
+            DB::transaction(function () use ($request, $product, $validated) {
+                $review = ProductReview::create([
+                    'product_id' => $product->id,
+                    'user_id' => Auth::id(),
+                    'rating' => $validated['rating'],
+                    'comment' => $validated['comment'],
+                    'is_verified' => true,
+                ]);
+
+                if (Schema::hasTable('product_review_photos') && $request->hasFile('photos')) {
+                    foreach ((array) $request->file('photos') as $photo) {
+                        $stored = $photo->store('review_images', 'public');
+                        $review->photos()->create(['image_path' => $stored]);
+                    }
+                }
+            });
+        } catch (\Throwable $e) {
+            Log::error('Web review submission failed', [
+                'product_id' => $product->id,
+                'user_id' => Auth::id(),
+                'error' => $e->getMessage(),
+            ]);
+
+            return redirect()->route('shop.show', $product->slug)
+                ->with('error', 'Ulasan gagal dihantar. Sila cuba lagi.');
+        }
 
         return redirect()->route('shop.show', $product->slug)
             ->with('success', 'Ulasan anda telah berjaya dihantar dan dipaparkan! Terima kasih atas maklum balas anda.');
@@ -98,6 +125,8 @@ class ReviewController extends Controller
         $validated = $request->validate([
             'rating' => 'required|integer|min:1|max:5',
             'comment' => 'required|string|min:10|max:1000',
+            'photos' => 'nullable|array|max:5',
+            'photos.*' => 'image|mimes:jpg,jpeg,png,webp|max:4096',
         ], [
             'rating.required' => 'Rating diperlukan.',
             'rating.integer' => 'Rating mesti nombor bulat.',
@@ -106,13 +135,43 @@ class ReviewController extends Controller
             'comment.required' => 'Komen diperlukan.',
             'comment.min' => 'Komen mesti sekurang-kurangnya 10 aksara.',
             'comment.max' => 'Komen tidak boleh melebihi 1000 aksara.',
+            'photos.max' => 'Maksimum 5 gambar dibenarkan.',
+            'photos.*.image' => 'Fail mesti imej yang sah.',
         ]);
 
-        $review->update([
-            'rating' => $validated['rating'],
-            'comment' => $validated['comment'],
-            'is_verified' => true, // Reviews remain verified when updated
-        ]);
+        try {
+            DB::transaction(function () use ($request, $review, $validated) {
+                $review->update([
+                    'rating' => $validated['rating'],
+                    'comment' => $validated['comment'],
+                    'is_verified' => true,
+                ]);
+
+                if (Schema::hasTable('product_review_photos') && $request->hasFile('photos')) {
+                    foreach ($review->photos as $existingPhoto) {
+                        if (!empty($existingPhoto->image_path)) {
+                            Storage::disk('public')->delete($existingPhoto->image_path);
+                        }
+                    }
+                    $review->photos()->delete();
+
+                    foreach ((array) $request->file('photos') as $photo) {
+                        $stored = $photo->store('review_images', 'public');
+                        $review->photos()->create(['image_path' => $stored]);
+                    }
+                }
+            });
+        } catch (\Throwable $e) {
+            Log::error('Web review update failed', [
+                'review_id' => $review->id,
+                'product_id' => $product->id,
+                'user_id' => Auth::id(),
+                'error' => $e->getMessage(),
+            ]);
+
+            return redirect()->route('shop.show', $product->slug)
+                ->with('error', 'Ulasan gagal dikemas kini. Sila cuba lagi.');
+        }
 
         return redirect()->route('shop.show', $product->slug)
             ->with('success', 'Ulasan anda telah berjaya dikemas kini!');
@@ -126,6 +185,12 @@ class ReviewController extends Controller
         // Check if user owns this review
         if ((int)$review->user_id !== Auth::id()) {
             abort(403, 'Anda hanya boleh memadamkan ulasan anda sendiri.');
+        }
+
+        foreach ($review->photos as $photo) {
+            if (!empty($photo->image_path)) {
+                Storage::disk('public')->delete($photo->image_path);
+            }
         }
 
         $review->delete();

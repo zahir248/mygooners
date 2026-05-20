@@ -28,29 +28,47 @@ class CartController extends Controller
         ]);
 
         $cart = Cart::getOrCreateCart();
-        $product = Product::findOrFail($request->product_id);
+        $product = Product::with('activeVariations')->findOrFail($request->product_id);
         
         // Determine price and variation
         $price = $product->price;
         $variationId = null;
         
+        $variation = null;
         if ($request->variation_id) {
-            $variation = ProductVariation::findOrFail($request->variation_id);
+            $variation = ProductVariation::query()
+                ->where('id', $request->variation_id)
+                ->where('product_id', $product->id)
+                ->where('is_active', true)
+                ->firstOrFail();
             $price = $variation->sale_price ?: $variation->price;
             $variationId = $variation->id;
         } else {
             $price = $product->sale_price ?: $product->price;
         }
 
-        // Check stock availability
-        $stockQuantity = $variationId ? 
-            ProductVariation::find($variationId)->stock_quantity : 
-            $product->stock_quantity;
+        if ($product->hasVariations() && !$variationId) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Selected size is out of stock.'
+            ], 400);
+        }
+
+        $stockQuantity = $variationId
+            ? (int) optional($variation)->stock_quantity
+            : (int) $product->calculated_stock;
+
+        if ($stockQuantity <= 0) {
+            return response()->json([
+                'success' => false,
+                'message' => $variationId ? 'Selected size is out of stock.' : 'This product is currently out of stock.'
+            ], 400);
+        }
             
         if ($stockQuantity < $request->quantity) {
             return response()->json([
                 'success' => false,
-                'message' => 'Stok tidak mencukupi'
+                'message' => 'Requested quantity exceeds available stock.'
             ], 400);
         }
 
@@ -69,7 +87,7 @@ class CartController extends Controller
             if ($newQuantity > $stockQuantity) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Stok tidak mencukupi untuk menambah kuantiti ini'
+                    'message' => 'Requested quantity exceeds available stock.'
                 ], 400);
             }
             
@@ -112,14 +130,23 @@ class CartController extends Controller
         }
 
         // Check stock availability
-        $stockQuantity = $cartItem->variation ? 
-            $cartItem->variation->stock_quantity : 
-            $cartItem->product->stock_quantity;
+        $stockQuantity = $cartItem->variation
+            ? (int) $cartItem->variation->stock_quantity
+            : (int) $cartItem->product->calculated_stock;
+
+        if ($stockQuantity <= 0) {
+            return response()->json([
+                'success' => false,
+                'message' => $cartItem->variation
+                    ? 'Selected size is out of stock.'
+                    : 'This product is currently out of stock.'
+            ], 400);
+        }
             
         if ($stockQuantity < $request->quantity) {
             return response()->json([
                 'success' => false,
-                'message' => 'Stok tidak mencukupi'
+                'message' => 'Requested quantity exceeds available stock.'
             ], 400);
         }
 

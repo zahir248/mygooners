@@ -63,20 +63,27 @@ class DirectCheckoutController extends Controller
             'variation_id' => 'nullable|exists:product_variations,id',
         ]);
 
-        $product = Product::with(['variations'])->findOrFail($request->product_id);
+        $product = Product::with(['activeVariations'])->findOrFail($request->product_id);
         $quantity = $request->quantity;
         $variationId = $request->variation_id;
         
         // Get variation if specified
         $variation = null;
         if ($variationId) {
-            $variation = $product->variations()->findOrFail($variationId);
+            $variation = $product->activeVariations()->findOrFail($variationId);
         }
 
-        // Check stock availability
-        $stockQuantity = $variation ? $variation->stock_quantity : $product->stock_quantity;
+        if ($product->hasVariations() && !$variation) {
+            return redirect()->back()->with('error', 'Selected size is out of stock.');
+        }
+
+        $stockQuantity = $variation ? (int) $variation->stock_quantity : (int) $product->calculated_stock;
+        if ($stockQuantity <= 0) {
+            return redirect()->back()->with('error', $variation ? 'Selected size is out of stock.' : 'This product is currently out of stock.');
+        }
+
         if ($stockQuantity < $quantity) {
-            return redirect()->back()->with('error', 'Stok tidak mencukupi untuk kuantiti yang dipilih.');
+            return redirect()->back()->with('error', 'Requested quantity exceeds available stock.');
         }
 
         // Calculate prices (use sale price if available, otherwise use regular price)
@@ -160,6 +167,27 @@ class DirectCheckoutController extends Controller
         $checkoutData = session('direct_checkout');
         if (!$checkoutData) {
             return redirect()->back()->with('error', 'Sesi checkout telah tamat. Sila cuba lagi.');
+        }
+
+        $product = Product::find($checkoutData['product_id']);
+        if (!$product) {
+            return redirect()->route('shop.index')->with('error', 'Something went wrong. Please try again.');
+        }
+
+        if (!empty($checkoutData['variation_id'])) {
+            $variation = ProductVariation::query()
+                ->where('id', $checkoutData['variation_id'])
+                ->where('product_id', $product->id)
+                ->where('is_active', true)
+                ->first();
+
+            if (!$variation || (int) $variation->stock_quantity < (int) $checkoutData['quantity']) {
+                return redirect()->route('shop.show', $product->slug)
+                    ->with('error', 'Selected size is out of stock.');
+            }
+        } elseif ((int) $product->calculated_stock < (int) $checkoutData['quantity']) {
+            return redirect()->route('shop.show', $product->slug)
+                ->with('error', ((int) $product->calculated_stock <= 0) ? 'This product is currently out of stock.' : 'Requested quantity exceeds available stock.');
         }
 
         try {
@@ -989,9 +1017,15 @@ class DirectCheckoutController extends Controller
                 // Update stock
                 if ($order->items->first()->product_variation_id) {
                     $variation = ProductVariation::find($order->items->first()->product_variation_id);
+                    if (!$variation || (int) $variation->stock_quantity < (int) $order->items->first()->quantity) {
+                        throw new \Exception('Selected size is out of stock.');
+                    }
                     $variation->decrement('stock_quantity', $order->items->first()->quantity);
                 } else {
                     $product = Product::find($order->items->first()->product_id);
+                    if (!$product || (int) $product->calculated_stock < (int) $order->items->first()->quantity) {
+                        throw new \Exception('This product is currently out of stock.');
+                    }
                     $product->decrement('stock_quantity', $order->items->first()->quantity);
                 }
 
@@ -1294,7 +1328,7 @@ class DirectCheckoutController extends Controller
             }
             
             return redirect()->route('checkout.orders')
-                           ->with('warning', 'Pembayaran belum diselesaikan. Sila cuba lagi atau hubungi kami.');
+                           ->with('warning', 'Payment is not completed yet.');
         }
 
         // Check if session data is available
@@ -1389,9 +1423,15 @@ class DirectCheckoutController extends Controller
             // Update stock (only if not already updated)
             if ($pendingCheckout['variation_id']) {
                 $variation = ProductVariation::find($pendingCheckout['variation_id']);
+                if (!$variation || (int) $variation->stock_quantity < (int) $pendingCheckout['quantity']) {
+                    throw new \Exception('Selected size is out of stock.');
+                }
                 $variation->decrement('stock_quantity', $pendingCheckout['quantity']);
             } else {
                 $product = Product::find($pendingCheckout['product_id']);
+                if (!$product || (int) $product->calculated_stock < (int) $pendingCheckout['quantity']) {
+                    throw new \Exception('This product is currently out of stock.');
+                }
                 $product->decrement('stock_quantity', $pendingCheckout['quantity']);
             }
 
@@ -1439,7 +1479,7 @@ class DirectCheckoutController extends Controller
             ]);
                 
             return redirect()->route('checkout.orders')
-                           ->with('error', 'Ralat semasa memproses pesanan. Sila hubungi kami.');
+                           ->with('error', 'Unable to process your order. Please check your cart and try again.');
         }
     }
 
@@ -1517,7 +1557,7 @@ class DirectCheckoutController extends Controller
                     'order_id' => $orderId,
                     'user_id' => auth()->id()
                 ]);
-                return back()->with('error', 'Gagal menjana invois. Sila cuba lagi.');
+                return back()->with('error', 'Unable to download invoice. Please try again later.');
             }
             
             // Check if file exists
@@ -1527,7 +1567,7 @@ class DirectCheckoutController extends Controller
                     'user_id' => auth()->id(),
                     'filepath' => $pdfPath
                 ]);
-                return back()->with('error', 'Fail invois tidak dijumpai. Sila cuba lagi.');
+                return back()->with('error', 'Unable to download invoice. Please try again later.');
             }
             
             // Get the filename from the path
@@ -1549,7 +1589,7 @@ class DirectCheckoutController extends Controller
                 'user_id' => auth()->id()
             ]);
             
-            return back()->with('error', 'Gagal memuat turun invois. Sila cuba lagi.');
+            return back()->with('error', 'Unable to download invoice. Please try again later.');
         }
     }
 
@@ -1583,7 +1623,7 @@ class DirectCheckoutController extends Controller
                     'order_id' => $orderId,
                     'user_id' => auth()->id()
                 ]);
-                return back()->with('error', 'Gagal menjana invois. Sila cuba lagi.');
+                return back()->with('error', 'Unable to download invoice. Please try again later.');
             }
             
             // Check if file exists
@@ -1593,7 +1633,7 @@ class DirectCheckoutController extends Controller
                     'user_id' => auth()->id(),
                     'filepath' => $pdfPath
                 ]);
-                return back()->with('error', 'Fail invois tidak dijumpai. Sila cuba lagi.');
+                return back()->with('error', 'Unable to download invoice. Please try again later.');
             }
             
             // Get the filename and determine content type
@@ -1614,7 +1654,7 @@ class DirectCheckoutController extends Controller
                 'user_id' => auth()->id()
             ]);
             
-            return back()->with('error', 'Gagal memaparkan invois. Sila cuba lagi.');
+            return back()->with('error', 'Unable to download invoice. Please try again later.');
         }
     }
 
@@ -1638,3 +1678,4 @@ class DirectCheckoutController extends Controller
         }
     }
 }
+

@@ -209,7 +209,7 @@
                                             @endif
                                         </div>
                                         <p class="text-sm text-gray-500 line-clamp-2">
-                                            ID Produk: #{{ $product->id }} • {{ $product->category }} • {{ $product->stock_quantity }} dalam stok
+                                            ID Produk: #{{ $product->id }} • {{ $product->category }} • {{ $product->calculated_stock }} dalam stok
                                         </p>
                                         @if($product->sale_price)
                                             <p class="text-sm text-red-600 font-medium">Jualan Aktif!</p>
@@ -236,17 +236,17 @@
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <div class="text-sm text-gray-900">
-                                    @if($product->stock_quantity > 10)
+                                    @if($product->calculated_stock > 10)
                                         <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                            {{ $product->stock_quantity }} Dalam Stok
+                                            {{ $product->calculated_stock }} Dalam Stok
                                         </span>
-                                    @elseif($product->stock_quantity > 0)
+                                    @elseif($product->calculated_stock > 0)
                                         <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                                            {{ $product->stock_quantity }} Stok Rendah
+                                            {{ $product->calculated_stock }} Stok Rendah
                                         </span>
                                     @else
                                         <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
-                                            Kehabisan Stok
+                                            No Stock
                                         </span>
                                     @endif
                                 </div>
@@ -588,3 +588,4 @@ document.getElementById('statusModal').addEventListener('click', function(e) {
 });
 </script>
 @endsection 
+

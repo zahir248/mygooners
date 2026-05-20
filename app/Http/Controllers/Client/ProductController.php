@@ -66,7 +66,11 @@ class ProductController extends Controller
     {
         $product = Product::where('slug', $slug)
             ->where('status', 'active')
-            ->with(['reviews', 'variations'])
+            ->with([
+                'reviews.user:id,name,profile_image',
+                'reviews.photos:id,product_review_id,image_path',
+                'variations',
+            ])
             ->firstOrFail();
 
         // Increment view count

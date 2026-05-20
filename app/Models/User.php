@@ -62,6 +62,10 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    protected $appends = [
+        'profile_image_url',
+    ];
+
     /**
      * Get the attributes that should be cast.
      *
@@ -159,5 +163,19 @@ class User extends Authenticatable
     public function articles()
     {
         return $this->hasMany(Article::class, 'author_id');
+    }
+
+    public function getProfileImageUrlAttribute(): ?string
+    {
+        $profileImage = trim((string) $this->profile_image);
+        if ($profileImage === '') {
+            return null;
+        }
+
+        if (str_starts_with($profileImage, 'http://') || str_starts_with($profileImage, 'https://')) {
+            return $profileImage;
+        }
+
+        return url('/profile-image/' . basename($profileImage));
     }
 }

@@ -55,7 +55,7 @@
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
                         </div>
-                <div>
+                <div id="main-stock-field-wrapper">
                     <label for="stock_quantity" class="block text-sm font-medium text-gray-700 mb-2">Kuantiti Stok <span class="text-red-500">*</span></label>
                     <input type="number" name="stock_quantity" id="stock_quantity" value="{{ old('stock_quantity', 0) }}" min="0" required class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-red-500 focus:border-red-500 @error('stock_quantity') border-red-500 @enderror">
                     @error('stock_quantity')
@@ -270,6 +270,8 @@ function toggleVariations() {
         section.style.display = 'none';
         toggleText.textContent = 'Tambah Varian';
     }
+
+    updateMainStockFieldState();
 }
 
 function addVariation() {
@@ -387,6 +389,7 @@ function addVariation() {
     `;
     
     container.appendChild(variationDiv);
+    updateMainStockFieldState();
 }
 
 function removeVariation(variationId) {
@@ -400,6 +403,26 @@ function removeVariation(variationId) {
     if (container.children.length === 0) {
         noVariationsMessage.style.display = 'block';
     }
+
+    updateMainStockFieldState();
+}
+
+function updateMainStockFieldState() {
+    const stockInput = document.getElementById('stock_quantity');
+    const variationCards = document.querySelectorAll('#variations-container > div[id^="variation-"]');
+
+    let hasVariation = false;
+
+    variationCards.forEach(card => {
+        const nameInput = card.querySelector('input[name*="[name]"]');
+        if (nameInput && nameInput.value.trim() !== '') {
+            hasVariation = true;
+        }
+    });
+
+    stockInput.readOnly = hasVariation;
+    stockInput.classList.toggle('bg-gray-100', hasVariation);
+    stockInput.classList.toggle('cursor-not-allowed', hasVariation);
 }
 
 function validateVariationSalePrice(input, variationId) {
@@ -458,6 +481,10 @@ document.getElementById('price').addEventListener('input', function() {
     if (salePriceInput.value) {
         validateSalePrice(salePriceInput);
     }
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+    updateMainStockFieldState();
 });
     </script>
 @endpush

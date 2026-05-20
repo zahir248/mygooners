@@ -5,7 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\URL;
 
 class ProductReview extends Model
 {
@@ -61,6 +60,10 @@ class ProductReview extends Model
 
     public function getReviewerAvatarUrlAttribute()
     {
+        if ($this->user && !empty($this->user->profile_image_url)) {
+            return $this->user->profile_image_url;
+        }
+
         $profileImg = trim((string) optional($this->user)->profile_image);
         if ($profileImg === '') {
             return null;
@@ -70,11 +73,7 @@ class ProductReview extends Model
             return $profileImg;
         }
 
-        if (Str::startsWith($profileImg, ['profile_images/', 'profiles/', 'users/'])) {
-            return URL::to('/profile-image/' . basename($profileImg));
-        }
-
-        return URL::to('/storage/' . ltrim($profileImg, '/'));
+        return url('/profile-image/' . basename($profileImg));
     }
 
     public function getPhotoUrlsAttribute(): array

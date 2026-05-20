@@ -25,7 +25,8 @@ class ProductVariation extends Model
         'images' => 'array',
         'is_active' => 'boolean',
         'price' => 'decimal:2',
-        'sale_price' => 'decimal:2'
+        'sale_price' => 'decimal:2',
+        'stock_quantity' => 'integer',
     ];
 
     public function product()
@@ -69,5 +70,18 @@ class ProductVariation extends Model
         return 0;
     }
 
+    public function getIsInStockAttribute(): bool
+    {
+        return (int) $this->stock_quantity > 0;
+    }
 
+    public function getIsOutOfStockAttribute(): bool
+    {
+        return !$this->is_in_stock;
+    }
+
+    public function getStockLabelAttribute(): string
+    {
+        return $this->is_in_stock ? 'In Stock' : 'No Stock';
+    }
 }

@@ -49,7 +49,7 @@
 
         <!-- Review Form -->
         <div class="bg-white rounded-xl shadow-lg p-6 sm:p-8">
-            <form action="{{ route('reviews.store', $product) }}" method="POST">
+            <form action="{{ route('reviews.store', $product) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 
                 <!-- Rating -->
@@ -90,6 +90,25 @@
                         <span id="char-count">0</span> / 1000 aksara
                     </div>
                     @error('comment')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <div class="mb-6">
+                    <label for="photos" class="block text-sm font-medium text-gray-700 mb-2">Gambar Ulasan (Pilihan)</label>
+                    <input
+                        id="photos"
+                        name="photos[]"
+                        type="file"
+                        accept="image/jpeg,image/png,image/webp"
+                        multiple
+                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-arsenal focus:border-transparent"
+                    >
+                    <p class="mt-1 text-xs text-gray-500">Maksimum 5 gambar (jpg, jpeg, png, webp), setiap satu sehingga 4MB.</p>
+                    @error('photos')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                    @error('photos.*')
                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                     @enderror
                 </div>

@@ -9,6 +9,15 @@ class Product extends Model
 {
     use HasFactory;
 
+    protected $appends = [
+        'calculated_stock',
+        'total_variation_stock',
+        'total_stock',
+        'is_in_stock',
+        'is_out_of_stock',
+        'stock_label',
+    ];
+
     protected $fillable = [
         'user_id',
         'title',
@@ -90,7 +99,15 @@ class Product extends Model
 
     public function scopeInStock($query)
     {
-        return $query->where('stock_quantity', '>', 0);
+        return $query->where(function ($q) {
+            $q->where(function ($baseProductQuery) {
+                $baseProductQuery
+                    ->whereDoesntHave('activeVariations')
+                    ->where('stock_quantity', '>', 0);
+            })->orWhereHas('activeVariations', function ($variationQuery) {
+                $variationQuery->where('stock_quantity', '>', 0);
+            });
+        });
     }
 
     public function getRouteKeyName()
@@ -118,7 +135,48 @@ class Product extends Model
 
     public function hasVariations()
     {
-        return $this->variations()->count() > 0;
+        if ($this->relationLoaded('activeVariations')) {
+            return $this->activeVariations->isNotEmpty();
+        }
+
+        return $this->activeVariations()->exists();
+    }
+
+    public function getTotalVariationStockAttribute()
+    {
+        if (!$this->hasVariations()) {
+            return 0;
+        }
+
+        if ($this->relationLoaded('activeVariations')) {
+            return (int) $this->activeVariations->sum('stock_quantity');
+        }
+
+        return (int) $this->activeVariations()->sum('stock_quantity');
+    }
+
+    public function getCalculatedStockAttribute()
+    {
+        if ($this->hasVariations()) {
+            return $this->total_variation_stock;
+        }
+
+        return (int) $this->stock_quantity;
+    }
+
+    public function getIsInStockAttribute()
+    {
+        return $this->calculated_stock > 0;
+    }
+
+    public function getIsOutOfStockAttribute()
+    {
+        return !$this->is_in_stock;
+    }
+
+    public function getStockLabelAttribute()
+    {
+        return $this->is_in_stock ? 'In Stock' : 'No Stock';
     }
 
     public function getMinPriceAttribute()
@@ -150,10 +208,7 @@ class Product extends Model
 
     public function getTotalStockAttribute()
     {
-        if ($this->hasVariations()) {
-            return $this->activeVariations()->sum('stock_quantity');
-        }
-        return $this->stock_quantity;
+        return $this->calculated_stock;
     }
 
     public function getVariantUrl($variantName)

@@ -56,9 +56,9 @@
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
                         </div>
-                <div>
+                <div id="main-stock-field-wrapper">
                     <label for="stock_quantity" class="block text-sm font-medium text-gray-700 mb-2">Kuantiti Stok <span class="text-red-500">*</span></label>
-                    <input type="number" name="stock_quantity" id="stock_quantity" value="{{ old('stock_quantity', $product->stock_quantity) }}" min="0" required class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-red-500 focus:border-red-500 @error('stock_quantity') border-red-500 @enderror">
+                    <input type="number" name="stock_quantity" id="stock_quantity" value="{{ old('stock_quantity', $product->stock_quantity) }}" min="0" required class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-red-500 focus:border-red-500 @error('stock_quantity') border-red-500 @enderror {{ $hasActiveVariations ? 'bg-gray-100 cursor-not-allowed' : '' }}" {{ $hasActiveVariations ? 'readonly' : '' }}>
                     @error('stock_quantity')
                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                     @enderror
@@ -483,20 +483,22 @@ function validateSalePrice(input) {
     });
 
     // Variation Management Functions
-    function toggleVariations() {
+function toggleVariations() {
         const section = document.getElementById('variations-section');
         const toggleText = document.getElementById('variations-toggle-text');
         
-        if (section.style.display === 'none') {
-            section.style.display = 'block';
-            toggleText.textContent = 'Sembunyikan Varian';
-        } else {
-            section.style.display = 'none';
-            toggleText.textContent = 'Tambah Varian';
-        }
+    if (section.style.display === 'none') {
+        section.style.display = 'block';
+        toggleText.textContent = 'Sembunyikan Varian';
+    } else {
+        section.style.display = 'none';
+        toggleText.textContent = 'Tambah Varian';
     }
 
-    function addVariation() {
+    updateMainStockFieldState();
+}
+
+function addVariation() {
         variationCounter++;
         const container = document.getElementById('variations-container');
         const noVariationsMessage = document.getElementById('no-variations-message');
@@ -610,8 +612,9 @@ function validateSalePrice(input) {
             </div>
         `;
         
-        container.appendChild(variationDiv);
-    }
+    container.appendChild(variationDiv);
+    updateMainStockFieldState();
+}
 
     function removeVariation(variationId) {
         const variationDiv = document.getElementById(`variation-${variationId}`);
@@ -639,8 +642,8 @@ function validateSalePrice(input) {
         })
         .then(response => response.json())
         .then(data => {
-            if (data.success) {
-                populateEditVariationModal(data.variation);
+            if (data.success && data.variation) {
+                populateEditVariationModal(data.variation, data.images || []);
                 document.getElementById('editVariationModal').classList.remove('hidden');
             } else {
                 showNotification('Error loading variation data', 'error');
@@ -652,7 +655,7 @@ function validateSalePrice(input) {
         });
     }
 
-    function populateEditVariationModal(variation) {
+    function populateEditVariationModal(variation, imageUrls = []) {
         // Set the variation ID
         document.getElementById('edit_variation_id').value = variation.id;
         
@@ -668,18 +671,18 @@ function validateSalePrice(input) {
         const currentImagesContainer = document.getElementById('edit_variation_current_images');
         currentImagesContainer.innerHTML = '';
         
-        if (variation.images && variation.images.length > 0) {
-            variation.images.forEach((image, index) => {
+        if (imageUrls && imageUrls.length > 0) {
+            imageUrls.forEach((imageUrl, index) => {
                 const imageDiv = document.createElement('div');
                 imageDiv.className = 'relative group';
                 imageDiv.dataset.imageIndex = index.toString();
                 imageDiv.innerHTML = `
-                    <img src="/storage/${image}" alt="Variation Image" class="h-20 w-20 object-cover rounded border border-gray-300">
+                    <img src="${imageUrl}" alt="Variation Image" class="h-20 w-20 object-cover rounded border border-gray-300">
                     <button type="button" onclick="removeEditVariationImage(${index})" 
                             class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-red-600">
                         ×
                     </button>
-                    <input type="hidden" name="current_images[]" value="${image}">
+                    
                 `;
                 currentImagesContainer.appendChild(imageDiv);
             });
@@ -738,41 +741,43 @@ function validateSalePrice(input) {
             return;
         }
         
-        // Clear any hidden inputs that might have been added incorrectly
-        const hiddenNewImagesInputs = form.querySelectorAll('input[name="new_images[]"]');
-        hiddenNewImagesInputs.forEach(input => {
-            if (input.type === 'hidden') {
-                input.remove();
+        fetch(`/admin/products/variations/${variationId}`, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                'Accept': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: (() => {
+                const payload = new FormData();
+                payload.append('_method', 'PUT');
+                payload.append('name', formData.get('name') ?? '');
+                payload.append('sku', formData.get('sku') ?? '');
+                payload.append('price', formData.get('price') ?? '');
+                payload.append('sale_price', formData.get('sale_price') ?? '');
+                payload.append('stock_quantity', formData.get('stock_quantity') ?? '0');
+                payload.append('is_active', formData.get('is_active') ? '1' : '0');
+
+                const newImagesInput = form.querySelector('input[name="new_images[]"]');
+                if (newImagesInput && newImagesInput.files.length > 0) {
+                    Array.from(newImagesInput.files).forEach(file => payload.append('new_images[]', file));
+                }
+
+                return payload;
+            })()
+        })
+        .then(async response => {
+            const data = await response.json();
+            if (!response.ok || !data.success) {
+                throw new Error(data.message || 'Unable to update variation. Please try again.');
             }
+            showNotification(data.message || 'Product variation updated successfully.', 'success');
+            closeEditVariationModal();
+            window.location.reload();
+        })
+        .catch(error => {
+            showNotification(error.message || 'Unable to update variation. Please try again.', 'error');
         });
-        
-        // Remove empty file inputs to prevent validation errors
-        const fileInputs = form.querySelectorAll('input[type="file"]');
-        fileInputs.forEach(input => {
-            if (input.files.length === 0) {
-                input.remove();
-            }
-        });
-        
-        // Set the form action
-        form.action = `/admin/products/variations/${variationId}`;
-        
-        // Add method override for PUT request
-        const methodInput = document.createElement('input');
-        methodInput.type = 'hidden';
-        methodInput.name = '_method';
-        methodInput.value = 'PUT';
-        form.appendChild(methodInput);
-        
-        // Debug: Log form data before submission
-        const debugFormData = new FormData(form);
-        console.log('Form data being sent:');
-        for (let [key, value] of debugFormData.entries()) {
-            console.log(key, value);
-        }
-        
-        // Submit the form
-        form.submit();
     }
 
     function validateEditVariationSalePrice(input) {
@@ -834,10 +839,35 @@ function validateSalePrice(input) {
             const container = document.getElementById('variations-container');
             const noVariationsMessage = document.getElementById('no-variations-message');
             
-            if ((!existingVariations || existingVariations.children.length === 0) && 
-                (!container || container.children.length === 0)) {
-                noVariationsMessage.style.display = 'block';
+        if ((!existingVariations || existingVariations.children.length === 0) && 
+            (!container || container.children.length === 0)) {
+            noVariationsMessage.style.display = 'block';
+        }
+
+        updateMainStockFieldState();
+    }
+
+    function updateMainStockFieldState() {
+        const stockInput = document.getElementById('stock_quantity');
+        const existingVariations = document.getElementById('existing-variations');
+        const newVariationCards = document.querySelectorAll('#variations-container > div[id^="variation-"]');
+
+        let hasVariation = false;
+
+        if (existingVariations && existingVariations.children.length > 0) {
+            hasVariation = true;
+        }
+
+        newVariationCards.forEach(card => {
+            const nameInput = card.querySelector('input[name*="[name]"]');
+            if (nameInput && nameInput.value.trim() !== '') {
+                hasVariation = true;
             }
+        });
+
+        stockInput.readOnly = hasVariation;
+        stockInput.classList.toggle('bg-gray-100', hasVariation);
+        stockInput.classList.toggle('cursor-not-allowed', hasVariation);
     }
 
     function showNotification(message, type = 'info') {
@@ -951,35 +981,37 @@ function validateSalePrice(input) {
 
     function performVariationDeletion() {
         const variationId = document.getElementById('deleteVariationId').value;
-        
-        // Create a form for deletion
-        const form = document.createElement('form');
-        form.method = 'POST';
-        form.action = `/admin/products/variations/${variationId}`;
-        form.style.display = 'none';
-        
-        // Add CSRF token
-        const csrfInput = document.createElement('input');
-        csrfInput.type = 'hidden';
-        csrfInput.name = '_token';
-        csrfInput.value = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-        form.appendChild(csrfInput);
-        
-        // Add method override for DELETE
-        const methodInput = document.createElement('input');
-        methodInput.type = 'hidden';
-        methodInput.name = '_method';
-        methodInput.value = 'DELETE';
-        form.appendChild(methodInput);
-        
-        // Add to page and submit
-        document.body.appendChild(form);
-        form.submit();
+
+        const payload = new FormData();
+        payload.append('_method', 'DELETE');
+
+        fetch(`/admin/products/variations/${variationId}`, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                'Accept': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: payload
+        })
+        .then(async response => {
+            const data = await response.json();
+            if (!response.ok || !data.success) {
+                throw new Error(data.message || 'Unable to update variation. Please try again.');
+            }
+            closeDeleteVariationModal();
+            showNotification(data.message || 'Product variation deleted successfully.', 'success');
+            window.location.reload();
+        })
+        .catch(error => {
+            showNotification(error.message || 'Unable to update variation. Please try again.', 'error');
+        });
     }
 
     // Add form submission debugging for variations
-    document.addEventListener('DOMContentLoaded', function() {
-        const form = document.querySelector('form');
+document.addEventListener('DOMContentLoaded', function() {
+    updateMainStockFieldState();
+    const form = document.querySelector('form');
         if (form) {
             form.addEventListener('submit', function(e) {
                 // Log variations marked for deletion before submission
