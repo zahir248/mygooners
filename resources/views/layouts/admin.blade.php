@@ -413,13 +413,62 @@
 
                         <!-- Right side -->
                         <div class="flex items-center space-x-4">
+                            @if(auth()->user()->role !== 'writer')
                             <!-- Notifications -->
-                            <button class="p-2 text-gray-400 hover:text-gray-500 relative">
-                                <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-5 5v-5zM14.828 14.828a4 4 0 01-5.656 0M9 10h1.586a1 1 0 01.707.293l2.414 2.414a1 1 0 00.707.293H15"></path>
-                                </svg>
-                                <span class="absolute top-0 right-0 block h-2 w-2 rounded-full bg-red-400 ring-2 ring-white"></span>
-                            </button>
+                            <div class="relative" x-data="{ notificationsOpen: false }">
+                                <button type="button"
+                                        @click="notificationsOpen = !notificationsOpen"
+                                        class="p-2 text-gray-400 hover:text-gray-500 hover:bg-gray-100 rounded-md relative focus:outline-none focus:ring-2 focus:ring-red-500"
+                                        aria-label="Notifikasi"
+                                        :aria-expanded="notificationsOpen">
+                                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
+                                    </svg>
+                                    @if(($adminNotificationCount ?? 0) > 0)
+                                        <span class="absolute top-1 right-1 block h-2 w-2 rounded-full bg-red-500 ring-2 ring-white"></span>
+                                    @endif
+                                </button>
+
+                                <div x-show="notificationsOpen"
+                                     @click.away="notificationsOpen = false"
+                                     x-transition:enter="transition ease-out duration-100"
+                                     x-transition:enter-start="opacity-0 scale-95"
+                                     x-transition:enter-end="opacity-100 scale-100"
+                                     x-transition:leave="transition ease-in duration-75"
+                                     x-transition:leave-start="opacity-100 scale-100"
+                                     x-transition:leave-end="opacity-0 scale-95"
+                                     x-cloak
+                                     class="absolute right-0 mt-2 w-80 bg-white rounded-md shadow-lg py-1 z-50 ring-1 ring-black ring-opacity-5">
+                                    <div class="px-4 py-3 border-b border-gray-100">
+                                        <h3 class="text-sm font-semibold text-gray-900">Notifikasi</h3>
+                                        <p class="text-xs text-gray-500 mt-0.5">Perkara yang memerlukan tindakan</p>
+                                    </div>
+                                    @if(!empty($adminNotifications))
+                                        <ul class="max-h-72 overflow-y-auto py-1">
+                                            @foreach($adminNotifications as $notification)
+                                                <li>
+                                                    <a href="{{ $notification['url'] }}"
+                                                       @click="notificationsOpen = false"
+                                                       class="flex items-center justify-between px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
+                                                        <span class="pr-3">{{ $notification['label'] }}</span>
+                                                        <span class="flex-shrink-0 inline-flex items-center justify-center min-w-[1.5rem] h-6 px-2 rounded-full bg-red-100 text-red-700 text-xs font-semibold">
+                                                            {{ $notification['count'] }}
+                                                        </span>
+                                                    </a>
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                    @else
+                                        <div class="px-4 py-8 text-center">
+                                            <svg class="mx-auto h-10 w-10 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
+                                            </svg>
+                                            <p class="mt-2 text-sm text-gray-500">Tiada notifikasi baharu</p>
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
+                            @endif
 
                             <!-- User dropdown -->
                             <div class="relative" x-data="{ open: false }">
