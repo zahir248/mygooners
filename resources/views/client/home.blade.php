@@ -371,6 +371,30 @@
                 @if($newServices->count() > 0)
                     @php $service = $newServices->first() @endphp
                     <div class="bg-white rounded-xl shadow-lg overflow-hidden flex flex-col h-full">
+                        <div class="relative">
+                            @if($service->images && is_array($service->images) && count($service->images) > 0)
+                                <a href="{{ route('services.show', $service->slug) }}">
+                                    <img src="{{ route('service.image', ['filename' => basename($service->images[0])]) }}" alt="{{ $service->title }}" class="w-full h-64 md:h-80 object-cover">
+                                </a>
+                            @else
+                                <div class="w-full h-64 md:h-80 bg-gray-200 flex items-center justify-center">
+                                    <svg class="w-16 h-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                    </svg>
+                                </div>
+                            @endif
+                            <div class="absolute top-4 left-4 flex gap-2">
+                                <span class="bg-red-600 text-white px-3 py-1 rounded-full text-sm font-medium">{{ $service->category ?: 'Perkhidmatan' }}</span>
+                                @if($service->is_verified)
+                                    <span class="bg-green-100 text-green-600 px-2 py-1 rounded-full text-xs font-bold flex items-center">
+                                        <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                        </svg>
+                                        Disahkan
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
                         <div class="p-6 flex flex-col flex-grow">
                             <div class="flex items-start justify-between mb-4">
                                 <div>
@@ -379,17 +403,6 @@
                                             {{ $service->title }}
                                         </a>
                                     </h2>
-                                    <div class="flex items-center space-x-2 mb-4">
-                                        <span class="bg-red-600 text-white px-3 py-1 rounded-full text-sm font-medium">{{ $service->category ?: 'Perkhidmatan' }}</span>
-                                        @if($service->is_verified)
-                                            <span class="bg-green-100 text-green-600 px-2 py-1 rounded-full text-xs flex items-center">
-                                                <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                                    <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-                                                </svg>
-                                                Disahkan
-                                            </span>
-                                        @endif
-                                    </div>
                                 </div>
                                 <div class="text-right">
                                     <div class="text-2xl font-bold text-red-600 mb-2">{{ $service->pricing ?: 'Harga Rundingan' }}</div>
@@ -445,11 +458,15 @@
                                     <div class="p-4 hover:bg-gray-50 transition-colors">
                                         <div class="flex space-x-3">
                                             <div class="flex-shrink-0">
-                                                <div class="w-16 h-16 bg-gray-200 rounded-lg flex items-center justify-center">
-                                                    <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0V6a2 2 0 012 2v6a2 2 0 01-2 2H8a2 2 0 01-2-2V8a2 2 0 012-2V6"></path>
-                                                    </svg>
-                                                </div>
+                                                @if($service->images && is_array($service->images) && count($service->images) > 0)
+                                                    <img src="{{ route('service.image', ['filename' => basename($service->images[0])]) }}" alt="{{ $service->title }}" class="w-16 h-16 object-cover rounded-lg">
+                                                @else
+                                                    <div class="w-16 h-16 bg-gray-200 rounded-lg flex items-center justify-center">
+                                                        <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                                        </svg>
+                                                    </div>
+                                                @endif
                                             </div>
                                             <div class="flex-1 min-w-0">
                                                 <h4 class="text-sm font-semibold text-gray-900 mb-1">
