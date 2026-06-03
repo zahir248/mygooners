@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Video;
+use App\Models\VideoCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -12,6 +13,17 @@ use Exception;
 
 class VideoController extends Controller
 {
+    private function getVideoFormCategories(?string $currentCategory = null): array
+    {
+        $names = VideoCategory::activeNamesForSelect();
+        if ($currentCategory && !in_array($currentCategory, $names, true)) {
+            $names[] = $currentCategory;
+            sort($names);
+        }
+
+        return array_combine($names, $names);
+    }
+
     private function extractYoutubeId($url)
     {
         // Handles youtu.be, youtube.com/watch?v=, youtube.com/embed/, etc.
@@ -54,46 +66,14 @@ class VideoController extends Controller
 
         $videos = $query->orderBy('created_at', 'desc')->paginate(15);
 
-        // Get unique categories for filter
-        $categories = Video::distinct()->pluck('category')->filter()->values();
+        $categories = VideoCategory::namesForSelect();
 
         return view('admin.videos.index', compact('videos', 'categories'));
     }
 
     public function create()
     {
-        // Existing video categories
-        $videoCategories = [
-            'Match Highlights' => 'Match Highlights',
-            'Player Interviews' => 'Player Interviews',
-            'Manager Press Conferences' => 'Manager Press Conferences',
-            'Behind the Scenes' => 'Behind the Scenes',
-            'Training Sessions' => 'Training Sessions',
-            'Fan Content' => 'Fan Content',
-            'Analysis' => 'Analysis',
-            'News' => 'News'
-        ];
-
-        // Article categories
-        $articleCategories = [
-            'Perkembangan Kelab' => 'Perkembangan Kelab',
-            'EPL' => 'EPL',
-            'UCL' => 'UCL',
-            'Bolasepak' => 'Bolasepak',
-            'Piala Dunia' => 'Piala Dunia',
-            'Euro' => 'Euro',
-            'Berita Perpindahan' => 'Berita Perpindahan',
-            'Analisis' => 'Analisis',
-            'Bundesliga' => 'Bundesliga',
-            'Serie A' => 'Serie A',
-            'Ligue 1' => 'Ligue 1',
-            'Antarabangsa' => 'Antarabangsa',
-            'La Liga' => 'La Liga',
-            'Lain-lain' => 'Lain-lain'
-        ];
-
-        // Combine video and article categories
-        $categories = array_merge($videoCategories, $articleCategories);
+        $categories = $this->getVideoFormCategories();
 
         return view('admin.videos.create', compact('categories'));
     }
@@ -206,38 +186,7 @@ class VideoController extends Controller
     {
         $video = Video::findOrFail($id);
         
-        // Existing video categories
-        $videoCategories = [
-            'Match Highlights' => 'Match Highlights',
-            'Player Interviews' => 'Player Interviews',
-            'Manager Press Conferences' => 'Manager Press Conferences',
-            'Behind the Scenes' => 'Behind the Scenes',
-            'Training Sessions' => 'Training Sessions',
-            'Fan Content' => 'Fan Content',
-            'Analysis' => 'Analysis',
-            'News' => 'News'
-        ];
-
-        // Article categories
-        $articleCategories = [
-            'Perkembangan Kelab' => 'Perkembangan Kelab',
-            'EPL' => 'EPL',
-            'UCL' => 'UCL',
-            'Bolasepak' => 'Bolasepak',
-            'Piala Dunia' => 'Piala Dunia',
-            'Euro' => 'Euro',
-            'Berita Perpindahan' => 'Berita Perpindahan',
-            'Analisis' => 'Analisis',
-            'Bundesliga' => 'Bundesliga',
-            'Serie A' => 'Serie A',
-            'Ligue 1' => 'Ligue 1',
-            'Antarabangsa' => 'Antarabangsa',
-            'La Liga' => 'La Liga',
-            'Lain-lain' => 'Lain-lain'
-        ];
-
-        // Combine video and article categories
-        $categories = array_merge($videoCategories, $articleCategories);
+        $categories = $this->getVideoFormCategories($video->category);
 
         return view('admin.videos.edit', compact('video', 'categories'));
     }

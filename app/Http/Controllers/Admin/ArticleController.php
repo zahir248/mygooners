@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Article;
+use App\Models\ArticleCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
@@ -42,51 +43,14 @@ class ArticleController extends Controller
         
         $articles = $query->with('author')->orderBy('created_at', 'desc')->get();
         
-        // Categories for filter dropdown (same list as create/edit)
-        $categories = [
-            'Perkembangan Kelab',
-            'EPL',
-            'UCL',
-            'Bolasepak',
-            'Piala Dunia',
-            'Euro',
-            'Berita Perpindahan',
-            'Analisis',
-            'Bundesliga',
-            'Serie A',
-            'Ligue 1',
-            'Antarabangsa',
-            'La Liga',
-            'Futsal',
-            'Liga Malaysia',
-            'Shopee Cup',
-            'Lain-lain'
-        ];
+        $categories = ArticleCategory::namesForSelect();
 
         return view('admin.articles.index', compact('articles', 'categories'));
     }
 
     public function create()
     {
-        $categories = [
-            'Perkembangan Kelab',
-            'EPL',
-            'UCL',
-            'Bolasepak',
-            'Piala Dunia',
-            'Euro',
-            'Berita Perpindahan',
-            'Analisis',
-            'Bundesliga',
-            'Serie A',
-            'Ligue 1',
-            'Antarabangsa',
-            'La Liga',
-            'Futsal',
-            'Liga Malaysia',
-            'Shopee Cup',
-            'Lain-lain'
-        ];
+        $categories = ArticleCategory::activeNamesForSelect();
 
         return view('admin.articles.create', compact('categories'));
     }
@@ -241,25 +205,11 @@ class ArticleController extends Controller
     {
         $article = Article::findOrFail($id);
 
-        $categories = [
-            'Perkembangan Kelab',
-            'EPL',
-            'UCL',
-            'Bolasepak',
-            'Piala Dunia',
-            'Euro',
-            'Berita Perpindahan',
-            'Analisis',
-            'Bundesliga',
-            'Serie A',
-            'Ligue 1',
-            'Antarabangsa',
-            'La Liga',
-            'Futsal',
-            'Liga Malaysia',
-            'Shopee Cup',
-            'Lain-lain'
-        ];
+        $categories = ArticleCategory::activeNamesForSelect();
+        if ($article->category && !in_array($article->category, $categories, true)) {
+            $categories[] = $article->category;
+            sort($categories);
+        }
 
         return view('admin.articles.edit', compact('article', 'categories'));
     }

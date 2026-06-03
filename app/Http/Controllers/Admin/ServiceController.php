@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Service;
+use App\Models\ServiceCategory;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -55,7 +56,7 @@ class ServiceController extends Controller
 
         $services = $query->orderBy('created_at', 'desc')->paginate(10);
 
-        $categories = Service::distinct()->pluck('category')->filter()->sort()->values();
+        $categories = ServiceCategory::namesForFilter();
 
         return view('admin.services.index', compact('services', 'categories'));
     }
@@ -74,17 +75,7 @@ class ServiceController extends Controller
 
     public function create()
     {
-        $categories = [
-            'Coaching' => 'Coaching',
-            'Transport' => 'Pengangkutan',
-            'Authentication' => 'Pengesahan',
-            'Photography' => 'Rafi',
-            'Entertainment' => 'Hiburan',
-            'Catering' => 'Katering',
-            'Security' => 'Keselamatan',
-            'Other' => 'Lain-lain'
-        ];
-
+        $categories = ServiceCategory::optionsForSelect();
         $users = User::where('role', 'user')->get();
 
         return view('admin.services.create', compact('categories', 'users'));
@@ -157,17 +148,7 @@ class ServiceController extends Controller
     {
         $service = Service::findOrFail($id);
         
-        $categories = [
-            'Coaching' => 'Coaching',
-            'Transport' => 'Pengangkutan',
-            'Authentication' => 'Pengesahan',
-            'Photography' => 'Rafi',
-            'Entertainment' => 'Hiburan',
-            'Catering' => 'Katering',
-            'Security' => 'Keselamatan',
-            'Other' => 'Lain-lain'
-        ];
-
+        $categories = ServiceCategory::optionsForSelect($service->category);
         $users = User::where('role', 'user')->get();
 
         return view('admin.services.edit', compact('service', 'categories', 'users'));

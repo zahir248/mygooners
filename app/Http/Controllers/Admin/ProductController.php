@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Product;
+use App\Models\ProductCategory;
 use App\Models\ProductVariation;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -97,22 +98,14 @@ class ProductController extends Controller
 
         $products = $query->orderBy('created_at', 'desc')->paginate(10);
 
-        $categories = Product::distinct()->pluck('category')->filter()->sort()->values();
+        $categories = ProductCategory::namesForFilter();
 
         return view('admin.products.index', compact('products', 'categories'));
     }
 
     public function create()
     {
-        $categories = [
-            'Jerseys' => 'Jersi',
-            'Training Wear' => 'Pakaian Latihan',
-            'Accessories' => 'Aksesori',
-            'Footwear' => 'Kasut',
-            'Collectibles' => 'Koleksi',
-            'Other' => 'Lain-lain'
-        ];
-
+        $categories = ProductCategory::optionsForSelect();
         $hasActiveVariations = false;
         $calculatedVariationStock = 0;
 
@@ -273,14 +266,7 @@ class ProductController extends Controller
         $hasActiveVariations = $product->activeVariations()->exists();
         $calculatedVariationStock = (int) $product->activeVariations()->sum('stock_quantity');
 
-        $categories = [
-            'Jerseys' => 'Jersi',
-            'Training Wear' => 'Pakaian Latihan',
-            'Accessories' => 'Aksesori',
-            'Footwear' => 'Kasut',
-            'Collectibles' => 'Koleksi',
-            'Other' => 'Lain-lain'
-        ];
+        $categories = ProductCategory::optionsForSelect($product->category);
 
         return view('admin.products.edit', compact('product', 'categories', 'hasActiveVariations', 'calculatedVariationStock'));
     }

@@ -11,7 +11,7 @@ class WriterAccessMiddleware
 {
     /**
      * Handle an incoming request.
-     * Restricts writers to only access dashboard and articles routes.
+     * Restricts writers to articles, article categories, and profile routes.
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
@@ -19,12 +19,12 @@ class WriterAccessMiddleware
     {
         $user = Auth::user();
         
-        // If user is a writer, restrict access to only dashboard and articles
+        // If user is a writer, restrict access to articles, categories, and profile
         if ($user && $user->role === 'writer') {
             $route = $request->route();
             $routeName = $route ? $route->getName() : null;
             
-            // Allowed routes for writers (only articles and profile)
+            // Allowed routes for writers
             $allowedRoutes = [
                 'admin.profile',
                 'admin.profile.update',
@@ -37,6 +37,12 @@ class WriterAccessMiddleware
                 'admin.articles.update',
                 'admin.articles.destroy',
                 'admin.articles.upload-image',
+                'admin.article-categories.index',
+                'admin.article-categories.create',
+                'admin.article-categories.store',
+                'admin.article-categories.edit',
+                'admin.article-categories.update',
+                'admin.article-categories.destroy',
             ];
             
             // Check if the current route is allowed

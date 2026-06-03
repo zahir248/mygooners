@@ -21,6 +21,10 @@ use App\Http\Controllers\Client\NewsletterController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\AuthController as AdminAuthController;
 use App\Http\Controllers\Admin\ArticleController as AdminArticleController;
+use App\Http\Controllers\Admin\ArticleCategoryController as AdminArticleCategoryController;
+use App\Http\Controllers\Admin\VideoCategoryController as AdminVideoCategoryController;
+use App\Http\Controllers\Admin\ServiceCategoryController as AdminServiceCategoryController;
+use App\Http\Controllers\Admin\ProductCategoryController as AdminProductCategoryController;
 use App\Http\Controllers\Admin\ServiceController as AdminServiceController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
@@ -457,6 +461,16 @@ Route::prefix('admin')->middleware(['auth', 'admin', 'writer'])->group(function 
     Route::get('/profile', [AdminController::class, 'profile'])->name('admin.profile');
     Route::put('/profile', [AdminController::class, 'updateProfile'])->name('admin.profile.update');
     
+    // Article Categories Management
+    Route::prefix('article-categories')->group(function () {
+        Route::get('/', [AdminArticleCategoryController::class, 'index'])->name('admin.article-categories.index');
+        Route::get('/create', [AdminArticleCategoryController::class, 'create'])->name('admin.article-categories.create');
+        Route::post('/', [AdminArticleCategoryController::class, 'store'])->name('admin.article-categories.store');
+        Route::get('/{articleCategory}/edit', [AdminArticleCategoryController::class, 'edit'])->name('admin.article-categories.edit');
+        Route::put('/{articleCategory}', [AdminArticleCategoryController::class, 'update'])->name('admin.article-categories.update');
+        Route::delete('/{articleCategory}', [AdminArticleCategoryController::class, 'destroy'])->name('admin.article-categories.destroy');
+    });
+
     // Articles Management
     Route::prefix('articles')->group(function () {
         Route::get('/', [AdminArticleController::class, 'index'])->name('admin.articles.index');
@@ -470,6 +484,16 @@ Route::prefix('admin')->middleware(['auth', 'admin', 'writer'])->group(function 
         Route::post('/upload-image', [AdminArticleController::class, 'uploadImage'])->name('admin.articles.upload-image');
     });
     
+    // Service Categories Management
+    Route::prefix('service-categories')->group(function () {
+        Route::get('/', [AdminServiceCategoryController::class, 'index'])->name('admin.service-categories.index');
+        Route::get('/create', [AdminServiceCategoryController::class, 'create'])->name('admin.service-categories.create');
+        Route::post('/', [AdminServiceCategoryController::class, 'store'])->name('admin.service-categories.store');
+        Route::get('/{serviceCategory}/edit', [AdminServiceCategoryController::class, 'edit'])->name('admin.service-categories.edit');
+        Route::put('/{serviceCategory}', [AdminServiceCategoryController::class, 'update'])->name('admin.service-categories.update');
+        Route::delete('/{serviceCategory}', [AdminServiceCategoryController::class, 'destroy'])->name('admin.service-categories.destroy');
+    });
+
     // Services Management
     Route::prefix('services')->group(function () {
         Route::get('/', [AdminServiceController::class, 'index'])->name('admin.services.index');
@@ -487,6 +511,16 @@ Route::prefix('admin')->middleware(['auth', 'admin', 'writer'])->group(function 
         Route::get('/{id}/details', [AdminServiceController::class, 'getServiceDetails'])->name('admin.services.details');
     });
     
+    // Product Categories Management
+    Route::prefix('product-categories')->group(function () {
+        Route::get('/', [AdminProductCategoryController::class, 'index'])->name('admin.product-categories.index');
+        Route::get('/create', [AdminProductCategoryController::class, 'create'])->name('admin.product-categories.create');
+        Route::post('/', [AdminProductCategoryController::class, 'store'])->name('admin.product-categories.store');
+        Route::get('/{productCategory}/edit', [AdminProductCategoryController::class, 'edit'])->name('admin.product-categories.edit');
+        Route::put('/{productCategory}', [AdminProductCategoryController::class, 'update'])->name('admin.product-categories.update');
+        Route::delete('/{productCategory}', [AdminProductCategoryController::class, 'destroy'])->name('admin.product-categories.destroy');
+    });
+
     // Products Management
     Route::prefix('products')->group(function () {
         Route::get('/', [AdminProductController::class, 'index'])->name('admin.products.index');
@@ -598,6 +632,16 @@ Route::prefix('service-reviews')->group(function () {
         Route::get('/download', [\App\Http\Controllers\Admin\LogController::class, 'download'])->name('admin.logs.download');
     });
     
+    // Video Categories Management
+    Route::prefix('video-categories')->group(function () {
+        Route::get('/', [AdminVideoCategoryController::class, 'index'])->name('admin.video-categories.index');
+        Route::get('/create', [AdminVideoCategoryController::class, 'create'])->name('admin.video-categories.create');
+        Route::post('/', [AdminVideoCategoryController::class, 'store'])->name('admin.video-categories.store');
+        Route::get('/{videoCategory}/edit', [AdminVideoCategoryController::class, 'edit'])->name('admin.video-categories.edit');
+        Route::put('/{videoCategory}', [AdminVideoCategoryController::class, 'update'])->name('admin.video-categories.update');
+        Route::delete('/{videoCategory}', [AdminVideoCategoryController::class, 'destroy'])->name('admin.video-categories.destroy');
+    });
+
     // Videos Management
     Route::prefix('videos')->group(function () {
         Route::get('/', [AdminVideoController::class, 'index'])->name('admin.videos.index');

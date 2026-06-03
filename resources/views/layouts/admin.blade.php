@@ -137,32 +137,66 @@
                     @endif
 
                     <!-- Articles -->
-                    <li>
-                        <a href="{{ route('admin.articles.index') }}" 
-                           class="flex items-center px-4 py-2 text-sm font-medium rounded-md transition-colors {{ request()->routeIs('admin.articles.*') ? 'bg-admin-700 text-white' : 'text-admin-300 hover:bg-admin-700 hover:text-white' }}">
+                    <li x-data="{ open: {{ request()->routeIs('admin.articles.*') || request()->routeIs('admin.article-categories.*') ? 'true' : 'false' }} }">
+                        <button @click="open = !open" type="button"
+                                class="flex items-center w-full px-4 py-2 text-sm font-medium rounded-md transition-colors {{ request()->routeIs('admin.articles.*') || request()->routeIs('admin.article-categories.*') ? 'bg-admin-700 text-white' : 'text-admin-300 hover:bg-admin-700 hover:text-white' }}">
                             <svg class="mr-3 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                             </svg>
                             Artikel
-                        </a>
+                            <svg class="ml-auto h-4 w-4 transform transition-transform duration-200" :class="{ 'rotate-90': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                            </svg>
+                        </button>
+                        <ul x-show="open" class="ml-8 mt-1 space-y-1" x-cloak>
+                            <li>
+                                <a href="{{ route('admin.articles.index') }}"
+                                   class="flex items-center px-4 py-2 text-sm font-medium rounded-md transition-colors {{ request()->routeIs('admin.articles.*') ? 'bg-admin-700 text-white' : 'text-admin-300 hover:bg-admin-700 hover:text-white' }}">
+                                    Semua Artikel
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ route('admin.article-categories.index') }}"
+                                   class="flex items-center px-4 py-2 text-sm font-medium rounded-md transition-colors {{ request()->routeIs('admin.article-categories.*') ? 'bg-admin-700 text-white' : 'text-admin-300 hover:bg-admin-700 hover:text-white' }}">
+                                    Kategori Artikel
+                                </a>
+                            </li>
+                        </ul>
                     </li>
 
                     @if(auth()->user()->role !== 'writer')
                     <!-- Videos -->
-                    <li>
-                        <a href="{{ route('admin.videos.index') }}" 
-                           class="flex items-center px-4 py-2 text-sm font-medium rounded-md transition-colors {{ request()->routeIs('admin.videos.*') ? 'bg-admin-700 text-white' : 'text-admin-300 hover:bg-admin-700 hover:text-white' }}">
+                    <li x-data="{ open: {{ request()->routeIs('admin.videos.*') || request()->routeIs('admin.video-categories.*') ? 'true' : 'false' }} }">
+                        <button @click="open = !open" type="button"
+                                class="flex items-center w-full px-4 py-2 text-sm font-medium rounded-md transition-colors {{ request()->routeIs('admin.videos.*') || request()->routeIs('admin.video-categories.*') ? 'bg-admin-700 text-white' : 'text-admin-300 hover:bg-admin-700 hover:text-white' }}">
                             <svg class="mr-3 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
                             </svg>
                             Video
-                        </a>
+                            <svg class="ml-auto h-4 w-4 transform transition-transform duration-200" :class="{ 'rotate-90': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                            </svg>
+                        </button>
+                        <ul x-show="open" class="ml-8 mt-1 space-y-1" x-cloak>
+                            <li>
+                                <a href="{{ route('admin.videos.index') }}"
+                                   class="flex items-center px-4 py-2 text-sm font-medium rounded-md transition-colors {{ request()->routeIs('admin.videos.index', 'admin.videos.create', 'admin.videos.edit', 'admin.videos.store', 'admin.videos.update', 'admin.videos.destroy') ? 'bg-admin-700 text-white' : 'text-admin-300 hover:bg-admin-700 hover:text-white' }}">
+                                    Semua Video
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ route('admin.video-categories.index') }}"
+                                   class="flex items-center px-4 py-2 text-sm font-medium rounded-md transition-colors {{ request()->routeIs('admin.video-categories.*') ? 'bg-admin-700 text-white' : 'text-admin-300 hover:bg-admin-700 hover:text-white' }}">
+                                    Kategori Video
+                                </a>
+                            </li>
+                        </ul>
                     </li>
 
                     <!-- Services -->
-                    <li x-data="{ open: {{ request()->routeIs('admin.services.*') || request()->routeIs('admin.service-reviews.*') ? 'true' : 'false' }} }">
+                    <li x-data="{ open: {{ request()->routeIs('admin.services.*') || request()->routeIs('admin.service-categories.*') || request()->routeIs('admin.service-reviews.*') ? 'true' : 'false' }} }">
                         <button @click="open = !open" type="button"
-                                class="flex items-center w-full px-4 py-2 text-sm font-medium rounded-md transition-colors {{ request()->routeIs('admin.services.*') || request()->routeIs('admin.service-reviews.*') ? 'bg-admin-700 text-white' : 'text-admin-300 hover:bg-admin-700 hover:text-white' }}">
+                                class="flex items-center w-full px-4 py-2 text-sm font-medium rounded-md transition-colors {{ request()->routeIs('admin.services.*') || request()->routeIs('admin.service-categories.*') || request()->routeIs('admin.service-reviews.*') ? 'bg-admin-700 text-white' : 'text-admin-300 hover:bg-admin-700 hover:text-white' }}">
                             <svg class="mr-3 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0V6a2 2 0 012 2v6a2 2 0 01-2 2H8a2 2 0 01-2-2V8a2 2 0 012-2h8z"></path>
                             </svg>
@@ -176,6 +210,12 @@
                                 <a href="{{ route('admin.services.index') }}"
                                    class="flex items-center px-4 py-2 text-sm font-medium rounded-md transition-colors {{ request()->routeIs('admin.services.index') ? 'bg-admin-700 text-white' : 'text-admin-300 hover:bg-admin-700 hover:text-white' }}">
                                     Semua Perkhidmatan
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ route('admin.service-categories.index') }}"
+                                   class="flex items-center px-4 py-2 text-sm font-medium rounded-md transition-colors {{ request()->routeIs('admin.service-categories.*') ? 'bg-admin-700 text-white' : 'text-admin-300 hover:bg-admin-700 hover:text-white' }}">
+                                    Kategori Perkhidmatan
                                 </a>
                             </li>
                             <li>
@@ -199,9 +239,9 @@
                     </li>
 
                     <!-- Products -->
-                    <li x-data="{ open: {{ request()->routeIs('admin.products.*') || request()->routeIs('admin.reviews.*') ? 'true' : 'false' }} }">
+                    <li x-data="{ open: {{ request()->routeIs('admin.products.*') || request()->routeIs('admin.product-categories.*') || request()->routeIs('admin.reviews.*') || request()->routeIs('admin.product-reports.*') ? 'true' : 'false' }} }">
                         <button @click="open = !open" type="button"
-                                class="flex items-center w-full px-4 py-2 text-sm font-medium rounded-md transition-colors {{ request()->routeIs('admin.products.*') || request()->routeIs('admin.reviews.*') ? 'bg-admin-700 text-white' : 'text-admin-300 hover:bg-admin-700 hover:text-white' }}">
+                                class="flex items-center w-full px-4 py-2 text-sm font-medium rounded-md transition-colors {{ request()->routeIs('admin.products.*') || request()->routeIs('admin.product-categories.*') || request()->routeIs('admin.reviews.*') || request()->routeIs('admin.product-reports.*') ? 'bg-admin-700 text-white' : 'text-admin-300 hover:bg-admin-700 hover:text-white' }}">
                             <svg class="mr-3 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
                             </svg>
@@ -215,6 +255,12 @@
                                 <a href="{{ route('admin.products.index') }}"
                                    class="flex items-center px-4 py-2 text-sm font-medium rounded-md transition-colors {{ request()->routeIs('admin.products.index') ? 'bg-admin-700 text-white' : 'text-admin-300 hover:bg-admin-700 hover:text-white' }}">
                                     Semua Produk
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ route('admin.product-categories.index') }}"
+                                   class="flex items-center px-4 py-2 text-sm font-medium rounded-md transition-colors {{ request()->routeIs('admin.product-categories.*') ? 'bg-admin-700 text-white' : 'text-admin-300 hover:bg-admin-700 hover:text-white' }}">
+                                    Kategori Produk
                                 </a>
                             </li>
                             <li>
