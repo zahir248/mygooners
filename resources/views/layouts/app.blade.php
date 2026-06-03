@@ -708,6 +708,18 @@
 
                         <!-- Auth (Hidden on mobile and tablet) -->
                         @auth
+                            @php
+                                $userMenuLinkClass = function (bool $active, bool $mobile = false): string {
+                                    if ($mobile) {
+                                        return $active
+                                            ? 'flex items-center text-sm text-red-600 font-semibold bg-red-50 rounded-md px-2 py-2 -mx-2'
+                                            : 'flex items-center text-sm text-gray-700 hover:text-red-600 transition-colors';
+                                    }
+                                    return $active
+                                        ? 'block px-4 py-2 text-sm bg-red-50 text-red-600 font-semibold'
+                                        : 'block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100';
+                                };
+                            @endphp
                             <div class="relative hidden xl:block" x-data="{ open: false }">
                                 <button @click="open = !open" class="flex items-center text-sm rounded-full focus:outline-none">
                                     @if(auth()->user()->profile_image)
@@ -722,31 +734,31 @@
                                     <span class="ml-1 md:ml-2 text-gray-700 font-medium text-sm md:text-base hidden sm:block">{{ auth()->user()->name }}</span>
                                 </button>
                                 <div x-show="open" @click.away="open = false" x-cloak class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
-                                    <a href="{{ route('dashboard') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                    <a href="{{ route('dashboard') }}" class="{{ $userMenuLinkClass(request()->routeIs('dashboard*')) }}">
                                         <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2zm0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
                                         </svg>
                                         Panel Kawalan
                                     </a>
-                                    <a href="{{ auth()->user()->is_seller ? route('seller.info') : route('profile.info') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                    <a href="{{ auth()->user()->is_seller ? route('seller.info') : route('profile.info') }}" class="{{ $userMenuLinkClass(request()->routeIs('profile.info', 'seller.info')) }}">
                                         <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
                                         </svg>
                                         Profil
                                     </a>
-                                    <a href="{{ route('checkout.orders') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                    <a href="{{ route('checkout.orders') }}" class="{{ $userMenuLinkClass(request()->routeIs('checkout.orders', 'checkout.show', 'checkout.show-retry-payment', 'checkout.retry-payment', 'checkout.retry-payment-with-method', 'checkout.invoice.*')) }}">
                                         <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
                                         </svg>
                                         Pesanan Saya
                                     </a>
-                                    <a href="{{ route('checkout.refunds') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                    <a href="{{ route('checkout.refunds') }}" class="{{ $userMenuLinkClass(request()->routeIs('checkout.refunds*')) }}">
                                         <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"></path>
                                         </svg>
                                         Permohonan Refund
                                     </a>
-                                    <a href="{{ route('favourites.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                    <a href="{{ route('favourites.index') }}" class="{{ $userMenuLinkClass(request()->routeIs('favourites.index')) }} flex items-center">
                                         <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
                                         </svg>
@@ -760,7 +772,7 @@
                                             @endif
                                         @endif
                                     </a>
-                                    <a href="{{ route('addresses.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                    <a href="{{ route('addresses.index') }}" class="{{ $userMenuLinkClass(request()->routeIs('addresses.*')) }}">
                                         <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
@@ -922,31 +934,31 @@
                                         </div>
                                     </div>
                                     <div class="space-y-2">
-                                        <a href="{{ route('dashboard') }}" class="flex items-center text-sm text-gray-700 hover:text-red-600 transition-colors">
+                                        <a href="{{ route('dashboard') }}" class="{{ $userMenuLinkClass(request()->routeIs('dashboard*'), true) }}">
                                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2zm0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
                                             </svg>
                                             Panel Kawalan
                                         </a>
-                                        <a href="{{ auth()->user()->is_seller ? route('seller.info') : route('profile.info') }}" class="flex items-center text-sm text-gray-700 hover:text-red-600 transition-colors">
+                                        <a href="{{ auth()->user()->is_seller ? route('seller.info') : route('profile.info') }}" class="{{ $userMenuLinkClass(request()->routeIs('profile.info', 'seller.info'), true) }}">
                                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
                                             </svg>
                                             Profil
                                         </a>
-                                        <a href="{{ route('checkout.orders') }}" class="flex items-center text-sm text-gray-700 hover:text-red-600 transition-colors">
+                                        <a href="{{ route('checkout.orders') }}" class="{{ $userMenuLinkClass(request()->routeIs('checkout.orders', 'checkout.show', 'checkout.show-retry-payment', 'checkout.retry-payment', 'checkout.retry-payment-with-method', 'checkout.invoice.*'), true) }}">
                                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
                                             </svg>
                                             Pesanan Saya
                                         </a>
-                                        <a href="{{ route('checkout.refunds') }}" class="flex items-center text-sm text-gray-700 hover:text-red-600 transition-colors">
+                                        <a href="{{ route('checkout.refunds') }}" class="{{ $userMenuLinkClass(request()->routeIs('checkout.refunds*'), true) }}">
                                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M6 10l6 6m-6-6l6-6"></path>
                                             </svg>
                                             Permohonan Refund
                                         </a>
-                                        <a href="{{ route('favourites.index') }}" class="flex items-center text-sm text-gray-700 hover:text-red-600 transition-colors">
+                                        <a href="{{ route('favourites.index') }}" class="{{ $userMenuLinkClass(request()->routeIs('favourites.index'), true) }}">
                                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
                                             </svg>
@@ -960,7 +972,7 @@
                                                 @endif
                                             @endif
                                         </a>
-                                        <a href="{{ route('addresses.index') }}" class="flex items-center text-sm text-gray-700 hover:text-red-600 transition-colors">
+                                        <a href="{{ route('addresses.index') }}" class="{{ $userMenuLinkClass(request()->routeIs('addresses.*'), true) }}">
                                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
