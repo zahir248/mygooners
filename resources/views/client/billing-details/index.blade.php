@@ -1,18 +1,18 @@
 @extends('layouts.app')
 
-@section('title', 'Alamat - MyGooners')
-@section('meta_description', 'Uruskan alamat bil dan penghantaran anda di MyGooners.')
+@section('title', __('Alamat - MyGooners'))
+@section('meta_description', __('Uruskan alamat bil dan penghantaran anda di MyGooners.'))
 
 @section('content')
 <!-- Breadcrumb -->
 <div class="bg-gray-50 border-b border-gray-200">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
         <nav class="flex items-center space-x-2 text-sm text-gray-600">
-            <a href="{{ route('home') }}" class="hover:text-red-600 transition-colors">Utama</a>
+            <a href="{{ route('home') }}" class="hover:text-red-600 transition-colors">{{ __('Utama') }}</a>
             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
             </svg>
-            <span class="text-gray-900 font-medium">Alamat</span>
+            <span class="text-gray-900 font-medium">{{ __('Alamat') }}</span>
         </nav>
     </div>
 </div>
@@ -22,19 +22,15 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <div class="flex items-center justify-between">
             <div>
-                <h1 class="text-2xl font-bold text-gray-900">Alamat</h1>
-                <p class="text-gray-600 mt-1">Uruskan alamat bil dan penghantaran anda</p>
+                <h1 class="text-2xl font-bold text-gray-900">{{ __('Alamat') }}</h1>
+                <p class="text-gray-600 mt-1">{{ __('Uruskan alamat bil dan penghantaran anda') }}</p>
             </div>
             
             <div class="flex space-x-3">
                 <a href="{{ route('addresses.billing.create') }}" 
-                   class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-medium transition-colors text-sm">
-                    Tambah Alamat Bil
-                </a>
+                   class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-medium transition-colors text-sm">{{ __('Tambah Alamat Bil') }}</a>
                 <a href="{{ route('addresses.shipping.create') }}" 
-                   class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors text-sm">
-                    Tambah Alamat Penghantaran
-                </a>
+                   class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors text-sm">{{ __('Tambah Alamat Penghantaran') }}</a>
             </div>
         </div>
     </div>
@@ -64,7 +60,7 @@
                 <div class="bg-white rounded-xl shadow-lg overflow-hidden border {{ $billingDetail->is_default ? 'border-red-500' : 'border-gray-200' }}">
                     @if($billingDetail->is_default)
                         <div class="bg-red-500 text-white px-4 py-2 text-center text-sm font-medium">
-                            Alamat Lalai
+                            {{ __('Alamat Lalai') }}
                         </div>
                     @endif
                     
@@ -78,9 +74,7 @@
                             </div>
                             
                             @if($billingDetail->is_default)
-                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
-                                    Lalai
-                                </span>
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">{{ __('Lalai') }}</span>
                             @endif
                         </div>
                         
@@ -98,27 +92,21 @@
                                 @if(!$billingDetail->is_default)
                                     <form method="POST" action="{{ route('addresses.billing.set-default', $billingDetail) }}" class="inline">
                                         @csrf
-                                        <button type="submit" class="text-blue-600 hover:text-blue-800 text-sm font-medium">
-                                            Tetapkan sebagai Lalai
-                                        </button>
+                                        <button type="submit" class="text-blue-600 hover:text-blue-800 text-sm font-medium">{{ __('Tetapkan sebagai Lalai') }}</button>
                                     </form>
                                 @endif
                             </div>
                             
                             <div class="flex items-center space-x-2">
                                 <a href="{{ route('addresses.billing.edit', $billingDetail) }}" 
-                                   class="text-gray-600 hover:text-red-600 text-sm font-medium">
-                                    Edit
-                                </a>
+                                   class="text-gray-600 hover:text-red-600 text-sm font-medium">{{ __('Edit') }}</a>
                                 
                                 @if(!$billingDetail->is_default)
                                     <form method="POST" action="{{ route('addresses.billing.destroy', $billingDetail) }}" class="inline" 
-                                          onsubmit="return confirm('Adakah anda pasti mahu memadamkan alamat ini?')">
+                                          onsubmit="return confirm(@json(__('Adakah anda pasti mahu memadamkan alamat ini?')))">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="text-red-600 hover:text-red-800 text-sm font-medium">
-                                            Padam
-                                        </button>
+                                        <button type="submit" class="text-red-600 hover:text-red-800 text-sm font-medium">{{ __('Padam') }}</button>
                                     </form>
                                 @endif
                             </div>
@@ -136,12 +124,10 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
                 </svg>
             </div>
-            <h2 class="text-2xl font-bold text-gray-900 mb-4">Anda Belum Ada Alamat Bil</h2>
-            <p class="text-gray-600 mb-8">Tambah alamat bil pertama anda untuk memudahkan proses pembelian seterusnya.</p>
+            <h2 class="text-2xl font-bold text-gray-900 mb-4">{{ __('Anda Belum Ada Alamat Bil') }}</h2>
+            <p class="text-gray-600 mb-8">{{ __('Tambah alamat bil pertama anda untuk memudahkan proses pembelian seterusnya.') }}</p>
             <a href="{{ route('addresses.billing.create') }}" 
-               class="inline-block bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded-lg font-bold transition-colors">
-                Tambah Alamat Bil Pertama
-            </a>
+               class="inline-block bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded-lg font-bold transition-colors">{{ __('Tambah Alamat Bil Pertama') }}</a>
         </div>
     @endif
     </div>
@@ -154,7 +140,7 @@
                     <div class="bg-white rounded-xl shadow-lg overflow-hidden border {{ $shippingDetail->is_default ? 'border-blue-500' : 'border-gray-200' }}">
                         @if($shippingDetail->is_default)
                             <div class="bg-blue-500 text-white px-4 py-2 text-center text-sm font-medium">
-                                Alamat Lalai
+                                {{ __('Alamat Lalai') }}
                             </div>
                         @endif
                         
@@ -168,9 +154,7 @@
                                 </div>
                                 
                                 @if($shippingDetail->is_default)
-                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                                        Lalai
-                                    </span>
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">{{ __('Lalai') }}</span>
                                 @endif
                             </div>
                             
@@ -188,27 +172,21 @@
                                     @if(!$shippingDetail->is_default)
                                         <form method="POST" action="{{ route('addresses.shipping.set-default', $shippingDetail) }}" class="inline">
                                             @csrf
-                                            <button type="submit" class="text-blue-600 hover:text-blue-800 text-sm font-medium">
-                                                Tetapkan sebagai Lalai
-                                            </button>
+                                            <button type="submit" class="text-blue-600 hover:text-blue-800 text-sm font-medium">{{ __('Tetapkan sebagai Lalai') }}</button>
                                         </form>
                                     @endif
                                 </div>
                                 
                                 <div class="flex items-center space-x-2">
                                     <a href="{{ route('addresses.shipping.edit', $shippingDetail) }}" 
-                                       class="text-gray-600 hover:text-blue-600 text-sm font-medium">
-                                        Edit
-                                    </a>
+                                       class="text-gray-600 hover:text-blue-600 text-sm font-medium">{{ __('Edit') }}</a>
                                     
                                     @if(!$shippingDetail->is_default)
                                         <form method="POST" action="{{ route('addresses.shipping.destroy', $shippingDetail) }}" class="inline" 
-                                              onsubmit="return confirm('Adakah anda pasti mahu memadamkan alamat ini?')">
+                                              onsubmit="return confirm(@json(__('Adakah anda pasti mahu memadamkan alamat ini?')))">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="text-red-600 hover:text-red-800 text-sm font-medium">
-                                                Padam
-                                            </button>
+                                            <button type="submit" class="text-red-600 hover:text-red-800 text-sm font-medium">{{ __('Padam') }}</button>
                                         </form>
                                     @endif
                                 </div>
@@ -226,12 +204,10 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
                     </svg>
                 </div>
-                <h2 class="text-2xl font-bold text-gray-900 mb-4">Anda Belum Ada Alamat Penghantaran</h2>
-                <p class="text-gray-600 mb-8">Tambah alamat penghantaran pertama anda untuk memudahkan proses checkout.</p>
+                <h2 class="text-2xl font-bold text-gray-900 mb-4">{{ __('Anda Belum Ada Alamat Penghantaran') }}</h2>
+                <p class="text-gray-600 mb-8">{{ __('Tambah alamat penghantaran pertama anda untuk memudahkan proses checkout.') }}</p>
                 <a href="{{ route('addresses.shipping.create') }}" 
-                   class="inline-block bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-bold transition-colors">
-                    Tambah Alamat Penghantaran Pertama
-                </a>
+                   class="inline-block bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-bold transition-colors">{{ __('Tambah Alamat Penghantaran Pertama') }}</a>
             </div>
         @endif
     </div>
@@ -245,19 +221,15 @@ document.addEventListener('DOMContentLoaded', function() {
     const shippingTab = document.getElementById('shipping-tab');
     const billingContent = document.getElementById('billing-content');
     const shippingContent = document.getElementById('shipping-content');
-
     function switchTab(activeTab, activeContent, inactiveTab, inactiveContent) {
         // Update tab buttons
         activeTab.classList.add('active', 'border-red-500', 'text-red-600');
         activeTab.classList.remove('border-transparent', 'text-gray-500');
-        
         inactiveTab.classList.remove('active', 'border-red-500', 'text-red-600');
         inactiveTab.classList.add('border-transparent', 'text-gray-500');
-        
         // Update content
         activeContent.classList.remove('hidden');
         activeContent.classList.add('active');
-        
         inactiveContent.classList.add('hidden');
         inactiveContent.classList.remove('active');
     }

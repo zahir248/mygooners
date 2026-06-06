@@ -1,14 +1,14 @@
 @extends('layouts.admin')
 
-@section('title', 'Statistik Ulasan')
+@section('title', __('Statistik Ulasan'))
 
 @section('content')
 <!-- Header Section -->
 <div class="px-4 sm:px-6 lg:px-8 py-6">
     <div class="sm:flex sm:items-center sm:justify-between">
         <div>
-            <h1 class="text-2xl font-bold text-gray-900">Statistik Ulasan</h1>
-            <p class="mt-2 text-sm text-gray-700">Analisis mendalam prestasi produk berdasarkan ulasan pelanggan</p>
+            <h1 class="text-2xl font-bold text-gray-900">{{ __('Statistik Ulasan') }}</h1>
+            <p class="mt-2 text-sm text-gray-700">{{ __('Analisis mendalam prestasi produk berdasarkan ulasan pelanggan') }}</p>
         </div>
         <div class="mt-4 sm:mt-0">
             <a href="{{ route('admin.reviews.index') }}" 
@@ -16,7 +16,7 @@
                 <svg class="-ml-1 mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
                 </svg>
-                Kembali ke Ulasan
+                {{ __('Kembali ke Ulasan') }}
             </a>
         </div>
     </div>
@@ -25,7 +25,7 @@
     <!-- Overview Cards -->
     <div class="mx-4 bg-white shadow rounded-lg mb-6">
         <div class="px-6 py-4 border-b border-gray-200">
-            <h3 class="text-lg font-medium text-gray-900">Ringkasan Statistik</h3>
+            <h3 class="text-lg font-medium text-gray-900">{{ __('Ringkasan Statistik') }}</h3>
         </div>
         <div class="p-6">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
@@ -36,7 +36,7 @@
                         </svg>
                     </div>
                     <div class="ml-4">
-                        <p class="text-sm font-medium text-gray-600">Produk Direview</p>
+                        <p class="text-sm font-medium text-gray-600">{{ __('Produk Direview') }}</p>
                         <p class="text-2xl font-bold text-gray-900">{{ number_format($stats['products_with_reviews'] ?? 0) }}</p>
                     </div>
                 </div>
@@ -48,7 +48,7 @@
                         </svg>
                     </div>
                     <div class="ml-4">
-                        <p class="text-sm font-medium text-gray-600">Purata Rating</p>
+                        <p class="text-sm font-medium text-gray-600">{{ __('Purata Penilaian') }}</p>
                         <p class="text-2xl font-bold text-gray-900">{{ number_format($stats['average_rating'], 1) }}/5</p>
                     </div>
                 </div>
@@ -60,7 +60,7 @@
                         </svg>
                     </div>
                     <div class="ml-4">
-                        <p class="text-sm font-medium text-gray-600">Produk Terbaik</p>
+                        <p class="text-sm font-medium text-gray-600">{{ __('Produk Terbaik') }}</p>
                         <p class="text-2xl font-bold text-gray-900">{{ number_format($stats['top_rated_products'] ?? 0) }}</p>
                     </div>
                 </div>
@@ -72,7 +72,7 @@
                         </svg>
                     </div>
                     <div class="ml-4">
-                        <p class="text-sm font-medium text-gray-600">Jumlah Ulasan</p>
+                        <p class="text-sm font-medium text-gray-600">{{ __('Jumlah Ulasan') }}</p>
                         <p class="text-2xl font-bold text-gray-900">{{ number_format($stats['total_reviews']) }}</p>
                     </div>
                 </div>
@@ -85,7 +85,7 @@
         <!-- Rating Distribution Chart -->
         <div class="bg-white shadow overflow-hidden sm:rounded-lg">
             <div class="px-6 py-4 border-b border-gray-200">
-                <h3 class="text-lg font-medium text-gray-900">Agihan Rating</h3>
+                <h3 class="text-lg font-medium text-gray-900">{{ __('Agihan Penilaian') }}</h3>
             </div>
             <div class="px-6 py-4">
                 <div class="space-y-4">
@@ -120,7 +120,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
                         </svg>
                     </div>
-                    <h3 class="text-lg font-medium text-gray-900">Analisis Produk</h3>
+                    <h3 class="text-lg font-medium text-gray-900">{{ __('Analisis Produk') }}</h3>
                 </div>
             </div>
             
@@ -131,7 +131,7 @@
                         <div class="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
                             <div class="flex items-center">
                                 <div class="w-2 h-2 bg-blue-500 rounded-full mr-3"></div>
-                                <span class="text-sm font-medium text-gray-700">Liputan Produk</span>
+                                <span class="text-sm font-medium text-gray-700">{{ __('Liputan Produk') }}</span>
                             </div>
                             <span class="text-sm font-semibold text-blue-600">{{ number_format($stats['products_with_reviews'] ?? 0) }} Produk</span>
                         </div>
@@ -140,7 +140,7 @@
                         <div class="flex items-center justify-between p-3 bg-green-50 rounded-lg">
                             <div class="flex items-center">
                                 <div class="w-2 h-2 bg-green-500 rounded-full mr-3"></div>
-                                <span class="text-sm font-medium text-gray-700">Kepuasan Pelanggan</span>
+                                <span class="text-sm font-medium text-gray-700">{{ __('Kepuasan Pelanggan') }}</span>
                             </div>
                             <span class="text-sm font-semibold text-green-600">{{ number_format($stats['average_rating'], 1) }}/5.0</span>
                         </div>
@@ -149,7 +149,7 @@
                         <div class="flex items-center justify-between p-3 bg-yellow-50 rounded-lg">
                             <div class="flex items-center">
                                 <div class="w-2 h-2 bg-yellow-500 rounded-full mr-3"></div>
-                                <span class="text-sm font-medium text-gray-700">Produk Berkualiti Tinggi</span>
+                                <span class="text-sm font-medium text-gray-700">{{ __('Produk Berkualiti Tinggi') }}</span>
                             </div>
                             <span class="text-sm font-semibold text-yellow-600">{{ number_format($stats['top_rated_products'] ?? 0) }} Produk</span>
                         </div>
@@ -158,7 +158,7 @@
                         <div class="flex items-center justify-between p-3 bg-purple-50 rounded-lg">
                             <div class="flex items-center">
                                 <div class="w-2 h-2 bg-purple-500 rounded-full mr-3"></div>
-                                <span class="text-sm font-medium text-gray-700">Indikator Kecemerlangan</span>
+                                <span class="text-sm font-medium text-gray-700">{{ __('Indikator Kecemerlangan') }}</span>
                             </div>
                             <span class="text-sm font-semibold text-purple-600">{{ number_format($stats['reviews_by_rating'][5] ?? 0) }} Ulasan 5★</span>
                         </div>
@@ -167,10 +167,11 @@
                     <!-- Summary Statement -->
                     <div class="mt-6 p-4 bg-gray-50 rounded-lg border-l-4 border-blue-500">
                         <p class="text-sm text-gray-700 leading-relaxed">
-                            <strong>Ringkasan:</strong> Portfolio produk menunjukkan prestasi yang memberangsangkan dengan 
-                            {{ number_format($stats['average_rating'], 1) }} bintang purata. 
-                            {{ number_format($stats['top_rated_products'] ?? 0) }} produk mendapat pengiktirafan tinggi, 
-                            mencerminkan komitmen terhadap kualiti dan kepuasan pelanggan.
+                            <strong>{{ __('Ringkasan:') }}</strong>
+                            {{ __('Portfolio produk menunjukkan prestasi yang memberangsangkan dengan :rating bintang purata. :count produk mendapat pengiktirafan tinggi, mencerminkan komitmen terhadap kualiti dan kepuasan pelanggan.', [
+                                'rating' => number_format($stats['average_rating'], 1),
+                                'count' => number_format($stats['top_rated_products'] ?? 0),
+                            ]) }}
                         </p>
                     </div>
                 @else
@@ -180,8 +181,8 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
                             </svg>
                         </div>
-                        <h4 class="text-lg font-medium text-gray-900 mb-2">Tiada Data Ulasan</h4>
-                        <p class="text-sm text-gray-500">Belum ada produk yang telah direview oleh pelanggan.</p>
+                        <h4 class="text-lg font-medium text-gray-900 mb-2">{{ __('Tiada Data Ulasan') }}</h4>
+                        <p class="text-sm text-gray-500">{{ __('Belum ada produk yang telah direview oleh pelanggan.') }}</p>
                     </div>
                 @endif
             </div>
@@ -191,20 +192,20 @@
     <!-- Quick Actions -->
     <div class="mx-4 bg-white shadow overflow-hidden sm:rounded-lg">
         <div class="px-6 py-4 border-b border-gray-200">
-            <h3 class="text-lg font-medium text-gray-900">Tindakan Pantas</h3>
+            <h3 class="text-lg font-medium text-gray-900">{{ __('Tindakan Pantas') }}</h3>
         </div>
         <div class="px-6 py-4">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <a href="{{ route('admin.reviews.index') }}" 
                    class="bg-blue-100 hover:bg-blue-200 text-blue-800 px-4 py-3 rounded-lg text-center transition-colors">
                     <div class="text-lg font-semibold">{{ $stats['total_reviews'] }}</div>
-                    <div class="text-sm">Semua Ulasan</div>
+                    <div class="text-sm">{{ __('Semua Ulasan') }}</div>
                 </a>
                 
                 <a href="{{ route('admin.products.index') }}" 
                    class="bg-green-100 hover:bg-green-200 text-green-800 px-4 py-3 rounded-lg text-center transition-colors">
                     <div class="text-lg font-semibold">{{ $stats['total_products'] ?? 0 }}</div>
-                    <div class="text-sm">Semua Produk</div>
+                    <div class="text-sm">{{ __('Semua Produk') }}</div>
                 </a>
                 
                 <a href="{{ route('admin.reviews.index', ['rating' => '5']) }}" 

@@ -142,8 +142,8 @@
         
         <div class="footer">
             <p><strong>MyGooners</strong></p>
-            <p>Komuniti peminat Arsenal terbaik</p>
-            <p>Berita terkini, video, dan kandungan eksklusif</p>
+            <p>{{ __('Komuniti peminat Arsenal terbaik') }}</p>
+            <p>{{ __('Berita terkini, video, dan kandungan eksklusif') }}</p>
             
             <div class="social-links">
                 <a href="#">Twitter</a>

@@ -18,6 +18,20 @@ return Application::configure(basePath: dirname(__DIR__))
             'admin' => \App\Http\Middleware\AdminMiddleware::class,
             'writer' => \App\Http\Middleware\WriterAccessMiddleware::class,
         ]);
+
+        $middleware->web(append: [
+            \App\Http\Middleware\SetAdminLocale::class,
+            \App\Http\Middleware\SetClientLocale::class,
+        ]);
+
+        // Run after Authenticate so locale comes from the logged-in user's preference.
+        $middleware->priority([
+            \Illuminate\Session\Middleware\StartSession::class,
+            \Illuminate\View\Middleware\ShareErrorsFromSession::class,
+            \Illuminate\Auth\Middleware\Authenticate::class,
+            \App\Http\Middleware\SetAdminLocale::class,
+            \App\Http\Middleware\SetClientLocale::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->render(function (Throwable $e, Request $request) {

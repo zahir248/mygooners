@@ -138,7 +138,7 @@ class AdminController extends Controller
                 return [
                     'type' => 'article',
                     'title' => $article->title,
-                    'description' => "Artikel baru: {$article->title}",
+                    'description' => __('admin.activity_new_article', ['title' => $article->title]),
                     'time' => $article->created_at->diffForHumans(),
                     'user' => 'Admin',
                     'color' => 'green',
@@ -174,7 +174,7 @@ class AdminController extends Controller
                 return [
                     'type' => 'product',
                     'title' => $product->name,
-                    'description' => "Produk baru: {$product->name}",
+                    'description' => __('admin.activity_new_product', ['name' => $product->name]),
                     'time' => $product->created_at->diffForHumans(),
                     'user' => $product->user->name ?? 'Admin',
                     'color' => 'red',
@@ -191,7 +191,7 @@ class AdminController extends Controller
                 return [
                     'type' => 'user',
                     'title' => $user->name,
-                    'description' => "Pengguna baru: {$user->name}",
+                    'description' => __('admin.activity_new_user', ['name' => $user->name]),
                     'time' => $user->created_at->diffForHumans(),
                     'user' => 'System',
                     'color' => 'blue',
@@ -209,7 +209,7 @@ class AdminController extends Controller
                 return [
                     'type' => 'review',
                     'title' => $review->product->name,
-                    'description' => "Ulasan baru untuk: {$review->product->name}",
+                    'description' => __('admin.activity_new_review', ['name' => $review->product->name]),
                     'time' => $review->created_at->diffForHumans(),
                     'user' => $review->user->name ?? 'Anonymous',
                     'color' => 'purple',
@@ -318,13 +318,13 @@ class AdminController extends Controller
         // Update password if provided
         if ($request->filled('new_password')) {
             if (!Hash::check($request->current_password, $admin->password)) {
-                return back()->withErrors(['current_password' => 'Kata laluan semasa tidak sah']);
+                return back()->withErrors(['current_password' => __('flash.current_password_invalid')]);
             }
             $admin->password = Hash::make($request->new_password);
         }
 
         $admin->save();
 
-        return redirect()->route('admin.profile')->with('success', 'Profil berjaya dikemas kini!');
+        return redirect()->route('admin.profile')->with('success', __('flash.profile_updated'));
     }
 } 

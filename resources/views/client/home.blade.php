@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'MyGooners - Komuniti Peminat Arsenal')
-@section('meta_description', 'Komuniti peminat Arsenal terbaik yang menampilkan berita terkini, video, pasaran perkhidmatan, dan barangan eksklusif. Sertai ribuan Gooners di seluruh dunia.')
+@section('title', __('MyGooners - Komuniti Peminat Arsenal'))
+@section('meta_description', __('Komuniti peminat Arsenal terbaik yang menampilkan berita terkini, video, pasaran perkhidmatan, dan barangan eksklusif. Sertai ribuan Gooners di seluruh dunia.'))
 
 @section('content')
 <!-- Hero Section -->
@@ -12,18 +12,12 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <div class="text-center">
             <h1 class="text-4xl md:text-6xl font-bold mb-6">
-                Selamat Datang ke <span class="text-yellow-300">MyGooners</span>
+                {{ __('Selamat Datang ke') }} <span class="text-yellow-300">{{ __('MyGooners') }}</span>
             </h1>
-            <p class="text-xl md:text-2xl mb-8 text-red-100 max-w-3xl mx-auto">
-                Komuniti peminat Arsenal terbaik yang menampilkan berita terkini, video eksklusif, perkhidmatan dipercayai dan barangan tulen.
-            </p>
+            <p class="text-xl md:text-2xl mb-8 text-red-100 max-w-3xl mx-auto">{{ __('Komuniti peminat Arsenal terbaik yang menampilkan berita terkini, video eksklusif, perkhidmatan dipercayai dan barangan tulen.') }}</p>
             <div class="flex flex-col sm:flex-row justify-center gap-4">
-                <a href="{{ route('blog.index') }}" class="bg-white text-red-600 hover:bg-gray-100 px-8 py-3 rounded-lg font-semibold text-lg transition-colors">
-                    Berita Terkini
-                </a>
-                <a href="{{ route('register') }}" class="bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded-lg font-semibold text-lg transition-colors">
-                    Sertai Komuniti
-                </a>
+                <a href="{{ route('blog.index') }}" class="bg-white text-red-600 hover:bg-gray-100 px-8 py-3 rounded-lg font-semibold text-lg transition-colors">{{ __('Berita Terkini') }}</a>
+                <a href="{{ route('register') }}" class="bg-red-600 hover:bg-red-700 text-white hover:text-white px-8 py-3 rounded-lg font-semibold text-lg transition-colors">{{ __('Sertai Komuniti') }}</a>
             </div>
         </div>
     </div>
@@ -35,12 +29,10 @@
     <section class="mb-16">
         <div class="flex items-center justify-between mb-8">
             <div>
-                <h2 class="text-3xl font-bold text-gray-900 mb-2">Berita Terkini</h2>
-                <p class="text-gray-600">Dapatkan berita dan perkembangan terkini mengenai Arsenal</p>
+                <h2 class="text-3xl font-bold text-gray-900 mb-2">{{ __('Berita Terkini') }}</h2>
+                <p class="text-gray-600">{{ __('Dapatkan berita dan perkembangan terkini mengenai Arsenal') }}</p>
             </div>
-            <a href="{{ route('blog.index') }}" class="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
-                Lihat Semua Berita
-            </a>
+            <a href="{{ route('blog.index') }}" class="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">{{ __('Lihat Semua Berita') }}</a>
         </div>
         
     <!-- Featured Content Grid -->
@@ -62,12 +54,10 @@
                         @endif
                         <div class="absolute top-4 left-4 flex gap-2">
                             <span class="bg-red-600 text-white px-3 py-1 rounded-full text-sm font-medium">
-                                {{ $article->category ?: 'Berita' }}
+                                {{ $article->category ?: __('Berita') }}
                             </span>
                             @if($article->is_featured)
-                                <span class="bg-yellow-400 text-gray-900 px-3 py-1 rounded-full text-sm font-bold">
-                                    UTAMA
-                                </span>
+                                <span class="bg-yellow-400 text-gray-900 px-3 py-1 rounded-full text-sm font-bold">{{ __('UTAMA') }}</span>
                             @endif
                         </div>
                     </div>
@@ -95,15 +85,15 @@
                                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path>
                                 </svg>
                                 <span>{{ $article->published_at ? $article->published_at->diffForHumans() : $article->created_at->diffForHumans() }}</span>
-                                <span class="mx-2">•</span>
+                                <span class="mx-2">{{ __('•') }}</span>
                                 <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
                                     <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path>
                                     <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"></path>
                                 </svg>
-                                {{ number_format($article->views_count ?? 0) }} tontonan
+                                {{ number_format($article->views_count ?? 0) }} {{ __('tontonan') }}
                             </div>
                             <a href="{{ route('blog.show', $article->slug) }}" class="text-red-600 hover:text-red-700 font-medium transition-colors">
-                                Baca Lagi →
+                                {{ __('Baca Lagi →') }}
                             </a>
                         </div>
                     </div>
@@ -115,8 +105,8 @@
                         <svg class="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                         </svg>
-                        <h3 class="text-xl font-semibold text-gray-900 mb-2">Tiada Artikel Terkini</h3>
-                        <p class="text-gray-600">Artikel akan muncul di sini tidak lama lagi.</p>
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2">{{ __('Tiada Artikel Terkini') }}</h3>
+                        <p class="text-gray-600">{{ __('Artikel akan muncul di sini tidak lama lagi.') }}</p>
                     </div>
                 </div>
             @endif
@@ -128,7 +118,7 @@
             <!-- Recent Articles List -->
             <div class="bg-white rounded-xl shadow-lg overflow-hidden flex flex-col h-full">
                 <div class="p-4 border-b border-gray-200">
-                    <h3 class="text-lg font-bold text-gray-900">Artikel Terkini</h3>
+                    <h3 class="text-lg font-bold text-gray-900">{{ __('Artikel Terkini') }}</h3>
                 </div>
                 <div class="flex flex-col flex-grow">
                     @if($featuredArticles->count() > 0)
@@ -152,8 +142,8 @@
                                                 </a>
                                             </h4>
                                             <div class="flex items-center text-xs text-gray-500">
-                                                <span class="bg-gray-100 text-gray-600 px-2 py-1 rounded-full text-xs">{{ $article->category ?: 'Berita' }}</span>
-                                                <span class="mx-2">•</span>
+                                                <span class="bg-gray-100 text-gray-600 px-2 py-1 rounded-full text-xs">{{ $article->category ?: __('Berita') }}</span>
+                                                <span class="mx-2">{{ __('•') }}</span>
                                                 <span>{{ $article->published_at ? $article->published_at->diffForHumans() : $article->created_at->diffForHumans() }}</span>
                                             </div>
                                         </div>
@@ -163,13 +153,11 @@
                         </div>
                     @else
                         <div class="p-6 flex-grow flex items-center justify-center">
-                            <p class="text-gray-600 text-sm text-center">Tiada artikel tambahan untuk dipaparkan.</p>
+                            <p class="text-gray-600 text-sm text-center">{{ __('Tiada artikel tambahan untuk dipaparkan.') }}</p>
                         </div>
                     @endif
                     <div class="p-4 bg-gray-50 mt-auto">
-                        <a href="{{ route('blog.index') }}" class="text-red-600 hover:text-red-700 font-medium text-sm">
-                            Lihat Semua Artikel →
-                        </a>
+                        <a href="{{ route('blog.index') }}" class="text-red-600 hover:text-red-700 font-medium text-sm">{{ __('Lihat Semua Artikel →') }}</a>
                     </div>
                 </div>
             </div>
@@ -180,7 +168,7 @@
     <!-- AdSense Ad Section 1 -->
     <div class="mb-8">
         <div class="bg-white rounded-xl shadow-lg p-6 text-center">
-            <div class="text-sm text-gray-500 mb-2">Iklan</div>
+            <div class="text-sm text-gray-500 mb-2">{{ __('Iklan') }}</div>
             <!-- MyGoonersMy AdSense Ad -->
             <ins class="adsbygoogle"
                  style="display:block"
@@ -198,12 +186,10 @@
     <section class="mb-16">
         <div class="flex items-center justify-between mb-8">
             <div>
-                <h2 class="text-3xl font-bold text-gray-900 mb-2">Video Terkini</h2>
-                <p class="text-gray-600">Tonton video eksklusif dan highlights Arsenal terkini</p>
+                <h2 class="text-3xl font-bold text-gray-900 mb-2">{{ __('Video Terkini') }}</h2>
+                <p class="text-gray-600">{{ __('Tonton video eksklusif dan highlights Arsenal terkini') }}</p>
             </div>
-            <a href="{{ route('videos.index') }}" class="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
-                Lihat Semua Video
-            </a>
+            <a href="{{ route('videos.index') }}" class="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">{{ __('Lihat Semua Video') }}</a>
         </div>
         
         <!-- Featured Video Grid -->
@@ -228,15 +214,11 @@
                                 </div>
                             @endif
                             <div class="absolute top-4 left-4">
-                                <span class="bg-red-600 text-white px-3 py-1 rounded-full text-sm font-medium">
-                                    Video
-                                </span>
+                                <span class="bg-red-600 text-white px-3 py-1 rounded-full text-sm font-medium">{{ __('Video') }}</span>
                             </div>
                             @if($video->is_featured)
                                 <div class="absolute top-4 right-4">
-                                    <span class="bg-yellow-400 text-gray-900 px-3 py-1 rounded-full text-sm font-bold">
-                                        UTAMA
-                                    </span>
+                                    <span class="bg-yellow-400 text-gray-900 px-3 py-1 rounded-full text-sm font-bold">{{ __('UTAMA') }}</span>
                                 </div>
                             @endif
                         </div>
@@ -255,15 +237,15 @@
                                         <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path>
                                     </svg>
                                     {{ $video->published_at ? $video->published_at->diffForHumans() : $video->created_at->diffForHumans() }}
-                                    <span class="mx-2">•</span>
+                                    <span class="mx-2">{{ __('•') }}</span>
                                     <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
                                         <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path>
                                         <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"></path>
                                     </svg>
-                                    {{ number_format($video->views_count ?? 0) }} tontonan
+                                    {{ number_format($video->views_count ?? 0) }} {{ __('tontonan') }}
                                 </div>
                                 <a href="{{ route('videos.show', $video->slug) }}" class="text-red-600 hover:text-red-700 font-medium">
-                                    Tonton Video →
+                                    {{ __('Tonton Video →') }}
                                 </a>
                             </div>
                         </div>
@@ -275,8 +257,8 @@
                             <svg class="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
                             </svg>
-                            <h3 class="text-xl font-semibold text-gray-900 mb-2">Tiada Video Terkini</h3>
-                            <p class="text-gray-600">Video akan muncul di sini tidak lama lagi.</p>
+                            <h3 class="text-xl font-semibold text-gray-900 mb-2">{{ __('Tiada Video Terkini') }}</h3>
+                            <p class="text-gray-600">{{ __('Video akan muncul di sini tidak lama lagi.') }}</p>
                         </div>
                     </div>
                 @endif
@@ -287,7 +269,7 @@
                 <!-- Recent Videos List -->
                 <div class="bg-white rounded-xl shadow-lg overflow-hidden flex flex-col h-full">
                     <div class="p-4 border-b border-gray-200">
-                        <h3 class="text-lg font-bold text-gray-900">Video Terkini</h3>
+                        <h3 class="text-lg font-bold text-gray-900">{{ __('Video Terkini') }}</h3>
                     </div>
                     <div class="flex flex-col flex-grow">
                         @if($featuredVideos->count() > 1)
@@ -310,8 +292,8 @@
                                                     </a>
                                                 </h4>
                                                 <div class="flex items-center text-xs text-gray-500">
-                                                    <span class="bg-gray-100 text-gray-600 px-2 py-1 rounded-full text-xs">Video</span>
-                                                    <span class="mx-2">•</span>
+                                                    <span class="bg-gray-100 text-gray-600 px-2 py-1 rounded-full text-xs">{{ __('Video') }}</span>
+                                                    <span class="mx-2">{{ __('•') }}</span>
                                                     <span>{{ $video->published_at ? $video->published_at->diffForHumans() : $video->created_at->diffForHumans() }}</span>
                                                 </div>
                                             </div>
@@ -321,13 +303,11 @@
                             </div>
                         @else
                             <div class="p-6 flex-grow flex items-center justify-center">
-                                <p class="text-gray-600 text-sm text-center">Tiada video tambahan untuk dipaparkan.</p>
+                                <p class="text-gray-600 text-sm text-center">{{ __('Tiada video tambahan untuk dipaparkan.') }}</p>
                             </div>
                         @endif
                         <div class="p-4 bg-gray-50 mt-auto">
-                            <a href="{{ route('videos.index') }}" class="text-red-600 hover:text-red-700 font-medium text-sm">
-                                Lihat Semua Video →
-                            </a>
+                            <a href="{{ route('videos.index') }}" class="text-red-600 hover:text-red-700 font-medium text-sm">{{ __('Lihat Semua Video →') }}</a>
                         </div>
                     </div>
                 </div>
@@ -338,7 +318,7 @@
     <!-- AdSense Ad Section 2 -->
     <div class="mb-8">
         <div class="bg-white rounded-xl shadow-lg p-6 text-center">
-            <div class="text-sm text-gray-500 mb-2">Iklan</div>
+            <div class="text-sm text-gray-500 mb-2">{{ __('Iklan') }}</div>
             <!-- MyGoonersMy AdSense Ad -->
             <ins class="adsbygoogle"
                  style="display:block"
@@ -356,12 +336,10 @@
     <section class="mb-16">
         <div class="flex items-center justify-between mb-8">
             <div>
-                <h2 class="text-3xl font-bold text-gray-900 mb-2">Perkhidmatan Dipercayai</h2>
-                <p class="text-gray-600">Berhubung dengan peminat Arsenal yang disahkan menawarkan perkhidmatan berkualiti</p>
+                <h2 class="text-3xl font-bold text-gray-900 mb-2">{{ __('Perkhidmatan Dipercayai') }}</h2>
+                <p class="text-gray-600">{{ __('Berhubung dengan peminat Arsenal yang disahkan menawarkan perkhidmatan berkualiti') }}</p>
             </div>
-            <a href="{{ route('services.index') }}" class="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
-                Lihat Semua Perkhidmatan
-            </a>
+            <a href="{{ route('services.index') }}" class="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">{{ __('Lihat Semua Perkhidmatan') }}</a>
         </div>
         
         <!-- Featured Services Grid -->
@@ -384,13 +362,13 @@
                                 </div>
                             @endif
                             <div class="absolute top-4 left-4 flex gap-2">
-                                <span class="bg-red-600 text-white px-3 py-1 rounded-full text-sm font-medium">{{ $service->category ?: 'Perkhidmatan' }}</span>
+                                <span class="bg-red-600 text-white px-3 py-1 rounded-full text-sm font-medium">{{ $service->category ?: __('Perkhidmatan') }}</span>
                                 @if($service->is_verified)
                                     <span class="bg-green-100 text-green-600 px-2 py-1 rounded-full text-xs font-bold flex items-center">
                                         <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
                                             <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
                                         </svg>
-                                        Disahkan
+                                        {{ __('Disahkan') }}
                                     </span>
                                 @endif
                             </div>
@@ -405,7 +383,7 @@
                                     </h2>
                                 </div>
                                 <div class="text-right">
-                                    <div class="text-2xl font-bold text-red-600 mb-2">{{ $service->pricing ?: 'Harga Rundingan' }}</div>
+                                    <div class="text-2xl font-bold text-red-600 mb-2">{{ $service->pricing ?: __('Harga Rundingan') }}</div>
                                     <div class="flex items-center text-sm text-gray-500">
                                         <svg class="w-4 h-4 mr-1 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
                                             <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
@@ -422,10 +400,10 @@
                                     <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
                                         <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
                                     </svg>
-                                    <span>{{ $service->location ?: 'Lokasi Tidak Dinyatakan' }}</span>
+                                    <span>{{ $service->location ?: __('Lokasi Tidak Dinyatakan') }}</span>
                                 </div>
                                 <a href="{{ route('services.show', $service->slug) }}" class="text-red-600 hover:text-red-700 font-medium">
-                                    Lihat Perkhidmatan →
+                                    {{ __('Lihat Perkhidmatan →') }}
                                 </a>
                             </div>
                         </div>
@@ -437,8 +415,8 @@
                             <svg class="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0V6a2 2 0 012 2v6a2 2 0 01-2 2H8a2 2 0 01-2-2V8a2 2 0 012-2V6"></path>
                             </svg>
-                            <h3 class="text-xl font-semibold text-gray-900 mb-2">Tiada Perkhidmatan Terkini</h3>
-                            <p class="text-gray-600">Perkhidmatan akan muncul di sini tidak lama lagi.</p>
+                            <h3 class="text-xl font-semibold text-gray-900 mb-2">{{ __('Tiada Perkhidmatan Terkini') }}</h3>
+                            <p class="text-gray-600">{{ __('Perkhidmatan akan muncul di sini tidak lama lagi.') }}</p>
                         </div>
                     </div>
                 @endif
@@ -449,7 +427,7 @@
                 <!-- Recent Services List -->
                 <div class="bg-white rounded-xl shadow-lg overflow-hidden flex flex-col h-full">
                     <div class="p-4 border-b border-gray-200">
-                        <h3 class="text-lg font-bold text-gray-900">Perkhidmatan Terkini</h3>
+                        <h3 class="text-lg font-bold text-gray-900">{{ __('Perkhidmatan Terkini') }}</h3>
                     </div>
                     <div class="flex flex-col flex-grow">
                         @if($newServices->count() > 1)
@@ -475,13 +453,13 @@
                                                     </a>
                                                 </h4>
                                                 <div class="flex items-center text-xs text-gray-500 mb-1">
-                                                    <span class="bg-gray-100 text-gray-600 px-2 py-1 rounded-full text-xs">{{ $service->category ?: 'Perkhidmatan' }}</span>
+                                                    <span class="bg-gray-100 text-gray-600 px-2 py-1 rounded-full text-xs">{{ $service->category ?: __('Perkhidmatan') }}</span>
                                                     @if($service->is_verified)
-                                                        <span class="ml-2 bg-green-100 text-green-600 px-2 py-1 rounded-full text-xs">✓</span>
+                                                        <span class="ml-2 bg-green-100 text-green-600 px-2 py-1 rounded-full text-xs">{{ __('✓') }}</span>
                                                     @endif
                                                 </div>
                                                 <div class="text-xs text-gray-500">
-                                                    <span class="font-medium text-red-600">{{ $service->pricing ?: 'Harga Rundingan' }}</span>
+                                                    <span class="font-medium text-red-600">{{ $service->pricing ?: __('Harga Rundingan') }}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -490,13 +468,11 @@
                             </div>
                         @else
                             <div class="p-6 flex-grow flex items-center justify-center">
-                                <p class="text-gray-600 text-sm text-center">Tiada perkhidmatan tambahan untuk dipaparkan.</p>
+                                <p class="text-gray-600 text-sm text-center">{{ __('Tiada perkhidmatan tambahan untuk dipaparkan.') }}</p>
                             </div>
                         @endif
                         <div class="p-4 bg-gray-50 mt-auto">
-                            <a href="{{ route('services.index') }}" class="text-red-600 hover:text-red-700 font-medium text-sm">
-                                Lihat Semua Perkhidmatan →
-                            </a>
+                            <a href="{{ route('services.index') }}" class="text-red-600 hover:text-red-700 font-medium text-sm">{{ __('Lihat Semua Perkhidmatan →') }}</a>
                         </div>
                     </div>
                 </div>
@@ -507,7 +483,7 @@
     <!-- AdSense Ad Section 2 -->
     <div class="mb-8">
         <div class="bg-white rounded-xl shadow-lg p-6 text-center">
-            <div class="text-sm text-gray-500 mb-2">Iklan</div>
+            <div class="text-sm text-gray-500 mb-2">{{ __('Iklan') }}</div>
             <!-- MyGoonersMy AdSense Ad -->
             <ins class="adsbygoogle"
                  style="display:block"
@@ -525,12 +501,10 @@
     <section class="mb-16">
         <div class="flex items-center justify-between mb-8">
             <div>
-                <h2 class="text-3xl font-bold text-gray-900 mb-2">Produk Popular</h2>
-                <p class="text-gray-600">Dapatkan barangan Arsenal terkini dan item eksklusif</p>
+                <h2 class="text-3xl font-bold text-gray-900 mb-2">{{ __('Produk Popular') }}</h2>
+                <p class="text-gray-600">{{ __('Dapatkan barangan Arsenal terkini dan item eksklusif') }}</p>
             </div>
-            <a href="{{ route('shop.index') }}" class="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
-                Lihat Semua Produk
-            </a>
+            <a href="{{ route('shop.index') }}" class="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">{{ __('Lihat Semua Produk') }}</a>
         </div>
         
         <!-- Featured Products Grid -->
@@ -552,35 +526,29 @@
                             @endif
                             @if($product->sale_price)
                                 <div class="absolute top-4 left-4">
-                                    <span class="bg-red-600 text-white px-3 py-1 rounded-full text-sm font-bold">
-                                        JUALAN
-                                    </span>
+                                    <span class="bg-red-600 text-white px-3 py-1 rounded-full text-sm font-bold">{{ __('JUALAN') }}</span>
                                 </div>
                             @endif
                             @if($product->is_featured)
                                 <div class="absolute top-4 right-4">
-                                    <span class="bg-yellow-400 text-gray-900 px-3 py-1 rounded-full text-sm font-bold">
-                                        UTAMA
-                                    </span>
+                                    <span class="bg-yellow-400 text-gray-900 px-3 py-1 rounded-full text-sm font-bold">{{ __('UTAMA') }}</span>
                                 </div>
                             @endif
                             @if($product->is_out_of_stock)
                                 <div class="absolute bottom-4 left-4">
-                                    <span class="bg-red-600 text-white px-3 py-1 rounded-full text-sm font-medium">
-                                        No Stock
-                                    </span>
+                                    <span class="bg-red-600 text-white px-3 py-1 rounded-full text-sm font-medium">{{ __('No Stock') }}</span>
                                 </div>
-                            @elseif($product->calculated_stock <= 5 && $product->calculated_stock > 0)
+                            @elseif($product->calculated_stock<= 5 && $product->calculated_stock > 0)
                                 <div class="absolute bottom-4 left-4">
                                     <span class="bg-orange-500 text-white px-3 py-1 rounded-full text-sm font-medium">
-                                        Hanya {{ $product->calculated_stock }} lagi
+                                        {{ __('Hanya :count lagi', ['count' => $product->calculated_stock]) }}
                                     </span>
                                 </div>
                             @endif
                         </div>
                         <div class="p-6 flex flex-col flex-grow">
                             <div class="flex items-center space-x-2 mb-4">
-                                <span class="bg-red-600 text-white px-3 py-1 rounded-full text-sm font-medium">{{ $product->category ?: 'Produk' }}</span>
+                                <span class="bg-red-600 text-white px-3 py-1 rounded-full text-sm font-medium">{{ $product->category ?: __('Produk') }}</span>
                             </div>
                             
                             <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-3">
@@ -601,7 +569,7 @@
                                     @endif
                                 </div>
                                 <a href="{{ route('shop.show', $product->slug) }}" class="text-red-600 hover:text-red-700 font-medium">
-                                    Lihat Produk →
+                                    {{ __('Lihat Produk →') }}
                                 </a>
                             </div>
                         </div>
@@ -613,8 +581,8 @@
                             <svg class="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
                             </svg>
-                            <h3 class="text-xl font-semibold text-gray-900 mb-2">Tiada Produk Terkini</h3>
-                            <p class="text-gray-600">Produk akan muncul di sini tidak lama lagi.</p>
+                            <h3 class="text-xl font-semibold text-gray-900 mb-2">{{ __('Tiada Produk Terkini') }}</h3>
+                            <p class="text-gray-600">{{ __('Produk akan muncul di sini tidak lama lagi.') }}</p>
                         </div>
                     </div>
                 @endif
@@ -625,7 +593,7 @@
                 <!-- Recent Products List -->
                 <div class="bg-white rounded-xl shadow-lg overflow-hidden flex flex-col h-full">
                     <div class="p-4 border-b border-gray-200">
-                        <h3 class="text-lg font-bold text-gray-900">Produk Terkini</h3>
+                        <h3 class="text-lg font-bold text-gray-900">{{ __('Produk Terkini') }}</h3>
                     </div>
                     <div class="flex flex-col flex-grow">
                         @if($popularProducts->count() > 1)
@@ -651,9 +619,9 @@
                                                     </a>
                                                 </h4>
                                                 <div class="flex items-center text-xs text-gray-500 mb-1">
-                                                    <span class="bg-gray-100 text-gray-600 px-2 py-1 rounded-full text-xs">{{ $product->category ?: 'Produk' }}</span>
+                                                    <span class="bg-gray-100 text-gray-600 px-2 py-1 rounded-full text-xs">{{ $product->category ?: __('Produk') }}</span>
                                                     @if($product->sale_price)
-                                                        <span class="ml-2 bg-red-100 text-red-600 px-2 py-1 rounded-full text-xs">SALE</span>
+                                                        <span class="ml-2 bg-red-100 text-red-600 px-2 py-1 rounded-full text-xs">{{ __('SALE') }}</span>
                                                     @endif
                                                 </div>
                                                 <div class="text-xs text-gray-500">
@@ -671,13 +639,11 @@
                             </div>
                         @else
                             <div class="p-6 flex-grow flex items-center justify-center">
-                                <p class="text-gray-600 text-sm text-center">Tiada produk tambahan untuk dipaparkan.</p>
+                                <p class="text-gray-600 text-sm text-center">{{ __('Tiada produk tambahan untuk dipaparkan.') }}</p>
                             </div>
                         @endif
                         <div class="p-4 bg-gray-50 mt-auto">
-                            <a href="{{ route('shop.index') }}" class="text-red-600 hover:text-red-700 font-medium text-sm">
-                                Lihat Semua Produk →
-                            </a>
+                            <a href="{{ route('shop.index') }}" class="text-red-600 hover:text-red-700 font-medium text-sm">{{ __('Lihat Semua Produk →') }}</a>
                         </div>
                     </div>
                 </div>

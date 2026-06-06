@@ -4,14 +4,14 @@
 use Illuminate\Support\Str;
 @endphp
 
-@section('title', 'Butiran Produk')
+@section('title', __('Butiran Produk'))
 
 @section('content')
 <!-- Header Section -->
 <div class="px-4 sm:px-6 lg:px-8 py-6">
     <div class="sm:flex sm:items-center sm:justify-between">
                 <div>
-            <h1 class="text-2xl font-bold text-gray-900">Butiran Produk</h1>
+            <h1 class="text-2xl font-bold text-gray-900">{{ __('Butiran Produk') }}</h1>
             <p class="mt-2 text-sm text-gray-700">{{ $product->title }}</p>
                                 </div>
         <div class="mt-4 sm:mt-0 flex space-x-3">
@@ -20,7 +20,7 @@ use Illuminate\Support\Str;
                 <svg class="-ml-1 mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
                                     </svg>
-                Kembali ke Produk
+                {{ __('Kembali ke Produk') }}
             </a>
             
                     <a href="{{ route('admin.products.edit', $product->id) }}"
@@ -28,7 +28,7 @@ use Illuminate\Support\Str;
                 <svg class="-ml-1 mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                         </svg>
-                        Edit Produk
+                        {{ __('Sunting Produk') }}
                     </a>
             
             <button type="button" 
@@ -41,7 +41,7 @@ use Illuminate\Support\Str;
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                                 @endif
                             </svg>
-                            {{ $product->status === 'active' ? 'Nyahaktif' : 'Aktif' }}
+                            {{ $product->status === 'active' ? trans('admin_product.btn_deactivate') : trans('admin_product.btn_activate') }}
                         </button>
             
             <button type="button" 
@@ -55,7 +55,7 @@ use Illuminate\Support\Str;
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
                                 @endif
                             </svg>
-                            {{ $product->is_featured ? 'Nyahpaparkan' : 'Tampilkan' }}
+                            {{ $product->is_featured ? trans('admin_product.btn_unfeature') : trans('admin_product.btn_feature') }}
                         </button>
                 </div>
             </div>
@@ -67,7 +67,7 @@ use Illuminate\Support\Str;
                 <!-- Product Information -->
                 <div class="bg-white shadow-sm rounded-lg overflow-hidden">
                     <div class="px-6 py-4 border-b border-gray-200">
-                        <h3 class="text-lg font-medium text-gray-900">Maklumat Produk</h3>
+                        <h3 class="text-lg font-medium text-gray-900">{{ __('Maklumat Produk') }}</h3>
                     </div>
                     <div class="p-6">
                         <!-- Product Images -->
@@ -92,16 +92,16 @@ use Illuminate\Support\Str;
                                     </span>
                                     @if($product->status === 'active')
                                         <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                            Aktif
+                                            {{ __('Aktif') }}
                                         </span>
                                     @elseif($product->status === 'inactive')
                                         <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
-                                            Tidak Aktif
+                                            {{ __('Tidak Aktif') }}
                                         </span>
 
                                     @elseif($product->status === 'rejected')
                                         <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
-                                            Ditolak
+                                            {{ __('Ditolak') }}
                                         </span>
                                     @endif
                                     @if($product->is_featured)
@@ -109,7 +109,7 @@ use Illuminate\Support\Str;
                                             <svg class="mr-1 h-3 w-3" fill="currentColor" viewBox="0 0 20 20">
                                                 <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
                                             </svg>
-                                            Ditampilkan
+                                            {{ __('Ditampilkan') }}
                                         </span>
                                     @endif
                                 </div>
@@ -117,35 +117,35 @@ use Illuminate\Support\Str;
 
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
-                                    <dt class="text-sm font-medium text-gray-500">Harga Asal</dt>
+                                    <dt class="text-sm font-medium text-gray-500">{{ __('Harga Asal') }}</dt>
                                     <dd class="mt-1 text-sm font-semibold text-gray-900">RM{{ number_format($product->price, 2) }}</dd>
                                 </div>
                                 @if($product->sale_price)
                                     <div>
-                                        <dt class="text-sm font-medium text-gray-500">Harga Jualan</dt>
+                                        <dt class="text-sm font-medium text-gray-500">{{ __('Harga Jualan') }}</dt>
                                         <dd class="mt-1 text-sm font-semibold text-red-600">RM{{ number_format($product->sale_price, 2) }}</dd>
                                     </div>
                                 @endif
                                 <div>
-                                    <dt class="text-sm font-medium text-gray-500">Stok</dt>
+                                    <dt class="text-sm font-medium text-gray-500">{{ __('Stok') }}</dt>
                                     <dd class="mt-1 text-sm text-gray-900">
                                         @if($product->calculated_stock > 10)
                                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                                {{ $product->calculated_stock }} Dalam Stok
+                                                {{ trans('admin_product.stock_in_stock', ['count' => $product->calculated_stock]) }}
                                             </span>
                                         @elseif($product->calculated_stock > 0)
                                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                                                {{ $product->calculated_stock }} Stok Rendah
+                                                {{ trans('admin_product.stock_low', ['count' => $product->calculated_stock]) }}
                                             </span>
                                         @else
                                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
-                                                No Stock
+                                                {{ __('Tiada Stok') }}
                                             </span>
                                         @endif
                                     </dd>
                                 </div>
                                 <div>
-                                    <dt class="text-sm font-medium text-gray-500">Penilaian</dt>
+                                    <dt class="text-sm font-medium text-gray-500">{{ __('Penilaian') }}</dt>
                                     <dd class="mt-1 flex items-center">
                                         <div class="flex items-center">
                                             @for($i = 1; $i <= 5; $i++)
@@ -160,21 +160,21 @@ use Illuminate\Support\Str;
                                                 @endif
                                             @endfor
                                         </div>
-                                        <span class="ml-2 text-sm text-gray-600">{{ number_format($product->average_rating, 1) }} ({{ $product->reviews->count() }} ulasan)</span>
+                                        <span class="ml-2 text-sm text-gray-600">{{ number_format($product->average_rating, 1) }} ({{ trans('admin_page.reviews_count_suffix', ['count' => $product->reviews->count()]) }})</span>
                                     </dd>
                                 </div>
                                 <div>
-                                    <dt class="text-sm font-medium text-gray-500">Tontonan</dt>
+                                    <dt class="text-sm font-medium text-gray-500">{{ __('Tontonan') }}</dt>
                                     <dd class="mt-1 text-sm text-gray-900">{{ number_format($product->views_count) }}</dd>
                                 </div>
                                 <div>
-                                    <dt class="text-sm font-medium text-gray-500">Dicipta</dt>
+                                    <dt class="text-sm font-medium text-gray-500">{{ __('Dicipta') }}</dt>
                                     <dd class="mt-1 text-sm text-gray-900">{{ $product->created_at->format('j M Y \p\a\d\a g:i A') }}</dd>
                                 </div>
                             </div>
 
                             <div>
-                                <dt class="text-sm font-medium text-gray-500">Deskripsi</dt>
+                                <dt class="text-sm font-medium text-gray-500">{{ __('Deskripsi') }}</dt>
                                 <dd class="mt-1 text-sm text-gray-900">
                                     <p class="whitespace-pre-line">{{ $product->description }}</p>
                                 </dd>
@@ -182,7 +182,7 @@ use Illuminate\Support\Str;
 
                             @if($product->tags)
                                 <div>
-                                    <dt class="text-sm font-medium text-gray-500">Tag</dt>
+                                    <dt class="text-sm font-medium text-gray-500">{{ __('Tag') }}</dt>
                                     <dd class="mt-1 text-sm text-gray-900">
                                         @if(is_array($product->tags))
                                             @foreach($product->tags as $tag)
@@ -197,16 +197,16 @@ use Illuminate\Support\Str;
 
                             @if($product->meta_title || $product->meta_description)
                                 <div>
-                                    <dt class="text-sm font-medium text-gray-500">SEO</dt>
+                                    <dt class="text-sm font-medium text-gray-500">{{ __('SEO') }}</dt>
                                     <dd class="mt-1 text-sm text-gray-900">
                                         @if($product->meta_title)
                                             <div class="mb-1">
-                                                <strong>Meta Title:</strong> {{ $product->meta_title }}
+                                                <strong>{{ trans('admin_page.meta_title') }}</strong> {{ $product->meta_title }}
                                             </div>
                                         @endif
                                         @if($product->meta_description)
                                             <div>
-                                                <strong>Meta Description:</strong> {{ $product->meta_description }}
+                                                <strong>{{ trans('admin_product.meta_description_label') }}</strong> {{ $product->meta_description }}
                                             </div>
                                         @endif
                                     </dd>
@@ -220,7 +220,7 @@ use Illuminate\Support\Str;
                 @if($product->reviews->count() > 0)
                     <div class="bg-white shadow-sm rounded-lg overflow-hidden">
                         <div class="px-6 py-4 border-b border-gray-200">
-                            <h3 class="text-lg font-medium text-gray-900">Ulasan Produk ({{ $product->reviews->count() }})</h3>
+                            <h3 class="text-lg font-medium text-gray-900">{{ trans('admin_page.product_reviews_count', ['count' => $product->reviews->count()]) }}</h3>
                         </div>
                         <div class="p-6">
                             <div class="space-y-4">
@@ -290,7 +290,7 @@ use Illuminate\Support\Str;
                 <!-- Quick Actions -->
                 <div class="bg-white shadow-sm rounded-lg overflow-hidden">
                     <div class="px-6 py-4 border-b border-gray-200">
-                        <h3 class="text-lg font-medium text-gray-900">Tindakan Pantas</h3>
+                        <h3 class="text-lg font-medium text-gray-900">{{ __('Tindakan Pantas') }}</h3>
                     </div>
                                          <div class="p-6 space-y-4">
                          <a href="{{ route('shop.show', $product->slug) }}" 
@@ -299,7 +299,7 @@ use Illuminate\Support\Str;
                              <svg class="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
                              </svg>
-                             Lihat di Kedai
+                             {{ __('Lihat di Kedai') }}
                          </a>
                          <button type="button" 
                                  onclick="openDeleteModal('{{ $product->title }}')"
@@ -307,7 +307,7 @@ use Illuminate\Support\Str;
                              <svg class="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                              </svg>
-                             Padam Produk
+                             {{ __('Padam Produk') }}
                          </button>
                      </div>
                 </div>
@@ -315,24 +315,24 @@ use Illuminate\Support\Str;
                 <!-- Product Statistics -->
                 <div class="bg-white shadow-sm rounded-lg overflow-hidden">
                     <div class="px-6 py-4 border-b border-gray-200">
-                        <h3 class="text-lg font-medium text-gray-900">Statistik Produk</h3>
+                        <h3 class="text-lg font-medium text-gray-900">{{ __('Statistik Produk') }}</h3>
                     </div>
                     <div class="p-6 space-y-4">
                         <div class="flex items-center justify-between">
-                            <span class="text-sm font-medium text-gray-500">Jumlah Tontonan</span>
+                            <span class="text-sm font-medium text-gray-500">{{ __('Jumlah Tontonan') }}</span>
                             <span class="text-sm text-gray-900">{{ number_format($product->views_count) }}</span>
                         </div>
                         <div class="flex items-center justify-between">
-                            <span class="text-sm font-medium text-gray-500">Jumlah Ulasan</span>
+                            <span class="text-sm font-medium text-gray-500">{{ __('Jumlah Ulasan') }}</span>
                             <span class="text-sm text-gray-900">{{ $product->reviews->count() }}</span>
                         </div>
                         <div class="flex items-center justify-between">
-                            <span class="text-sm font-medium text-gray-500">Purata Penilaian</span>
+                            <span class="text-sm font-medium text-gray-500">{{ __('Purata Penilaian') }}</span>
                             <span class="text-sm text-gray-900">{{ number_format($product->average_rating, 1) }}/5</span>
                         </div>
                         <div class="flex items-center justify-between">
-                            <span class="text-sm font-medium text-gray-500">Stok Semasa</span>
-                            <span class="text-sm text-gray-900">{{ $product->calculated_stock }} unit</span>
+                            <span class="text-sm font-medium text-gray-500">{{ __('Stok Semasa') }}</span>
+                            <span class="text-sm text-gray-900">{{ trans('admin_product.stock_units', ['count' => $product->calculated_stock]) }}</span>
                         </div>
                     </div>
                 </div>
@@ -341,7 +341,7 @@ use Illuminate\Support\Str;
                 @if($product->images && count($product->images) > 1)
                     <div class="bg-white shadow-sm rounded-lg overflow-hidden">
                         <div class="px-6 py-4 border-b border-gray-200">
-                            <h3 class="text-lg font-medium text-gray-900">Galeri Gambar</h3>
+                            <h3 class="text-lg font-medium text-gray-900">{{ __('Galeri Gambar') }}</h3>
                         </div>
                         <div class="p-6">
                             <div class="grid grid-cols-2 gap-2">
@@ -371,15 +371,15 @@ use Illuminate\Support\Str;
             </div>
             
             <!-- Modal Title -->
-            <h3 class="text-lg font-medium text-gray-900 mt-4" id="statusModalTitle">Ubah Status Produk</h3>
+            <h3 class="text-lg font-medium text-gray-900 mt-4" id="statusModalTitle">{{ __('Ubah Status Produk') }}</h3>
             
             <!-- Modal Content -->
             <div class="mt-2 px-7 py-3">
                 <p class="text-sm text-gray-500" id="statusModalMessage">
-                    Adakah anda pasti mahu mengubah status produk ini?
+                    {{ __('Adakah anda pasti mahu mengubah status produk ini?') }}
                 </p>
                 <div class="mt-3 bg-gray-50 p-3 rounded-md">
-                    <p class="text-xs text-gray-600 font-medium">Produk:</p>
+                    <p class="text-xs text-gray-600 font-medium">{{ __('Produk:') }}</p>
                     <p class="text-sm text-gray-800 mt-1" id="statusProductName"></p>
                 </div>
             </div>
@@ -388,13 +388,13 @@ use Illuminate\Support\Str;
             <div class="flex items-center justify-center gap-3 mt-4">
                 <button id="cancelStatus" 
                         class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 text-sm">
-                    Batal
+                    {{ __('Batal') }}
                 </button>
                 <form id="statusForm" method="POST" class="inline">
                     @csrf
                     <button type="submit" 
                             class="px-4 py-2 bg-yellow-600 text-white rounded-md hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 text-sm">
-                        Ya, Ubah Status
+                        {{ __('Ya, Ubah Status') }}
                     </button>
                 </form>
             </div>
@@ -414,15 +414,15 @@ use Illuminate\Support\Str;
             </div>
             
             <!-- Modal Title -->
-            <h3 class="text-lg font-medium text-gray-900 mt-4" id="featuredModalTitle">Ubah Status Ditampilkan</h3>
+            <h3 class="text-lg font-medium text-gray-900 mt-4" id="featuredModalTitle">{{ __('Ubah Status Ditampilkan') }}</h3>
             
             <!-- Modal Content -->
             <div class="mt-2 px-7 py-3">
                 <p class="text-sm text-gray-500" id="featuredModalMessage">
-                    Adakah anda pasti mahu mengubah status ditampilkan produk ini?
+                    {{ __('Adakah anda pasti mahu mengubah status ditampilkan produk ini?') }}
                 </p>
                 <div class="mt-3 bg-gray-50 p-3 rounded-md">
-                    <p class="text-xs text-gray-600 font-medium">Produk:</p>
+                    <p class="text-xs text-gray-600 font-medium">{{ __('Produk:') }}</p>
                     <p class="text-sm text-gray-800 mt-1" id="featuredProductName"></p>
                 </div>
             </div>
@@ -431,13 +431,13 @@ use Illuminate\Support\Str;
             <div class="flex items-center justify-center gap-3 mt-4">
                 <button id="cancelFeatured" 
                         class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 text-sm">
-                    Batal
+                    {{ __('Batal') }}
                 </button>
                 <form id="featuredForm" method="POST" class="inline">
                     @csrf
                     <button type="submit" 
                             class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 text-sm">
-                        Ya, Ubah Status
+                        {{ __('Ya, Ubah Status') }}
                     </button>
                 </form>
             </div>
@@ -457,19 +457,19 @@ use Illuminate\Support\Str;
             </div>
             
             <!-- Modal Title -->
-            <h3 class="text-lg font-medium text-gray-900 mt-4">Padam Produk</h3>
+            <h3 class="text-lg font-medium text-gray-900 mt-4">{{ __('Padam Produk') }}</h3>
             
             <!-- Modal Content -->
             <div class="mt-2 px-7 py-3">
                 <p class="text-sm text-gray-500">
-                    Adakah anda pasti mahu memadamkan produk ini?
+                    {{ __('Adakah anda pasti mahu memadamkan produk ini?') }}
                 </p>
                 <div class="mt-3 bg-gray-50 p-3 rounded-md">
-                    <p class="text-xs text-gray-600 font-medium">Produk:</p>
+                    <p class="text-xs text-gray-600 font-medium">{{ __('Produk:') }}</p>
                     <p class="text-sm text-gray-800 mt-1" id="deleteProductName"></p>
                 </div>
                 <p class="text-xs text-red-600 mt-2">
-                    Tindakan ini tidak boleh dibatalkan.
+                    {{ __('Tindakan ini tidak boleh dibatalkan.') }}
                 </p>
             </div>
             
@@ -477,14 +477,14 @@ use Illuminate\Support\Str;
             <div class="flex items-center justify-center gap-3 mt-4">
                 <button id="cancelDelete" 
                         class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 text-sm">
-                    Batal
+                    {{ __('Batal') }}
                 </button>
                 <form id="deleteForm" method="POST" class="inline">
                     @csrf
                     @method('DELETE')
                     <button type="submit" 
                             class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 text-sm">
-                        Padam
+                        {{ __('Padam') }}
                     </button>
                 </form>
             </div>
@@ -579,11 +579,11 @@ use Illuminate\Support\Str;
         
         // Set the modal content based on action
         if (action === 'deactivate') {
-            statusModalTitle.textContent = 'Nyahaktif Produk';
-            statusModalMessage.textContent = 'Adakah anda pasti mahu menyahaktifkan produk ini?';
+            statusModalTitle.textContent = @json(__('Nyahaktif Produk'));
+            statusModalMessage.textContent = @json(__('Adakah anda pasti mahu menyahaktifkan produk ini?'));
         } else {
-            statusModalTitle.textContent = 'Aktif Produk';
-            statusModalMessage.textContent = 'Adakah anda pasti mahu mengaktifkan produk ini?';
+            statusModalTitle.textContent = @json(__('Aktif Produk'));
+            statusModalMessage.textContent = @json(__('Adakah anda pasti mahu mengaktifkan produk ini?'));
         }
         
         // Set the product name
@@ -606,11 +606,11 @@ use Illuminate\Support\Str;
         
         // Set the modal content based on action
         if (action === 'unfeature') {
-            featuredModalTitle.textContent = 'Nyahpaparkan Produk';
-            featuredModalMessage.textContent = 'Adakah anda pasti mahu menyahpaparkan produk ini?';
+            featuredModalTitle.textContent = @json(__('Nyahpaparkan Produk'));
+            featuredModalMessage.textContent = @json(__('Adakah anda pasti mahu menyahpaparkan produk ini?'));
         } else {
-            featuredModalTitle.textContent = 'Tampilkan Produk';
-            featuredModalMessage.textContent = 'Adakah anda pasti mahu menampilkan produk ini?';
+            featuredModalTitle.textContent = @json(__('Tampilkan Produk'));
+            featuredModalMessage.textContent = @json(__('Adakah anda pasti mahu menampilkan produk ini?'));
         }
         
         // Set the product name

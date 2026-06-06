@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 
@@ -20,7 +21,7 @@ class LogController extends Controller
         
         // Check if log file exists
         if (!File::exists($logFile)) {
-            $error = 'Log file not found.';
+            $error = 'Fail log tidak dijumpai.';
         } else {
             try {
                 // Read the log file
@@ -50,14 +51,19 @@ class LogController extends Controller
                     });
                 }
                 
-                // Paginate results
-                $perPage = 100;
-                $currentPage = $request->get('page', 1);
-                $offset = ($currentPage - 1) * $perPage;
-                $logs = array_slice($logs, $offset, $perPage);
+                $allLogs = array_values($logs);
+                $perPage = 50;
+                $currentPage = max(1, (int) $request->get('page', 1));
+                $logs = new LengthAwarePaginator(
+                    array_slice($allLogs, ($currentPage - 1) * $perPage, $perPage),
+                    count($allLogs),
+                    $perPage,
+                    $currentPage,
+                    ['path' => $request->url(), 'query' => $request->query()]
+                );
                 
             } catch (\Exception $e) {
-                $error = 'Error reading log file: ' . $e->getMessage();
+                $error = __('flash.log_read_error', ['message' => $e->getMessage()]);
             }
         }
         
@@ -74,12 +80,12 @@ class LogController extends Controller
             
             if (File::exists($logFile)) {
                 File::put($logFile, '');
-                return redirect()->route('admin.logs.index')->with('success', 'Log file cleared successfully.');
+                return redirect()->route('admin.logs.index')->with('success', __('flash.log_cleared'));
             }
             
-            return redirect()->route('admin.logs.index')->with('error', 'Log file not found.');
+            return redirect()->route('admin.logs.index')->with('error', __('flash.log_file_not_found'));
         } catch (\Exception $e) {
-            return redirect()->route('admin.logs.index')->with('error', 'Error clearing log file: ' . $e->getMessage());
+            return redirect()->route('admin.logs.index')->with('error', __('flash.log_clear_error', ['message' => $e->getMessage()]));
         }
     }
     
@@ -91,7 +97,7 @@ class LogController extends Controller
         $logFile = storage_path('logs/laravel.log');
         
         if (!File::exists($logFile)) {
-            return redirect()->route('admin.logs.index')->with('error', 'Log file not found.');
+            return redirect()->route('admin.logs.index')->with('error', __('flash.log_file_not_found'));
         }
         
         return response()->download($logFile, 'laravel-' . date('Y-m-d-H-i-s') . '.log');

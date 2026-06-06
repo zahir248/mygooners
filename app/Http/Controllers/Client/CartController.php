@@ -48,9 +48,10 @@ class CartController extends Controller
         }
 
         if ($product->hasVariations() && !$variationId) {
+            $label = $product->variation_label ?: __('client_messages.variation_label_default');
             return response()->json([
                 'success' => false,
-                'message' => 'Selected size is out of stock.'
+                'message' => __('client_messages.pick_variation_first', ['label' => $label]),
             ], 400);
         }
 
@@ -61,14 +62,16 @@ class CartController extends Controller
         if ($stockQuantity <= 0) {
             return response()->json([
                 'success' => false,
-                'message' => $variationId ? 'Selected size is out of stock.' : 'This product is currently out of stock.'
+                'message' => $variationId
+                    ? __('client_messages.variation_out_of_stock')
+                    : __('client_messages.product_out_of_stock'),
             ], 400);
         }
             
         if ($stockQuantity < $request->quantity) {
             return response()->json([
                 'success' => false,
-                'message' => 'Requested quantity exceeds available stock.'
+                'message' => __('client_messages.msg_1858ef6f0305')
             ], 400);
         }
 
@@ -87,7 +90,7 @@ class CartController extends Controller
             if ($newQuantity > $stockQuantity) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Requested quantity exceeds available stock.'
+                    'message' => __('client_messages.msg_1858ef6f0305')
                 ], 400);
             }
             
@@ -106,7 +109,7 @@ class CartController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Produk ditambah ke troli',
+            'message' => __('client_messages.cart_product_added'),
             'cart_count' => $cart->fresh()->item_count,
             'cart_total' => number_format($cart->fresh()->total, 2)
         ]);
@@ -125,7 +128,7 @@ class CartController extends Controller
         if (!$this->canAccessCart($cart)) {
             return response()->json([
                 'success' => false,
-                'message' => 'Akses tidak dibenarkan'
+                'message' => __('client_messages.access_denied')
             ], 403);
         }
 
@@ -138,15 +141,15 @@ class CartController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => $cartItem->variation
-                    ? 'Selected size is out of stock.'
-                    : 'This product is currently out of stock.'
+                    ? __('client_messages.variation_out_of_stock')
+                    : __('client_messages.product_out_of_stock')
             ], 400);
         }
             
         if ($stockQuantity < $request->quantity) {
             return response()->json([
                 'success' => false,
-                'message' => 'Requested quantity exceeds available stock.'
+                'message' => __('client_messages.msg_1858ef6f0305')
             ], 400);
         }
 
@@ -154,7 +157,7 @@ class CartController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Kuantiti dikemas kini',
+            'message' => __('client_messages.cart_quantity_updated'),
             'cart_count' => $cart->fresh()->item_count,
             'cart_total' => number_format($cart->fresh()->total, 2),
             'item_subtotal' => number_format($cartItem->subtotal, 2)
@@ -170,7 +173,7 @@ class CartController extends Controller
         if (!$this->canAccessCart($cart)) {
             return response()->json([
                 'success' => false,
-                'message' => 'Akses tidak dibenarkan'
+                'message' => __('client_messages.access_denied')
             ], 403);
         }
 
@@ -178,7 +181,7 @@ class CartController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Item dikeluarkan dari troli',
+            'message' => __('client_messages.cart_item_removed'),
             'cart_count' => $cart->fresh()->item_count,
             'cart_total' => number_format($cart->fresh()->total, 2)
         ]);
@@ -191,7 +194,7 @@ class CartController extends Controller
         if (!$this->canAccessCart($cart)) {
             return response()->json([
                 'success' => false,
-                'message' => 'Akses tidak dibenarkan'
+                'message' => __('client_messages.access_denied')
             ], 403);
         }
 
@@ -199,7 +202,7 @@ class CartController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Troli dikosongkan',
+            'message' => __('client_messages.cart_cleared'),
             'cart_count' => 0,
             'cart_total' => '0.00'
         ]);

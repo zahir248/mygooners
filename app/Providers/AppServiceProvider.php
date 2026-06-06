@@ -2,9 +2,9 @@
 
 namespace App\Providers;
 
+use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
-use Illuminate\Support\Facades\App;
 use App\Models\Order;
 use App\Models\Refund;
 use App\Models\Service;
@@ -26,9 +26,15 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // Set application locale to Malay
-        App::setLocale('ms');
-        
+        // For BM locale, keep Malay UI strings (JSON keys) instead of falling back to en.json English.
+        Lang::handleMissingKeysUsing(function (string $key, array $replacements, string $locale) {
+            if ($locale === 'ms' && ! str_contains($key, '.')) {
+                return $key;
+            }
+
+            return null;
+        });
+
         // Share pending counts and navbar notifications with all admin views
         View::composer('layouts.admin', function ($view) {
             $pendingServicesCount = Service::where('status', 'pending')->count();
@@ -45,7 +51,7 @@ class AppServiceProvider extends ServiceProvider
             if ($user && $user->role !== 'writer') {
                 if ($pendingServicesCount > 0) {
                     $notifications[] = [
-                        'label' => 'Perkhidmatan menunggu kelulusan',
+                        'label' => __('admin.notification_services_pending'),
                         'count' => $pendingServicesCount,
                         'url' => route('admin.services.pending'),
                     ];
@@ -53,7 +59,7 @@ class AppServiceProvider extends ServiceProvider
 
                 if ($pendingSellersCount > 0) {
                     $notifications[] = [
-                        'label' => 'Permohonan penjual menunggu',
+                        'label' => __('admin.notification_sellers_pending'),
                         'count' => $pendingSellersCount,
                         'url' => route('admin.seller-requests.pending'),
                     ];
@@ -62,7 +68,7 @@ class AppServiceProvider extends ServiceProvider
                 $pendingRefundsCount = Refund::where('status', 'pending')->count();
                 if ($pendingRefundsCount > 0) {
                     $notifications[] = [
-                        'label' => 'Permohonan refund menunggu',
+                        'label' => __('admin.notification_refunds_pending'),
                         'count' => $pendingRefundsCount,
                         'url' => route('admin.refunds.index', ['status' => 'pending']),
                     ];
@@ -71,7 +77,7 @@ class AppServiceProvider extends ServiceProvider
                 $pendingOrdersCount = Order::where('status', 'pending')->count();
                 if ($pendingOrdersCount > 0) {
                     $notifications[] = [
-                        'label' => 'Pesanan menunggu',
+                        'label' => __('admin.notification_orders_pending'),
                         'count' => $pendingOrdersCount,
                         'url' => route('admin.orders.index', ['status' => 'pending']),
                     ];

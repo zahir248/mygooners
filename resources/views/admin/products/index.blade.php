@@ -1,14 +1,14 @@
 @extends('layouts.admin')
 
-@section('title', 'Pengurusan Produk')
+@section('title', __('Pengurusan Produk'))
 
 @section('content')
 <!-- Header Section -->
 <div class="px-4 sm:px-6 lg:px-8 py-6">
     <div class="sm:flex sm:items-center sm:justify-between">
         <div>
-            <h1 class="text-2xl font-bold text-gray-900">Pengurusan Produk</h1>
-            <p class="mt-2 text-sm text-gray-700">Urus semua produk Arsenal yang ditawarkan</p>
+            <h1 class="text-2xl font-bold text-gray-900">{{ __('Pengurusan Produk') }}</h1>
+            <p class="mt-2 text-sm text-gray-700">{{ __('Urus semua produk Arsenal yang ditawarkan') }}</p>
         </div>
         <div class="mt-4 sm:mt-0">
             <a href="{{ route('admin.products.create') }}"
@@ -16,7 +16,7 @@
                 <svg class="-ml-1 mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                 </svg>
-                Cipta Produk
+                {{ __('Cipta Produk') }}
             </a>
         </div>
     </div>
@@ -25,7 +25,7 @@
 <!-- Debug Info (temporary) -->
 @if(session('debug_info'))
     <div class="mx-4 mb-4 p-4 bg-yellow-100 border border-yellow-400 rounded-lg">
-        <h4 class="font-bold text-yellow-800 mb-2">Debug Info:</h4>
+        <h4 class="font-bold text-yellow-800 mb-2">{{ __('Debug Info:') }}</h4>
         <pre class="text-sm text-yellow-700">{{ json_encode(session('debug_info'), JSON_PRETTY_PRINT) }}</pre>
     </div>
 @endif
@@ -34,13 +34,13 @@
 <div class="mx-4 bg-white shadow rounded-lg mb-6">
     <form method="GET" action="{{ route('admin.products.index') }}" class="px-6 py-4 border-b border-gray-200">
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-            <h3 class="text-lg font-medium text-gray-900 mb-4 sm:mb-0">Tapis Produk</h3>
+            <h3 class="text-lg font-medium text-gray-900 mb-4 sm:mb-0">{{ __('Tapis Produk') }}</h3>
             <div class="flex flex-col sm:flex-row gap-4">
                 <!-- Search -->
                 <div class="relative">
                     <input type="text" 
                            name="search" 
-                           placeholder="Cari produk..."
+                           placeholder="{{ __('Cari produk...') }}"
                            value="{{ request('search') }}"
                            class="pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-red-500 focus:border-red-500 sm:text-sm">
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -51,14 +51,14 @@
                 </div>
                 <!-- Status Filter -->
                 <select name="status" class="border border-gray-300 rounded-md px-3 py-2 focus:ring-red-500 focus:border-red-500 sm:text-sm">
-                    <option value="">Semua Status</option>
-                                            <option value="active" {{ request('status') === 'active' ? 'selected' : '' }}>Aktif</option>
-                        <option value="inactive" {{ request('status') === 'inactive' ? 'selected' : '' }}>Tidak Aktif</option>
-                        <option value="rejected" {{ request('status') === 'rejected' ? 'selected' : '' }}>Ditolak</option>
+                    <option value="">{{ __('Semua Status') }}</option>
+                                            <option value="active" {{ request('status') === 'active' ? 'selected' : '' }}>{{ __('Aktif') }}</option>
+                        <option value="inactive" {{ request('status') === 'inactive' ? 'selected' : '' }}>{{ __('Tidak Aktif') }}</option>
+                        <option value="rejected" {{ request('status') === 'rejected' ? 'selected' : '' }}>{{ __('Ditolak') }}</option>
                 </select>
                 <!-- Category Filter -->
                 <select name="category" class="border border-gray-300 rounded-md px-3 py-2 focus:ring-red-500 focus:border-red-500 sm:text-sm">
-                    <option value="">Semua Kategori</option>
+                    <option value="">{{ __('Semua Kategori') }}</option>
                     @foreach($categories as $category)
                         <option value="{{ $category }}" {{ request('category') === $category ? 'selected' : '' }}>
                             {{ $category }}
@@ -67,10 +67,10 @@
                 </select>
                 <!-- Stock Filter -->
                 <select name="stock" class="border border-gray-300 rounded-md px-3 py-2 focus:ring-red-500 focus:border-red-500 sm:text-sm">
-                    <option value="">Semua Stok</option>
-                    <option value="in_stock" {{ request('stock') === 'in_stock' ? 'selected' : '' }}>Dalam Stok</option>
-                    <option value="low_stock" {{ request('stock') === 'low_stock' ? 'selected' : '' }}>Stok Rendah</option>
-                    <option value="out_of_stock" {{ request('stock') === 'out_of_stock' ? 'selected' : '' }}>Kehabisan Stok</option>
+                    <option value="">{{ __('Semua Stok') }}</option>
+                    <option value="in_stock" {{ request('stock') === 'in_stock' ? 'selected' : '' }}>{{ __('Dalam Stok') }}</option>
+                    <option value="low_stock" {{ request('stock') === 'low_stock' ? 'selected' : '' }}>{{ __('Stok Rendah') }}</option>
+                    <option value="out_of_stock" {{ request('stock') === 'out_of_stock' ? 'selected' : '' }}>{{ __('Kehabisan Stok') }}</option>
                 </select>
                 <!-- Featured Filter -->
                 <div class="flex items-center">
@@ -81,18 +81,18 @@
                            {{ request('featured') ? 'checked' : '' }}
                            class="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300 rounded">
                     <label for="featured" class="ml-2 block text-sm text-gray-900">
-                        Ditampilkan Sahaja
+                        {{ __('Ditampilkan Sahaja') }}
                     </label>
                 </div>
                 <!-- Filter Buttons -->
                 <div class="flex gap-2">
                     <button type="submit" 
                             class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 text-sm">
-                        Tapis
+                        {{ __('Tapis') }}
                     </button>
                     <a href="{{ route('admin.products.index') }}"
                        class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 text-sm">
-                        Reset
+                        {{ __('Set Semula') }}
                     </a>
                 </div>
             </div>
@@ -105,35 +105,43 @@
     <div class="px-6 py-4 border-b border-gray-200">
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
             <h3 class="text-lg font-medium text-gray-900">
-                Produk ({{ $products->count() }})
+                {{ trans('admin_page.list_products', ['count' => $products->count()]) }}
             </h3>
             @if(request('search') || request('status') || request('category') || request('stock') || request('featured'))
                 <div class="mt-2 sm:mt-0">
                     <p class="text-sm text-gray-600">
-                        Tapisan aktif:
+                        {{ trans('admin_page.active_filters') }}
                         @if(request('search'))
                             <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 mr-1">
-                                Cari: "{{ request('search') }}"
+                                {{ trans('admin_page.search_filter', ['query' => request('search')]) }}
                             </span>
                         @endif
                         @if(request('status'))
                             <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 mr-1">
-                                Status: {{ request('status') === 'active' ? 'Aktif' : (request('status') === 'inactive' ? 'Tidak Aktif' : (request('status') === 'rejected' ? 'Ditolak' : '')) }}
+                                {{ trans('admin_page.status_filter', ['status' => request('status') === 'active' ? trans('admin_page.status_active') : (request('status') === 'inactive' ? trans('admin_page.status_inactive') : (request('status') === 'rejected' ? trans('admin_page.status_rejected') : ''))]) }}
                             </span>
                         @endif
                         @if(request('category'))
                             <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800 mr-1">
-                                Kategori: {{ request('category') }}
+                                {{ trans('admin_product.category_filter', ['category' => request('category')]) }}
                             </span>
                         @endif
                         @if(request('stock'))
+                            @php
+                                $stockFilterLabel = match (request('stock')) {
+                                    'in_stock' => __('Dalam Stok'),
+                                    'low_stock' => __('Stok Rendah'),
+                                    'out_of_stock' => __('Kehabisan Stok'),
+                                    default => request('stock'),
+                                };
+                            @endphp
                             <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 mr-1">
-                                Stok: {{ request('stock') === 'in_stock' ? 'Dalam Stok' : (request('stock') === 'low_stock' ? 'Stok Rendah' : 'Kehabisan Stok') }}
+                                {{ trans('admin_product.stock_filter', ['status' => $stockFilterLabel]) }}
                             </span>
                         @endif
                         @if(request('featured'))
                             <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-800 mr-1">
-                                Ditampilkan Sahaja
+                                {{ __('Ditampilkan Sahaja') }}
                             </span>
                         @endif
                     </p>
@@ -146,35 +154,19 @@
             <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-gray-50">
                     <tr>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Produk') }}</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Kategori') }}</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Harga') }}</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Stok') }}</th>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Produk
+                            {{ __('Varian') }}
                         </th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Kategori
-                        </th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Harga
-                        </th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Stok
-                        </th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Varian
-                        </th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Status
-                        </th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Penilaian
-                        </th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Tontonan
-                        </th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Tarikh
-                        </th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Status') }}</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Penilaian') }}</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Tontonan') }}</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Tarikh') }}</th>
                         <th scope="col" class="relative px-6 py-3">
-                            <span class="sr-only">Tindakan</span>
+                            <span class="sr-only">{{ __('Tindakan') }}</span>
                         </th>
                     </tr>
                 </thead>
@@ -204,15 +196,15 @@
                                                     <svg class="mr-1 h-3 w-3" fill="currentColor" viewBox="0 0 20 20">
                                                         <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
                                                     </svg>
-                                                    Ditampilkan
+                                                    {{ __('Ditampilkan') }}
                                                 </span>
                                             @endif
                                         </div>
                                         <p class="text-sm text-gray-500 line-clamp-2">
-                                            ID Produk: #{{ $product->id }} • {{ $product->category }} • {{ $product->calculated_stock }} dalam stok
+                                            {{ trans('admin_page.list_product_meta', ['id' => $product->id, 'category' => $product->category, 'stock' => $product->calculated_stock]) }}
                                         </p>
                                         @if($product->sale_price)
-                                            <p class="text-sm text-red-600 font-medium">Jualan Aktif!</p>
+                                            <p class="text-sm text-red-600 font-medium">{{ __('Jualan Aktif!') }}</p>
                                         @endif
                                     </div>
                                 </div>
@@ -238,15 +230,15 @@
                                 <div class="text-sm text-gray-900">
                                     @if($product->calculated_stock > 10)
                                         <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                            {{ $product->calculated_stock }} Dalam Stok
+                                            {{ trans('admin_product.stock_in_stock', ['count' => $product->calculated_stock]) }}
                                         </span>
                                     @elseif($product->calculated_stock > 0)
                                         <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                                            {{ $product->calculated_stock }} Stok Rendah
+                                            {{ trans('admin_product.stock_low', ['count' => $product->calculated_stock]) }}
                                         </span>
                                     @else
                                         <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
-                                            No Stock
+                                            {{ __('Tiada Stok') }}
                                         </span>
                                     @endif
                                 </div>
@@ -254,23 +246,23 @@
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <div class="text-sm text-gray-900">
                                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                                        {{ $product->variations->count() }} Varian
+                                        {{ trans('admin_product.variants_count', ['count' => $product->variations->count()]) }}
                                     </span>
                                 </div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 @if($product->status === 'active')
                                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                        Aktif
+                                        {{ __('Aktif') }}
                                     </span>
                                 @elseif($product->status === 'inactive')
                                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
-                                        Tidak Aktif
+                                        {{ __('Tidak Aktif') }}
                                     </span>
 
                                 @elseif($product->status === 'rejected')
                                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
-                                        Ditolak
+                                        {{ __('Ditolak') }}
                                     </span>
                                 @endif
                             </td>
@@ -314,7 +306,7 @@
                                         <button type="button" 
                                                 onclick="openStatusModal({{ $product->id }}, '{{ $product->title }}', '{{ $product->status }}')"
                                                 class="text-gray-600 hover:text-gray-900"
-                                                title="Ubah Status">
+                                                title="{{ __('Ubah Status') }}">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31.826 2.37 2.37a1.724 1.724 0 002.572 1.065c.426 1.756 2.924 1.756 3.35 0a1.724 1.724 0 002.573-1.066c1.543-.94 3.31.826 2.37-2.37a1.724 1.724 0 011.065-2.572c1.756-.426 1.756-2.924 0-3.35a1.724 1.724 0 00-1.066-2.573c.94-1.543-.826-3.31.826-2.37-2.37a1.724 1.724 0 00-2.572-1.065z"></path>
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
@@ -324,7 +316,7 @@
                                     <!-- Show Product Details -->
                                     <a href="{{ route('admin.products.show', $product->id) }}"
                                        class="text-blue-600 hover:text-blue-900"
-                                       title="Butiran Produk">
+                                       title="{{ __('Butiran Produk') }}">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
@@ -334,7 +326,7 @@
                                     <!-- Edit Product -->
                                     <a href="{{ route('admin.products.edit', $product->id) }}"
                                        class="text-red-600 hover:text-red-900"
-                                       title="Edit Produk">
+                                       title="{{ __('Sunting Produk') }}">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                                         </svg>
@@ -347,7 +339,7 @@
                                         <button type="button" 
                                                 onclick="confirmDeleteProduct({{ $product->id }}, '{{ $product->title }}')" 
                                                 class="text-red-600 hover:text-red-900" 
-                                                title="Padam Produk">
+                                                title="{{ __('Padam Produk') }}">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                                             </svg>
@@ -355,7 +347,7 @@
                                     </form>
                                 </div>
                                 @else
-                                    <span class="text-gray-400 text-xs">Tiada tindakan tersedia</span>
+                                    <span class="text-gray-400 text-xs">{{ __('Tiada tindakan tersedia') }}</span>
                                 @endif
                             </td>
                         </tr>
@@ -364,49 +356,21 @@
             </table>
         </div>
         
-        <!-- Pagination -->
-        <div class="bg-white px-6 py-3 border-t border-gray-200">
-            <div class="flex items-center justify-between">
-                <div class="text-sm text-gray-700">
-                    Showing <span class="font-medium">{{ $products->firstItem() ?? 0 }}</span> to <span class="font-medium">{{ $products->lastItem() ?? 0 }}</span> of <span class="font-medium">{{ $products->total() }}</span> results
-                </div>
-                <div class="flex space-x-2">
-                    @if($products->onFirstPage())
-                        <button class="px-3 py-1 border border-gray-300 rounded-md text-sm text-gray-500 bg-gray-50 cursor-not-allowed">
-                            Previous
-                        </button>
-                    @else
-                        <a href="{{ $products->previousPageUrl() }}" class="px-3 py-1 border border-gray-300 rounded-md text-sm text-gray-700 bg-white hover:bg-gray-50">
-                            Previous
-                        </a>
-                    @endif
-                    
-                    @if($products->hasMorePages())
-                        <a href="{{ $products->nextPageUrl() }}" class="px-3 py-1 border border-gray-300 rounded-md text-sm text-gray-700 bg-white hover:bg-gray-50">
-                            Next
-                        </a>
-                    @else
-                        <button class="px-3 py-1 border border-gray-300 rounded-md text-sm text-gray-500 bg-gray-50 cursor-not-allowed">
-                            Next
-                        </button>
-                    @endif
-                </div>
-            </div>
-        </div>
+        @include('admin.partials.pagination', ['paginator' => $products])
     @else
         <div class="px-6 py-12 text-center">
             <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
             </svg>
-            <h3 class="mt-2 text-sm font-medium text-gray-900">Tiada produk</h3>
-            <p class="mt-1 text-sm text-gray-500">Mula dengan mencipta produk pertama anda.</p>
+            <h3 class="mt-2 text-sm font-medium text-gray-900">{{ __('Tiada produk') }}</h3>
+            <p class="mt-1 text-sm text-gray-500">{{ __('Mula dengan mencipta produk pertama anda.') }}</p>
             <div class="mt-6">
                 <a href="{{ route('admin.products.create') }}"
                    class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
                     <svg class="-ml-1 mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                     </svg>
-                    Cipta Produk
+                    {{ __('Cipta Produk') }}
                 </a>
             </div>
         </div>
@@ -422,23 +386,21 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.732 15.5c-.77.833.192 2.5 1.732 2.5z"></path>
                 </svg>
             </div>
-            <h3 class="text-lg font-medium text-gray-900 mt-4">Padam Produk</h3>
+            <h3 class="text-lg font-medium text-gray-900 mt-4">{{ __('Padam Produk') }}</h3>
             <div class="mt-2 px-7 py-3">
-                <p class="text-sm text-gray-500">
-                    Adakah anda pasti mahu memadamkan "<span id="deleteProductTitle"></span>"? Tindakan ini tidak boleh diundur.
-                </p>
+                <p class="text-sm text-gray-500" id="deleteProductConfirmText"></p>
             </div>
             <div class="flex justify-center space-x-4 mt-4">
                 <button onclick="closeDeleteProductModal()" 
                         class="px-4 py-2 bg-gray-300 text-gray-800 text-sm font-medium rounded-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-300">
-                    Batal
+                    {{ __('Batal') }}
                 </button>
                 <form id="deleteProductFormModal" method="POST" class="inline">
                     @csrf
                     @method('DELETE')
                     <button type="submit" 
                             class="px-4 py-2 bg-red-600 text-white text-sm font-medium rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500">
-                        Padam
+                        {{ __('Padam') }}
                     </button>
                 </form>
             </div>
@@ -456,11 +418,9 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                 </svg>
             </div>
-            <h3 class="text-lg font-medium text-gray-900 mt-4 text-center">Ubah Status Produk</h3>
+            <h3 class="text-lg font-medium text-gray-900 mt-4 text-center">{{ __('Ubah Status Produk') }}</h3>
             <div class="mt-2 px-7 py-3">
-                <p class="text-sm text-gray-500 text-center mb-4">
-                    Pilih status baru untuk "<span id="statusProductTitle"></span>"
-                </p>
+                <p class="text-sm text-gray-500 text-center mb-4" id="statusProductConfirmText"></p>
                 <form id="statusFormModal" method="POST" class="space-y-3">
                     @csrf
                     @method('PATCH')
@@ -471,7 +431,7 @@
                                 <span class="w-2 h-2 bg-green-400 rounded-full hidden"></span>
                             </span>
                             <span class="w-2 h-2 bg-green-400 rounded-full mr-2"></span>
-                            <span class="text-sm font-medium text-gray-700">Aktif</span>
+                            <span class="text-sm font-medium text-gray-700">{{ __('Aktif') }}</span>
                         </label>
                         <label class="flex items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors duration-150">
                             <input type="radio" name="status" value="inactive" class="sr-only">
@@ -479,7 +439,7 @@
                                 <span class="w-2 h-2 bg-gray-400 rounded-full hidden"></span>
                             </span>
                             <span class="w-2 h-2 bg-gray-400 rounded-full mr-2"></span>
-                            <span class="text-sm font-medium text-gray-700">Tidak Aktif</span>
+                            <span class="text-sm font-medium text-gray-700">{{ __('Tidak Aktif') }}</span>
                         </label>
 
                     </div>
@@ -488,23 +448,28 @@
             <div class="flex justify-center space-x-4 mt-4">
                 <button onclick="closeStatusModal()" 
                         class="px-4 py-2 bg-gray-300 text-gray-800 text-sm font-medium rounded-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-300">
-                    Batal
+                    {{ __('Batal') }}
                 </button>
                 <button onclick="submitStatusForm()" 
                         class="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    Kemas Kini
+                    {{ __('Kemas Kini') }}
                 </button>
             </div>
         </div>
     </div>
 </div>
 
+@php
+    $adminProductMessages = trans('admin_product');
+@endphp
+<script>window.adminProductMessages = @json($adminProductMessages);</script>
 <script>
 let currentProductId = null;
 
 function openStatusModal(productId, productTitle, currentStatus) {
     currentProductId = productId;
-    document.getElementById('statusProductTitle').textContent = productTitle;
+    document.getElementById('statusProductConfirmText').textContent =
+        window.adminProductMessages.select_status_for.replace(':name', productTitle);
     
     // Set the current status as selected
     const radioButtons = document.querySelectorAll('#statusFormModal input[name="status"]');
@@ -537,7 +502,7 @@ function submitStatusForm() {
     const selectedStatus = form.querySelector('input[name="status"]:checked');
     
     if (!selectedStatus) {
-        alert('Sila pilih status baru');
+        alert(window.adminMessages.select_new_status);
         return;
     }
     
@@ -565,7 +530,8 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
     function confirmDeleteProduct(productId, productTitle) {
-        document.getElementById('deleteProductTitle').textContent = productTitle;
+        document.getElementById('deleteProductConfirmText').textContent =
+            window.adminProductMessages.delete_confirm.replace(':name', productTitle);
         document.getElementById('deleteProductFormModal').action = `/admin/products/${productId}`;
         document.getElementById('deleteProductModal').classList.remove('hidden');
     }

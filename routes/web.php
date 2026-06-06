@@ -35,6 +35,12 @@ use App\Http\Controllers\Admin\RefundController as AdminRefundController;
 use App\Http\Controllers\Admin\ProductReviewController;
 use App\Http\Controllers\Admin\ServiceReviewController as AdminServiceReviewController;
 use App\Http\Controllers\Admin\NewsletterController as AdminNewsletterController;
+use App\Http\Controllers\Client\LocaleController as ClientLocaleController;
+
+// Client language preference (guests: session; logged-in: saved on user)
+Route::post('/locale/{locale}', [ClientLocaleController::class, 'switch'])
+    ->name('locale.switch')
+    ->where('locale', 'ms|en');
 
 // Home Page
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -329,7 +335,7 @@ Route::middleware('auth')->group(function () {
         $user->seller_application_date = now();
         $user->save();
         session()->forget('show_seller_form');
-        return redirect()->route('dashboard')->with('success', 'Permohonan penjual anda telah dihantar dan sedang menunggu kelulusan admin!');
+        return redirect()->route('dashboard')->with('success', __('flash.seller_application_submitted'));
     })->name('dashboard.become_seller');
 
     Route::get('/seller-info', function () {
@@ -394,9 +400,9 @@ Route::middleware('auth')->group(function () {
         $user->save();
         // Redirect to appropriate page based on user type
         if ($user->is_seller) {
-            return redirect()->route('seller.info')->with('success', 'Maklumat peribadi berjaya dikemaskini!');
+            return redirect()->route('seller.info')->with('success', __('flash.personal_info_updated'));
         } else {
-            return redirect()->route('profile.info')->with('success', 'Maklumat peribadi berjaya dikemaskini!');
+            return redirect()->route('profile.info')->with('success', __('flash.personal_info_updated'));
         }
     })->name('dashboard.update_profile');
 
@@ -456,6 +462,10 @@ Route::prefix('admin')->group(function () {
 
 // Protected Admin Routes
 Route::prefix('admin')->middleware(['auth', 'admin', 'writer'])->group(function () {
+    Route::post('/locale/{locale}', [\App\Http\Controllers\Admin\LocaleController::class, 'switch'])
+        ->name('admin.locale.switch')
+        ->where('locale', 'ms|en');
+
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::get('/dashboard/stats', [AdminController::class, 'getDashboardStats'])->name('admin.dashboard.stats');
     Route::get('/profile', [AdminController::class, 'profile'])->name('admin.profile');

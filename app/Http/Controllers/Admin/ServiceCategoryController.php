@@ -35,12 +35,8 @@ class ServiceCategoryController extends Controller
         $categories = $query
             ->orderBy('sort_order')
             ->orderBy('name')
-            ->get()
-            ->map(function (ServiceCategory $category) {
-                $category->services_count = $category->servicesCount();
-
-                return $category;
-            });
+            ->paginate(15)
+            ->withQueryString();
 
         return view('admin.service-categories.index', compact('categories'));
     }
@@ -69,7 +65,7 @@ class ServiceCategoryController extends Controller
 
         return redirect()
             ->route('admin.service-categories.index')
-            ->with('success', 'Kategori perkhidmatan berjaya ditambah.');
+            ->with('success', __('flash.service_category_created'));
     }
 
     public function edit(ServiceCategory $serviceCategory)
@@ -107,7 +103,7 @@ class ServiceCategoryController extends Controller
 
         return redirect()
             ->route('admin.service-categories.index')
-            ->with('success', 'Kategori perkhidmatan berjaya dikemas kini.');
+            ->with('success', __('flash.service_category_updated'));
     }
 
     public function destroy(ServiceCategory $serviceCategory)
@@ -115,13 +111,13 @@ class ServiceCategoryController extends Controller
         if ($serviceCategory->servicesCount() > 0) {
             return redirect()
                 ->route('admin.service-categories.index')
-                ->with('error', 'Kategori ini masih digunakan oleh perkhidmatan. Sila tukar kategori perkhidmatan tersebut terlebih dahulu.');
+                ->with('error', __('flash.service_category_in_use'));
         }
 
         $serviceCategory->delete();
 
         return redirect()
             ->route('admin.service-categories.index')
-            ->with('success', 'Kategori perkhidmatan berjaya dipadam.');
+            ->with('success', __('flash.service_category_deleted'));
     }
 }

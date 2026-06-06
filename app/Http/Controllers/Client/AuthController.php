@@ -33,15 +33,24 @@ class AuthController extends Controller
             $request->session()->regenerate();
             // Update last_login timestamp
             $user = Auth::user();
+
+            if ($request->session()->has('client_locale') && empty($user->client_locale)) {
+                $sessionLocale = $request->session()->get('client_locale');
+                if (in_array($sessionLocale, ['ms', 'en'], true)) {
+                    $user->forceFill(['client_locale' => $sessionLocale])->save();
+                }
+                $request->session()->forget('client_locale');
+            }
+
             $user->update(['last_login' => now()]);
             
             // Redirect based on user role
             $redirectRoute = $this->getRedirectRouteForUser($user);
             return redirect()->intended($redirectRoute)
-                ->with('success', 'Selamat kembali! Anda telah berjaya log masuk.');
+                ->with('success', __('client_messages.msg_fcf4bd49c1bc'));
         }
 
-        return back()->with('error', 'Maklumat log masuk yang diberikan tidak sepadan dengan rekod kami.')->onlyInput('email');
+        return back()->with('error', __('client_messages.msg_5cf89aad9e8e'))->onlyInput('email');
     }
 
     public function showRegisterForm()
@@ -55,25 +64,21 @@ class AuthController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
+        ], [
+            'email.unique' => __('client_messages.msg_aa4ec1316875'),
+            'password.confirmed' => __('client_messages.msg_e48eb8564ec7'),
+            'password.min' => __('client_messages.msg_a022d2d5d04d'),
         ]);
 
         if ($validator->fails()) {
-            // Check if it's an email uniqueness error
-            if ($validator->errors()->has('email') && $validator->errors()->first('email') === 'The email has already been taken.') {
-                return back()->with('error', 'Alamat emel ini telah digunakan.')->withInput($request->except('password', 'password_confirmation'));
+            if ($validator->errors()->has('email')) {
+                return back()->with('error', __('client_messages.msg_aa4ec1316875'))->withInput($request->except('password', 'password_confirmation'));
             }
-            
-            // Check if it's a password confirmation error
-            if ($validator->errors()->has('password') && $validator->errors()->first('password') === 'The password field confirmation does not match.') {
-                return back()->with('error', 'Kata laluan dan pengesahan kata laluan tidak sepadan.')->withInput($request->except('password', 'password_confirmation'));
+
+            if ($validator->errors()->has('password')) {
+                return back()->with('error', $validator->errors()->first('password'))->withInput($request->except('password', 'password_confirmation'));
             }
-            
-            // Check if it's a password length error
-            if ($validator->errors()->has('password') && $validator->errors()->first('password') === 'The password field must be at least 8 characters.') {
-                return back()->with('error', 'Kata laluan mesti sekurang-kurangnya 8 aksara.')->withInput($request->except('password', 'password_confirmation'));
-            }
-            
-            // For other validation errors, still use field errors
+
             return back()
                 ->withErrors($validator)
                 ->withInput($request->except('password', 'password_confirmation'));
@@ -92,7 +97,7 @@ class AuthController extends Controller
         // Auth::login($user);
 
         return redirect(route('login'))
-            ->with('success', 'Akaun berjaya dicipta! Sila log masuk untuk meneruskan.');
+            ->with('success', __('client_messages.msg_a77a22bd6874'));
     }
 
     public function logout(Request $request)
@@ -103,7 +108,7 @@ class AuthController extends Controller
         $request->session()->regenerateToken();
 
         return redirect(route('home'))
-            ->with('success', 'Anda telah berjaya log keluar.');
+            ->with('success', __('client_messages.msg_5ddb757ef2d2'));
     }
 
     public function redirectToGoogle()
@@ -134,7 +139,7 @@ class AuthController extends Controller
         } catch (\Exception $e) {
             Log::error('Google OAuth Error: ' . $e->getMessage());
             return redirect()->route('login')
-                ->with('error', 'Tidak dapat menyambung ke Google. Sila cuba lagi.');
+                ->with('error', __('client_messages.msg_4c96a0273344'));
         }
     }
 
@@ -171,7 +176,7 @@ class AuthController extends Controller
                 // Registration Flow
                 if ($user) {
                     return redirect()->route('login')
-                        ->with('error', 'Alamat emel ini telah didaftarkan. Sila log masuk.');
+                        ->with('error', __('client_messages.msg_691034536cc5'));
                 }
 
                 // Create new user
@@ -190,13 +195,13 @@ class AuthController extends Controller
                 // Auth::login($user, true);
                 session()->forget('google_registration');
                 return redirect()->route('login')
-                    ->with('success', 'Akaun berjaya dicipta! Sila log masuk untuk meneruskan.');
+                    ->with('success', __('client_messages.msg_a77a22bd6874'));
             }
             
             // Login Flow
             if (!$user) {
                 return redirect()->route('register')
-                    ->with('error', 'Akaun tidak dijumpai. Sila daftar terlebih dahulu.');
+                    ->with('error', __('client_messages.msg_ccd0b6e21e95'));
             }
 
             // Update google_id if not set
@@ -213,7 +218,7 @@ class AuthController extends Controller
             
             // Redirect based on user role
             $redirectRoute = $this->getRedirectRouteForUser($user);
-            return redirect($redirectRoute)->with('success', 'Selamat kembali! Anda telah berjaya log masuk.');
+            return redirect($redirectRoute)->with('success', __('client_messages.msg_fcf4bd49c1bc'));
 
         } catch (\Exception $e) {
             Log::error('Google Callback Error:', [
@@ -225,7 +230,7 @@ class AuthController extends Controller
             if (app()->environment('local')) {
                 $errorMessage .= $e->getMessage();
             } else {
-                $errorMessage .= 'Sila cuba lagi.';
+                $errorMessage .= __('flash.login_try_again');
             }
 
             return redirect()->route('login')
@@ -255,8 +260,8 @@ class AuthController extends Controller
         );
 
         return $status === Password::RESET_LINK_SENT
-                    ? back()->with('success', 'Pautan reset kata laluan telah dihantar ke alamat emel anda.')
-                    : back()->with('error', 'Kami tidak dapat mencari pengguna dengan alamat emel tersebut.');
+                    ? back()->with('success', __('client_messages.msg_0b9c42f58db5'))
+                    : back()->with('error', __('client_messages.msg_96d671090228'));
     }
 
     /**
@@ -292,8 +297,8 @@ class AuthController extends Controller
         );
 
         return $status === Password::PASSWORD_RESET
-                    ? redirect()->route('login')->with('success', 'Kata laluan anda telah berjaya ditetapkan semula. Sila log masuk dengan kata laluan baharu.')
-                    : back()->with('error', 'Token reset kata laluan tidak sah atau telah tamat tempoh.');
+                    ? redirect()->route('login')->with('success', __('client_messages.msg_1984b302e1b8'))
+                    : back()->with('error', __('client_messages.msg_742ff73ddbd2'));
     }
 
     /**
@@ -310,7 +315,7 @@ class AuthController extends Controller
             return route('admin.articles.index');
         }
         
-        // Default redirect to client dashboard
-        return route('dashboard');
+        // Default redirect to home page
+        return route('home');
     }
 } 

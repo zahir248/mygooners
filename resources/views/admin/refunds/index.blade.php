@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Pengurusan Refund - Admin Panel')
+@section('title', __('Pengurusan Bayaran Balik - Panel Pentadbir'))
 
 @section('content')
 <div class="px-4 sm:px-6 lg:px-8 py-8">
@@ -8,8 +8,8 @@
     <div class="mb-8">
         <div class="flex items-center justify-between">
             <div>
-                <h1 class="text-2xl font-bold text-gray-900">Pengurusan Refund</h1>
-                <p class="text-gray-600 mt-1">Uruskan semua permohonan refund dari pengguna</p>
+                <h1 class="text-2xl font-bold text-gray-900">{{ __('Pengurusan Bayaran Balik') }}</h1>
+                <p class="text-gray-600 mt-1">{{ __('Uruskan semua permohonan refund dari pengguna') }}</p>
             </div>
             
             <div class="flex space-x-3">
@@ -18,7 +18,7 @@
                     <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                     </svg>
-                    Export CSV
+                    {{ __('Eksport CSV') }}
                 </a>
             </div>
         </div>
@@ -34,7 +34,7 @@
                     </svg>
                 </div>
                 <div class="ml-4">
-                    <p class="text-sm font-medium text-gray-500">Total Refund</p>
+                    <p class="text-sm font-medium text-gray-500">{{ __('Jumlah Bayaran Balik') }}</p>
                     <p class="text-2xl font-semibold text-gray-900">{{ $statusCounts['pending'] + $statusCounts['approved'] + $statusCounts['rejected'] + $statusCounts['processing'] + $statusCounts['completed'] }}</p>
                 </div>
             </div>
@@ -48,7 +48,7 @@
                     </svg>
                 </div>
                 <div class="ml-4">
-                    <p class="text-sm font-medium text-gray-500">Menunggu</p>
+                    <p class="text-sm font-medium text-gray-500">{{ __('Menunggu') }}</p>
                     <p class="text-2xl font-semibold text-gray-900">{{ $statusCounts['pending'] }}</p>
                 </div>
             </div>
@@ -62,7 +62,7 @@
                     </svg>
                 </div>
                 <div class="ml-4">
-                    <p class="text-sm font-medium text-gray-500">Diluluskan</p>
+                    <p class="text-sm font-medium text-gray-500">{{ __('Diluluskan') }}</p>
                     <p class="text-2xl font-semibold text-gray-900">{{ $statusCounts['approved'] }}</p>
                 </div>
             </div>
@@ -76,7 +76,7 @@
                     </svg>
                 </div>
                 <div class="ml-4">
-                    <p class="text-sm font-medium text-gray-500">Diproses</p>
+                    <p class="text-sm font-medium text-gray-500">{{ __('Diproses') }}</p>
                     <p class="text-2xl font-semibold text-gray-900">{{ $statusCounts['processing'] }}</p>
                 </div>
             </div>
@@ -90,7 +90,7 @@
                     </svg>
                 </div>
                 <div class="ml-4">
-                    <p class="text-sm font-medium text-gray-500">Selesai</p>
+                    <p class="text-sm font-medium text-gray-500">{{ __('Selesai') }}</p>
                     <p class="text-2xl font-semibold text-gray-900">{{ $statusCounts['completed'] }}</p>
                 </div>
             </div>
@@ -101,19 +101,19 @@
     <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
         <form method="GET" action="{{ route('admin.refunds.index') }}" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             <div>
-                <label for="search" class="block text-sm font-medium text-gray-700 mb-2">Cari</label>
+                <label for="search" class="block text-sm font-medium text-gray-700 mb-2">{{ __('Cari') }}</label>
                 <input type="text" name="search" id="search" value="{{ request('search') }}" 
-                       placeholder="Nombor pesanan atau nama pengguna" 
+                       placeholder="{{ __('Nombor pesanan atau nama pengguna') }}" 
                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
             </div>
             
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Status Permohonan</label>
+                <label class="block text-sm font-medium text-gray-700 mb-2">{{ __('Status Permohonan') }}</label>
                 <select name="status" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                    <option value="">Semua Status</option>
-                    <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Tertunggak</option>
-                    <option value="approved" {{ request('status') == 'approved' ? 'selected' : '' }}>Diluluskan</option>
-                    <option value="rejected" {{ request('status') == 'rejected' ? 'selected' : '' }}>Ditolak</option>
+                    <option value="">{{ __('Semua Status') }}</option>
+                    <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>{{ __('Tertunggak') }}</option>
+                    <option value="approved" {{ request('status') == 'approved' ? 'selected' : '' }}>{{ __('Diluluskan') }}</option>
+                    <option value="rejected" {{ request('status') == 'rejected' ? 'selected' : '' }}>{{ __('Ditolak') }}</option>
                 </select>
             </div>
             
@@ -122,11 +122,11 @@
                     <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                     </svg>
-                    Cari
+                    {{ __('Cari') }}
                 </button>
                 
                 <a href="{{ route('admin.refunds.index') }}" class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded-lg font-medium transition-colors">
-                    Reset
+                    {{ __('Set Semula') }}
                 </a>
             </div>
         </form>
@@ -139,30 +139,14 @@
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-gray-50">
                         <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Refund
-                            </th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Pesanan
-                            </th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Pengguna
-                            </th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Jumlah
-                            </th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Status
-                            </th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Sudah Dihantar?
-                            </th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Tarikh
-                            </th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Tindakan
-                            </th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Bayaran Balik') }}</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Pesanan') }}</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Pengguna') }}</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Jumlah') }}</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Status') }}</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Sudah Dihantar?') }}</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Tarikh') }}</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Tindakan') }}</th>
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
@@ -173,7 +157,7 @@
                                         #{{ $refund->id }}
                                     </div>
                                     <div class="text-sm text-gray-500">
-                                        Return & Refund
+                                        {{ __('Pulangan & Bayaran Balik') }}
                                     </div>
                                 </td>
                                 
@@ -216,12 +200,12 @@
                                             <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                                             </svg>
-                                            Ya
+                                            {{ __('Ya') }}
                                         @else
                                             <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                                             </svg>
-                                            Tidak
+                                            {{ __('Tidak') }}
                                         @endif
                                     </span>
                                 </td>
@@ -233,7 +217,7 @@
                                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                     <a href="{{ route('admin.refunds.show', $refund->id) }}" 
                                        class="text-blue-600 hover:text-blue-900 transition-colors duration-200" 
-                                       title="Lihat Butiran Refund">
+                                       title="{{ __('Lihat Butiran Bayaran Balik') }}">
                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
@@ -246,19 +230,16 @@
                 </table>
             </div>
             
-            <!-- Pagination -->
-            <div class="px-6 py-4 border-t border-gray-200">
-                {{ $refunds->appends(request()->query())->links() }}
-            </div>
+            @include('admin.partials.pagination', ['paginator' => $refunds])
         @else
             <!-- Empty State -->
             <div class="text-center py-12">
                 <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"></path>
                 </svg>
-                <h3 class="mt-2 text-sm font-medium text-gray-900">Tiada Permohonan Refund</h3>
+                <h3 class="mt-2 text-sm font-medium text-gray-900">{{ __('Tiada Permohonan Bayaran Balik') }}</h3>
                 <p class="mt-1 text-sm text-gray-500">
-                    Belum ada permohonan refund yang dibuat oleh pengguna.
+                    {{ __('Belum ada permohonan refund yang dibuat oleh pengguna.') }}
                 </p>
             </div>
         @endif

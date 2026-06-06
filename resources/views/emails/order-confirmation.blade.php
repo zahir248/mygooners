@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ms">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pengesahan Pesanan #{{ $order->order_number }}</title>
+    <title>{{ trans('email.order_confirmation_title', ['number' => $order->order_number]) }}</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -102,30 +102,30 @@
 <body>
     <div class="header">
         <h1>MyGooners</h1>
-        <p>Pengesahan Pesanan</p>
+        <p>{{ trans('email.order_confirmation_heading') }}</p>
     </div>
 
     <div class="content">
-        <p>Hai {{ $order->shipping_name }},</p>
+        <p>{{ trans('email.greeting', ['name' => $order->shipping_name]) }}</p>
         
-        <p>Terima kasih atas pesanan anda! Kami telah menerima pembayaran anda dan sedang memproses pesanan anda.</p>
+        <p>{{ trans('email.order_confirmation_intro') }}</p>
 
         <div class="order-details">
-            <div class="order-number">Pesanan #{{ $order->order_number }}</div>
+            <div class="order-number">{{ trans('email.order_number', ['number' => $order->order_number]) }}</div>
             <div>
                 <span class="status-badge status-{{ $order->payment_status }}">
-                    {{ $order->payment_status === 'paid' ? 'Telah Dibayar' : ucfirst($order->payment_status) }}
+                    {{ $order->payment_status === 'paid' ? __('Telah Dibayar') : ucfirst($order->payment_status) }}
                 </span>
                 <span class="status-badge status-{{ $order->status }}">
-                    {{ $order->status === 'processing' ? 'Sedang Diproses' : ucfirst($order->status) }}
+                    {{ $order->status === 'processing' ? __('Sedang Diproses') : ucfirst($order->status) }}
                 </span>
             </div>
             
-            <p><strong>Tarikh Pesanan:</strong> {{ $order->created_at->format('d/m/Y H:i') }}</p>
-            <p><strong>Kaedah Pembayaran:</strong> {{ $order->getPaymentMethodDisplayName() }}</p>
+            <p><strong>{{ trans('email.order_date') }}</strong> {{ $order->created_at->format('d/m/Y H:i') }}</p>
+            <p><strong>{{ trans('email.payment_method') }}</strong> {{ $order->getPaymentMethodDisplayName() }}</p>
         </div>
 
-        <h3>Item Pesanan:</h3>
+        <h3>{{ trans('email.order_items') }}</h3>
         @foreach($order->items as $item)
             <div class="item">
                 <div style="display: flex; justify-content: space-between;">
@@ -134,29 +134,29 @@
                         @if($item->variation_name)
                             <br><small>{{ $item->variation_name }}</small>
                         @endif
-                        <br><small>Kuantiti: {{ $item->quantity }}</small>
+                        <br><small>{{ trans('email.quantity', ['qty' => $item->quantity]) }}</small>
                     </div>
                     <div style="text-align: right;">
                         <strong>{{ $item->getFormattedSubtotal() }}</strong>
-                        <br><small>{{ $item->getFormattedPrice() }} setiap unit</small>
+                        <br><small>{{ trans('email.per_unit', ['price' => $item->getFormattedPrice()]) }}</small>
                     </div>
                 </div>
             </div>
         @endforeach
 
         <div class="total">
-            <div>Subtotal: RM{{ number_format($order->subtotal, 2) }}</div>
+            <div>{{ trans('email.subtotal') }} RM{{ number_format($order->subtotal, 2) }}</div>
             @if($order->shipping_cost > 0)
-                <div>Kos Penghantaran: RM{{ number_format($order->shipping_cost, 2) }}</div>
+                <div>{{ trans('email.shipping_cost') }} RM{{ number_format($order->shipping_cost, 2) }}</div>
             @endif
             @if($order->tax > 0)
-                <div>Cukai: RM{{ number_format($order->tax, 2) }}</div>
+                <div>{{ trans('email.tax') }} RM{{ number_format($order->tax, 2) }}</div>
             @endif
-            <div style="font-size: 20px; color: #dc2626;">Jumlah: {{ $order->getFormattedTotal() }}</div>
+            <div style="font-size: 20px; color: #dc2626;">{{ trans('email.total') }} {{ $order->getFormattedTotal() }}</div>
         </div>
 
         <div class="address-section">
-            <div class="address-title">Alamat Penghantaran:</div>
+            <div class="address-title">{{ trans('email.shipping_address') }}</div>
             <div>
                 {{ $order->shipping_name }}<br>
                 {{ $order->shipping_email }}<br>
@@ -169,7 +169,7 @@
 
         @if($order->billing_email !== $order->shipping_email)
             <div class="address-section">
-                <div class="address-title">Alamat Bil:</div>
+                <div class="address-title">{{ trans('email.billing_address') }}</div>
                 <div>
                     {{ $order->billing_name }}<br>
                     {{ $order->billing_email }}<br>
@@ -183,32 +183,32 @@
 
         @if($order->fpl_manager_name && $order->fpl_team_name)
             <div class="address-section">
-                <div class="address-title">Fantasy Premier League:</div>
+                <div class="address-title">{{ trans('email.fpl_section') }}</div>
                 <div>
-                    <strong>Nama Manager:</strong> {{ $order->fpl_manager_name }}<br>
-                    <strong>Nama Pasukan:</strong> {{ $order->fpl_team_name }}<br>
-                    <strong>Kod Liga:</strong> 8nx2p4
+                    <strong>{{ trans('email.manager_name') }}</strong> {{ $order->fpl_manager_name }}<br>
+                    <strong>{{ trans('email.team_name') }}</strong> {{ $order->fpl_team_name }}<br>
+                    <strong>{{ trans('email.league_code') }}</strong> 8nx2p4
                 </div>
             </div>
         @endif
 
         <div style="text-align: center; margin: 30px 0;">
-            <a href="{{ route('checkout.show', $order->id) }}" class="button">Lihat Pesanan</a>
+            <a href="{{ route('checkout.show', $order->id) }}" class="button">{{ trans('email.view_order') }}</a>
         </div>
 
         <div style="background-color: #fef3c7; padding: 15px; border-radius: 8px; margin: 20px 0;">
-            <h4 style="margin-top: 0; color: #92400e;">Langkah Seterusnya:</h4>
+            <h4 style="margin-top: 0; color: #92400e;">{{ trans('email.next_steps') }}</h4>
             <ul style="margin: 0; padding-left: 20px;">
-                <li>Tim kami akan memproses pesanan anda dalam masa 1-2 hari bekerja</li>
-                <li>Anda akan menerima emel dengan nombor pengesanan apabila pesanan dihantar</li>
-                <li>Anda boleh menjejaki status pesanan anda melalui pautan di atas</li>
+                <li>{{ trans('email.next_step_process') }}</li>
+                <li>{{ trans('email.next_step_tracking') }}</li>
+                <li>{{ trans('email.next_step_track_online') }}</li>
             </ul>
         </div>
     </div>
 
     <div class="footer">
-        <p>Jika anda mempunyai sebarang pertanyaan, sila hubungi kami di support@mygooners.com</p>
-        <p>&copy; {{ date('Y') }} MyGooners. Hak cipta terpelihara.</p>
+        <p>{{ trans('email.footer_questions') }}</p>
+        <p>&copy; {{ date('Y') }} MyGooners. {{ trans('email.footer_copyright') }}</p>
     </div>
 </body>
-</html> 
+</html>

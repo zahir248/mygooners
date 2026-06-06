@@ -29,7 +29,7 @@
             </div>
             <!-- Action Buttons -->
             <div class="flex gap-3">
-                <button @click="open = false" type="button" class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 rounded-lg transition-colors">Tidak</button>
+                <button @click="open = false" type="button" class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 rounded-lg transition-colors">{{ __('Tidak') }}</button>
                 <form x-ref="form" method="POST" action="{{ $action }}" class="flex-1">
                     @csrf
                     @method('DELETE')

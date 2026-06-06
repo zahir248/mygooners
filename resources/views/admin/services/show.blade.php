@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Butiran Perkhidmatan')
+@section('title', __('Butiran Perkhidmatan'))
 
 @section('content')
     <div class="py-6">
@@ -13,9 +13,7 @@
                             <ol class="flex items-center space-x-4">
                                 <li>
                                     <div>
-                                        <a href="{{ route('admin.services.index') }}" class="text-gray-400 hover:text-gray-500">
-                                            Perkhidmatan
-                                        </a>
+                                        <a href="{{ route('admin.services.index') }}" class="text-gray-400 hover:text-gray-500">{{ __('Perkhidmatan') }}</a>
                                     </div>
                                 </li>
                                 <li>
@@ -28,7 +26,7 @@
                                 </li>
                             </ol>
                         </nav>
-                        <h1 class="text-2xl font-bold text-gray-900 mt-2">Butiran Perkhidmatan</h1>
+                        <h1 class="text-2xl font-bold text-gray-900 mt-2">{{ __('Butiran Perkhidmatan') }}</h1>
                     </div>
                     <div class="flex space-x-3">
                         @if($service->status === 'pending')
@@ -36,22 +34,22 @@
                                 @csrf
                                 <button type="submit" 
                                         class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
-                                        onclick="return confirm('Adakah anda pasti mahu meluluskan perkhidmatan ini?')">
+                                        onclick="return confirm(@json(__('Adakah anda pasti mahu meluluskan perkhidmatan ini?')))">
                                     <svg class="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                                     </svg>
-                                    Luluskan Perkhidmatan
+                                    {{ __('Luluskan Perkhidmatan') }}
                                 </button>
                             </form>
                             <form method="POST" action="{{ route('admin.services.reject', $service->id) }}" class="inline">
                                 @csrf
                                 <button type="submit" 
                                         class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500"
-                                        onclick="return confirm('Adakah anda pasti mahu menolak perkhidmatan ini?')">
+                                        onclick="return confirm(@json(__('Adakah anda pasti mahu menolak perkhidmatan ini?')))">
                                     <svg class="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                                     </svg>
-                                    Tolak Perkhidmatan
+                                    {{ __('Tolak Perkhidmatan') }}
                                 </button>
                             </form>
                         @endif
@@ -65,7 +63,7 @@
                     <!-- Service Information -->
                     <div class="bg-white shadow-sm rounded-lg overflow-hidden">
                         <div class="px-6 py-4 border-b border-gray-200">
-                            <h3 class="text-lg font-medium text-gray-900">Maklumat Perkhidmatan</h3>
+                            <h3 class="text-lg font-medium text-gray-900">{{ __('Maklumat Perkhidmatan') }}</h3>
                         </div>
                         <div class="p-6">
                             <!-- Service Images -->
@@ -89,24 +87,18 @@
                                             {{ $service->category }}
                                         </span>
                                         @if($service->status === 'active')
-                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                                Aktif
-                                            </span>
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">{{ __('Aktif') }}</span>
                                         @elseif($service->status === 'pending')
-                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                                                Menunggu Semakan
-                                            </span>
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">{{ __('Menunggu Semakan') }}</span>
                                         @elseif($service->status === 'rejected')
-                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
-                                                Ditolak
-                                            </span>
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">{{ __('Ditolak') }}</span>
                                         @endif
                                         @if($service->is_verified)
                                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
                                                 <svg class="mr-1 h-3 w-3" fill="currentColor" viewBox="0 0 20 20">
                                                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
                                                 </svg>
-                                                Disahkan
+                                                {{ __('Disahkan') }}
                                             </span>
                                         @endif
                                     </div>
@@ -114,15 +106,15 @@
 
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div>
-                                        <dt class="text-sm font-medium text-gray-500">Lokasi</dt>
+                                        <dt class="text-sm font-medium text-gray-500">{{ __('Lokasi') }}</dt>
                                         <dd class="mt-1 text-sm text-gray-900">{{ $service->location }}</dd>
                                     </div>
                                     <div>
-                                        <dt class="text-sm font-medium text-gray-500">Harga</dt>
+                                        <dt class="text-sm font-medium text-gray-500">{{ __('Harga') }}</dt>
                                         <dd class="mt-1 text-sm font-semibold text-green-600">{{ $service->pricing }}</dd>
                                     </div>
                                     <div>
-                                        <dt class="text-sm font-medium text-gray-500">Skor Kepercayaan</dt>
+                                        <dt class="text-sm font-medium text-gray-500">{{ __('Skor Kepercayaan') }}</dt>
                                         <dd class="mt-1 flex items-center">
                                             <div class="flex items-center">
                                                 @for($i = 1; $i <= 5; $i++)
@@ -141,25 +133,25 @@
                                         </dd>
                                     </div>
                                     <div>
-                                        <dt class="text-sm font-medium text-gray-500">Tontonan</dt>
+                                        <dt class="text-sm font-medium text-gray-500">{{ __('Tontonan') }}</dt>
                                         <dd class="mt-1 text-sm text-gray-900">{{ number_format($service->views_count) }}</dd>
                                     </div>
                                 </div>
 
                                 <div>
-                                    <dt class="text-sm font-medium text-gray-500">Deskripsi</dt>
+                                    <dt class="text-sm font-medium text-gray-500">{{ __('Deskripsi') }}</dt>
                                     <dd class="mt-1 text-sm text-gray-900">
                                         <p class="whitespace-pre-line">{{ $service->description }}</p>
                                     </dd>
                                 </div>
 
                                 <div>
-                                    <dt class="text-sm font-medium text-gray-500">Maklumat Hubungan</dt>
+                                    <dt class="text-sm font-medium text-gray-500">{{ __('Maklumat Hubungan') }}</dt>
                                     <dd class="mt-1 text-sm text-gray-900">{{ $service->contact_info }}</dd>
                                 </div>
 
                                 <div>
-                                    <dt class="text-sm font-medium text-gray-500">Dicipta</dt>
+                                    <dt class="text-sm font-medium text-gray-500">{{ __('Dicipta') }}</dt>
                                     <dd class="mt-1 text-sm text-gray-900">{{ $service->created_at->format('j M Y \p\a\d\a g:i A') }}</dd>
                                 </div>
                             </div>
@@ -172,7 +164,7 @@
                     <!-- Provider Information -->
                     <div class="bg-white shadow-sm rounded-lg overflow-hidden">
                         <div class="px-6 py-4 border-b border-gray-200">
-                            <h3 class="text-lg font-medium text-gray-900">Penyedia Perkhidmatan</h3>
+                            <h3 class="text-lg font-medium text-gray-900">{{ __('Penyedia Perkhidmatan') }}</h3>
                         </div>
                         <div class="p-6">
                             <div class="flex items-center">
@@ -194,40 +186,32 @@
 
                             @if($service->user->bio)
                                 <div class="mt-4">
-                                    <dt class="text-sm font-medium text-gray-500">Bio</dt>
+                                    <dt class="text-sm font-medium text-gray-500">{{ __('Bio') }}</dt>
                                     <dd class="mt-1 text-sm text-gray-900">{{ $service->user->bio }}</dd>
                                 </div>
                             @endif
 
                             <div class="mt-4 space-y-3">
                                 <div class="flex items-center justify-between">
-                                    <span class="text-sm font-medium text-gray-500">Status Pengguna:</span>
+                                    <span class="text-sm font-medium text-gray-500">{{ __('Status Pengguna:') }}</span>
                                     @if($service->user->status === 'active')
-                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                            Aktif
-                                        </span>
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">{{ __('Aktif') }}</span>
                                     @elseif($service->user->status === 'suspended')
-                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
-                                            Digantung
-                                        </span>
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">{{ __('Digantung') }}</span>
                                     @endif
                                 </div>
 
                                 <div class="flex items-center justify-between">
-                                    <span class="text-sm font-medium text-gray-500">Disahkan:</span>
+                                    <span class="text-sm font-medium text-gray-500">{{ __('Disahkan:') }}</span>
                                     @if($service->user->is_verified)
-                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                            Ya
-                                        </span>
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">{{ __('Ya') }}</span>
                                     @else
-                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
-                                            Tidak
-                                        </span>
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">{{ __('Tidak') }}</span>
                                     @endif
                                 </div>
 
                                 <div class="flex items-center justify-between">
-                                    <span class="text-sm font-medium text-gray-500">Ahli Sejak:</span>
+                                    <span class="text-sm font-medium text-gray-500">{{ __('Ahli Sejak:') }}</span>
                                     <span class="text-sm text-gray-900">{{ $service->user->created_at->format('M Y') }}</span>
                                 </div>
                             </div>
@@ -244,7 +228,7 @@
                     <!-- Service Actions -->
                     <div class="bg-white shadow-sm rounded-lg overflow-hidden">
                         <div class="px-6 py-4 border-b border-gray-200">
-                            <h3 class="text-lg font-medium text-gray-900">Tindakan</h3>
+                            <h3 class="text-lg font-medium text-gray-900">{{ __('Tindakan') }}</h3>
                         </div>
                         <div class="p-6 space-y-3">
                             @if($service->status === 'pending')
@@ -252,22 +236,22 @@
                                     @csrf
                                     <button type="submit" 
                                             class="w-full inline-flex justify-center items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
-                                            onclick="return confirm('Adakah anda pasti mahu meluluskan perkhidmatan ini?')">
+                                            onclick="return confirm(@json(__('Adakah anda pasti mahu meluluskan perkhidmatan ini?')))">
                                         <svg class="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                                         </svg>
-                                        Luluskan Perkhidmatan
+                                        {{ __('Luluskan Perkhidmatan') }}
                                     </button>
                                 </form>
                                 <form method="POST" action="{{ route('admin.services.reject', $service->id) }}" class="w-full">
                                     @csrf
                                     <button type="submit" 
                                             class="w-full inline-flex justify-center items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500"
-                                            onclick="return confirm('Adakah anda pasti mahu menolak perkhidmatan ini?')">
+                                            onclick="return confirm(@json(__('Adakah anda pasti mahu menolak perkhidmatan ini?')))">
                                         <svg class="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                                         </svg>
-                                        Tolak Perkhidmatan
+                                        {{ __('Tolak Perkhidmatan') }}
                                     </button>
                                 </form>
                             @elseif($service->status === 'active')
@@ -275,11 +259,11 @@
                                     @csrf
                                     <button type="submit" 
                                             class="w-full inline-flex justify-center items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-                                            onclick="return confirm('Adakah anda pasti mahu menggantung perkhidmatan ini?')">
+                                            onclick="return confirm(@json(__('Adakah anda pasti mahu menggantung perkhidmatan ini?')))">
                                         <svg class="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728L5.636 5.636m12.728 12.728L18.364 5.636M5.636 18.364l12.728-12.728"></path>
                                         </svg>
-                                        Gantung Perkhidmatan
+                                        {{ __('Gantung Perkhidmatan') }}
                                     </button>
                                 </form>
                             @endif
@@ -290,7 +274,7 @@
                                 <svg class="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
                                 </svg>
-                                Lihat di Laman
+                                {{ __('Lihat di Laman') }}
                             </a>
                         </div>
                     </div>
@@ -308,23 +292,17 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
                     </svg>
                 </div>
-                <h3 class="text-lg font-medium text-gray-900 mt-2">Delete Service</h3>
+                <h3 class="text-lg font-medium text-gray-900 mt-2">{{ __('Padam Perkhidmatan') }}</h3>
                 <div class="mt-2 px-7 py-3">
-                    <p class="text-sm text-gray-500">
-                        Are you sure you want to delete this service? This action cannot be undone.
-                    </p>
+                    <p class="text-sm text-gray-500">{{ __('Adakah anda pasti mahu memadam perkhidmatan ini? Tindakan ini tidak boleh diundur.') }}</p>
                 </div>
                 <div class="items-center px-4 py-3">
                     <form id="deleteForm" method="POST" class="inline">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class="px-4 py-2 bg-red-600 text-white text-base font-medium rounded-md shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 mr-2">
-                            Delete
-                        </button>
+                        <button type="submit" class="px-4 py-2 bg-red-600 text-white text-base font-medium rounded-md shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 mr-2">{{ __('Padam') }}</button>
                     </form>
-                    <button onclick="closeDeleteModal()" class="px-4 py-2 bg-gray-300 text-gray-800 text-base font-medium rounded-md shadow-sm hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-300">
-                        Cancel
-                    </button>
+                    <button onclick="closeDeleteModal()" class="px-4 py-2 bg-gray-300 text-gray-800 text-base font-medium rounded-md shadow-sm hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-300">{{ __('Batal') }}</button>
                 </div>
             </div>
         </div>

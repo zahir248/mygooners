@@ -36,14 +36,23 @@ class AuthController extends Controller
             $request->session()->regenerate();
 
             $user = Auth::user();
-            // Update last_login timestamp
+
+            // One-time: migrate legacy session locale to user preference
+            if ($request->session()->has('admin_locale') && empty($user->admin_locale)) {
+                $sessionLocale = $request->session()->get('admin_locale');
+                if (in_array($sessionLocale, ['ms', 'en'], true)) {
+                    $user->forceFill(['admin_locale' => $sessionLocale])->save();
+                }
+                $request->session()->forget('admin_locale');
+            }
+
             $user->update(['last_login' => now()]);
             
             // Check if user has admin privileges
             if (!in_array($user->role, ['admin', 'super_admin'])) {
                 Auth::logout();
                 return back()->withErrors([
-                    'email' => 'You do not have admin privileges.',
+                    'email' => __('flash.auth_no_admin_privileges'),
                 ]);
             }
 
@@ -51,7 +60,7 @@ class AuthController extends Controller
         }
 
         return back()->withErrors([
-            'email' => 'The provided credentials do not match our records.',
+            'email' => __('flash.auth_credentials_invalid'),
         ]);
     }
 
@@ -94,9 +103,7 @@ class AuthController extends Controller
         // Log them in as a regular user
         Auth::login($user);
 
-        return redirect()->route('dashboard')->with('success', 
-            'Your admin access request has been submitted and is pending review. You\'ve been given regular user access in the meantime.'
-        );
+        return redirect()->route('dashboard')->with('success', __('flash.auth_admin_request_submitted'));
     }
 
     /**
@@ -137,7 +144,7 @@ class AuthController extends Controller
         // Check if the user exists and has admin privileges
         $user = User::where('email', $request->email)->first();
         if (!$user || !in_array($user->role, ['admin', 'super_admin'])) {
-            return back()->with('error', 'Kami tidak dapat mencari admin dengan alamat emel tersebut.');
+            return back()->with('error', __('flash.auth_email_not_found'));
         }
 
         $status = Password::sendResetLink(
@@ -145,8 +152,8 @@ class AuthController extends Controller
         );
 
         return $status === Password::RESET_LINK_SENT
-                    ? back()->with('success', 'Pautan reset kata laluan telah dihantar ke alamat emel anda.')
-                    : back()->with('error', 'Kami tidak dapat mencari admin dengan alamat emel tersebut.');
+                    ? back()->with('success', __('flash.auth_reset_link_sent'))
+                    : back()->with('error', __('flash.auth_email_not_found'));
     }
 
     /**
@@ -171,7 +178,7 @@ class AuthController extends Controller
         // Check if the user exists and has admin privileges
         $user = User::where('email', $request->email)->first();
         if (!$user || !in_array($user->role, ['admin', 'super_admin'])) {
-            return back()->with('error', 'Kami tidak dapat mencari admin dengan alamat emel tersebut.');
+            return back()->with('error', __('flash.auth_email_not_found'));
         }
 
         $status = Password::reset(
@@ -188,7 +195,7 @@ class AuthController extends Controller
         );
 
         return $status === Password::PASSWORD_RESET
-                    ? redirect()->route('admin.login')->with('success', 'Kata laluan anda telah berjaya ditetapkan semula. Sila log masuk dengan kata laluan baharu.')
-                    : back()->with('error', 'Token reset kata laluan tidak sah atau telah tamat tempoh.');
+                    ? redirect()->route('admin.login')->with('success', __('flash.auth_password_reset_success'))
+                    : back()->with('error', __('flash.auth_reset_token_invalid'));
     }
 } 

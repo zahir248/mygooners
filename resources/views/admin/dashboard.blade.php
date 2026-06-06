@@ -1,11 +1,11 @@
 @extends('layouts.admin')
 
-@section('title', 'Panel Kawalan - MyGooners Admin')
+@section('title', __('Panel Kawalan - Pentadbir MyGooners'))
 
 @push('breadcrumbs')
-    <span class="text-gray-500">Admin</span>
+    <span class="text-gray-500">{{ __('Pentadbir') }}</span>
     <span class="text-gray-300">/</span>
-    <span class="text-gray-900 font-medium">Panel Kawalan</span>
+    <span class="text-gray-900 font-medium">{{ __('Panel Kawalan') }}</span>
 @endpush
 
 @push('styles')
@@ -78,10 +78,10 @@
         <!-- Page header with welcome message -->
         <div class="mb-8">
             <div>
-                <h1 class="text-3xl font-bold text-gray-900">Panel Kawalan</h1>
+                <h1 class="text-3xl font-bold text-gray-900">{{ __('Panel Kawalan') }}</h1>
                 <p class="mt-2 text-lg text-gray-600">
-                    Selamat kembali, {{ auth()->user()->name }}! 
-                    <span class="text-sm text-gray-500">Terakhir log masuk: {{ auth()->user()->last_login ? auth()->user()->last_login->diffForHumans() : 'Tidak diketahui' }}</span>
+                    {{ __('Selamat kembali,') }} {{ auth()->user()->name }}! 
+                    <span class="text-sm text-gray-500">{{ __('Terakhir log masuk:') }} {{ auth()->user()->last_login ? auth()->user()->last_login->diffForHumans() : __('Tidak diketahui') }}</span>
                 </p>
             </div>
         </div>
@@ -101,7 +101,7 @@
                         </div>
                         <div class="ml-5 w-0 flex-1">
                             <dl>
-                                <dt class="text-sm font-medium text-gray-500 truncate">Jumlah Pengguna</dt>
+                                <dt class="text-sm font-medium text-gray-500 truncate">{{ __('Jumlah Pengguna') }}</dt>
                                 <dd class="text-2xl font-bold text-gray-900" id="total-users">{{ number_format($stats['total_users']) }}</dd>
                                 <dd class="text-sm text-gray-500">
                                     <span class="text-green-600">+{{ $stats['new_users_this_month'] }}</span> bulan ini
@@ -125,7 +125,7 @@
                         </div>
                         <div class="ml-5 w-0 flex-1">
                             <dl>
-                                <dt class="text-sm font-medium text-gray-500 truncate">Artikel Diterbitkan</dt>
+                                <dt class="text-sm font-medium text-gray-500 truncate">{{ __('Artikel Diterbitkan') }}</dt>
                                 <dd class="text-2xl font-bold text-gray-900" id="published-articles">{{ number_format($stats['published_articles']) }}</dd>
                                 <dd class="text-sm text-gray-500">
                                     <span class="text-green-600">+{{ $stats['published_articles_this_month'] }}</span> bulan ini
@@ -149,7 +149,7 @@
                         </div>
                         <div class="ml-5 w-0 flex-1">
                             <dl>
-                                <dt class="text-sm font-medium text-gray-500 truncate">Perkhidmatan Aktif</dt>
+                                <dt class="text-sm font-medium text-gray-500 truncate">{{ __('Perkhidmatan Aktif') }}</dt>
                                 <dd class="text-2xl font-bold text-gray-900" id="active-services">{{ number_format($stats['active_services']) }}</dd>
                                 @if($stats['pending_services'] > 0)
                                     <dd class="text-sm text-red-600">
@@ -175,7 +175,7 @@
                         </div>
                         <div class="ml-5 w-0 flex-1">
                             <dl>
-                                <dt class="text-sm font-medium text-gray-500 truncate">Jumlah Produk</dt>
+                                <dt class="text-sm font-medium text-gray-500 truncate">{{ __('Jumlah Produk') }}</dt>
                                 <dd class="text-2xl font-bold text-gray-900" id="total-products">{{ number_format($stats['total_products']) }}</dd>
                             </dl>
                         </div>
@@ -188,22 +188,22 @@
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
             <!-- Growth Metrics -->
             <div class="bg-white shadow-sm rounded-lg border border-gray-200 p-6">
-                <h3 class="text-lg font-medium text-gray-900 mb-4">Metrik Pertumbuhan</h3>
+                <h3 class="text-lg font-medium text-gray-900 mb-4">{{ __('Metrik Pertumbuhan') }}</h3>
                 <div class="space-y-4">
                     <div class="flex items-center justify-between">
-                        <span class="text-sm text-gray-600">Pertumbuhan Pengguna</span>
+                        <span class="text-sm text-gray-600">{{ __('Pertumbuhan Pengguna') }}</span>
                         <span class="text-lg font-semibold {{ $performance['user_growth'] >= 0 ? 'text-green-600' : 'text-red-600' }}">
                             {{ $performance['user_growth'] >= 0 ? '+' : '' }}{{ $performance['user_growth'] }}%
                         </span>
                     </div>
                     <div class="flex items-center justify-between">
-                        <span class="text-sm text-gray-600">Pertumbuhan Kandungan</span>
+                        <span class="text-sm text-gray-600">{{ __('Pertumbuhan Kandungan') }}</span>
                         <span class="text-lg font-semibold {{ $performance['content_growth'] >= 0 ? 'text-green-600' : 'text-red-600' }}">
                             {{ $performance['content_growth'] >= 0 ? '+' : '' }}{{ $performance['content_growth'] }}%
                         </span>
                     </div>
                     <div class="flex items-center justify-between">
-                        <span class="text-sm text-gray-600">Kadar Penglibatan</span>
+                        <span class="text-sm text-gray-600">{{ __('Kadar Penglibatan') }}</span>
                         <span class="text-lg font-semibold text-blue-600">{{ $performance['engagement_rate'] }}%</span>
                     </div>
                 </div>
@@ -211,7 +211,7 @@
 
             <!-- Pending Items -->
             <div class="bg-white shadow-sm rounded-lg border border-gray-200 p-6">
-                <h3 class="text-lg font-medium text-gray-900 mb-4">Item Menunggu</h3>
+                <h3 class="text-lg font-medium text-gray-900 mb-4">{{ __('Item Menunggu') }}</h3>
                 <div class="space-y-3">
                     @if($pendingItems['services']->count() > 0)
                         @foreach($pendingItems['services']->take(3) as $service)
@@ -222,7 +222,7 @@
                                 </div>
                                 <a href="{{ route('admin.services.show', $service->id) }}" 
                                    class="text-xs text-yellow-600 hover:text-yellow-800 transition-colors duration-200" 
-                                   title="Lihat Butiran Perkhidmatan">
+                                   title="{{ __('Lihat Butiran Perkhidmatan') }}">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
@@ -235,7 +235,7 @@
                             <svg class="mx-auto h-8 w-8 text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                             </svg>
-                            <p class="text-sm">Tiada item menunggu</p>
+                            <p class="text-sm">{{ __('Tiada item menunggu') }}</p>
                         </div>
                     @endif
                 </div>
@@ -243,18 +243,18 @@
 
             <!-- Quick Stats -->
             <div class="bg-white shadow-sm rounded-lg border border-gray-200 p-6">
-                <h3 class="text-lg font-medium text-gray-900 mb-4">Statistik Pantas</h3>
+                <h3 class="text-lg font-medium text-gray-900 mb-4">{{ __('Statistik Pantas') }}</h3>
                 <div class="space-y-4">
                     <div class="flex items-center justify-between">
-                        <span class="text-sm text-gray-600">Video Diterbitkan</span>
+                        <span class="text-sm text-gray-600">{{ __('Video Diterbitkan') }}</span>
                         <span class="text-lg font-semibold text-purple-600">{{ $stats['published_videos'] }}</span>
                     </div>
                     <div class="flex items-center justify-between">
-                        <span class="text-sm text-gray-600">Jumlah Ulasan</span>
+                        <span class="text-sm text-gray-600">{{ __('Jumlah Ulasan') }}</span>
                         <span class="text-lg font-semibold text-indigo-600">{{ $stats['total_reviews'] }}</span>
                     </div>
                     <div class="flex items-center justify-between">
-                        <span class="text-sm text-gray-600">Pengguna Bulan Ini</span>
+                        <span class="text-sm text-gray-600">{{ __('Pengguna Bulan Ini') }}</span>
                         <span class="text-lg font-semibold text-green-600">{{ $stats['new_users_this_month'] }}</span>
                     </div>
                 </div>
@@ -266,7 +266,7 @@
             <!-- Monthly Growth Chart -->
             <div class="bg-white shadow-sm rounded-lg border border-gray-200">
                 <div class="px-6 py-4 border-b border-gray-200">
-                    <h3 class="text-lg font-medium text-gray-900">Pertumbuhan Bulanan</h3>
+                    <h3 class="text-lg font-medium text-gray-900">{{ __('Pertumbuhan Bulanan') }}</h3>
                 </div>
                 <div class="p-6">
                     <div class="chart-container">
@@ -278,7 +278,7 @@
             <!-- Recent Activity -->
             <div class="bg-white shadow-sm rounded-lg border border-gray-200">
                 <div class="px-6 py-4 border-b border-gray-200">
-                    <h3 class="text-lg font-medium text-gray-900">Aktiviti Terkini</h3>
+                    <h3 class="text-lg font-medium text-gray-900">{{ __('Aktiviti Terkini') }}</h3>
                 </div>
                 <div class="px-6 py-4">
                     <div class="flow-root">
@@ -342,7 +342,7 @@
                                     <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                     </svg>
-                                    <p class="mt-2">Tiada aktiviti terkini</p>
+                                    <p class="mt-2">{{ __('Tiada aktiviti terkini') }}</p>
                                 </li>
                             @endforelse
                         </ul>
@@ -355,7 +355,7 @@
         <div class="mt-8">
             <div class="bg-white shadow-sm rounded-lg border border-gray-200">
                 <div class="px-6 py-4 border-b border-gray-200">
-                    <h3 class="text-lg font-medium text-gray-900">Tindakan Pantas</h3>
+                    <h3 class="text-lg font-medium text-gray-900">{{ __('Tindakan Pantas') }}</h3>
                 </div>
                 <div class="px-6 py-4">
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -372,10 +372,10 @@
                             <div class="mt-8">
                                 <h3 class="text-lg font-medium text-gray-900">
                                     <span class="absolute inset-0" aria-hidden="true"></span>
-                                    Cipta Artikel
+                                    {{ __('Cipta Artikel') }}
                                 </h3>
                                 <p class="mt-2 text-sm text-gray-500">
-                                    Tulis dan terbitkan berita Arsenal dan analisis baharu
+                                    {{ __('Tulis dan terbitkan berita Arsenal dan analisis baharu') }}
                                 </p>
                             </div>
                         </a>
@@ -393,10 +393,10 @@
                             <div class="mt-8">
                                 <h3 class="text-lg font-medium text-gray-900">
                                     <span class="absolute inset-0" aria-hidden="true"></span>
-                                    Urus Pengguna
+                                    {{ __('Urus Pengguna') }}
                                 </h3>
                                 <p class="mt-2 text-sm text-gray-500">
-                                    Lihat dan moderasi ahli komuniti
+                                    {{ __('Lihat dan moderasi ahli komuniti') }}
                                 </p>
                             </div>
                         </a>
@@ -414,10 +414,10 @@
                             <div class="mt-8">
                                 <h3 class="text-lg font-medium text-gray-900">
                                     <span class="absolute inset-0" aria-hidden="true"></span>
-                                    Tambah Video
+                                    {{ __('Tambah Video') }}
                                 </h3>
                                 <p class="mt-2 text-sm text-gray-500">
-                                    Muat naik video Arsenal dan kandungan multimedia
+                                    {{ __('Muat naik video Arsenal dan kandungan multimedia') }}
                                 </p>
                             </div>
                         </a>
@@ -440,10 +440,10 @@
                             <div class="mt-8">
                                 <h3 class="text-lg font-medium text-gray-900">
                                     <span class="absolute inset-0" aria-hidden="true"></span>
-                                    Item Menunggu
+                                    {{ __('Item Menunggu') }}
                                 </h3>
                                 <p class="mt-2 text-sm text-gray-500">
-                                    Semak dan kelulusan item yang menunggu
+                                    {{ __('Semak dan kelulusan item yang menunggu') }}
                                 </p>
                             </div>
                         </a>
@@ -535,7 +535,7 @@ function refreshStats() {
     
     // Add loading state
     refreshBtn.classList.add('loading');
-    refreshText.textContent = 'Mengemas kini...';
+    refreshText.textContent = @json(__('Mengemas kini...'));
     
     fetch('{{ route("admin.dashboard.stats") }}')
         .then(response => {
@@ -551,16 +551,16 @@ function refreshStats() {
             document.getElementById('total-products').textContent = data.total_products.toLocaleString();
             
             // Show success message
-            showNotification('Statistik telah dikemas kini', 'success');
+            showNotification(@json(__('Statistik telah dikemas kini')), 'success');
         })
         .catch(error => {
             console.error('Error refreshing stats:', error);
-            showNotification('Ralat semasa mengemas kini statistik', 'error');
+            showNotification(@json(__('Ralat semasa mengemas kini statistik')), 'error');
         })
         .finally(() => {
             // Remove loading state
             refreshBtn.classList.remove('loading');
-            refreshText.textContent = 'Kemas Kini';
+            refreshText.textContent = @json(__('Kemas Kini'));
         });
 }
 
@@ -618,7 +618,7 @@ document.addEventListener('DOMContentLoaded', function() {
 window.addEventListener('error', function(e) {
     if (e.message.includes('Chart')) {
         console.error('Chart error:', e);
-        showNotification('Ralat memuatkan graf', 'error');
+        showNotification(@json(__('Ralat memuatkan graf')), 'error');
     }
 });
 </script>

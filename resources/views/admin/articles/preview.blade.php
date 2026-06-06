@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Preview: {{ $article->title ?: 'Untitled Article' }}</title>
+    <title>Pratonton: {{ $article->title ?: 'Artikel Tanpa Tajuk' }}</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         .prose {
@@ -246,7 +246,7 @@
             <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
             </svg>
-            Close Preview
+            {{ __('Tutup Pratonton') }}
         </button>
     </div>
 
@@ -261,7 +261,7 @@
                                 <svg class="flex-shrink-0 h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
                                     <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
                                 </svg>
-                                <span class="sr-only">Utama</span>
+                                <span class="sr-only">{{ __('Utama') }}</span>
                             </span>
                         </div>
                     </li>
@@ -270,7 +270,7 @@
                             <svg class="flex-shrink-0 h-5 w-5 text-gray-300" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
                             </svg>
-                            <span class="ml-4 text-sm font-medium text-gray-500">Berita</span>
+                            <span class="ml-4 text-sm font-medium text-gray-500">{{ __('Berita') }}</span>
                         </div>
                     </li>
                     <li>
@@ -286,7 +286,7 @@
                             <svg class="flex-shrink-0 h-5 w-5 text-gray-300" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
                             </svg>
-                            <span class="ml-4 text-sm font-medium text-gray-900" aria-current="page">{{ Str::limit($article->title ?: 'Untitled Article', 30) }}</span>
+                            <span class="ml-4 text-sm font-medium text-gray-900" aria-current="page">{{ Str::limit($article->title ?: 'Artikel Tanpa Tajuk', 30) }}</span>
                         </div>
                     </li>
                 </ol>
@@ -318,12 +318,12 @@
                         </span>
                         @if($article->is_featured)
                             <span class="bg-yellow-400 text-gray-900 px-3 py-1 rounded-full text-sm font-bold ml-3">
-                                UTAMA
+                                {{ __('UTAMA') }}
                             </span>
                         @endif
                     </div>
                     <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 leading-tight">
-                        {{ $article->title ?: 'Untitled Article' }}
+                        {{ $article->title ?: 'Artikel Tanpa Tajuk' }}
                     </h1>
                     <div class="flex items-center text-white text-sm">
                         @if($article->author)
@@ -331,19 +331,19 @@
                                 <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>
                             </svg>
                             <span class="font-medium">{{ $article->author->name }}</span>
-                            <span class="mx-2">•</span>
+                            <span class="mx-2">{{ __('•') }}</span>
                         @endif
                         <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path>
                         </svg>
                         {{ $article->formatted_published_date }}
-                        <span class="mx-2">•</span>
+                        <span class="mx-2">{{ __('•') }}</span>
                         <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
                             <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path>
                             <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"></path>
                         </svg>
                         {{ number_format($article->views_count) }} tontonan
-                        <span class="mx-2">•</span>
+                        <span class="mx-2">{{ __('•') }}</span>
                         <span>{{ $article->content ? ceil(str_word_count(strip_tags($article->content)) / 200) : 0 }} min baca</span>
                     </div>
                 </div>
@@ -376,13 +376,13 @@
 
                 <!-- Article Content -->
                 <div class="max-w-none article-content">
-                    {!! $article->formatted_content ?: '<p class="text-gray-500 italic">No content provided yet.</p>' !!}
+                    {!! $article->formatted_content ?: '<p class="text-gray-500 italic">{{ __('Tiada kandungan lagi.') }}</p>' !!}
                 </div>
 
                 <!-- Tags -->
                 @if($article->tags && is_array($article->tags) && count($article->tags) > 0)
                     <div class="mt-12 pt-8 border-t border-gray-200">
-                        <h3 class="text-sm font-medium text-gray-900 mb-4">Tags</h3>
+                        <h3 class="text-sm font-medium text-gray-900 mb-4">{{ __('Tags') }}</h3>
                         <div class="flex flex-wrap gap-2">
                             @foreach($article->tags as $tag)
                                 <span class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1 rounded-full text-sm font-medium transition-colors cursor-pointer">
@@ -403,9 +403,9 @@
                                 </svg>
                             </div>
                             <div class="ml-3">
-                                <h3 class="text-sm font-medium text-yellow-800">Preview Mode</h3>
+                                <h3 class="text-sm font-medium text-yellow-800">{{ __('Mod Pratonton') }}</h3>
                                 <div class="mt-2 text-sm text-yellow-700">
-                                    <p>This is a preview of how your article will appear to readers. Changes made here are not saved.</p>
+                                    <p>{{ __('Ini ialah pratonton bagaimana artikel anda akan kelihatan kepada pembaca. Perubahan di sini tidak disimpan.') }}</p>
                                 </div>
                             </div>
                         </div>

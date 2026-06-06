@@ -29,7 +29,7 @@ class ReviewController extends Controller
         
         if ($existingReview) {
             return redirect()->route('shop.show', $product->slug)
-                ->with('error', 'Anda telah memberikan ulasan untuk produk ini.');
+                ->with('error', __('client_messages.msg_5dcbedced3a3'));
         }
 
         return view('client.reviews.create', compact('product'));
@@ -46,7 +46,7 @@ class ReviewController extends Controller
             
             if ($existingReview) {
                 return redirect()->route('shop.show', $product->slug)
-                    ->with('error', 'Anda telah memberikan ulasan untuk produk ini.');
+                    ->with('error', __('client_messages.msg_5dcbedced3a3'));
             }
         }
 
@@ -92,11 +92,11 @@ class ReviewController extends Controller
             ]);
 
             return redirect()->route('shop.show', $product->slug)
-                ->with('error', 'Ulasan gagal dihantar. Sila cuba lagi.');
+                ->with('error', __('client_messages.msg_f98399ea16c4'));
         }
 
         return redirect()->route('shop.show', $product->slug)
-            ->with('success', 'Ulasan anda telah berjaya dihantar dan dipaparkan! Terima kasih atas maklum balas anda.');
+            ->with('success', __('client_messages.msg_8379278a3ed5'));
     }
 
     /**
@@ -170,11 +170,11 @@ class ReviewController extends Controller
             ]);
 
             return redirect()->route('shop.show', $product->slug)
-                ->with('error', 'Ulasan gagal dikemas kini. Sila cuba lagi.');
+                ->with('error', __('client_messages.msg_210cc28f0dd1'));
         }
 
         return redirect()->route('shop.show', $product->slug)
-            ->with('success', 'Ulasan anda telah berjaya dikemas kini!');
+            ->with('success', __('client_messages.msg_401aa59a9472'));
     }
 
     /**
@@ -196,6 +196,6 @@ class ReviewController extends Controller
         $review->delete();
 
         return redirect()->route('shop.show', $product->slug)
-            ->with('success', 'Ulasan anda telah berjaya dipadamkan.');
+            ->with('success', __('client_messages.msg_26ca4453ff56'));
     }
 }

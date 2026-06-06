@@ -54,7 +54,7 @@ class ShippingDetailController extends Controller
         }
 
         return redirect()->route('addresses.index')
-                        ->with('success', 'Alamat penghantaran berjaya ditambah!');
+                        ->with('success', __('client_messages.msg_620293c5b7de'));
     }
 
     public function edit(ShippingDetail $shippingDetail)
@@ -105,7 +105,7 @@ class ShippingDetailController extends Controller
         }
 
         return redirect()->route('addresses.index')
-                        ->with('success', 'Alamat penghantaran berjaya dikemas kini!');
+                        ->with('success', __('client_messages.msg_edc61fbd39f6'));
     }
 
     public function destroy(ShippingDetail $shippingDetail)
@@ -118,7 +118,7 @@ class ShippingDetailController extends Controller
         $shippingDetail->delete();
 
         return redirect()->route('addresses.index')
-                        ->with('success', 'Alamat penghantaran berjaya dipadam!');
+                        ->with('success', __('client_messages.msg_df55de7332c9'));
     }
 
     public function setDefault(ShippingDetail $shippingDetail)
@@ -131,6 +131,6 @@ class ShippingDetailController extends Controller
         ShippingDetail::setAsDefault($shippingDetail->id, auth()->id());
 
         return redirect()->route('addresses.index')
-                        ->with('success', 'Alamat penghantaran lalai berjaya ditetapkan!');
+                        ->with('success', __('client_messages.msg_98c6413e3797'));
     }
 }

@@ -34,12 +34,8 @@ class ArticleCategoryController extends Controller
         $categories = $query
             ->orderBy('sort_order')
             ->orderBy('name')
-            ->get()
-            ->map(function (ArticleCategory $category) {
-                $category->articles_count = $category->articlesCount();
-
-                return $category;
-            });
+            ->paginate(15)
+            ->withQueryString();
 
         return view('admin.article-categories.index', compact('categories'));
     }
@@ -66,7 +62,7 @@ class ArticleCategoryController extends Controller
 
         return redirect()
             ->route('admin.article-categories.index')
-            ->with('success', 'Kategori artikel berjaya ditambah.');
+            ->with('success', __('flash.article_category_created'));
     }
 
     public function edit(ArticleCategory $articleCategory)
@@ -102,7 +98,7 @@ class ArticleCategoryController extends Controller
 
         return redirect()
             ->route('admin.article-categories.index')
-            ->with('success', 'Kategori artikel berjaya dikemas kini.');
+            ->with('success', __('flash.article_category_updated'));
     }
 
     public function destroy(ArticleCategory $articleCategory)
@@ -110,13 +106,13 @@ class ArticleCategoryController extends Controller
         if ($articleCategory->articlesCount() > 0) {
             return redirect()
                 ->route('admin.article-categories.index')
-                ->with('error', 'Kategori ini masih digunakan oleh artikel. Sila tukar kategori artikel tersebut terlebih dahulu.');
+                ->with('error', __('flash.article_category_in_use'));
         }
 
         $articleCategory->delete();
 
         return redirect()
             ->route('admin.article-categories.index')
-            ->with('success', 'Kategori artikel berjaya dipadam.');
+            ->with('success', __('flash.article_category_deleted'));
     }
 }

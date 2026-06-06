@@ -74,16 +74,19 @@ class DirectCheckoutController extends Controller
         }
 
         if ($product->hasVariations() && !$variation) {
-            return redirect()->back()->with('error', 'Selected size is out of stock.');
+            $label = $product->variation_label ?: __('client_messages.variation_label_default');
+            return redirect()->back()->with('error', __('client_messages.pick_variation_first', ['label' => $label]));
         }
 
         $stockQuantity = $variation ? (int) $variation->stock_quantity : (int) $product->calculated_stock;
         if ($stockQuantity <= 0) {
-            return redirect()->back()->with('error', $variation ? 'Selected size is out of stock.' : 'This product is currently out of stock.');
+            return redirect()->back()->with('error', $variation
+                ? __('client_messages.variation_out_of_stock')
+                : __('client_messages.product_out_of_stock'));
         }
 
         if ($stockQuantity < $quantity) {
-            return redirect()->back()->with('error', 'Requested quantity exceeds available stock.');
+            return redirect()->back()->with('error', __('client_messages.msg_1858ef6f0305'));
         }
 
         // Calculate prices (use sale price if available, otherwise use regular price)
@@ -166,12 +169,12 @@ class DirectCheckoutController extends Controller
         // Get checkout data from session
         $checkoutData = session('direct_checkout');
         if (!$checkoutData) {
-            return redirect()->back()->with('error', 'Sesi checkout telah tamat. Sila cuba lagi.');
+            return redirect()->back()->with('error', __('client_messages.msg_00153ea9f115'));
         }
 
         $product = Product::find($checkoutData['product_id']);
         if (!$product) {
-            return redirect()->route('shop.index')->with('error', 'Something went wrong. Please try again.');
+            return redirect()->route('shop.index')->with('error', __('client_messages.msg_e9f36d65b049'));
         }
 
         if (!empty($checkoutData['variation_id'])) {
@@ -183,11 +186,13 @@ class DirectCheckoutController extends Controller
 
             if (!$variation || (int) $variation->stock_quantity < (int) $checkoutData['quantity']) {
                 return redirect()->route('shop.show', $product->slug)
-                    ->with('error', 'Selected size is out of stock.');
+                    ->with('error', __('client_messages.msg_20310103e0c7'));
             }
         } elseif ((int) $product->calculated_stock < (int) $checkoutData['quantity']) {
             return redirect()->route('shop.show', $product->slug)
-                ->with('error', ((int) $product->calculated_stock <= 0) ? 'This product is currently out of stock.' : 'Requested quantity exceeds available stock.');
+                ->with('error', ((int) $product->calculated_stock <= 0)
+                    ? __('client_messages.product_out_of_stock')
+                    : __('client_messages.msg_1858ef6f0305'));
         }
 
         try {
@@ -414,7 +419,7 @@ class DirectCheckoutController extends Controller
                     return redirect($paymentResult['payment_url']);
                 } else {
                     DB::rollBack();
-                    return back()->with('error', 'Gagal membuat bil pembayaran. Sila cuba lagi.')
+                    return back()->with('error', __('client_messages.msg_0da8ffd4c594'))
                                 ->withInput();
                 }
             } elseif ($request->payment_method === 'stripe') {
@@ -460,7 +465,7 @@ class DirectCheckoutController extends Controller
                 } else {
                     DB::rollBack();
                     // If payment creation fails, order still exists but payment failed
-                    return back()->with('error', 'Gagal membuat pembayaran Stripe. Sila cuba lagi.')
+                    return back()->with('error', __('client_messages.msg_71f926c2f106'))
                                 ->withInput();
                 }
             }
@@ -470,7 +475,7 @@ class DirectCheckoutController extends Controller
             \Log::error('Direct checkout error: ' . $e->getMessage());
             
             return redirect()->back()
-                           ->with('error', 'Ralat semasa memproses pesanan. Sila cuba lagi.')
+                           ->with('error', __('client_messages.msg_5f21adf315f7'))
                            ->withInput();
         }
     }
@@ -496,14 +501,14 @@ class DirectCheckoutController extends Controller
 
         // Check if order can be cancelled
         if (!in_array($order->status, ['pending', 'processing'])) {
-            return back()->with('error', 'Pesanan ini tidak boleh dibatalkan. Hanya pesanan yang tertunggak atau sedang diproses boleh dibatalkan.');
+            return back()->with('error', __('client_messages.msg_13f281fd979d'));
         }
 
         // Check if payment was made and if it's within cancellation window
         if ($order->payment_status === 'paid') {
             $hoursSinceOrder = $order->created_at->diffInHours(now());
             if ($hoursSinceOrder > 24) {
-                return back()->with('error', 'Pesanan ini tidak boleh dibatalkan kerana telah melebihi 24 jam dari masa pembelian. Sila hubungi admin untuk bantuan.');
+                return back()->with('error', __('client_messages.msg_5fb01c720eb8'));
             }
         }
 
@@ -593,7 +598,7 @@ class DirectCheckoutController extends Controller
 
             DB::commit();
 
-            return redirect()->route('checkout.orders')->with('success', 'Pesanan anda telah berjaya dibatalkan.');
+            return redirect()->route('checkout.orders')->with('success', __('client_messages.msg_cdab9af934cc'));
 
         } catch (\Exception $e) {
             DB::rollBack();
@@ -603,7 +608,7 @@ class DirectCheckoutController extends Controller
                 'error' => $e->getMessage()
             ]);
 
-            return back()->with('error', 'Ralat semasa membatalkan pesanan. Sila cuba lagi atau hubungi admin.');
+            return back()->with('error', __('client_messages.msg_7d3402f1c39f'));
         }
     }
 
@@ -618,7 +623,7 @@ class DirectCheckoutController extends Controller
 
         // Only allow marking as delivered if order is shipped
         if ($order->status !== 'shipped') {
-            return back()->with('error', 'Pesanan hanya boleh ditandakan sebagai diterima jika statusnya adalah "Telah Dihantar".');
+            return back()->with('error', __('client_messages.msg_46e6fa3b933e'));
         }
 
         $order->update([
@@ -626,7 +631,7 @@ class DirectCheckoutController extends Controller
             'delivered_at' => now()
         ]);
 
-        return back()->with('success', 'Pesanan berjaya ditandakan sebagai diterima. Terima kasih kerana membeli-belah dengan kami!');
+        return back()->with('success', __('client_messages.msg_f62d124f8d43'));
     }
 
     /**
@@ -675,7 +680,7 @@ class DirectCheckoutController extends Controller
                     return redirect($paymentResult['payment_url']);
                 } else {
                     DB::rollBack();
-                    return back()->with('error', 'Gagal membuat bil pembayaran. Sila cuba lagi.');
+                    return back()->with('error', __('client_messages.msg_0da8ffd4c594'));
                 }
             } elseif ($order->payment_method === 'stripe') {
                 // Try to reuse existing payment intent first, then create new one if needed
@@ -707,12 +712,12 @@ class DirectCheckoutController extends Controller
                     ]);
                 } else {
                     DB::rollBack();
-                    return back()->with('error', 'Gagal membuat pembayaran Stripe. Sila cuba lagi.');
+                    return back()->with('error', __('client_messages.msg_71f926c2f106'));
                 }
             }
 
             DB::rollBack();
-            return back()->with('error', 'Kaedah pembayaran tidak sah.');
+            return back()->with('error', __('client_messages.msg_c638d4644643'));
 
         } catch (\Exception $e) {
             DB::rollBack();
@@ -722,7 +727,7 @@ class DirectCheckoutController extends Controller
                 'error' => $e->getMessage()
             ]);
 
-            return back()->with('error', 'Ralat semasa mencuba pembayaran semula. Sila cuba lagi.');
+            return back()->with('error', __('client_messages.msg_b14da15047d5'));
         }
     }
 
@@ -785,7 +790,7 @@ class DirectCheckoutController extends Controller
                     return redirect($paymentResult['payment_url']);
                 } else {
                     DB::rollBack();
-                    return back()->with('error', 'Gagal membuat bil pembayaran. Sila cuba lagi.');
+                    return back()->with('error', __('client_messages.msg_0da8ffd4c594'));
                 }
             } elseif ($request->payment_method === 'stripe') {
                 // Create new Stripe payment intent first
@@ -810,12 +815,12 @@ class DirectCheckoutController extends Controller
                     ]);
                 } else {
                     DB::rollBack();
-                    return back()->with('error', 'Gagal membuat pembayaran Stripe. Sila cuba lagi.');
+                    return back()->with('error', __('client_messages.msg_71f926c2f106'));
                 }
             }
 
             DB::rollBack();
-            return back()->with('error', 'Kaedah pembayaran tidak sah.');
+            return back()->with('error', __('client_messages.msg_c638d4644643'));
 
         } catch (\Exception $e) {
             DB::rollBack();
@@ -826,7 +831,7 @@ class DirectCheckoutController extends Controller
                 'error' => $e->getMessage()
             ]);
 
-            return back()->with('error', 'Ralat semasa mencuba pembayaran semula. Sila cuba lagi.');
+            return back()->with('error', __('client_messages.msg_b14da15047d5'));
         }
     }
 
@@ -846,7 +851,7 @@ class DirectCheckoutController extends Controller
 
         if (!$billCode) {
             return redirect()->route('checkout.orders')
-                           ->with('error', 'Maklumat pembayaran tidak lengkap.');
+                           ->with('error', __('client_messages.msg_d2fee20df332'));
         }
 
         // Get order from database using bill code
@@ -903,7 +908,7 @@ class DirectCheckoutController extends Controller
                 ]);
                 
                 return redirect()->route('checkout.orders')
-                               ->with('error', 'Pesanan tidak dijumpai.');
+                               ->with('error', __('client_messages.msg_2467b7180349'));
             }
         }
 
@@ -1018,13 +1023,13 @@ class DirectCheckoutController extends Controller
                 if ($order->items->first()->product_variation_id) {
                     $variation = ProductVariation::find($order->items->first()->product_variation_id);
                     if (!$variation || (int) $variation->stock_quantity < (int) $order->items->first()->quantity) {
-                        throw new \Exception('Selected size is out of stock.');
+                        throw new \Exception(__('client_messages.variation_out_of_stock'));
                     }
                     $variation->decrement('stock_quantity', $order->items->first()->quantity);
                 } else {
                     $product = Product::find($order->items->first()->product_id);
                     if (!$product || (int) $product->calculated_stock < (int) $order->items->first()->quantity) {
-                        throw new \Exception('This product is currently out of stock.');
+                        throw new \Exception(__('client_messages.product_out_of_stock'));
                     }
                     $product->decrement('stock_quantity', $order->items->first()->quantity);
                 }
@@ -1056,14 +1061,14 @@ class DirectCheckoutController extends Controller
                 }
 
                 return redirect()->route('direct-checkout.success', $order->id)
-                               ->with('success', 'Pembayaran berjaya! Pesanan anda telah direkodkan.');
+                               ->with('success', __('client_messages.msg_afa6ca01566d'));
 
             } catch (\Exception $e) {
                 DB::rollBack();
                 \Log::error('Error updating direct checkout order after payment: ' . $e->getMessage());
                 
                 return redirect()->route('checkout.orders')
-                               ->with('error', 'Ralat semasa memproses pesanan. Sila hubungi kami.');
+                               ->with('error', __('client_messages.msg_25e232757128'));
             }
         } else {
             // Payment failed or user clicked back - create order if it doesn't exist and redirect to retry
@@ -1133,7 +1138,7 @@ class DirectCheckoutController extends Controller
                         \Log::error('Error creating order for failed direct checkout payment: ' . $e->getMessage());
                         
                         return redirect()->route('checkout.orders')
-                                       ->with('error', 'Ralat semasa memproses pesanan. Sila hubungi kami.');
+                                       ->with('error', __('client_messages.msg_25e232757128'));
                     }
                 } else {
                     \Log::warning('Direct checkout ToyyibPay payment failed but no pending checkout data found', [
@@ -1142,7 +1147,7 @@ class DirectCheckoutController extends Controller
                     ]);
                     
                     return redirect()->route('checkout.orders')
-                                   ->with('error', 'Pembayaran gagal dan maklumat pesanan tidak dijumpai.');
+                                   ->with('error', __('client_messages.msg_51cc2e901ba4'));
                 }
             } else {
                 // Order exists - update payment status to failed
@@ -1217,7 +1222,7 @@ class DirectCheckoutController extends Controller
             ]);
             
             return redirect()->route('checkout.orders')
-                           ->with('error', 'Pesanan tidak dijumpai.');
+                           ->with('error', __('client_messages.msg_2467b7180349'));
         }
 
         // Update order status to failed
@@ -1269,7 +1274,7 @@ class DirectCheckoutController extends Controller
 
         if (!$paymentIntentId) {
             return redirect()->route('checkout.orders')
-                           ->with('error', 'Maklumat pembayaran tidak lengkap.');
+                           ->with('error', __('client_messages.msg_d2fee20df332'));
         }
 
         // Get pending direct checkout data from session
@@ -1297,7 +1302,7 @@ class DirectCheckoutController extends Controller
 
         if (!$paymentResult['success']) {
             return redirect()->route('checkout.orders')
-                           ->with('error', 'Gagal mengesahkan status pembayaran. Sila hubungi kami.');
+                           ->with('error', __('client_messages.msg_59d4a6a59469'));
         }
 
         if (!$paymentResult['paid']) {
@@ -1380,12 +1385,12 @@ class DirectCheckoutController extends Controller
                 }
 
                 return redirect()->route('direct-checkout.success', $existingOrder->id)
-                               ->with('success', 'Pembayaran berjaya! Pesanan anda telah direkodkan.');
+                               ->with('success', __('client_messages.msg_afa6ca01566d'));
             }
 
             // If no existing order found, show error
             return redirect()->route('checkout.orders')
-                           ->with('error', 'Sesi pembayaran tidak sah atau telah tamat. Sila cuba lagi.');
+                           ->with('error', __('client_messages.msg_646099c00ffb'));
         }
 
         // Session data is valid, proceed with order update
@@ -1405,7 +1410,7 @@ class DirectCheckoutController extends Controller
                     'payment_intent_id' => $paymentIntentId
                 ]);
                 return redirect()->route('checkout.orders')
-                               ->with('error', 'Pesanan tidak dijumpai. Sila cuba lagi.');
+                               ->with('error', __('client_messages.msg_5d9a3bbb81d6'));
             }
 
             // Update the existing order with payment success; keep order status pending
@@ -1424,13 +1429,13 @@ class DirectCheckoutController extends Controller
             if ($pendingCheckout['variation_id']) {
                 $variation = ProductVariation::find($pendingCheckout['variation_id']);
                 if (!$variation || (int) $variation->stock_quantity < (int) $pendingCheckout['quantity']) {
-                    throw new \Exception('Selected size is out of stock.');
+                    throw new \Exception(__('client_messages.variation_out_of_stock'));
                 }
                 $variation->decrement('stock_quantity', $pendingCheckout['quantity']);
             } else {
                 $product = Product::find($pendingCheckout['product_id']);
                 if (!$product || (int) $product->calculated_stock < (int) $pendingCheckout['quantity']) {
-                    throw new \Exception('This product is currently out of stock.');
+                    throw new \Exception(__('client_messages.product_out_of_stock'));
                 }
                 $product->decrement('stock_quantity', $pendingCheckout['quantity']);
             }
@@ -1468,7 +1473,7 @@ class DirectCheckoutController extends Controller
             ]);
 
             return redirect()->route('direct-checkout.success', $order->id)
-                           ->with('success', 'Pembayaran berjaya! Pesanan anda telah direkodkan.');
+                           ->with('success', __('client_messages.msg_afa6ca01566d'));
 
         } catch (\Exception $e) {
             DB::rollBack();
@@ -1479,7 +1484,7 @@ class DirectCheckoutController extends Controller
             ]);
                 
             return redirect()->route('checkout.orders')
-                           ->with('error', 'Unable to process your order. Please check your cart and try again.');
+                           ->with('error', __('client_messages.msg_fd32d416ae56'));
         }
     }
 
@@ -1521,7 +1526,7 @@ class DirectCheckoutController extends Controller
 
         if (!$paymentIntentId || !$clientSecret) {
             return redirect()->route('checkout.orders')
-                           ->with('error', 'Maklumat pembayaran tidak lengkap.');
+                           ->with('error', __('client_messages.msg_d2fee20df332'));
         }
 
         return view('client.direct-checkout.stripe-payment', compact('paymentIntentId', 'clientSecret'));
@@ -1539,12 +1544,12 @@ class DirectCheckoutController extends Controller
 
         // Check if order is eligible for invoice download
         if (($order->status === 'pending' && $order->payment_status === 'pending') || $order->payment_status === 'failed') {
-            return back()->with('error', 'Invois tidak tersedia untuk pesanan yang belum dibayar atau pembayaran gagal.');
+            return back()->with('error', __('client_messages.msg_07eb0905a87d'));
         }
 
         // Check if order is cancelled
         if ($order->status === 'cancelled') {
-            return back()->with('error', 'Invois tidak tersedia untuk pesanan yang telah dibatalkan.');
+            return back()->with('error', __('client_messages.msg_5bae937b7024'));
         }
 
         try {
@@ -1557,7 +1562,7 @@ class DirectCheckoutController extends Controller
                     'order_id' => $orderId,
                     'user_id' => auth()->id()
                 ]);
-                return back()->with('error', 'Unable to download invoice. Please try again later.');
+                return back()->with('error', __('client_messages.msg_7ea1295213aa'));
             }
             
             // Check if file exists
@@ -1567,7 +1572,7 @@ class DirectCheckoutController extends Controller
                     'user_id' => auth()->id(),
                     'filepath' => $pdfPath
                 ]);
-                return back()->with('error', 'Unable to download invoice. Please try again later.');
+                return back()->with('error', __('client_messages.msg_7ea1295213aa'));
             }
             
             // Get the filename from the path
@@ -1589,7 +1594,7 @@ class DirectCheckoutController extends Controller
                 'user_id' => auth()->id()
             ]);
             
-            return back()->with('error', 'Unable to download invoice. Please try again later.');
+            return back()->with('error', __('client_messages.msg_7ea1295213aa'));
         }
     }
 
@@ -1605,12 +1610,12 @@ class DirectCheckoutController extends Controller
 
         // Check if order is eligible for invoice viewing
         if (($order->status === 'pending' && $order->payment_status === 'pending') || $order->payment_status === 'failed') {
-            return back()->with('error', 'Invois tidak tersedia untuk pesanan yang belum dibayar atau pembayaran gagal.');
+            return back()->with('error', __('client_messages.msg_07eb0905a87d'));
         }
 
         // Check if order is cancelled
         if ($order->status === 'cancelled') {
-            return back()->with('error', 'Invois tidak tersedia untuk pesanan yang telah dibatalkan.');
+            return back()->with('error', __('client_messages.msg_5bae937b7024'));
         }
 
         try {
@@ -1623,7 +1628,7 @@ class DirectCheckoutController extends Controller
                     'order_id' => $orderId,
                     'user_id' => auth()->id()
                 ]);
-                return back()->with('error', 'Unable to download invoice. Please try again later.');
+                return back()->with('error', __('client_messages.msg_7ea1295213aa'));
             }
             
             // Check if file exists
@@ -1633,7 +1638,7 @@ class DirectCheckoutController extends Controller
                     'user_id' => auth()->id(),
                     'filepath' => $pdfPath
                 ]);
-                return back()->with('error', 'Unable to download invoice. Please try again later.');
+                return back()->with('error', __('client_messages.msg_7ea1295213aa'));
             }
             
             // Get the filename and determine content type
@@ -1654,7 +1659,7 @@ class DirectCheckoutController extends Controller
                 'user_id' => auth()->id()
             ]);
             
-            return back()->with('error', 'Unable to download invoice. Please try again later.');
+            return back()->with('error', __('client_messages.msg_7ea1295213aa'));
         }
     }
 

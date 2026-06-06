@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Reset Kata Laluan - MyGooners</title>
+    <title>{{ __('Reset Kata Laluan - MyGooners') }}</title>
     <meta name="description" content="Reset kata laluan MyGooners">
     
     <!-- Favicon -->
@@ -73,11 +73,11 @@
         <div class="max-w-md w-full relative z-10">
             <div class="bg-white rounded-xl shadow-lg p-8">
                 <div class="flex items-center space-x-2 mb-4 pl-1 pt-1">
-                    <a href="{{ route('password.request') }}" class="flex items-center text-gray-500 text-sm font-normal hover:text-gray-700 focus:outline-none" aria-label="Kembali ke Lupa Kata Laluan">
+                    <a href="{{ route('password.request') }}" class="flex items-center text-gray-500 text-sm font-normal hover:text-gray-700 focus:outline-none" aria-label="{{ __('Kembali ke Lupa Kata Laluan') }}">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                         </svg>
-                        <span>Back</span>
+                        <span>{{ __('Back') }}</span>
                     </a>
                 </div>
                 
@@ -85,12 +85,8 @@
                     <svg class="mx-auto h-12 w-12 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                     </svg>
-                    <h2 class="mt-4 text-3xl font-extrabold text-gray-900">
-                        Reset Kata Laluan
-                    </h2>
-                    <p class="mt-2 text-sm text-gray-600">
-                        Masukkan kata laluan baharu untuk akaun anda.
-                    </p>
+                    <h2 class="mt-4 text-3xl font-extrabold text-gray-900">{{ __('Reset Kata Laluan') }}</h2>
+                    <p class="mt-2 text-sm text-gray-600">{{ __('Masukkan kata laluan baharu untuk akaun anda.') }}</p>
                 </div>
 
                 <form class="mt-8 space-y-6" method="POST" action="{{ route('password.update') }}">
@@ -102,41 +98,35 @@
 
                     <div class="space-y-4">
                         <div>
-                            <label for="email" class="block text-sm font-medium text-gray-700 mb-1">
-                                Alamat Emel
-                            </label>
+                            <label for="email" class="block text-sm font-medium text-gray-700 mb-1">{{ __('Alamat Emel') }}</label>
                             <input id="email" 
-                                   type="email" 
+                                   type="email"
                                    value="{{ $email }}" 
                                    disabled
                                    class="appearance-none relative block w-full px-3 py-3 border border-gray-300 bg-gray-50 text-gray-500 rounded-md sm:text-sm">
                         </div>
 
                         <div>
-                            <label for="password" class="block text-sm font-medium text-gray-700 mb-1">
-                                Kata Laluan Baharu
-                            </label>
+                            <label for="password" class="block text-sm font-medium text-gray-700 mb-1">{{ __('Kata Laluan Baharu') }}</label>
                             <input id="password" 
-                                   name="password" 
-                                   type="password" 
-                                   required 
+                                   name="password"
+                                   type="password"
+                                   required
                                    class="appearance-none relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-red-500 focus:border-red-500 focus:z-10 sm:text-sm @error('password') border-red-500 @enderror" 
-                                   placeholder="Kata laluan baharu (minimum 8 aksara)">
+                                   placeholder="{{ __('Kata laluan baharu (minimum 8 aksara)') }}">
                             @error('password')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
                         </div>
 
                         <div>
-                            <label for="password_confirmation" class="block text-sm font-medium text-gray-700 mb-1">
-                                Sahkan Kata Laluan
-                            </label>
+                            <label for="password_confirmation" class="block text-sm font-medium text-gray-700 mb-1">{{ __('Sahkan Kata Laluan') }}</label>
                             <input id="password_confirmation" 
-                                   name="password_confirmation" 
-                                   type="password" 
-                                   required 
+                                   name="password_confirmation"
+                                   type="password"
+                                   required
                                    class="appearance-none relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-red-500 focus:border-red-500 focus:z-10 sm:text-sm @error('password_confirmation') border-red-500 @enderror" 
-                                   placeholder="Sahkan kata laluan baharu">
+                                   placeholder="{{ __('Sahkan kata laluan baharu') }}">
                             @error('password_confirmation')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
@@ -151,17 +141,15 @@
                                     <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"></path>
                                 </svg>
                             </span>
-                            Reset Kata Laluan
+                            {{ __('Reset Kata Laluan') }}
                         </button>
                     </div>
                 </form>
 
                 <div class="text-center mt-8">
                     <p class="text-sm text-gray-600">
-                        Ingat kata laluan anda? 
-                        <a href="{{ route('login') }}" class="font-medium text-red-600 hover:text-red-500">
-                            Log masuk di sini
-                        </a>
+                        {{ __('Ingat kata laluan anda?') }} 
+                        <a href="{{ route('login') }}" class="font-medium text-red-600 hover:text-red-500">{{ __('Log masuk di sini') }}</a>
                     </p>
                 </div>
             </div>

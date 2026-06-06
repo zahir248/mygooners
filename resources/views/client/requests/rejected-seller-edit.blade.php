@@ -11,9 +11,9 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
                     </svg>
                 </a>
-                <h1 class="text-2xl font-bold text-gray-900">Kemaskini Permohonan Penjual</h1>
+                <h1 class="text-2xl font-bold text-gray-900">{{ __('Kemaskini Permohonan Penjual') }}</h1>
             </div>
-            <p class="text-gray-600">Kemaskini maklumat penjual anda berdasarkan sebab penolakan dan hantar semula untuk kelulusan.</p>
+            <p class="text-gray-600">{{ __('Kemaskini maklumat penjual anda berdasarkan sebab penolakan dan hantar semula untuk kelulusan.') }}</p>
         </div>
 
         <!-- Rejection Reason Reminder -->
@@ -26,9 +26,9 @@
                     </svg>
                 </div>
                 <div>
-                    <h3 class="text-sm font-semibold text-red-800 mb-1">Sebab Penolakan Sebelum Ini:</h3>
+                    <h3 class="text-sm font-semibold text-red-800 mb-1">{{ __('Sebab Penolakan Sebelum Ini:') }}</h3>
                     <p class="text-sm text-red-700">{{ $user->seller_rejection_reason }}</p>
-                    <p class="text-xs text-red-600 mt-2">Sila perbaiki isu-isu ini sebelum menghantar semula permohonan anda.</p>
+                    <p class="text-xs text-red-600 mt-2">{{ __('Sila perbaiki isu-isu ini sebelum menghantar semula permohonan anda.') }}</p>
                 </div>
             </div>
         </div>
@@ -37,7 +37,7 @@
         <!-- Edit Form -->
         <div class="bg-white rounded-lg shadow-sm border border-gray-200">
             <div class="px-6 py-4 border-b border-gray-200">
-                <h2 class="text-lg font-semibold text-gray-900">Maklumat Penjual</h2>
+                <h2 class="text-lg font-semibold text-gray-900">{{ __('Maklumat Penjual') }}</h2>
             </div>
 
             <form action="{{ route('rejected.seller.update') }}" method="POST" enctype="multipart/form-data" class="p-6">
@@ -51,8 +51,8 @@
                             Nama Perniagaan <span class="text-red-500">*</span>
                         </label>
                         <input type="text" 
-                               id="business_name" 
-                               name="business_name" 
+                               id="business_name"
+                               name="business_name"
                                value="{{ old('business_name', $user->business_name) }}"
                                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                                required>
@@ -67,10 +67,10 @@
                             Jenis Perniagaan <span class="text-red-500">*</span>
                         </label>
                         <input type="text" 
-                               id="business_type" 
-                               name="business_type" 
+                               id="business_type"
+                               name="business_type"
                                value="{{ old('business_type', $user->business_type) }}"
-                               placeholder="Contoh: Perusahaan Kecil dan Sederhana"
+                               placeholder="{{ __('Contoh: Perusahaan Kecil dan Sederhana') }}"
                                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                                required>
                         @error('business_type')
@@ -80,14 +80,12 @@
 
                     <!-- Business Registration -->
                     <div>
-                        <label for="business_registration" class="block text-sm font-medium text-gray-700 mb-2">
-                            Nombor Pendaftaran Perniagaan
-                        </label>
+                        <label for="business_registration" class="block text-sm font-medium text-gray-700 mb-2">{{ __('Nombor Pendaftaran Perniagaan') }}</label>
                         <input type="text" 
-                               id="business_registration" 
-                               name="business_registration" 
+                               id="business_registration"
+                               name="business_registration"
                                value="{{ old('business_registration', $user->business_registration) }}"
-                               placeholder="Contoh: 12345678-X"
+                               placeholder="{{ __('Contoh: 12345678-X') }}"
                                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                         @error('business_registration')
                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
@@ -96,14 +94,12 @@
 
                     <!-- Website -->
                     <div>
-                        <label for="website" class="block text-sm font-medium text-gray-700 mb-2">
-                            Laman Web
-                        </label>
+                        <label for="website" class="block text-sm font-medium text-gray-700 mb-2">{{ __('Laman Web') }}</label>
                         <input type="url" 
-                               id="website" 
-                               name="website" 
+                               id="website"
+                               name="website"
                                value="{{ old('website', $user->website) }}"
-                               placeholder="Contoh: https://www.example.com"
+                               placeholder="{{ __('Contoh: https://www.example.com') }}"
                                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                         @error('website')
                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
@@ -116,10 +112,10 @@
                             Kawasan Operasi <span class="text-red-500">*</span>
                         </label>
                         <input type="text" 
-                               id="operating_area" 
-                               name="operating_area" 
+                               id="operating_area"
+                               name="operating_area"
                                value="{{ old('operating_area', $user->operating_area) }}"
-                               placeholder="Contoh: Selangor, Kuala Lumpur"
+                               placeholder="{{ __('Contoh: Selangor, Kuala Lumpur') }}"
                                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                                required>
                         @error('operating_area')
@@ -133,10 +129,10 @@
                             Tahun Pengalaman <span class="text-red-500">*</span>
                         </label>
                         <input type="number" 
-                               id="years_experience" 
-                               name="years_experience" 
+                               id="years_experience"
+                               name="years_experience"
                                value="{{ old('years_experience', $user->years_experience) }}"
-                               min="0" max="50"
+                               {{ __('min="0" max="50"') }}
                                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                                required>
                         @error('years_experience')
@@ -150,7 +146,7 @@
                             Alamat Perniagaan <span class="text-red-500">*</span>
                         </label>
                         <textarea id="business_address" 
-                                  name="business_address" 
+                                  name="business_address"
                                   rows="3"
                                   class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                                   required>{{ old('business_address', $user->business_address) }}</textarea>
@@ -165,9 +161,9 @@
                             Kemahiran <span class="text-red-500">*</span>
                         </label>
                         <textarea id="skills" 
-                                  name="skills" 
+                                  name="skills"
                                   rows="3"
-                                  placeholder="Senaraikan kemahiran dan kelebihan anda..."
+                                  placeholder="{{ __('Senaraikan kemahiran dan kelebihan anda...') }}"
                                   class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                                   required>{{ old('skills', $user->skills) }}</textarea>
                         @error('skills')
@@ -181,9 +177,9 @@
                             Kawasan Perkhidmatan <span class="text-red-500">*</span>
                         </label>
                         <textarea id="service_areas" 
-                                  name="service_areas" 
+                                  name="service_areas"
                                   rows="3"
-                                  placeholder="Senaraikan kawasan yang anda boleh berkhidmat..."
+                                  placeholder="{{ __('Senaraikan kawasan yang anda boleh berkhidmat...') }}"
                                   class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                                   required>{{ old('service_areas', $user->service_areas) }}</textarea>
                         @error('service_areas')
@@ -194,27 +190,25 @@
                     <!-- Current Documents -->
                     @if($user->id_document || $user->selfie_with_id)
                     <div class="md:col-span-2">
-                        <label class="block text-sm font-medium text-gray-700 mb-2">
-                            Dokumen Semasa
-                        </label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">{{ __('Dokumen Semasa') }}</label>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                             @if($user->id_document)
                             <div class="bg-gray-50 p-3 rounded-lg">
-                                <p class="text-sm font-medium text-gray-700 mb-1">Dokumen Pengenalan</p>
+                                <p class="text-sm font-medium text-gray-700 mb-1">{{ __('Dokumen Pengenalan') }}</p>
                                 <a href="{{ route('seller.document', ['filename' => basename($user->id_document)]) }}" 
-                                   target="_blank"
+                                   target="_blank" rel="noopener noreferrer"
                                    class="text-blue-600 hover:text-blue-800 text-sm">
-                                    Lihat Dokumen
+                                    {{ __('Lihat Dokumen') }}
                                 </a>
                             </div>
                             @endif
                             @if($user->selfie_with_id)
                             <div class="bg-gray-50 p-3 rounded-lg">
-                                <p class="text-sm font-medium text-gray-700 mb-1">Selfie dengan ID</p>
+                                <p class="text-sm font-medium text-gray-700 mb-1">{{ __('Selfie dengan ID') }}</p>
                                 <a href="{{ route('seller.image', ['filename' => basename($user->selfie_with_id)]) }}" 
-                                   target="_blank"
+                                   target="_blank" rel="noopener noreferrer"
                                    class="text-blue-600 hover:text-blue-800 text-sm">
-                                    Lihat Gambar
+                                    {{ __('Lihat Gambar') }}
                                 </a>
                             </div>
                             @endif
@@ -224,30 +218,26 @@
 
                     <!-- New Documents -->
                     <div class="md:col-span-2">
-                        <label for="id_document" class="block text-sm font-medium text-gray-700 mb-2">
-                            Dokumen Pengenalan Baharu
-                        </label>
+                        <label for="id_document" class="block text-sm font-medium text-gray-700 mb-2">{{ __('Dokumen Pengenalan Baharu') }}</label>
                         <input type="file" 
-                               id="id_document" 
-                               name="id_document" 
+                               id="id_document"
+                               name="id_document"
                                accept=".jpg,.jpeg,.png,.pdf"
                                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                        <p class="text-xs text-gray-500 mt-1">Format yang diterima: JPG, PNG, PDF. Saiz maksimum: 2MB.</p>
+                        <p class="text-xs text-gray-500 mt-1">{{ __('Format yang diterima: JPG, PNG, PDF. Saiz maksimum: 2MB.') }}</p>
                         @error('id_document')
                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                         @enderror
                     </div>
 
                     <div class="md:col-span-2">
-                        <label for="selfie_with_id" class="block text-sm font-medium text-gray-700 mb-2">
-                            Selfie dengan ID Baharu
-                        </label>
+                        <label for="selfie_with_id" class="block text-sm font-medium text-gray-700 mb-2">{{ __('Selfie dengan ID Baharu') }}</label>
                         <input type="file" 
-                               id="selfie_with_id" 
-                               name="selfie_with_id" 
+                               id="selfie_with_id"
+                               name="selfie_with_id"
                                accept=".jpg,.jpeg,.png"
                                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                        <p class="text-xs text-gray-500 mt-1">Format yang diterima: JPG, PNG. Saiz maksimum: 2MB.</p>
+                        <p class="text-xs text-gray-500 mt-1">{{ __('Format yang diterima: JPG, PNG. Saiz maksimum: 2MB.') }}</p>
                         @error('selfie_with_id')
                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                         @enderror
@@ -261,14 +251,14 @@
                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
                         </svg>
-                        Batal
+                        {{ __('Batal') }}
                     </a>
                     <button type="submit" 
                             class="inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                         </svg>
-                        Hantar Semula Permohonan
+                        {{ __('Hantar Semula Permohonan') }}
                     </button>
                 </div>
             </form>
@@ -283,31 +273,31 @@
                     </svg>
                 </div>
                 <div>
-                    <h3 class="text-lg font-semibold text-blue-900 mb-2">Petua untuk Permohonan yang Berjaya</h3>
+                    <h3 class="text-lg font-semibold text-blue-900 mb-2">{{ __('Petua untuk Permohonan yang Berjaya') }}</h3>
                     <ul class="text-blue-800 space-y-2">
                         <li class="flex items-start gap-2">
                             <svg class="w-4 h-4 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4"/>
                             </svg>
-                            <span>Pastikan semua maklumat perniagaan diisi dengan lengkap dan tepat</span>
+                            <span>{{ __('Pastikan semua maklumat perniagaan diisi dengan lengkap dan tepat') }}</span>
                         </li>
                         <li class="flex items-start gap-2">
                             <svg class="w-4 h-4 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4"/>
                             </svg>
-                            <span>Berikan penerangan kemahiran yang terperinci dan relevan</span>
+                            <span>{{ __('Berikan penerangan kemahiran yang terperinci dan relevan') }}</span>
                         </li>
                         <li class="flex items-start gap-2">
                             <svg class="w-4 h-4 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4"/>
                             </svg>
-                            <span>Pastikan dokumen yang dihantar adalah jelas dan sah</span>
+                            <span>{{ __('Pastikan dokumen yang dihantar adalah jelas dan sah') }}</span>
                         </li>
                         <li class="flex items-start gap-2">
                             <svg class="w-4 h-4 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4"/>
                             </svg>
-                            <span>Nyatakan kawasan perkhidmatan yang jelas dan terperinci</span>
+                            <span>{{ __('Nyatakan kawasan perkhidmatan yang jelas dan terperinci') }}</span>
                         </li>
                     </ul>
                 </div>

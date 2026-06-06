@@ -37,7 +37,7 @@ class ServiceReviewController extends Controller
             });
         }
 
-        $reviews = $query->latest()->paginate(20);
+        $reviews = $query->latest()->paginate(20)->withQueryString();
         $services = Service::orderBy('title')->get();
 
         return view('admin.service-reviews.index', compact('reviews', 'services'));
@@ -62,7 +62,7 @@ class ServiceReviewController extends Controller
         // Update service trust score
         $review->service->updateTrustScore();
 
-        return redirect()->back()->with('success', 'Ulasan telah berjaya diluluskan.');
+        return redirect()->back()->with('success', __('flash.review_approved'));
     }
 
     /**
@@ -75,7 +75,7 @@ class ServiceReviewController extends Controller
         // Update service trust score
         $review->service->updateTrustScore();
 
-        return redirect()->back()->with('success', 'Ulasan telah berjaya ditolak.');
+        return redirect()->back()->with('success', __('flash.review_rejected'));
     }
 
     /**
@@ -88,7 +88,7 @@ class ServiceReviewController extends Controller
         // Update service trust score
         $review->service->updateTrustScore();
 
-        return redirect()->route('admin.service-reviews.index')->with('success', 'Ulasan telah berjaya dipadamkan.');
+        return redirect()->route('admin.service-reviews.index')->with('success', __('flash.review_deleted'));
     }
 
     /**
@@ -107,15 +107,15 @@ class ServiceReviewController extends Controller
         switch ($request->action) {
             case 'approve':
                 $reviews->update(['status' => 'approved']);
-                $message = 'Ulasan yang dipilih telah berjaya diluluskan.';
+                $message = __('flash.reviews_bulk_approved');
                 break;
             case 'reject':
                 $reviews->update(['status' => 'rejected']);
-                $message = 'Ulasan yang dipilih telah berjaya ditolak.';
+                $message = __('flash.reviews_bulk_rejected');
                 break;
             case 'delete':
                 $reviews->delete();
-                $message = 'Ulasan yang dipilih telah berjaya dipadamkan.';
+                $message = __('flash.reviews_bulk_deleted');
                 break;
         }
 

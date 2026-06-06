@@ -55,7 +55,7 @@ class SettingsController extends Controller
         Setting::clearCache();
 
         return redirect()->route('admin.settings.index')
-            ->with('success', 'Tetapan berjaya dikemas kini.');
+            ->with('success', __('flash.settings_updated'));
     }
 
     /**
@@ -73,7 +73,7 @@ class SettingsController extends Controller
         Setting::clearCache();
 
         return redirect()->route('admin.settings.index')
-            ->with('success', 'Tetapan telah direset kepada nilai lalai.');
+            ->with('success', __('flash.settings_reset'));
     }
 
     /**

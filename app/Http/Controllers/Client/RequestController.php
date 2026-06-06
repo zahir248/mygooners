@@ -69,7 +69,7 @@ class RequestController extends Controller
             'status' => 'pending'
         ]);
 
-        return redirect()->route('dashboard')->with('success', 'Permohonan perkhidmatan anda telah dihantar! Admin akan menyemak permohonan anda dalam masa 1-3 hari bekerja.');
+        return redirect()->route('dashboard')->with('success', __('client_messages.msg_0368d99ef88d'));
     }
 
     public function previewPendingService($id)
@@ -185,7 +185,7 @@ class RequestController extends Controller
         // If no changes, show reminder
         if (!$hasChanges) {
             return redirect()->back()
-                ->with('warning', 'Tiada perubahan dibuat. Sila kemaskini maklumat berdasarkan sebab penolakan sebelum menghantar semula.')
+                ->with('warning', __('flash.no_changes_resubmit'))
                 ->withInput();
         }
 
@@ -222,7 +222,7 @@ class RequestController extends Controller
         $service->save();
 
         return redirect()->route('dashboard')
-            ->with('success', 'Permohonan berjaya dihantar semula!');
+            ->with('success', __('client_messages.msg_55c2be988e2e'));
     }
 
     public function updateServiceStatus(Request $request, $id)
@@ -239,9 +239,11 @@ class RequestController extends Controller
         $service->status = $request->status;
         $service->save();
 
-        $statusText = $request->status === 'active' ? 'aktif' : 'tidak aktif';
+        $statusText = $request->status === 'active'
+            ? __('client_messages.status_active')
+            : __('client_messages.status_inactive');
         return redirect()->route('dashboard')
-            ->with('success', "Status perkhidmatan berjaya dikemaskini kepada {$statusText}!");
+            ->with('success', __('client_messages.service_status_updated', ['status' => $statusText]));
     }
 
     public function showServiceEditRequestForm($id)
@@ -269,7 +271,7 @@ class RequestController extends Controller
 
         if ($existingPendingRequest) {
             return redirect()->back()
-                ->with('error', 'Permohonan kemaskini untuk perkhidmatan ini masih menunggu kelulusan admin. Sila tunggu sehingga permohonan sedia ada diluluskan atau ditolak.')
+                ->with('error', __('client_messages.msg_2c48bfbf16e2'))
                 ->withInput();
         }
 
@@ -341,7 +343,7 @@ class RequestController extends Controller
         // If no changes, show warning
         if (!$hasChanges) {
             return redirect()->back()
-                ->with('warning', 'Tiada perubahan dibuat. Sila kemaskini maklumat sebelum menghantar permohonan.')
+                ->with('warning', __('flash.no_changes_before_submit'))
                 ->withInput();
         }
 
@@ -385,7 +387,7 @@ class RequestController extends Controller
         $updateService->save();
 
         return redirect()->route('dashboard')
-            ->with('success', 'Permohonan kemaskini perkhidmatan telah dihantar! Admin akan menyemak permohonan anda dalam masa 1-3 hari bekerja.');
+            ->with('success', __('client_messages.msg_34514f26abf8'));
     }
 
     public function previewServiceUpdateRequest($id)
@@ -399,7 +401,7 @@ class RequestController extends Controller
         $originalService = Service::find($updateRequest->original_service_id);
         
         if (!$originalService) {
-            return redirect()->route('dashboard')->with('error', 'Perkhidmatan asal tidak dijumpai.');
+            return redirect()->route('dashboard')->with('error', __('client_messages.msg_b3637816f334'));
         }
 
         // Get changes for comparison
@@ -492,7 +494,7 @@ class RequestController extends Controller
         $service->delete();
 
         return redirect()->route('dashboard')
-            ->with('success', 'Permohonan perkhidmatan telah dibatalkan.');
+            ->with('success', __('client_messages.msg_a74d5214f4f7'));
     }
 
     public function cancelServiceUpdateRequest($id)
@@ -507,7 +509,7 @@ class RequestController extends Controller
         $updateRequest->delete();
 
         return redirect()->route('dashboard')
-            ->with('success', 'Permohonan kemaskini perkhidmatan telah dibatalkan.');
+            ->with('success', __('client_messages.msg_2fcce4a9b474'));
     }
 
     public function forgetServiceUpdateRequest($id)
@@ -521,7 +523,7 @@ class RequestController extends Controller
         $updateRequest->delete();
 
         return redirect()->route('dashboard')
-            ->with('success', 'Permohonan kemaskini perkhidmatan berjaya dilupakan.');
+            ->with('success', __('client_messages.msg_594554249862'));
     }
 
     public function forgetServiceRequest($id)
@@ -535,7 +537,7 @@ class RequestController extends Controller
         $service->delete();
 
         return redirect()->route('dashboard')
-            ->with('success', 'Permohonan perkhidmatan berjaya dilupakan.');
+            ->with('success', __('client_messages.msg_8277fc613c3c'));
     }
 
     public function previewPendingSellerRequest()
@@ -543,7 +545,7 @@ class RequestController extends Controller
         $user = auth()->user();
         
         if (!$user->seller_status || $user->seller_status !== 'pending') {
-            return redirect()->route('dashboard')->with('error', 'Permohonan penjual tidak ditemui.');
+            return redirect()->route('dashboard')->with('error', __('client_messages.msg_e8e10864fabc'));
         }
 
         return view('client.requests.pending-seller-preview', compact('user'));
@@ -554,7 +556,7 @@ class RequestController extends Controller
         $user = auth()->user();
         
         if (!$user->seller_status || $user->seller_status !== 'pending') {
-            return redirect()->route('dashboard')->with('error', 'Permohonan penjual tidak ditemui.');
+            return redirect()->route('dashboard')->with('error', __('client_messages.msg_e8e10864fabc'));
         }
 
         // Delete associated files
@@ -574,7 +576,7 @@ class RequestController extends Controller
         ]);
 
         return redirect()->route('dashboard')
-            ->with('success', 'Permohonan penjual telah dibatalkan.');
+            ->with('success', __('client_messages.msg_47b202c0feb7'));
     }
 
     public function previewRejectedSellerRequest()
@@ -582,7 +584,7 @@ class RequestController extends Controller
         $user = auth()->user();
         
         if (!$user->seller_status || $user->seller_status !== 'rejected') {
-            return redirect()->route('dashboard')->with('error', 'Permohonan penjual tidak ditemui.');
+            return redirect()->route('dashboard')->with('error', __('client_messages.msg_e8e10864fabc'));
         }
 
         return view('client.requests.rejected-seller-preview', compact('user'));
@@ -593,7 +595,7 @@ class RequestController extends Controller
         $user = auth()->user();
         
         if (!$user->seller_status || $user->seller_status !== 'rejected') {
-            return redirect()->route('dashboard')->with('error', 'Permohonan penjual tidak ditemui.');
+            return redirect()->route('dashboard')->with('error', __('client_messages.msg_e8e10864fabc'));
         }
 
         return view('client.requests.rejected-seller-edit', compact('user'));
@@ -604,7 +606,7 @@ class RequestController extends Controller
         $user = auth()->user();
         
         if (!$user->seller_status || $user->seller_status !== 'rejected') {
-            return redirect()->route('dashboard')->with('error', 'Permohonan penjual tidak ditemui.');
+            return redirect()->route('dashboard')->with('error', __('client_messages.msg_e8e10864fabc'));
         }
 
         // Create validation rules based on business type
@@ -685,7 +687,7 @@ class RequestController extends Controller
         // If no changes, show reminder
         if (!$hasChanges) {
             return redirect()->back()
-                ->with('warning', 'Tiada perubahan dibuat. Sila kemaskini maklumat berdasarkan sebab penolakan sebelum menghantar semula.')
+                ->with('warning', __('flash.no_changes_resubmit'))
                 ->withInput();
         }
 
@@ -725,6 +727,6 @@ class RequestController extends Controller
         ]);
 
         return redirect()->route('dashboard')
-            ->with('success', 'Permohonan penjual anda telah dihantar semula dan sedang menunggu kelulusan admin!');
+            ->with('success', __('client_messages.msg_e5bca0ba9b43'));
     }
 } 

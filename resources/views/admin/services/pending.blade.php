@@ -1,13 +1,13 @@
 @extends('layouts.admin')
 
-@section('title', 'Perkhidmatan Menunggu Kelulusan')
+@section('title', __('Perkhidmatan Menunggu Kelulusan'))
 
 @section('content')
 <div class="px-4 sm:px-6 lg:px-8 py-6">
     <div class="sm:flex sm:items-center sm:justify-between mb-6">
         <div>
-            <h1 class="text-2xl font-bold text-gray-900">Perkhidmatan Menunggu Kelulusan</h1>
-            <p class="mt-2 text-sm text-gray-700">Senarai perkhidmatan yang menunggu kelulusan admin</p>
+            <h1 class="text-2xl font-bold text-gray-900">{{ __('Perkhidmatan Menunggu Kelulusan') }}</h1>
+            <p class="mt-2 text-sm text-gray-700">{{ __('Senarai perkhidmatan yang menunggu kelulusan admin') }}</p>
         </div>
         <div class="mt-4 sm:mt-0 flex gap-2">
             <a href="{{ route('admin.services.index') }}"
@@ -15,14 +15,14 @@
                 <svg class="-ml-1 mr-2 h-5 w-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                 </svg>
-                Semua Perkhidmatan
+                {{ __('Semua Perkhidmatan') }}
             </a>
         </div>
     </div>
     <div class="bg-white shadow overflow-hidden sm:rounded-lg">
         <div class="px-6 py-4 border-b border-gray-200">
             <h3 class="text-lg font-medium text-gray-900">
-                Menunggu Kelulusan ({{ $services->total() }})
+                {{ trans('admin_page.pending_approval', ['count' => $services->total()]) }}
             </h3>
         </div>
         @if($services->count() > 0)
@@ -30,12 +30,12 @@
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-gray-50">
                         <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Perkhidmatan</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Penyedia</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kategori</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tarikh</th>
-                            <th class="relative px-6 py-3"><span class="sr-only">Tindakan</span></th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Perkhidmatan') }}</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Penyedia') }}</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Kategori') }}</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Status') }}</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Tarikh') }}</th>
+                            <th class="relative px-6 py-3"><span class="sr-only">{{ __('Tindakan') }}</span></th>
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
@@ -61,16 +61,16 @@
                                             <div class="flex items-center space-x-2 mb-1">
                                                 <p class="text-sm font-bold text-gray-900 truncate">{{ $displayService->title }}</p>
                                                 @if($displayService->is_verified)
-                                                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">Disahkan</span>
+                                                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">{{ __('Disahkan') }}</span>
                                                 @endif
                                                 @if($service->is_update_request)
-                                                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">Kemaskini</span>
+                                                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">{{ __('Kemaskini') }}</span>
                                                 @endif
                                             </div>
                                             <p class="text-sm text-gray-500 line-clamp-2">
-                                                ID Perkhidmatan: #{{ $displayService->id }} • {{ $displayService->location }} • {{ $displayService->pricing }}
+                                                {{ trans('admin_page.list_service_meta', ['id' => $displayService->id, 'location' => $displayService->location, 'pricing' => $displayService->pricing]) }}
                                                 @if($service->is_update_request && $service->original_service_id)
-                                                    <br><span class="text-blue-600">Kemaskini untuk perkhidmatan #{{ $service->original_service_id }}</span>
+                                                    <br><span class="text-blue-600">{{ trans('admin_page.update_for_service', ['id' => $service->original_service_id]) }}</span>
                                                 @endif
                                             </p>
                                         </div>
@@ -88,7 +88,7 @@
                                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">{{ $displayService->category }}</span>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">Menunggu</span>
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">{{ __('Menunggu') }}</span>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                     <div>
@@ -102,7 +102,7 @@
                                         <button type="button" 
                                                 onclick="openApproveModal({{ $service->id }}, '{{ $service->title }}')"
                                                 class="text-green-600 hover:text-green-900" 
-                                                title="Lulus Perkhidmatan">
+                                                title="{{ __('Lulus Perkhidmatan') }}">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                                             </svg>
@@ -111,7 +111,7 @@
                                         <button type="button" 
                                                 onclick="openRejectModal({{ $service->id }}, '{{ $service->title }}')"
                                                 class="text-red-600 hover:text-red-900" 
-                                                title="Tolak Perkhidmatan">
+                                                title="{{ __('Tolak Perkhidmatan') }}">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                                             </svg>
@@ -120,7 +120,7 @@
                                         <button type="button" 
                                                 onclick="openServiceModal({{ $service->id }})"
                                                 class="text-blue-600 hover:text-blue-900" 
-                                                title="Lihat Perkhidmatan">
+                                                title="{{ __('Lihat Perkhidmatan') }}">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
@@ -133,45 +133,17 @@
                     </tbody>
                 </table>
             </div>
-            <!-- Pagination -->
-            <div class="bg-white px-6 py-3 border-t border-gray-200">
-                <div class="flex items-center justify-between">
-                    <div class="text-sm text-gray-700">
-                        Showing <span class="font-medium">{{ $services->firstItem() ?? 0 }}</span> to <span class="font-medium">{{ $services->lastItem() ?? 0 }}</span> of <span class="font-medium">{{ $services->total() }}</span> results
-                    </div>
-                    <div class="flex space-x-2">
-                        @if($services->onFirstPage())
-                            <button class="px-3 py-1 border border-gray-300 rounded-md text-sm text-gray-500 bg-gray-50 cursor-not-allowed">
-                                Previous
-                            </button>
-                        @else
-                            <a href="{{ $services->previousPageUrl() }}" class="px-3 py-1 border border-gray-300 rounded-md text-sm text-gray-700 bg-white hover:bg-gray-50">
-                                Previous
-                            </a>
-                        @endif
-                        
-                        @if($services->hasMorePages())
-                            <a href="{{ $services->nextPageUrl() }}" class="px-3 py-1 border border-gray-300 rounded-md text-sm text-gray-700 bg-white hover:bg-gray-50">
-                                Next
-                            </a>
-                        @else
-                            <button class="px-3 py-1 border border-gray-300 rounded-md text-sm text-gray-500 bg-gray-50 cursor-not-allowed">
-                                Next
-                            </button>
-                        @endif
-                    </div>
-                </div>
-            </div>
+            @include('admin.partials.pagination', ['paginator' => $services])
         @else
             <div class="px-6 py-12 text-center">
                 <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m8 5H7a2 2 0 01-2-2V7a2 2 0 012-2h10a2 2 0 012 2v10a2 2 0 01-2 2z" />
                 </svg>
-                <h3 class="mt-2 text-sm font-medium text-gray-900">Tiada perkhidmatan menunggu</h3>
-                <p class="mt-1 text-sm text-gray-500">Semua perkhidmatan telah diluluskan atau ditolak.</p>
+                <h3 class="mt-2 text-sm font-medium text-gray-900">{{ __('Tiada perkhidmatan menunggu') }}</h3>
+                <p class="mt-1 text-sm text-gray-500">{{ __('Semua perkhidmatan telah diluluskan atau ditolak.') }}</p>
                 <div class="mt-6">
                     <a href="{{ route('admin.services.index') }}" class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
-                        Lihat Semua Perkhidmatan
+                        {{ __('Lihat Semua Perkhidmatan') }}
                     </a>
                 </div>
             </div>
@@ -183,7 +155,7 @@
 <div id="serviceModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 backdrop-blur-sm overflow-y-auto h-full w-full hidden" style="z-index: 60;">
     <div class="relative top-5 mx-auto p-5 border w-11/12 max-w-4xl shadow-lg rounded-md bg-white max-h-[90vh] overflow-y-auto my-8">
         <div class="flex justify-between items-center mb-4">
-            <h3 class="text-xl font-bold text-gray-900">Butiran Permohonan</h3>
+            <h3 class="text-xl font-bold text-gray-900">{{ __('Butiran Permohonan') }}</h3>
             <button onclick="closeServiceModal()" class="text-gray-400 hover:text-gray-600">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
@@ -212,38 +184,38 @@
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <!-- Service Information -->
                     <div class="space-y-4">
-                        <h4 class="text-lg font-semibold text-gray-900 border-b pb-2">Maklumat Perkhidmatan</h4>
+                        <h4 class="text-lg font-semibold text-gray-900 border-b pb-2">{{ __('Maklumat Perkhidmatan') }}</h4>
                         <div class="space-y-3">
                             <div>
-                                <label class="text-sm font-medium text-gray-600">Tajuk Perkhidmatan</label>
+                                <label class="text-sm font-medium text-gray-600">{{ __('Tajuk Perkhidmatan') }}</label>
                                 <p id="serviceTitle" class="text-gray-900 font-medium"></p>
                             </div>
                             <div>
-                                <label class="text-sm font-medium text-gray-600">Penerangan</label>
+                                <label class="text-sm font-medium text-gray-600">{{ __('Penerangan') }}</label>
                                 <p id="serviceDescription" class="text-gray-900"></p>
                             </div>
                             <div>
-                                <label class="text-sm font-medium text-gray-600">Kategori</label>
+                                <label class="text-sm font-medium text-gray-600">{{ __('Kategori') }}</label>
                                 <p id="serviceCategory" class="text-gray-900"></p>
                             </div>
                             <div>
-                                <label class="text-sm font-medium text-gray-600">Lokasi</label>
+                                <label class="text-sm font-medium text-gray-600">{{ __('Lokasi') }}</label>
                                 <p id="serviceLocation" class="text-gray-900"></p>
                             </div>
                             <div>
-                                <label class="text-sm font-medium text-gray-600">Harga</label>
+                                <label class="text-sm font-medium text-gray-600">{{ __('Harga') }}</label>
                                 <p id="servicePricing" class="text-gray-900"></p>
                             </div>
                             <div>
-                                <label class="text-sm font-medium text-gray-600">Maklumat Hubungan</label>
+                                <label class="text-sm font-medium text-gray-600">{{ __('Maklumat Hubungan') }}</label>
                                 <p id="serviceContact" class="text-gray-900"></p>
                             </div>
                             <div>
-                                <label class="text-sm font-medium text-gray-600">Tag</label>
+                                <label class="text-sm font-medium text-gray-600">{{ __('Tag') }}</label>
                                 <div id="serviceTags" class="flex flex-wrap gap-2"></div>
                             </div>
                             <div>
-                                <label class="text-sm font-medium text-gray-600">Tarikh Permohonan</label>
+                                <label class="text-sm font-medium text-gray-600">{{ __('Tarikh Permohonan') }}</label>
                                 <p id="serviceCreatedAt" class="text-gray-900"></p>
                             </div>
                         </div>
@@ -251,48 +223,48 @@
                     
                     <!-- User Information -->
                     <div class="space-y-4">
-                        <h4 class="text-lg font-semibold text-gray-900 border-b pb-2">Maklumat Pengguna</h4>
+                        <h4 class="text-lg font-semibold text-gray-900 border-b pb-2">{{ __('Maklumat Pengguna') }}</h4>
                         <div class="space-y-3">
                             <div>
-                                <label class="text-sm font-medium text-gray-600">Nama</label>
+                                <label class="text-sm font-medium text-gray-600">{{ __('Nama') }}</label>
                                 <p id="userName" class="text-gray-900 font-medium"></p>
                             </div>
                             <div>
-                                <label class="text-sm font-medium text-gray-600">Email</label>
+                                <label class="text-sm font-medium text-gray-600">{{ __('Emel') }}</label>
                                 <p id="userEmail" class="text-gray-900"></p>
                             </div>
                             <div>
-                                <label class="text-sm font-medium text-gray-600">No. Telefon</label>
+                                <label class="text-sm font-medium text-gray-600">{{ __('No. Telefon') }}</label>
                                 <p id="userPhone" class="text-gray-900"></p>
                             </div>
                             <div>
-                                <label class="text-sm font-medium text-gray-600">Bio</label>
+                                <label class="text-sm font-medium text-gray-600">{{ __('Bio') }}</label>
                                 <p id="userBio" class="text-gray-900"></p>
                             </div>
                             <div>
-                                <label class="text-sm font-medium text-gray-600">Lokasi</label>
+                                <label class="text-sm font-medium text-gray-600">{{ __('Lokasi') }}</label>
                                 <p id="userLocation" class="text-gray-900"></p>
                             </div>
                             <div>
-                                <label class="text-sm font-medium text-gray-600">Status Penjual</label>
+                                <label class="text-sm font-medium text-gray-600">{{ __('Status Penjual') }}</label>
                                 <p id="userSellerStatus" class="text-gray-900"></p>
                             </div>
                             
                             <!-- User Images Section -->
                             <div>
-                                <label class="text-sm font-medium text-gray-600">Gambar Pengguna</label>
+                                <label class="text-sm font-medium text-gray-600">{{ __('Gambar Pengguna') }}</label>
                                 <div id="userImages" class="mt-2 space-y-3">
                                     <!-- Profile Image -->
                                     <div id="userProfileImage" class="hidden">
-                                        <label class="text-xs font-medium text-gray-500">Gambar Profil</label>
+                                        <label class="text-xs font-medium text-gray-500">{{ __('Gambar Profil') }}</label>
                                         <div class="mt-1">
-                                            <img id="profileImageSrc" src="" alt="Profile Image" class="w-24 h-24 object-cover rounded-lg border">
+                                            <img id="profileImageSrc" src="" alt="{{ __('Gambar Profil') }}" class="w-24 h-24 object-cover rounded-lg border">
                                         </div>
                                     </div>
                                     
                                     <!-- ID Document -->
                                     <div id="userIdDocument" class="hidden">
-                                        <label class="text-xs font-medium text-gray-500">Dokumen Pengenalan</label>
+                                        <label class="text-xs font-medium text-gray-500">{{ __('Dokumen Pengenalan') }}</label>
                                         <div class="mt-1">
                                             <img id="idDocumentSrc" src="" alt="ID Document" class="w-32 h-20 object-cover rounded-lg border">
                                         </div>
@@ -300,7 +272,7 @@
                                     
                                     <!-- Selfie with ID -->
                                     <div id="userSelfieWithId" class="hidden">
-                                        <label class="text-xs font-medium text-gray-500">Selfie dengan Dokumen Pengenalan</label>
+                                        <label class="text-xs font-medium text-gray-500">{{ __('Selfie dengan Dokumen Pengenalan') }}</label>
                                         <div class="mt-1">
                                             <img id="selfieWithIdSrc" src="" alt="Selfie with ID" class="w-32 h-20 object-cover rounded-lg border">
                                         </div>
@@ -310,31 +282,31 @@
                             
                             <div id="sellerDetails" class="hidden space-y-3">
                                 <div>
-                                    <label class="text-sm font-medium text-gray-600">Nama Perniagaan</label>
+                                    <label class="text-sm font-medium text-gray-600">{{ __('Nama Perniagaan') }}</label>
                                     <p id="userBusinessName" class="text-gray-900"></p>
                                 </div>
                                 <div>
-                                    <label class="text-sm font-medium text-gray-600">Jenis Perniagaan</label>
+                                    <label class="text-sm font-medium text-gray-600">{{ __('Jenis Perniagaan') }}</label>
                                     <p id="userBusinessType" class="text-gray-900"></p>
                                 </div>
                                 <div>
-                                    <label class="text-sm font-medium text-gray-600">Alamat Perniagaan</label>
+                                    <label class="text-sm font-medium text-gray-600">{{ __('Alamat Perniagaan') }}</label>
                                     <p id="userBusinessAddress" class="text-gray-900"></p>
                                 </div>
                                 <div>
-                                    <label class="text-sm font-medium text-gray-600">Kawasan Operasi</label>
+                                    <label class="text-sm font-medium text-gray-600">{{ __('Kawasan Operasi') }}</label>
                                     <p id="userOperatingArea" class="text-gray-900"></p>
                                 </div>
                                 <div>
-                                    <label class="text-sm font-medium text-gray-600">Tahun Pengalaman</label>
+                                    <label class="text-sm font-medium text-gray-600">{{ __('Tahun Pengalaman') }}</label>
                                     <p id="userYearsExperience" class="text-gray-900"></p>
                                 </div>
                                 <div>
-                                    <label class="text-sm font-medium text-gray-600">Kemahiran</label>
+                                    <label class="text-sm font-medium text-gray-600">{{ __('Kemahiran') }}</label>
                                     <p id="userSkills" class="text-gray-900"></p>
                                 </div>
                                 <div>
-                                    <label class="text-sm font-medium text-gray-600">Kawasan Perkhidmatan</label>
+                                    <label class="text-sm font-medium text-gray-600">{{ __('Kawasan Perkhidmatan') }}</label>
                                     <p id="userServiceAreas" class="text-gray-900"></p>
                                 </div>
                             </div>
@@ -366,7 +338,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                 </svg>
             </div>
-            <h3 class="text-lg font-medium text-gray-900 mt-4">Lulus Perkhidmatan</h3>
+            <h3 class="text-lg font-medium text-gray-900 mt-4">{{ __('Lulus Perkhidmatan') }}</h3>
             <div class="mt-2 px-7 py-3">
                 <p class="text-sm text-gray-500">
                     Adakah anda pasti mahu meluluskan "<span id="approveServiceTitle"></span>"? Perkhidmatan ini akan menjadi aktif dan boleh dilihat oleh pengguna.
@@ -375,13 +347,13 @@
             <div class="flex justify-center space-x-4 mt-4">
                 <button onclick="closeApproveModal()" 
                         class="px-4 py-2 bg-gray-300 text-gray-800 text-sm font-medium rounded-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-300">
-                    Batal
+                    {{ __('Batal') }}
                 </button>
                 <form id="approveServiceFormModal" method="POST" class="inline">
                     @csrf
                     <button type="submit" 
                             class="px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500">
-                        Lulus
+                        {{ __('Lulus') }}
                     </button>
                 </form>
             </div>
@@ -398,7 +370,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                 </svg>
             </div>
-            <h3 class="text-lg font-medium text-gray-900 mt-4 text-center">Tolak Perkhidmatan</h3>
+            <h3 class="text-lg font-medium text-gray-900 mt-4 text-center">{{ __('Tolak Perkhidmatan') }}</h3>
             <div class="mt-2 px-7 py-3">
                 <p class="text-sm text-gray-500 text-center">
                     Adakah anda pasti mahu menolak "<span id="rejectServiceTitle"></span>"?
@@ -407,24 +379,24 @@
                     @csrf
                     <div class="mb-4">
                         <label for="rejection_reason" class="block text-sm font-medium text-gray-700 mb-2">
-                            Sebab Penolakan <span class="text-red-500">*</span>
+                            {{ trans('admin_page.rejection_reason') }} <span class="text-red-500">*</span>
                         </label>
                         <textarea 
                             id="rejection_reason" 
                             name="rejection_reason" 
                             rows="4" 
                             class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500"
-                            placeholder="Sila berikan sebab penolakan permohonan ini..."
+                            placeholder="{{ __('Sila berikan sebab penolakan permohonan ini...') }}"
                             required></textarea>
                     </div>
                     <div class="flex justify-center space-x-4">
                         <button type="button" onclick="closeRejectModal()" 
                                 class="px-4 py-2 bg-gray-300 text-gray-800 text-sm font-medium rounded-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-300">
-                            Batal
+                            {{ __('Batal') }}
                         </button>
                         <button type="submit" 
                                 class="px-4 py-2 bg-red-600 text-white text-sm font-medium rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500">
-                            Tolak
+                            {{ __('Tolak') }}
                         </button>
                     </div>
                 </form>
@@ -432,6 +404,19 @@
         </div>
     </div>
 </div>
+
+@php
+    $serviceFieldLabels = [
+        'title' => __('Tajuk Perkhidmatan'),
+        'description' => __('Penerangan'),
+        'location' => __('Lokasi'),
+        'pricing' => __('Harga'),
+        'contact_info' => __('Maklumat Hubungan'),
+        'category' => __('Kategori'),
+        'tags' => __('Tag'),
+        'images' => __('Gambar'),
+    ];
+@endphp
 
 @push('scripts')
 <script>
@@ -532,7 +517,7 @@ function openServiceModal(serviceId) {
                     tagsContainer.appendChild(tagElement);
                 });
             } else {
-                tagsContainer.innerHTML = '<span class="text-gray-500 text-sm">Tiada tag</span>';
+                tagsContainer.innerHTML = '<span class="text-gray-500 text-sm">{{ __('Tiada tag') }}</span>';
             }
             
             // Populate images with change highlighting
@@ -543,7 +528,7 @@ function openServiceModal(serviceId) {
                 // Existing Images
                 const existingLabel = document.createElement('div');
                 existingLabel.className = 'mb-2 font-semibold text-gray-700';
-                existingLabel.textContent = 'Gambar Sedia Ada';
+                existingLabel.textContent = @json(__('Gambar Sedia Ada'));
                 imagesContainer.appendChild(existingLabel);
 
                 const existingGrid = document.createElement('div');
@@ -552,18 +537,18 @@ function openServiceModal(serviceId) {
                     data.original_service.images.forEach(imageUrl => {
                         const imgDiv = document.createElement('div');
                         const filename = imageUrl.split('/').pop(); // Extract filename from path
-                        imgDiv.innerHTML = `<img src="/service-image/${filename}" alt="Gambar Sedia Ada" class="w-full h-32 object-cover rounded-lg">`;
+                        imgDiv.innerHTML = `<img src="/service-image/${filename}" alt="{{ __('Gambar Sedia Ada') }}" class="w-full h-32 object-cover rounded-lg">`;
                         existingGrid.appendChild(imgDiv);
                     });
                 } else {
-                    existingGrid.innerHTML = '<p class="text-gray-500 text-sm">Tiada gambar</p>';
+                    existingGrid.innerHTML = '<p class="text-gray-500 text-sm">{{ __('Tiada gambar') }}</p>';
                 }
                 imagesContainer.appendChild(existingGrid);
 
                 // Proposed Images
                 const proposedLabel = document.createElement('div');
                 proposedLabel.className = 'mb-2 font-semibold text-gray-700';
-                proposedLabel.textContent = 'Gambar Dicadangkan';
+                proposedLabel.textContent = @json(__('Gambar Dicadangkan'));
                 imagesContainer.appendChild(proposedLabel);
 
                 const proposedGrid = document.createElement('div');
@@ -572,18 +557,18 @@ function openServiceModal(serviceId) {
                     data.images.forEach(imageUrl => {
                         const imgDiv = document.createElement('div');
                         const filename = imageUrl.split('/').pop(); // Extract filename from path
-                        imgDiv.innerHTML = `<img src="/service-image/${filename}" alt="Gambar Dicadangkan" class="w-full h-32 object-cover rounded-lg">`;
+                        imgDiv.innerHTML = `<img src="/service-image/${filename}" alt="{{ __('Gambar Dicadangkan') }}" class="w-full h-32 object-cover rounded-lg">`;
                         proposedGrid.appendChild(imgDiv);
                     });
                 } else {
-                    proposedGrid.innerHTML = '<p class="text-gray-500 text-sm">Tiada gambar</p>';
+                    proposedGrid.innerHTML = '<p class="text-gray-500 text-sm">{{ __('Tiada gambar') }}</p>';
                 }
                 imagesContainer.appendChild(proposedGrid);
             } else if (data.images && data.images.length > 0) {
                 // For new services (not update requests)
                 const label = document.createElement('div');
                 label.className = 'mb-2 font-semibold text-gray-700';
-                label.textContent = 'Gambar';
+                label.textContent = @json(__('Gambar'));
                 imagesContainer.appendChild(label);
 
                 const grid = document.createElement('div');
@@ -591,12 +576,12 @@ function openServiceModal(serviceId) {
                 data.images.forEach(imageUrl => {
                     const imgDiv = document.createElement('div');
                     const filename = imageUrl.split('/').pop(); // Extract filename from path
-                    imgDiv.innerHTML = `<img src="/service-image/${filename}" alt="Gambar" class="w-full h-32 object-cover rounded-lg">`;
+                    imgDiv.innerHTML = `<img src="/service-image/${filename}" alt="{{ __('Gambar') }}" class="w-full h-32 object-cover rounded-lg">`;
                     grid.appendChild(imgDiv);
                 });
                 imagesContainer.appendChild(grid);
             } else {
-                imagesContainer.innerHTML = '<p class="text-gray-500 text-sm">Tiada gambar</p>';
+                imagesContainer.innerHTML = '<p class="text-gray-500 text-sm">{{ __('Tiada gambar') }}</p>';
             }
             
             // Populate user information
@@ -665,7 +650,7 @@ function openServiceModal(serviceId) {
         })
         .catch(error => {
             console.error('Error fetching service details:', error);
-            document.getElementById('serviceModalLoading').innerHTML = '<p class="text-red-500">Ralat memuat data perkhidmatan</p>';
+            document.getElementById('serviceModalLoading').innerHTML = '<p class="text-red-500">{{ __('Ralat memuat data perkhidmatan') }}</p>';
         });
 }
 
@@ -695,10 +680,10 @@ function populateServiceField(elementId, value, change) {
                         </svg>
                     </div>
                     <div class="ml-3 flex-1">
-                        <p class="text-sm font-medium text-green-800">Nilai Baharu</p>
+                        <p class="text-sm font-medium text-green-800">{{ __('Nilai Baharu') }}</p>
                         <p class="text-sm text-green-700 mt-1">${value}</p>
                         <details class="mt-2">
-                            <summary class="text-xs text-green-600 cursor-pointer hover:text-green-800">Lihat nilai asal</summary>
+                            <summary class="text-xs text-green-600 cursor-pointer hover:text-green-800">{{ __('Lihat nilai asal') }}</summary>
                             <p class="text-xs text-gray-600 mt-1 bg-gray-50 p-2 rounded">${change.old}</p>
                         </details>
                     </div>
@@ -720,16 +705,7 @@ function populateChangesSummary(changes) {
     }
     
     const changedFields = Object.keys(changes);
-    const fieldLabels = {
-        'title': 'Tajuk Perkhidmatan',
-        'description': 'Penerangan',
-        'location': 'Lokasi',
-        'pricing': 'Harga',
-        'contact_info': 'Maklumat Hubungan',
-        'category': 'Kategori',
-        'tags': 'Tag',
-        'images': 'Gambar'
-    };
+    const fieldLabels = @json($serviceFieldLabels);
     
     const summaryHTML = `
         <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-lg">
@@ -740,9 +716,9 @@ function populateChangesSummary(changes) {
                     </svg>
                 </div>
                 <div class="ml-3">
-                    <h3 class="text-sm font-medium text-yellow-800">Ringkasan Perubahan</h3>
+                    <h3 class="text-sm font-medium text-yellow-800">{{ __('Ringkasan Perubahan') }}</h3>
                     <div class="mt-2 text-sm text-yellow-700">
-                        <p class="mb-2">Bidang yang dikemaskini:</p>
+                        <p class="mb-2">{{ __('Bidang yang dikemaskini:') }}</p>
                         <ul class="list-disc list-inside space-y-1">
                             ${changedFields.map(field => `<li>${fieldLabels[field] || field}</li>`).join('')}
                         </ul>

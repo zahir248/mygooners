@@ -44,7 +44,7 @@ class NewsletterController extends Controller
             }
         }
 
-        $subscribers = $query->orderBy('created_at', 'desc')->paginate(20);
+        $subscribers = $query->orderBy('created_at', 'desc')->paginate(20)->withQueryString();
         $activeCount = Newsletter::active()->count();
         $unsubscribedCount = Newsletter::unsubscribed()->count();
 
@@ -83,7 +83,7 @@ class NewsletterController extends Controller
         $activeSubscribers = Newsletter::active()->get();
         
         if ($activeSubscribers->isEmpty()) {
-            return back()->with('error', 'Tiada pelanggan aktif untuk dihantar newsletter.');
+            return back()->with('error', __('flash.newsletter_no_subscribers'));
         }
 
         $subject = $request->subject;
@@ -102,9 +102,9 @@ class NewsletterController extends Controller
             }
         }
 
-        $message = "Newsletter berjaya dihantar kepada {$sentCount} pelanggan.";
+        $message = __('flash.newsletter_sent', ['count' => $sentCount]);
         if ($failedCount > 0) {
-            $message .= " {$failedCount} emel gagal dihantar.";
+            $message .= ' '.__('flash.newsletter_partial_failed', ['failed' => $failedCount]);
         }
 
         return redirect()->route('admin.newsletter.index')->with('success', $message);
@@ -117,7 +117,7 @@ class NewsletterController extends Controller
     {
         $newsletter->delete();
         
-        return redirect()->route('admin.newsletter.index')->with('success', 'Pelanggan berjaya dikeluarkan.');
+        return redirect()->route('admin.newsletter.index')->with('success', __('flash.newsletter_subscriber_removed'));
     }
 
     /**
@@ -127,10 +127,10 @@ class NewsletterController extends Controller
     {
         if ($newsletter->status === 'active') {
             $newsletter->unsubscribe();
-            $message = 'Pelanggan telah berhenti melanggani.';
+            $message = __('flash.newsletter_unsubscribed');
         } else {
             $newsletter->resubscribe();
-            $message = 'Pelanggan telah melanggani semula.';
+            $message = __('flash.newsletter_resubscribed');
         }
 
         return redirect()->route('admin.newsletter.index')->with('success', $message);

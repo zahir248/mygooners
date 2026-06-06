@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Panel Kawalan - MyGooners')
+@section('title', __('Panel Kawalan - MyGooners'))
 
 @section('content')
 <div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
@@ -19,30 +19,30 @@
                 <img src="{{ asset('images/profile-image-default.png') }}" alt="Avatar" class="w-20 h-20 rounded-full shadow-md object-cover">
             @endif
             <div>
-                <h1 class="text-2xl md:text-3xl font-bold text-gray-900 mb-1">Selamat kembali, {{ auth()->user()->name }}!</h1>
+                <h1 class="text-2xl md:text-3xl font-bold text-gray-900 mb-1">{{ __('Selamat kembali, :name!', ['name' => auth()->user()->name]) }}</h1>
                 @if(auth()->user()->is_seller && auth()->user()->seller_status === 'approved')
                     <div class="flex items-center gap-2 mb-1">
-                        <span class="inline-flex items-center px-3 py-1 rounded-full bg-green-100 text-green-700 text-xs font-semibold">Penjual Disahkan</span>
+                        <span class="inline-flex items-center px-3 py-1 rounded-full bg-green-100 text-green-700 text-xs font-semibold">{{ __('Penjual Disahkan') }}</span>
                         @if(auth()->user()->business_name)
                             <span class="text-gray-600 text-sm font-medium">{{ auth()->user()->business_name }}</span>
                         @endif
                     </div>
                 @else
-                    <span class="inline-flex items-center px-3 py-1 rounded-full bg-yellow-100 text-yellow-700 text-xs font-semibold">Akaun Biasa</span>
+                    <span class="inline-flex items-center px-3 py-1 rounded-full bg-yellow-100 text-yellow-700 text-xs font-semibold">{{ __('Akaun Biasa') }}</span>
                 @endif
-                <p class="text-gray-500 text-sm">Panel kawalan akaun & perniagaan anda di MyGooners</p>
+                <p class="text-gray-500 text-sm">{{ __('Panel kawalan akaun & perniagaan anda di MyGooners') }}</p>
             </div>
         </div>
         <div>
             @if(auth()->user()->is_seller && auth()->user()->seller_status === 'approved')
                 <a href="{{ route('seller.info') }}" class="inline-flex items-center gap-2 bg-gray-600 hover:bg-gray-700 text-white px-6 py-3 rounded-lg font-semibold shadow transition-colors">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                    Lihat Maklumat Penjual
+                    {{ __('Lihat Maklumat Penjual') }}
                 </a>
             @else
                 <a href="{{ route('profile.info') }}" class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold shadow transition-colors">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
-                    Lihat Maklumat Profil
+                    {{ __('Lihat Maklumat Profil') }}
                 </a>
             @endif
         </div>
@@ -56,28 +56,28 @@
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745"/></svg>
             </div>
             <div class="text-2xl font-bold">{{ $services->where('status', 'active')->count() ?? 0 }}</div>
-            <div class="text-gray-500 text-sm">Perkhidmatan Aktif</div>
+            <div class="text-gray-500 text-sm">{{ __('Perkhidmatan Aktif') }}</div>
         </div>
         <div class="bg-white rounded-xl shadow p-6 flex flex-col items-center">
             <div class="bg-gray-100 text-gray-600 rounded-full p-3 mb-2">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
             </div>
             <div class="text-2xl font-bold">{{ $services->where('status', 'inactive')->count() ?? 0 }}</div>
-            <div class="text-gray-500 text-sm">Perkhidmatan Tidak Aktif</div>
+            <div class="text-gray-500 text-sm">{{ __('Perkhidmatan Tidak Aktif') }}</div>
         </div>
         <div class="bg-white rounded-xl shadow p-6 flex flex-col items-center">
             <div class="bg-yellow-100 text-yellow-600 rounded-full p-3 mb-2">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v8m-4-4h8"/></svg>
             </div>
             <div class="text-2xl font-bold">{{ $pendingServices->count() }}</div>
-            <div class="text-gray-500 text-sm">Permohonan Menunggu</div>
+            <div class="text-gray-500 text-sm">{{ __('Permohonan Menunggu') }}</div>
         </div>
         <div class="bg-white rounded-xl shadow p-6 flex flex-col items-center">
             <div class="bg-blue-100 text-blue-600 rounded-full p-3 mb-2">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
             </div>
-                <div class="text-2xl font-bold">Penjual (Disahkan)</div>
-            <div class="text-gray-500 text-sm">Status Akaun</div>
+                <div class="text-2xl font-bold">{{ __('Penjual (Disahkan)') }}</div>
+            <div class="text-gray-500 text-sm">{{ __('Status Akaun') }}</div>
         </div>
     </div>
     @else
@@ -88,7 +88,7 @@
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                 </div>
                 <div class="text-2xl font-bold">1</div>
-                <div class="text-gray-500 text-sm">Permohonan Penjual</div>
+                <div class="text-gray-500 text-sm">{{ __('Permohonan Penjual') }}</div>
             </div>
             <div class="bg-white rounded-xl shadow p-6 flex flex-col items-center">
                 <div class="bg-blue-100 text-blue-600 rounded-full p-3 mb-2">
@@ -97,19 +97,19 @@
                 <div class="text-2xl font-bold">
                     @if(auth()->user()->is_seller)
                         @if(auth()->user()->seller_status === 'pending')
-                            Penjual (Menunggu)
+                            {{ __('Penjual (Menunggu)') }}
                         @elseif(auth()->user()->seller_status === 'approved')
-                            Penjual (Disahkan)
+                            {{ __('Penjual (Disahkan)') }}
                         @elseif(auth()->user()->seller_status === 'rejected')
-                            Penjual (Ditolak)
+                            {{ __('Penjual (Ditolak)') }}
                         @else
-                            Penjual
+                            {{ __('Penjual') }}
                         @endif
                     @else
-                        Pengguna
+                        {{ __('Pengguna') }}
                     @endif
                 </div>
-                <div class="text-gray-500 text-sm">Status Akaun</div>
+                <div class="text-gray-500 text-sm">{{ __('Status Akaun') }}</div>
             </div>
         </div>
         @else
@@ -122,19 +122,19 @@
                 <div class="text-2xl font-bold">
                     @if(auth()->user()->is_seller)
                         @if(auth()->user()->seller_status === 'pending')
-                            Penjual (Menunggu)
+                            {{ __('Penjual (Menunggu)') }}
                         @elseif(auth()->user()->seller_status === 'approved')
-                            Penjual (Disahkan)
+                            {{ __('Penjual (Disahkan)') }}
                         @elseif(auth()->user()->seller_status === 'rejected')
-                            Penjual (Ditolak)
+                            {{ __('Penjual (Ditolak)') }}
                         @else
-                            Penjual
+                            {{ __('Penjual') }}
                         @endif
                     @else
-                        Pengguna
+                        {{ __('Pengguna') }}
                     @endif
                 </div>
-                <div class="text-gray-500 text-sm">Status Akaun</div>
+                <div class="text-gray-500 text-sm">{{ __('Status Akaun') }}</div>
             </div>
         </div>
         @endif
@@ -152,12 +152,12 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
                         </svg>
                     </div>
-                    <h3 class="text-lg font-bold text-yellow-800">Permohonan Penjual Menunggu</h3>
+                    <h3 class="text-lg font-bold text-yellow-800">{{ __('Permohonan Penjual Menunggu') }}</h3>
                 </div>
-                <p class="text-yellow-700 mb-4">Permohonan anda untuk menjadi penjual sedang dalam proses semakan oleh admin. Anda akan diberitahu sebaik sahaja keputusan dikeluarkan.</p>
+                <p class="text-yellow-700 mb-4">{{ __('Permohonan anda untuk menjadi penjual sedang dalam proses semakan oleh admin. Anda akan diberitahu sebaik sahaja keputusan dikeluarkan.') }}</p>
                 <div class="bg-yellow-100 border border-yellow-300 rounded-lg p-4 mb-4">
-                    <p class="text-yellow-800 text-sm"><strong>Status:</strong> Menunggu kelulusan admin</p>
-                    <p class="text-yellow-800 text-sm mt-2"><strong>Tarikh Permohonan:</strong> 
+                    <p class="text-yellow-800 text-sm"><strong>{{ __('Status:') }}</strong> {{ __('Menunggu kelulusan admin') }}</p>
+                    <p class="text-yellow-800 text-sm mt-2"><strong>{{ __('Tarikh Permohonan:') }}</strong> 
                         @if(auth()->user()->seller_application_date)
                             {{ auth()->user()->seller_application_date->format('d/m/Y H:i') }}
                         @else
@@ -167,9 +167,7 @@
                 </div>
                 <div class="flex items-center gap-3">
                     <a href="{{ route('pending.seller.preview') }}" 
-                       class="text-blue-600 hover:text-blue-800 text-sm font-medium">
-                        Lihat
-                    </a>
+                       class="text-blue-600 hover:text-blue-800 text-sm font-medium">{{ __('Lihat') }}</a>
                     @include('client.partials.cancel-modal', [
                         'action' => route('seller.request.cancel'),
                         'message' => 'Adakah anda pasti mahu membatalkan permohonan penjual ini? Tindakan ini tidak boleh diundur.'
@@ -184,25 +182,21 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                         </svg>
                     </div>
-                    <h3 class="text-lg font-bold text-red-800">Permohonan Penjual Ditolak</h3>
+                    <h3 class="text-lg font-bold text-red-800">{{ __('Permohonan Penjual Ditolak') }}</h3>
                 </div>
-                <p class="text-red-700 mb-4">Permohonan anda untuk menjadi penjual telah ditolak. Sila lihat sebab penolakan di bawah.</p>
+                <p class="text-red-700 mb-4">{{ __('Permohonan anda untuk menjadi penjual telah ditolak. Sila lihat sebab penolakan di bawah.') }}</p>
                 @if(auth()->user()->seller_rejection_reason)
                     <div class="bg-red-100 border border-red-300 rounded-lg p-4 mb-4">
-                        <p class="text-red-800 text-sm"><strong>Sebab Penolakan:</strong></p>
+                        <p class="text-red-800 text-sm"><strong>{{ __('Sebab Penolakan:') }}</strong></p>
                         <p class="text-red-800 text-sm mt-2">{{ auth()->user()->seller_rejection_reason }}</p>
                     </div>
                 @endif
-                <p class="text-red-700 text-sm mb-4">Anda boleh menghantar semula permohonan dengan maklumat yang dikemaskini.</p>
+                <p class="text-red-700 text-sm mb-4">{{ __('Anda boleh menghantar semula permohonan dengan maklumat yang dikemaskini.') }}</p>
                 <div class="flex items-center gap-3">
                     <a href="{{ route('rejected.seller.preview') }}" 
-                       class="text-blue-600 hover:text-blue-800 text-sm font-medium">
-                        Lihat
-                    </a>
+                       class="text-blue-600 hover:text-blue-800 text-sm font-medium">{{ __('Lihat') }}</a>
                     <a href="{{ route('rejected.seller.edit') }}" 
-                       class="text-green-600 hover:text-green-800 text-sm font-medium">
-                        Hantar Semula
-                    </a>
+                       class="text-green-600 hover:text-green-800 text-sm font-medium">{{ __('Hantar Semula') }}</a>
                 </div>
             </div>
         @endif
@@ -211,14 +205,14 @@
     <!-- Become Seller CTA -->
     @if(auth()->user()->seller_status === null)
         <div class="bg-gradient-to-r from-yellow-100 to-yellow-200 border-l-4 border-yellow-500 rounded-xl shadow p-6 mb-10">
-            <h2 class="text-xl font-bold text-yellow-800 mb-2">Jana pendapatan dengan menjadi penjual di MyGooners!</h2>
-            <p class="text-yellow-700 mb-4">Isi maklumat perniagaan anda untuk mula menjual perkhidmatan kepada komuniti Gooners.</p>
+            <h2 class="text-xl font-bold text-yellow-800 mb-2">{{ __('Jana pendapatan dengan menjadi penjual di MyGooners!') }}</h2>
+            <p class="text-yellow-700 mb-4">{{ __('Isi maklumat perniagaan anda untuk mula menjual perkhidmatan kepada komuniti Gooners.') }}</p>
             @if(session('show_seller_form'))
                 @include('client.partials.seller-form')
             @else
                 <form method="POST" action="{{ route('dashboard.show_seller_form') }}">
                     @csrf
-                    <button type="submit" class="bg-yellow-500 hover:bg-yellow-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors">Saya ingin menjadi penjual</button>
+                    <button type="submit" class="bg-yellow-500 hover:bg-yellow-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors">{{ __('Saya ingin menjadi penjual') }}</button>
                 </form>
             @endif
         </div>
@@ -239,7 +233,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v8m-4-4h8"/>
                 </svg>
             </div>
-            <h3 class="text-lg font-bold text-yellow-800">Permohonan Menunggu Kelulusan</h3>
+            <h3 class="text-lg font-bold text-yellow-800">{{ __('Permohonan Menunggu Kelulusan') }}</h3>
         </div>
         
         <!-- Pending Services -->
@@ -251,9 +245,7 @@
                 <div class="bg-white rounded-lg p-4 border border-yellow-200">
                     <div class="flex items-start justify-between mb-2">
                         <h5 class="font-medium text-gray-900 line-clamp-2">{{ $service->title }}</h5>
-                        <span class="bg-yellow-100 text-yellow-700 px-2 py-1 rounded-full text-xs font-medium">
-                            Menunggu
-                        </span>
+                        <span class="bg-yellow-100 text-yellow-700 px-2 py-1 rounded-full text-xs font-medium">{{ __('Menunggu') }}</span>
                     </div>
                     <p class="text-sm text-gray-600 mb-3 line-clamp-2">{{ Str::limit($service->description, 80) }}</p>
                     <div class="flex items-center justify-between">
@@ -261,7 +253,7 @@
                         <div class="flex items-center gap-2">
                             <a href="{{ route('pending.service.preview', $service->id) }}" 
                                class="text-blue-600 hover:text-blue-800 text-sm font-medium">
-                                Lihat
+                                {{ __('Lihat') }}
                             </a>
                             @include('client.partials.cancel-modal', [
                                 'action' => route('service.cancel', $service->id),
@@ -290,17 +282,15 @@
                     <div class="bg-white rounded-lg p-4 border border-yellow-200">
                         <div class="flex items-start justify-between mb-2">
                             <h5 class="font-medium text-gray-900 line-clamp-2">{{ $originalService->title }}</h5>
-                            <span class="bg-blue-100 text-blue-700 px-2 py-1 rounded-full text-xs font-medium">
-                                Kemaskini Menunggu
-                            </span>
+                            <span class="bg-blue-100 text-blue-700 px-2 py-1 rounded-full text-xs font-medium">{{ __('Kemaskini Menunggu') }}</span>
                         </div>
-                        <p class="text-sm text-gray-600 mb-3">Permohonan kemaskini anda sedang disemak oleh admin.</p>
+                        <p class="text-sm text-gray-600 mb-3">{{ __('Permohonan kemaskini anda sedang disemak oleh admin.') }}</p>
                         <div class="flex items-center justify-between">
                             <span class="text-xs text-gray-500">{{ $updateRequest->created_at->format('d M Y') }}</span>
                             <div class="flex items-center gap-2">
                                 <a href="{{ route('service.update.preview', $updateRequest->id) }}" 
                                    class="text-blue-600 hover:text-blue-800 text-sm font-medium">
-                                    Lihat
+                                    {{ __('Lihat') }}
                                 </a>
                                 @include('client.partials.cancel-modal', [
                                     'action' => route('service.update.cancel', $updateRequest->id),
@@ -322,13 +312,13 @@
                 <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                 </svg>
-                Admin akan menyemak permohonan anda dalam masa 1-3 hari bekerja. Anda akan dimaklumkan melalui email.
+                {{ __('Admin akan menyemak permohonan anda dalam masa 1-3 hari bekerja. Anda akan dimaklumkan melalui email.') }}
             </p>
             <p class="text-sm text-yellow-800 mt-2">
                 <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                 </svg>
-                <strong>Nota:</strong> Item yang menunggu kelulusan tidak dapat dilihat oleh pengguna lain sehingga diluluskan oleh admin.
+                <strong>{{ __('Nota:') }}</strong> {{ __('Item yang menunggu kelulusan tidak dapat dilihat oleh pengguna lain sehingga diluluskan oleh admin.') }}
             </p>
         </div>
     </div>
@@ -350,7 +340,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                 </svg>
             </div>
-            <h3 class="text-lg font-bold text-red-800">Permohonan Kemaskini Ditolak</h3>
+            <h3 class="text-lg font-bold text-red-800">{{ __('Permohonan Kemaskini Ditolak') }}</h3>
         </div>
         
         <div class="space-y-4">
@@ -364,17 +354,13 @@
                     <div class="flex items-start justify-between mb-2">
                         <div class="flex items-center gap-2">
                             <h5 class="font-medium text-gray-900">{{ $originalService->title }}</h5>
-                            <span class="bg-blue-100 text-blue-700 px-2 py-1 rounded-full text-xs font-medium">
-                                Perkhidmatan
-                            </span>
+                            <span class="bg-blue-100 text-blue-700 px-2 py-1 rounded-full text-xs font-medium">{{ __('Perkhidmatan') }}</span>
                         </div>
-                        <span class="bg-red-100 text-red-700 px-2 py-1 rounded-full text-xs font-medium">
-                            Kemaskini Ditolak
-                        </span>
+                        <span class="bg-red-100 text-red-700 px-2 py-1 rounded-full text-xs font-medium">{{ __('Kemaskini Ditolak') }}</span>
                     </div>
                     @if($updateRequest->rejection_reason)
                     <div class="mb-3 p-3 bg-red-50 border border-red-200 rounded-lg">
-                        <p class="text-xs font-medium text-red-800 mb-1">Sebab Penolakan:</p>
+                        <p class="text-xs font-medium text-red-800 mb-1">{{ __('Sebab Penolakan:') }}</p>
                         <p class="text-xs text-red-700">{{ $updateRequest->rejection_reason }}</p>
                     </div>
                     @endif
@@ -383,11 +369,11 @@
                         <div class="flex gap-2 items-center">
                             <a href="{{ route('service.update.preview', $updateRequest->id) }}" 
                                class="text-blue-600 hover:text-blue-800 text-sm font-medium">
-                                Lihat
+                                {{ __('Lihat') }}
                             </a>
                             <a href="{{ route('service.edit.request.create', $originalService->id) }}" 
                                class="text-green-600 hover:text-green-800 text-sm font-medium">
-                                Hantar Semula
+                                {{ __('Hantar Semula') }}
                             </a>
                             @include('client.partials.cancel-modal', [
                                 'action' => route('service.update.forget', $updateRequest->id),
@@ -409,7 +395,7 @@
                 <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                 </svg>
-                Permohonan anda telah ditolak oleh admin. Sila semak sebab penolakan dan buat permohonan baharu jika perlu.
+                {{ __('Permohonan anda telah ditolak oleh admin. Sila semak sebab penolakan dan buat permohonan baharu jika perlu.') }}
             </p>
         </div>
         </div>
@@ -424,7 +410,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                 </svg>
             </div>
-            <h3 class="text-lg font-bold text-red-800">Permohonan Ditolak</h3>
+            <h3 class="text-lg font-bold text-red-800">{{ __('Permohonan Ditolak') }}</h3>
         </div>
         
         <div class="space-y-4">
@@ -434,17 +420,13 @@
                 <div class="flex items-start justify-between mb-2">
                     <div class="flex items-center gap-2">
                         <h5 class="font-medium text-gray-900">{{ $service->title }}</h5>
-                        <span class="bg-blue-100 text-blue-700 px-2 py-1 rounded-full text-xs font-medium">
-                            Perkhidmatan
-                        </span>
+                        <span class="bg-blue-100 text-blue-700 px-2 py-1 rounded-full text-xs font-medium">{{ __('Perkhidmatan') }}</span>
                     </div>
-                    <span class="bg-red-100 text-red-700 px-2 py-1 rounded-full text-xs font-medium">
-                        Ditolak
-                    </span>
+                    <span class="bg-red-100 text-red-700 px-2 py-1 rounded-full text-xs font-medium">{{ __('Ditolak') }}</span>
                 </div>
                 @if($service->rejection_reason)
                 <div class="mb-3 p-3 bg-red-50 border border-red-200 rounded-lg">
-                    <p class="text-xs font-medium text-red-800 mb-1">Sebab Penolakan:</p>
+                    <p class="text-xs font-medium text-red-800 mb-1">{{ __('Sebab Penolakan:') }}</p>
                     <p class="text-xs text-red-700">{{ $service->rejection_reason }}</p>
                 </div>
                 @endif
@@ -453,11 +435,11 @@
                     <div class="flex gap-2 items-center">
                         <a href="{{ route('rejected.service.preview', $service->id) }}" 
                            class="text-blue-600 hover:text-blue-800 text-sm font-medium">
-                            Lihat
+                            {{ __('Lihat') }}
                         </a>
                         <a href="{{ route('rejected.service.edit', $service->id) }}" 
                            class="text-green-600 hover:text-green-800 text-sm font-medium">
-                            Hantar Semula
+                            {{ __('Hantar Semula') }}
                         </a>
                         @include('client.partials.cancel-modal', [
                             'action' => route('service.forget', $service->id),
@@ -478,7 +460,7 @@
                 <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                 </svg>
-                Permohonan anda telah ditolak oleh admin. Sila semak sebab penolakan dan buat permohonan baharu jika perlu.
+                {{ __('Permohonan anda telah ditolak oleh admin. Sila semak sebab penolakan dan buat permohonan baharu jika perlu.') }}
             </p>
         </div>
     </div>
@@ -488,10 +470,10 @@
     @if(auth()->user()->is_seller && auth()->user()->seller_status === 'approved')
     <div class="mb-10">
         <div class="flex items-center justify-between mb-4">
-            <h3 class="text-xl font-bold text-gray-900">Perkhidmatan Saya</h3>
+            <h3 class="text-xl font-bold text-gray-900">{{ __('Perkhidmatan Saya') }}</h3>
                 <a href="{{ route('service.request.create') }}" class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium text-sm transition-colors">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-                    Mohon Tambah Perkhidmatan
+                    {{ __('Mohon Tambah Perkhidmatan') }}
                 </a>
         </div>
         @if($services->count())
@@ -505,11 +487,11 @@
                                     <button type="button"
                                         class="relative inline-flex h-6 w-11 items-center rounded-full bg-gray-300 cursor-not-allowed opacity-60"
                                         @click="showError = true"
-                                        title="Tidak boleh tukar status semasa permohonan kemaskini sedang menunggu kelulusan">
+                                        title="{{ trans('account_page.toggle_status_title') }}">
                                         <span class="inline-block h-4 w-4 transform rounded-full bg-white transition-transform {{ $service->status == 'active' ? 'translate-x-6' : 'translate-x-1' }}"></span>
                                     </button>
                                     <div x-show="showError" x-transition class="absolute right-0 mt-2 w-64 bg-red-50 border border-red-200 text-red-700 text-sm rounded-lg shadow p-3 z-50">
-                                        Tidak boleh tukar status semasa permohonan kemaskini sedang menunggu kelulusan.
+                                        {{ __('Tidak boleh tukar status semasa permohonan kemaskini sedang menunggu kelulusan.') }}
                                         <button @click="showError = false" class="absolute top-1 right-2 text-red-400 hover:text-red-600">&times;</button>
                                     </div>
                                 @else
@@ -537,19 +519,19 @@
                             <p class="text-gray-600 text-sm mb-2 line-clamp-2">{{ Str::limit($service->description, 80) }}</p>
                         </div>
                         <div class="flex gap-2 mt-4">
-                            <a href="{{ route('service.preview', $service->id) }}" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline text-sm font-medium">Lihat</a>
+                            <a href="{{ route('service.preview', $service->id) }}" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline text-sm font-medium">{{ __('Lihat') }}</a>
                             @if($service->status == 'active' || $service->status == 'inactive')
                                 @php
                                     $updateRequest = $serviceUpdateRequests->get($service->id);
                                 @endphp
                                 @if($updateRequest)
                                     @if($updateRequest->status == 'pending')
-                                        <span class="text-yellow-600 text-sm font-medium">Kemaskini Menunggu</span>
+                                        <span class="text-yellow-600 text-sm font-medium">{{ __('Kemaskini Menunggu') }}</span>
                                     @elseif($updateRequest->status == 'rejected')
-                                        <a href="{{ route('service.edit.request.create', $service->id) }}" class="text-red-600 hover:underline text-sm font-medium">Kemaskini Ditolak</a>
+                                        <a href="{{ route('service.edit.request.create', $service->id) }}" class="text-red-600 hover:underline text-sm font-medium">{{ __('Kemaskini Ditolak') }}</a>
                                     @endif
                                 @else
-                                    <a href="{{ route('service.edit.request.create', $service->id) }}" class="text-green-600 hover:underline text-sm font-medium">Kemaskini</a>
+                                    <a href="{{ route('service.edit.request.create', $service->id) }}" class="text-green-600 hover:underline text-sm font-medium">{{ __('Kemaskini') }}</a>
                                 @endif
                             @endif
                         </div>
@@ -559,11 +541,11 @@
         @else
             <div class="bg-white rounded-xl shadow p-8 text-center text-gray-400">
                 <svg class="w-12 h-12 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-6a2 2 0 012-2h2a2 2 0 012 2v6m-6 4h6"/></svg>
-                <p class="mb-2">Anda belum menyiarkan sebarang perkhidmatan.</p>
+                <p class="mb-2">{{ __('Anda belum menyiarkan sebarang perkhidmatan.') }}</p>
                 @if(auth()->user()->is_seller && auth()->user()->seller_status === 'approved')
                     <a href="{{ route('service.request.create') }}" class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium text-sm transition-colors mt-2">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-                        Mohon Tambah Perkhidmatan
+                        {{ __('Mohon Tambah Perkhidmatan') }}
                     </a>
                 @endif
             </div>

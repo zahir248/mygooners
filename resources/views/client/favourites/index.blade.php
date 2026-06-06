@@ -1,14 +1,14 @@
 @extends('layouts.app')
 
-@section('title', 'Kegemaran Saya')
+@section('title', __('Kegemaran Saya'))
 
 @section('content')
 <div class="min-h-screen bg-gray-50 py-8">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <!-- Header -->
         <div class="mb-8">
-            <h1 class="text-3xl font-bold text-gray-900">Kegemaran Saya</h1>
-            <p class="mt-2 text-gray-600">Produk dan perkhidmatan yang anda simpan</p>
+            <h1 class="text-3xl font-bold text-gray-900">{{ __('Kegemaran Saya') }}</h1>
+            <p class="mt-2 text-gray-600">{{ __('Produk dan perkhidmatan yang anda simpan') }}</p>
         </div>
 
         @if($favourites->count() > 0)
@@ -34,19 +34,17 @@
                             <div class="absolute top-3 left-3 space-y-2">
                                 @if($product->sale_price)
                                     <span class="bg-red-600 text-white px-3 py-1 rounded-full text-sm font-bold">
-                                        {{ round((($product->price - $product->sale_price) / $product->price) * 100) }}% OFF
+                                        {{ trans('shop_page.percent_off', ['percent' => round((($product->price - $product->sale_price) / $product->price) * 100)]) }}
                                     </span>
                                 @endif
                                 @if($product->is_featured)
-                                    <span class="bg-yellow-400 text-gray-900 px-3 py-1 rounded-full text-sm font-bold">
-                                        UTAMA
-                                    </span>
+                                    <span class="bg-yellow-400 text-gray-900 px-3 py-1 rounded-full text-sm font-bold">{{ __('UTAMA') }}</span>
                                 @endif
                             </div>
-                            @if($product->stock_quantity <= 5)
+                            @if($product->stock_quantity<= 5)
                                 <div class="absolute bottom-3 left-3">
                                     <span class="bg-orange-500 text-white px-3 py-1 rounded-full text-sm font-medium">
-                                        Hanya {{ $product->stock_quantity }} tinggal
+                                        {{ trans('shop_page.only_left', ['count' => $product->stock_quantity]) }}
                                     </span>
                                 </div>
                             @endif
@@ -104,7 +102,7 @@
                                     @endif
                                 </div>
                                 <div class="flex justify-end">
-                                    <a href="{{ route('shop.show', $product->slug) }}" class="inline-block bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">Lihat</a>
+                                    <a href="{{ route('shop.show', $product->slug) }}" class="inline-block bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">{{ __('Lihat') }}</a>
                                 </div>
                             </div>
                         </div>
@@ -122,12 +120,10 @@
                 <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
                 </svg>
-                <h3 class="mt-2 text-sm font-medium text-gray-900">Belum ada kegemaran</h3>
-                <p class="mt-1 text-sm text-gray-500">Mula tambah produk ke kegemaran anda untuk melihatnya di sini.</p>
+                <h3 class="mt-2 text-sm font-medium text-gray-900">{{ __('Belum ada kegemaran') }}</h3>
+                <p class="mt-1 text-sm text-gray-500">{{ __('Mula tambah produk ke kegemaran anda untuk melihatnya di sini.') }}</p>
                 <div class="mt-6">
-                    <a href="{{ route('shop.index') }}" class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700">
-                        Lihat Produk
-                    </a>
+                    <a href="{{ route('shop.index') }}" class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700">{{ __('Lihat Produk') }}</a>
                 </div>
             </div>
         @endif
@@ -146,28 +142,20 @@
                     </div>
                     
                     <!-- Modal Title -->
-                    <h3 class="text-lg font-medium text-gray-900 mt-4">Keluarkan dari Kegemaran</h3>
+                    <h3 class="text-lg font-medium text-gray-900 mt-4">{{ __('Keluarkan dari Kegemaran') }}</h3>
                     
                     <!-- Modal Message -->
                     <div class="mt-2 px-7 py-3">
-                        <p class="text-sm text-gray-500">
-                            Adakah anda pasti mahu mengeluarkan produk ini dari senarai kegemaran anda?
-                        </p>
-                        <p class="text-sm text-gray-500 mt-2">
-                            Tindakan ini tidak boleh dibatalkan.
-                        </p>
+                        <p class="text-sm text-gray-500">{{ __('Adakah anda pasti mahu mengeluarkan produk ini dari senarai kegemaran anda?') }}</p>
+                        <p class="text-sm text-gray-500 mt-2">{{ __('Tindakan ini tidak boleh dibatalkan.') }}</p>
                     </div>
                     
                     <!-- Modal Actions -->
                     <div class="flex justify-center space-x-3 mt-6">
                         <button id="cancelRemove" 
-                                class="px-4 py-2 bg-gray-300 text-gray-700 text-base font-medium rounded-md shadow-sm hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-300 transition-colors duration-200">
-                            Batal
-                        </button>
+                                class="px-4 py-2 bg-gray-300 text-gray-700 text-base font-medium rounded-md shadow-sm hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-300 transition-colors duration-200">{{ __('Batal') }}</button>
                         <button id="confirmRemove" 
-                                class="px-4 py-2 bg-red-600 text-white text-base font-medium rounded-md shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 transition-colors duration-200">
-                            Ya, Keluarkan
-                        </button>
+                                class="px-4 py-2 bg-red-600 text-white text-base font-medium rounded-md shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 transition-colors duration-200">{{ __('Ya, Keluarkan') }}</button>
                     </div>
                 </div>
             </div>
@@ -176,15 +164,12 @@
         <script>
         let currentProductId = null;
         let currentRemoveButton = null;
-
         function removeFromFavourites(productId, button) {
             currentProductId = productId;
             currentRemoveButton = button;
-            
             // Show modal
             const modal = document.getElementById('removeModal');
             modal.classList.remove('hidden');
-            
             // Add backdrop click to close
             modal.addEventListener('click', function(e) {
                 if (e.target === modal) {
@@ -202,7 +187,6 @@
 
         function confirmRemove() {
             if (!currentProductId) return;
-            
             fetch(`/favourites/remove`, {
                 method: 'DELETE',
                 headers: {
@@ -231,16 +215,15 @@
                         }
                     }
                     closeModal();
-                    
                     // Show success message
-                    showSuccessMessage('Produk berjaya dikeluarkan dari kegemaran');
+                    showSuccessMessage(@json(__('client_messages.favourite_removed')));
                 } else {
-                    showErrorMessage(data.message || 'Ralat mengeluarkan produk dari kegemaran');
+                    showErrorMessage(data.message || window.clientMessages.favourite_remove_error);
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
-                showErrorMessage('Ralat mengeluarkan produk dari kegemaran');
+                showErrorMessage(window.clientMessages.favourite_remove_error);
             });
         }
 
@@ -262,7 +245,6 @@
             `;
             
             document.body.appendChild(notification);
-            
             // Remove after 3 seconds
             setTimeout(() => {
                 if (notification.parentNode) {
@@ -291,7 +273,6 @@
             `;
             
             document.body.appendChild(notification);
-            
             // Remove after 3 seconds
             setTimeout(() => {
                 if (notification.parentNode) {
@@ -312,14 +293,14 @@
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    showSuccessMessage('Produk berjaya ditambah ke troli!');
+                    showSuccessMessage(@json(__('client_messages.cart_product_added')));
                 } else {
-                    showErrorMessage(data.message || 'Ralat menambah produk ke troli');
+                    showErrorMessage(data.message || window.clientMessages.cart_add_error);
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
-                showErrorMessage('Ralat menambah produk ke troli');
+                showErrorMessage(window.clientMessages.cart_add_error);
             });
         }
 
@@ -327,7 +308,6 @@
         document.addEventListener('DOMContentLoaded', function() {
             // Cancel button
             document.getElementById('cancelRemove').addEventListener('click', closeModal);
-            
             // Confirm button
             document.getElementById('confirmRemove').addEventListener('click', confirmRemove);
             

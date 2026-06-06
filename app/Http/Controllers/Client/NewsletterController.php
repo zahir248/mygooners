@@ -17,9 +17,9 @@ class NewsletterController extends Controller
         $validator = Validator::make($request->all(), [
             'email' => 'required|email|max:255'
         ], [
-            'email.required' => 'Alamat emel diperlukan.',
-            'email.email' => 'Sila masukkan alamat emel yang sah.',
-            'email.max' => 'Alamat emel terlalu panjang.'
+            'email.required' => __('client_messages.newsletter_email_required'),
+            'email.email' => __('client_messages.newsletter_email_invalid'),
+            'email.max' => __('client_messages.newsletter_email_max'),
         ]);
 
         if ($validator->fails()) {
@@ -38,14 +38,14 @@ class NewsletterController extends Controller
             if ($existingSubscription->status === 'active') {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Alamat emel ini sudah dilanggani newsletter kami.'
+                    'message' => __('client_messages.newsletter_already_subscribed')
                 ], 422);
             } else {
                 // Resubscribe
                 $existingSubscription->resubscribe();
                 return response()->json([
                     'success' => true,
-                    'message' => 'Terima kasih! Anda telah berjaya melanggani newsletter kami semula.'
+                    'message' => __('client_messages.newsletter_resubscribed')
                 ]);
             }
         }
@@ -59,7 +59,7 @@ class NewsletterController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Terima kasih! Anda telah berjaya melanggani newsletter kami.'
+            'message' => __('client_messages.newsletter_subscribed_success')
         ]);
     }
 
@@ -69,13 +69,17 @@ class NewsletterController extends Controller
     public function unsubscribe(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'email' => 'required|email|max:255'
+            'email' => 'required|email|max:255',
+        ], [
+            'email.required' => __('client_messages.newsletter_email_required'),
+            'email.email' => __('client_messages.newsletter_email_invalid'),
+            'email.max' => __('client_messages.newsletter_email_max'),
         ]);
 
         if ($validator->fails()) {
             return response()->json([
                 'success' => false,
-                'message' => 'Alamat emel tidak sah.'
+                'message' => $validator->errors()->first(),
             ], 422);
         }
 
@@ -85,7 +89,7 @@ class NewsletterController extends Controller
         if (!$subscription) {
             return response()->json([
                 'success' => false,
-                'message' => 'Alamat emel tidak ditemui dalam senarai langganan.'
+                'message' => __('client_messages.newsletter_unsubscribe_not_found')
             ], 404);
         }
 
@@ -93,7 +97,7 @@ class NewsletterController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Anda telah berjaya berhenti melanggani newsletter kami.'
+            'message' => __('client_messages.newsletter_unsubscribed_success')
         ]);
     }
 
@@ -109,11 +113,11 @@ class NewsletterController extends Controller
         $subscription = Newsletter::where('email', $email)->first();
 
         if (!$subscription) {
-            return redirect()->route('home')->with('error', 'Alamat emel tidak ditemui dalam senarai langganan.');
+            return redirect()->route('home')->with('error', __('client_messages.msg_fe746d751137'));
         }
 
         $subscription->unsubscribe();
 
-        return redirect()->route('home')->with('success', 'Anda telah berjaya berhenti melanggani newsletter kami.');
+        return redirect()->route('home')->with('success', __('client_messages.msg_a065b5d104e1'));
     }
 }

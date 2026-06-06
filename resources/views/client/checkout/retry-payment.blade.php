@@ -1,26 +1,26 @@
 @extends('layouts.app')
 
-@section('title', 'Bayar Pesanan - MyGooners')
-@section('meta_description', 'Pilih kaedah pembayaran untuk pesanan anda.')
+@section('title', __('Bayar Pesanan - MyGooners'))
+@section('meta_description', __('Pilih kaedah pembayaran untuk pesanan anda.'))
 
 @section('content')
 <!-- Breadcrumb -->
 <div class="bg-gray-50 border-b border-gray-200">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
         <nav class="flex items-center space-x-2 text-sm text-gray-600">
-            <a href="{{ route('home') }}" class="hover:text-red-600 transition-colors">Utama</a>
+            <a href="{{ route('home') }}" class="hover:text-red-600 transition-colors">{{ __('Utama') }}</a>
             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
             </svg>
-            <a href="{{ route('checkout.orders') }}" class="hover:text-red-600 transition-colors">Pesanan Saya</a>
+            <a href="{{ route('checkout.orders') }}" class="hover:text-red-600 transition-colors">{{ __('Pesanan Saya') }}</a>
             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
             </svg>
             <span class="text-gray-900 font-medium">
                 @if($order->payment_status === 'failed')
-                    Cuba Bayar Semula
+                    {{ __('Cuba Bayar Semula') }}
                 @else
-                    Bayar Pesanan
+                    {{ __('Bayar Pesanan') }}
                 @endif
             </span>
         </nav>
@@ -33,12 +33,12 @@
         <div class="text-center">
             <h1 class="text-2xl font-bold text-gray-900">
                 @if($order->payment_status === 'failed')
-                    Cuba Bayar Semula
+                    {{ __('Cuba Bayar Semula') }}
                 @else
-                    Bayar Pesanan
+                    {{ __('Bayar Pesanan') }}
                 @endif
             </h1>
-            <p class="text-gray-600 mt-1">Pilih kaedah pembayaran untuk pesanan #{{ $order->order_number }}</p>
+            <p class="text-gray-600 mt-1">{{ __('Pilih kaedah pembayaran untuk pesanan #:number', ['number' => $order->order_number]) }}</p>
         </div>
     </div>
 </div>
@@ -48,16 +48,16 @@
     <!-- Order Summary -->
     <div class="bg-white rounded-xl shadow-lg overflow-hidden mb-8">
         <div class="px-6 py-4 border-b border-gray-200">
-            <h2 class="text-lg font-bold text-gray-900">Ringkasan Pesanan</h2>
+            <h2 class="text-lg font-bold text-gray-900">{{ __('Ringkasan Pesanan') }}</h2>
         </div>
         <div class="p-6">
             <div class="flex items-center justify-between mb-4">
                 <div>
-                    <p class="text-sm text-gray-600">Nombor Pesanan</p>
+                    <p class="text-sm text-gray-600">{{ __('Nombor Pesanan') }}</p>
                     <p class="font-medium text-gray-900">{{ $order->order_number }}</p>
                 </div>
                 <div class="text-right">
-                    <p class="text-sm text-gray-600">Jumlah Bayaran</p>
+                    <p class="text-sm text-gray-600">{{ __('Jumlah Bayaran') }}</p>
                     <p class="text-xl font-bold text-red-600">{{ $order->getFormattedTotal() }}</p>
                 </div>
             </div>
@@ -89,7 +89,7 @@
                             @if($item->variation_name)
                                 <p class="text-xs text-gray-500">{{ $item->variation_name }}</p>
                             @endif
-                            <p class="text-xs text-gray-500">Kuantiti: {{ $item->quantity }}</p>
+                            <p class="text-xs text-gray-500">{{ trans('account_page.quantity', ['qty' => $item->quantity]) }}</p>
                         </div>
                         
                         <div class="text-right">
@@ -101,7 +101,7 @@
             
             <div class="border-t border-gray-200 pt-4">
                 <div class="flex items-center justify-between text-sm">
-                    <span class="text-gray-600">Kaedah Pembayaran Sebelumnya:</span>
+                    <span class="text-gray-600">{{ __('Kaedah Pembayaran Sebelumnya:') }}</span>
                     <span class="font-medium text-gray-900">{{ $order->getPaymentMethodDisplayName() }}</span>
                 </div>
             </div>
@@ -111,8 +111,8 @@
     <!-- Payment Method Selection -->
     <div class="bg-white rounded-xl shadow-lg overflow-hidden">
         <div class="px-6 py-4 border-b border-gray-200">
-            <h2 class="text-lg font-bold text-gray-900">Pilih Kaedah Pembayaran</h2>
-            <p class="text-sm text-gray-600 mt-1">Pilih kaedah pembayaran yang anda mahu gunakan</p>
+            <h2 class="text-lg font-bold text-gray-900">{{ __('Pilih Kaedah Pembayaran') }}</h2>
+            <p class="text-sm text-gray-600 mt-1">{{ __('Pilih kaedah pembayaran yang anda mahu gunakan') }}</p>
         </div>
         
         <form method="POST" action="{{ route('checkout.retry-payment-with-method', $order->id) }}" class="p-6">
@@ -126,8 +126,8 @@
                     <div class="ml-3 flex-1">
                         <div class="flex items-center justify-between">
                             <div>
-                                <p class="text-sm font-medium text-gray-900">ToyyibPay</p>
-                                <p class="text-xs text-gray-500">Pembayaran selamat melalui ToyyibPay</p>
+                                <p class="text-sm font-medium text-gray-900">{{ __('ToyyibPay') }}</p>
+                                <p class="text-xs text-gray-500">{{ __('Pembayaran selamat melalui ToyyibPay') }}</p>
                             </div>
                             <div class="flex items-center space-x-2">
                                 <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -144,8 +144,8 @@
                         <div class="ml-3 flex-1">
                             <div class="flex items-center justify-between">
                                 <div>
-                                    <p class="text-sm font-medium text-gray-900">Stripe</p>
-                                    <p class="text-xs text-gray-500">Bayar menggunakan kad kredit/debit</p>
+                                    <p class="text-sm font-medium text-gray-900">{{ __('Stripe') }}</p>
+                                    <p class="text-xs text-gray-500">{{ __('Bayar menggunakan kad kredit/debit') }}</p>
                                 </div>
                                 <div class="flex items-center space-x-2">
                                     <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -170,16 +170,14 @@
             <!-- Action Buttons -->
             <div class="flex items-center justify-between">
                 <a href="{{ route('checkout.orders') }}" 
-                   class="bg-gray-300 hover:bg-gray-400 text-gray-700 px-6 py-3 rounded-lg font-medium transition-colors">
-                    Kembali ke Pesanan
-                </a>
+                   class="bg-gray-300 hover:bg-gray-400 text-gray-700 px-6 py-3 rounded-lg font-medium transition-colors">{{ __('Kembali ke Pesanan') }}</a>
                 
                 <button type="submit" 
                         class="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-lg font-bold transition-colors">
                     @if($order->payment_status === 'failed')
-                        Cuba Bayar Semula
+                        {{ __('Cuba Bayar Semula') }}
                     @else
-                        Bayar Sekarang
+                        {{ __('Bayar Sekarang') }}
                     @endif
                 </button>
             </div>

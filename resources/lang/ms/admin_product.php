@@ -1,0 +1,28 @@
+<?php
+
+return [
+    'variation_prefix' => 'Varian:',
+    'variation_this' => 'Varian ini',
+    'stock_label' => 'Stok:',
+    'variation_images' => 'Gambar Varian:',
+    'delete_confirm' => 'Adakah anda pasti mahu memadamkan ":name"? Tindakan ini tidak boleh diundur.',
+    'error_load_variation' => 'Ralat memuatkan data varian',
+    'error_empty_variation_name' => 'Nama varian tidak boleh kosong',
+    'error_invalid_stock' => 'Kuantiti stok mesti nombor yang sah dan tidak boleh negatif',
+    'error_sale_price_lower' => 'Harga jualan mesti lebih rendah daripada harga asal',
+    'error_update_variation' => 'Tidak dapat mengemas kini varian. Sila cuba lagi.',
+    'success_update_variation' => 'Varian produk berjaya dikemas kini.',
+    'success_delete_variation' => 'Varian produk berjaya dipadam.',
+    'category_filter' => 'Kategori: :category',
+    'stock_filter' => 'Stok: :status',
+    'stock_in_stock' => ':count Dalam Stok',
+    'stock_low' => ':count Stok Rendah',
+    'variants_count' => ':count Varian',
+    'select_status_for' => 'Pilih status baru untuk ":name"',
+    'stock_units' => ':count unit',
+    'meta_description_label' => 'Huraian Meta:',
+    'btn_deactivate' => 'Nyahaktif',
+    'btn_activate' => 'Aktif',
+    'btn_unfeature' => 'Nyahpaparkan',
+    'btn_feature' => 'Tampilkan',
+];

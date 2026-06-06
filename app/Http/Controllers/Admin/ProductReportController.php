@@ -45,7 +45,7 @@ class ProductReportController extends Controller
             $query->where('category', $request->category);
         }
 
-        $products = $query->orderBy('stock_quantity', 'asc')->paginate(20);
+        $products = $query->orderBy('stock_quantity', 'asc')->paginate(20)->withQueryString();
 
         // Get stock summary
         $stockSummary = $this->getStockSummary();

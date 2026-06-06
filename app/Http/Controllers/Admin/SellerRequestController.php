@@ -34,7 +34,7 @@ class SellerRequestController extends Controller
         $query->orderByRaw('COALESCE(seller_application_date, created_at) DESC');
 
         // Get paginated results
-        $sellers = $query->paginate(15);
+        $sellers = $query->paginate(15)->withQueryString();
 
         return view('admin.seller-requests.index', compact('sellers'));
     }
@@ -44,7 +44,8 @@ class SellerRequestController extends Controller
         $sellers = User::where('seller_status', 'pending')
             ->withCount('services')
             ->orderByRaw('COALESCE(seller_application_date, created_at) DESC')
-            ->paginate(15);
+            ->paginate(15)
+            ->withQueryString();
 
         return view('admin.seller-requests.pending', compact('sellers'));
     }
@@ -77,7 +78,7 @@ class SellerRequestController extends Controller
         ]);
 
         return redirect()->route('admin.seller-requests.pending')
-            ->with('success', 'Permohonan penjual diluluskan dengan jayanya!');
+            ->with('success', __('flash.seller_approved'));
     }
 
     public function reject(Request $request, $id)
@@ -94,7 +95,7 @@ class SellerRequestController extends Controller
         ]);
 
         return redirect()->route('admin.seller-requests.pending')
-            ->with('success', 'Permohonan penjual ditolak dengan jayanya!');
+            ->with('success', __('flash.seller_rejected'));
     }
 
     public function toggleStatus($id)
@@ -106,13 +107,13 @@ class SellerRequestController extends Controller
                 'seller_status' => 'rejected',
                 'is_seller' => false
             ]);
-            $message = 'Status penjual telah ditolak!';
+            $message = __('flash.seller_status_rejected');
         } else {
             $seller->update([
                 'seller_status' => 'approved',
                 'is_seller' => true
             ]);
-            $message = 'Status penjual telah diluluskan!';
+            $message = __('flash.seller_status_approved');
         }
 
         return redirect()->route('admin.seller-requests.index')
@@ -139,6 +140,6 @@ class SellerRequestController extends Controller
         ]);
 
         return redirect()->route('admin.seller-requests.index')
-            ->with('success', 'Permohonan penjual dipadam dengan jayanya!');
+            ->with('success', __('flash.seller_deleted'));
     }
 }

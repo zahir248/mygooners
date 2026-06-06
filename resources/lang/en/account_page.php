@@ -1,0 +1,32 @@
+<?php
+
+return [
+    'order_number' => 'Order #:number',
+    'created_on' => 'Placed on :date',
+    'quantity' => 'Quantity: :qty',
+    'unit_price' => 'Unit price: :price',
+    'items_in_cart' => ':count item(s) in cart',
+    'order_count' => ':count order(s)',
+    'refund_number' => 'Refund #:id - :order_number',
+    'orders_with_status' => 'Orders: :status',
+    'no_orders_with_status' => 'No :status orders',
+    'no_orders_status_found' => 'No orders with status ":status" found.',
+    'auto_delivery_countdown' => '⚠️ Order will be marked as received automatically in :countdown',
+    'fpl_join_hint' => 'Use league code :code to join the MyGooners Fantasy Premier League.',
+    'toggle_status_title' => 'Cannot change status while an update request is pending approval',
+    'confirm_cancel_prefix' => 'Are you sure you want to cancel order',
+    'confirm_mark_delivered_prefix' => 'Are you sure you want to mark order',
+    'confirm_mark_delivered_suffix' => 'as received?',
+    'years_experience' => ':count year(s)',
+    'order_auto_mark_received_in' => 'Order will be marked as received automatically in :countdown',
+    'order_cancelled_at' => 'This order was cancelled on :date',
+    'order_refunded_and_processing' => 'This order has been refunded and the refund is being processed',
+    'refund_amount_processed' => 'Amount :amount has been processed',
+    'refund_statuses' => [
+        'pending' => 'Pending',
+        'approved' => 'Approved',
+        'rejected' => 'Rejected',
+        'processing' => 'Processing',
+        'completed' => 'Completed',
+    ],
+];

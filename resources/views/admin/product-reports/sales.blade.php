@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Laporan Jualan Produk - Panel Admin')
+@section('title', __('Laporan Jualan Produk - Panel Pentadbir'))
 
 @section('content')
 <div class="py-6">
@@ -9,17 +9,17 @@
         <div class="mb-8">
             <div class="flex items-center justify-between">
                 <div>
-                    <h1 class="text-3xl font-bold text-gray-900">Laporan Jualan Produk</h1>
-                    <p class="mt-2 text-gray-600">Analisis prestasi jualan produk dan variasi</p>
+                    <h1 class="text-3xl font-bold text-gray-900">{{ __('Laporan Jualan Produk') }}</h1>
+                    <p class="mt-2 text-gray-600">{{ __('Analisis prestasi jualan produk dan variasi') }}</p>
                 </div>
                 <div class="flex space-x-3">
                     <a href="{{ route('admin.product-reports.index') }}" 
                        class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50">
-                        Kembali
+                        {{ __('Kembali') }}
                     </a>
                     <a href="{{ route('admin.product-reports.sales.export') }}?{{ http_build_query(request()->all()) }}" 
                        class="px-4 py-2 bg-green-600 border border-transparent rounded-md text-sm font-medium text-white hover:bg-green-700">
-                        Eksport CSV
+                        {{ __('Eksport CSV') }}
                     </a>
                 </div>
             </div>
@@ -35,7 +35,7 @@
                         </svg>
                     </div>
                     <div class="ml-4">
-                        <p class="text-sm font-medium text-gray-600">Jumlah Jualan</p>
+                        <p class="text-sm font-medium text-gray-600">{{ __('Jumlah Jualan') }}</p>
                         <p class="text-2xl font-bold text-gray-900">RM {{ number_format($salesSummary['total_sales'], 2) }}</p>
                     </div>
                 </div>
@@ -49,7 +49,7 @@
                         </svg>
                     </div>
                     <div class="ml-4">
-                        <p class="text-sm font-medium text-gray-600">Jumlah Kuantiti</p>
+                        <p class="text-sm font-medium text-gray-600">{{ __('Jumlah Kuantiti') }}</p>
                         <p class="text-2xl font-bold text-gray-900">{{ number_format($salesSummary['total_quantity']) }}</p>
                     </div>
                 </div>
@@ -63,7 +63,7 @@
                         </svg>
                     </div>
                     <div class="ml-4">
-                        <p class="text-sm font-medium text-gray-600">Jumlah Pesanan</p>
+                        <p class="text-sm font-medium text-gray-600">{{ __('Jumlah Pesanan') }}</p>
                         <p class="text-2xl font-bold text-gray-900">{{ number_format($salesSummary['total_orders']) }}</p>
                     </div>
                 </div>
@@ -77,7 +77,7 @@
                         </svg>
                     </div>
                     <div class="ml-4">
-                        <p class="text-sm font-medium text-gray-600">Purata Nilai</p>
+                        <p class="text-sm font-medium text-gray-600">{{ __('Purata Nilai') }}</p>
                         <p class="text-2xl font-bold text-gray-900">RM {{ number_format($salesSummary['average_order_value'], 2) }}</p>
                     </div>
                 </div>
@@ -87,29 +87,29 @@
         <!-- Date Range Filter -->
         <div class="bg-white rounded-lg shadow mb-8">
             <div class="px-6 py-4 border-b border-gray-200">
-                <h3 class="text-lg font-medium text-gray-900">Julat Tarikh</h3>
+                <h3 class="text-lg font-medium text-gray-900">{{ __('Julat Tarikh') }}</h3>
             </div>
             <div class="p-6">
                 <form method="GET" action="{{ route('admin.product-reports.sales') }}" class="grid grid-cols-1 md:grid-cols-4 gap-4">
                     <div>
-                        <label for="date_range" class="block text-sm font-medium text-gray-700 mb-2">Julat Pantas</label>
+                        <label for="date_range" class="block text-sm font-medium text-gray-700 mb-2">{{ __('Julat Pantas') }}</label>
                         <select name="date_range" id="date_range" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            <option value="7" {{ request('date_range') == '7' ? 'selected' : '' }}>7 hari lepas</option>
-                            <option value="30" {{ request('date_range') == '30' ? 'selected' : '' }}>30 hari lepas</option>
-                            <option value="90" {{ request('date_range') == '90' ? 'selected' : '' }}>90 hari lepas</option>
-                            <option value="365" {{ request('date_range') == '365' ? 'selected' : '' }}>1 tahun lepas</option>
+                            <option value="7" {{ request('date_range') == '7' ? 'selected' : '' }}>{{ __('7 hari lepas') }}</option>
+                            <option value="30" {{ request('date_range') == '30' ? 'selected' : '' }}>{{ __('30 hari lepas') }}</option>
+                            <option value="90" {{ request('date_range') == '90' ? 'selected' : '' }}>{{ __('90 hari lepas') }}</option>
+                            <option value="365" {{ request('date_range') == '365' ? 'selected' : '' }}>{{ __('1 tahun lepas') }}</option>
                         </select>
                     </div>
 
                     <div>
-                        <label for="start_date" class="block text-sm font-medium text-gray-700 mb-2">Tarikh Mula</label>
+                        <label for="start_date" class="block text-sm font-medium text-gray-700 mb-2">{{ __('Tarikh Mula') }}</label>
                         <input type="date" name="start_date" id="start_date" 
                                value="{{ request('start_date', $startDate->format('Y-m-d')) }}"
                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                     </div>
 
                     <div>
-                        <label for="end_date" class="block text-sm font-medium text-gray-700 mb-2">Tarikh Akhir</label>
+                        <label for="end_date" class="block text-sm font-medium text-gray-700 mb-2">{{ __('Tarikh Akhir') }}</label>
                         <input type="date" name="end_date" id="end_date" 
                                value="{{ request('end_date', $endDate->format('Y-m-d')) }}"
                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
@@ -118,11 +118,11 @@
                     <div class="flex items-end space-x-3">
                         <a href="{{ route('admin.product-reports.sales') }}" 
                            class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50">
-                            Reset
+                            {{ __('Set Semula') }}
                         </a>
                         <button type="submit" 
                                 class="px-4 py-2 bg-blue-600 border border-transparent rounded-md text-sm font-medium text-white hover:bg-blue-700">
-                            Terapkan
+                            {{ __('Terapkan') }}
                         </button>
                     </div>
                 </form>
@@ -132,7 +132,7 @@
         <!-- Sales Data Table -->
         <div class="bg-white rounded-lg shadow">
             <div class="px-6 py-4 border-b border-gray-200">
-                <h3 class="text-lg font-medium text-gray-900">Data Jualan Produk</h3>
+                <h3 class="text-lg font-medium text-gray-900">{{ __('Data Jualan Produk') }}</h3>
                 <p class="text-sm text-gray-600 mt-1">
                     Tempoh: {{ $startDate->format('d/m/Y') }} - {{ $endDate->format('d/m/Y') }}
                 </p>
@@ -141,14 +141,14 @@
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-gray-50">
                         <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Produk</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Penjual</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kategori</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jumlah Jualan</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jumlah Kuantiti</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Purata Harga</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Variasi</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tindakan</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Produk') }}</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Penjual') }}</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Kategori') }}</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Jumlah Jualan') }}</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Jumlah Kuantiti') }}</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Purata Harga') }}</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Variasi') }}</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Tindakan') }}</th>
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
@@ -174,7 +174,7 @@
                                 </div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="text-sm text-gray-900">{{ $data['product']->user->name ?? 'N/A' }}</div>
+                                <div class="text-sm text-gray-900">{{ $data['product']->user->name ?? 'Tiada' }}</div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
@@ -214,7 +214,7 @@
                                         </div>
                                     </div>
                                 @else
-                                    <span class="text-sm text-gray-500">Tiada variasi</span>
+                                    <span class="text-sm text-gray-500">{{ __('Tiada variasi') }}</span>
                                 @endif
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
@@ -222,7 +222,7 @@
                                     <!-- Show Product Details -->
                                     <a href="{{ route('admin.products.show', $data['product']->id) }}"
                                        class="text-blue-600 hover:text-blue-900"
-                                       title="Butiran Produk">
+                                       title="{{ __('Butiran Produk') }}">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
@@ -232,7 +232,7 @@
                                     <!-- Edit Product -->
                                     <a href="{{ route('admin.products.edit', $data['product']->id) }}"
                                        class="text-red-600 hover:text-red-900"
-                                       title="Edit Produk">
+                                       title="{{ __('Sunting Produk') }}">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                                         </svg>
@@ -243,7 +243,7 @@
                         @empty
                         <tr>
                             <td colspan="8" class="px-6 py-4 text-center text-gray-500">
-                                Tiada data jualan dijumpai untuk tempoh yang dipilih.
+                                {{ __('Tiada data jualan dijumpai untuk tempoh yang dipilih.') }}
                             </td>
                         </tr>
                         @endforelse
@@ -257,13 +257,13 @@
         <div class="mt-8">
             <div class="bg-white rounded-lg shadow">
                 <div class="px-6 py-4 border-b border-gray-200">
-                    <h3 class="text-lg font-medium text-gray-900">Analisis Jualan</h3>
+                    <h3 class="text-lg font-medium text-gray-900">{{ __('Analisis Jualan') }}</h3>
                 </div>
                 <div class="p-6">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <!-- Top Performing Products -->
                         <div>
-                            <h4 class="text-sm font-medium text-gray-900 mb-4">Produk Terlaris (Mengikut Kuantiti)</h4>
+                            <h4 class="text-sm font-medium text-gray-900 mb-4">{{ __('Produk Terlaris (Mengikut Kuantiti)') }}</h4>
                             <div class="space-y-3">
                                 @php
                                     $topProducts = collect($productSalesData)->sortByDesc('total_quantity')->take(5);
@@ -285,7 +285,7 @@
 
                         <!-- Top Revenue Products -->
                         <div>
-                            <h4 class="text-sm font-medium text-gray-900 mb-4">Produk Tertinggi Pendapatan</h4>
+                            <h4 class="text-sm font-medium text-gray-900 mb-4">{{ __('Produk Tertinggi Pendapatan') }}</h4>
                             <div class="space-y-3">
                                 @php
                                     $topRevenue = collect($productSalesData)->sortByDesc('total_revenue')->take(5);

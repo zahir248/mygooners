@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Pasaran Perkhidmatan Arsenal - MyGooners')
-@section('meta_description', 'Berhubung dengan peminat Arsenal dipercayai yang menawarkan perkhidmatan berkualiti. Cari latihan, pengangkutan, fotografi, dan banyak lagi dari ahli komuniti yang disahkan.')
+@section('title', __('Pasaran Perkhidmatan Arsenal - MyGooners'))
+@section('meta_description', __('Berhubung dengan peminat Arsenal dipercayai yang menawarkan perkhidmatan berkualiti. Cari latihan, pengangkutan, fotografi, dan banyak lagi dari ahli komuniti yang disahkan.'))
 
 @section('content')
 
@@ -13,13 +13,13 @@
             <div class="flex flex-col lg:flex-row lg:items-end lg:space-x-4 space-y-4 lg:space-y-0">
                 <!-- Search -->
                 <div class="flex-1">
-                    <label for="search" class="block text-sm font-medium text-gray-700 mb-2">Cari Perkhidmatan</label>
+                    <label for="search" class="block text-sm font-medium text-gray-700 mb-2">{{ __('Cari Perkhidmatan') }}</label>
                     <div class="relative">
                         <input type="text" 
                                id="search"
-                               name="search" 
+                               name="search"
                                value="{{ $search }}" 
-                               placeholder="Cari perkhidmatan..." 
+                               placeholder="{{ __('Cari perkhidmatan...') }}" 
                                class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent">
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                             <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -31,9 +31,9 @@
 
                 <!-- Category Filter -->
                 <div class="lg:w-48">
-                    <label for="category" class="block text-sm font-medium text-gray-700 mb-2">Kategori</label>
+                    <label for="category" class="block text-sm font-medium text-gray-700 mb-2">{{ __('Kategori') }}</label>
                     <select id="category" name="category" class="w-full py-3 px-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent">
-                        <option value="">Semua Kategori</option>
+                        <option value="">{{ __('Semua Kategori') }}</option>
                         @foreach($categories as $cat)
                             <option value="{{ strtolower($cat) }}" {{ strtolower($category) === strtolower($cat) ? 'selected' : '' }}>
                                 {{ $cat }}
@@ -44,9 +44,9 @@
 
                 <!-- Location Filter -->
                 <div class="lg:w-48">
-                    <label for="location" class="block text-sm font-medium text-gray-700 mb-2">Lokasi</label>
+                    <label for="location" class="block text-sm font-medium text-gray-700 mb-2">{{ __('Lokasi') }}</label>
                     <select id="location" name="location" class="w-full py-3 px-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent">
-                        <option value="">Semua Lokasi</option>
+                        <option value="">{{ __('Semua Lokasi') }}</option>
                         @foreach($locations as $loc)
                             <option value="{{ strtolower($loc) }}" {{ strtolower($location) === strtolower($loc) ? 'selected' : '' }}>
                                 {{ $loc }}
@@ -57,19 +57,17 @@
 
                 <!-- Search Button -->
                 <div>
-                    <button type="submit" class="w-full lg:w-auto bg-arsenal hover:bg-arsenal text-white px-8 py-3 rounded-lg font-medium transition-colors">
-                        Cari
-                    </button>
+                    <button type="submit" class="w-full lg:w-auto bg-arsenal hover:bg-arsenal text-white px-8 py-3 rounded-lg font-medium transition-colors">{{ __('Cari') }}</button>
                 </div>
             </div>
 
             <!-- Active Filters -->
             @if($search || $category || $location)
                 <div class="flex flex-wrap items-center gap-2">
-                    <span class="text-sm text-gray-600">Penapis aktif:</span>
+                    <span class="text-sm text-gray-600">{{ __('Penapis aktif:') }}</span>
                     @if($search)
                         <span class="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm flex items-center">
-                            Carian: "{{ $search }}"
+                            {{ __('community.search_label') }} "{{ $search }}"
                             <a href="{{ route('services.index', array_filter(['category' => $category, 'location' => $location])) }}" class="ml-2 text-red-600 hover:text-red-800">
                                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
@@ -97,7 +95,7 @@
                             </a>
                         </span>
                     @endif
-                    <a href="{{ route('services.index') }}" class="text-sm text-red-600 hover:text-red-800 font-medium">Kosongkan semua</a>
+                    <a href="{{ route('services.index') }}" class="text-sm text-red-600 hover:text-red-800 font-medium">{{ __('Kosongkan semua') }}</a>
                 </div>
             @endif
         </form>
@@ -112,18 +110,18 @@
             <div>
                 <h2 class="text-2xl font-bold text-gray-900">
                     @if($search || $category || $location)
-                        Keputusan Carian ({{ $services->count() }} dijumpai)
+                        {{ __('community.search_results_title', ['count' => $services->count()]) }}
                     @else
-                        Semua Perkhidmatan ({{ $services->count() }})
+                        {{ __('community.all_services_title', ['count' => $services->count()]) }}
                     @endif
                 </h2>
-                <p class="text-gray-600 mt-1">Perkhidmatan dipercayai dari peminat Arsenal yang disahkan</p>
+                <p class="text-gray-600 mt-1">{{ __('Perkhidmatan dipercayai dari peminat Arsenal yang disahkan') }}</p>
             </div>
             <div class="flex items-center space-x-2 text-sm text-gray-500">
                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                     <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path>
                 </svg>
-                <span>Disusun mengikut: Terkini</span>
+                <span>{{ __('Disusun mengikut: Terkini') }}</span>
             </div>
         </div>
 
@@ -154,7 +152,7 @@
                                     <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
                                         <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
                                     </svg>
-                                    DISAHKAN
+                                    {{ __('DISAHKAN') }}
                                 </span>
                             </div>
                         @endif
@@ -221,7 +219,7 @@
                                     <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path>
                                     <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"></path>
                                 </svg>
-                                {{ number_format($service->views_count) }} tontonan
+                                {{ number_format($service->views_count) }} {{ __('tontonan') }}
                             </div>
                         </div>
                     </div>
@@ -231,9 +229,7 @@
 
         <!-- Load More / Pagination -->
         <div class="mt-12 text-center">
-            <button class="bg-arsenal hover:bg-arsenal text-white px-8 py-3 rounded-lg font-medium transition-colors">
-                Muatkan Lebih Banyak Perkhidmatan
-            </button>
+            <button class="bg-arsenal hover:bg-arsenal text-white px-8 py-3 rounded-lg font-medium transition-colors">{{ __('Muatkan Lebih Banyak Perkhidmatan') }}</button>
         </div>
     @else
         <!-- No Services Found -->
@@ -241,23 +237,19 @@
             <svg class="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0V6a2 2 0 012 2v6a2 2 0 01-2 2H8a2 2 0 01-2-2V8a2 2 0 012-2h8z"></path>
             </svg>
-            <h3 class="text-xl font-medium text-gray-900 mb-2">Tiada perkhidmatan dijumpai</h3>
+            <h3 class="text-xl font-medium text-gray-900 mb-2">{{ __('Tiada perkhidmatan dijumpai') }}</h3>
             <p class="text-gray-600 mb-6">
                 @if($search || $category || $location)
-                    Tiada perkhidmatan yang sepadan dengan kriteria carian anda. Cuba laraskan penapis anda.
+                    {{ __('community.no_match_filters') }}
                 @else
-                    Tiada perkhidmatan telah disenaraikan lagi.
+                    {{ __('Tiada perkhidmatan telah disenaraikan lagi.') }}
                 @endif
             </p>
             <div class="space-x-4">
                 @if($search || $category || $location)
-                    <a href="{{ route('services.index') }}" class="text-red-600 hover:text-red-700 font-medium">
-                        ← Lihat semua perkhidmatan
-                    </a>
+                    <a href="{{ route('services.index') }}" class="text-red-600 hover:text-red-700 font-medium">{{ __('← Lihat semua perkhidmatan') }}</a>
                 @endif
-                <button class="bg-arsenal hover:bg-arsenal text-white px-6 py-3 rounded-lg font-medium transition-colors">
-                    Senaraikan Perkhidmatan Anda
-                </button>
+                <button class="bg-arsenal hover:bg-arsenal text-white px-6 py-3 rounded-lg font-medium transition-colors">{{ __('Senaraikan Perkhidmatan Anda') }}</button>
             </div>
         </div>
     @endif
@@ -267,8 +259,8 @@
 <div class="bg-gray-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div class="text-center mb-12">
-            <h2 class="text-3xl font-bold text-gray-900 mb-4">Kepercayaan & Keselamatan</h2>
-            <p class="text-gray-600">Bagaimana kami memastikan komuniti MyGooners selamat</p>
+            <h2 class="text-3xl font-bold text-gray-900 mb-4">{{ __('Kepercayaan & Keselamatan') }}</h2>
+            <p class="text-gray-600">{{ __('Bagaimana kami memastikan komuniti MyGooners selamat') }}</p>
         </div>
         
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -278,8 +270,8 @@
                         <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
                     </svg>
                 </div>
-                <h3 class="text-xl font-bold text-gray-900 mb-2">Penyedia Disahkan</h3>
-                <p class="text-gray-600">Semua penyedia perkhidmatan adalah peminat Arsenal yang disahkan dengan kelayakan terbukti dan skor kepercayaan komuniti.</p>
+                <h3 class="text-xl font-bold text-gray-900 mb-2">{{ __('Penyedia Disahkan') }}</h3>
+                <p class="text-gray-600">{{ __('Semua penyedia perkhidmatan adalah peminat Arsenal yang disahkan dengan kelayakan terbukti dan skor kepercayaan komuniti.') }}</p>
             </div>
             
             <div class="text-center">
@@ -288,8 +280,8 @@
                         <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"></path>
                     </svg>
                 </div>
-                <h3 class="text-xl font-bold text-gray-900 mb-2">Ulasan Berkualiti</h3>
-                <p class="text-gray-600">Sistem ulasan yang dipacu komuniti membantu anda membuat keputusan berdasarkan maklumat tentang penyedia perkhidmatan.</p>
+                <h3 class="text-xl font-bold text-gray-900 mb-2">{{ __('Ulasan Berkualiti') }}</h3>
+                <p class="text-gray-600">{{ __('Sistem ulasan yang dipacu komuniti membantu anda membuat keputusan berdasarkan maklumat tentang penyedia perkhidmatan.') }}</p>
             </div>
             
             <div class="text-center">
@@ -298,8 +290,8 @@
                         <path fill-rule="evenodd" d="M3 6a3 3 0 013-3h10a1 1 0 01.8 1.6L14.25 8l2.55 3.4A1 1 0 0116 13H6a1 1 0 00-1 1v3a1 1 0 11-2 0V6z" clip-rule="evenodd"></path>
                     </svg>
                 </div>
-                <h3 class="text-xl font-bold text-gray-900 mb-2">Komunikasi Selamat</h3>
-                <p class="text-gray-600">Semua komunikasi dipermudahkan melalui platform selamat kami untuk melindungi privasi anda.</p>
+                <h3 class="text-xl font-bold text-gray-900 mb-2">{{ __('Komunikasi Selamat') }}</h3>
+                <p class="text-gray-600">{{ __('Semua komunikasi dipermudahkan melalui platform selamat kami untuk melindungi privasi anda.') }}</p>
             </div>
         </div>
     </div>
@@ -307,5 +299,4 @@
 @endsection
 
 @push('scripts')
-<script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 @endpush 

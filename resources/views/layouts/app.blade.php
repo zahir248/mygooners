@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>@yield('title', 'MyGooners - Komuniti Peminat Arsenal')</title>
-    <meta name="description" content="@yield('meta_description', 'Komuniti peminat Arsenal terbaik yang menampilkan berita terkini, video, pasaran perkhidmatan, dan barangan eksklusif.')">
+    <title>@yield('title', __('MyGooners - Komuniti Peminat Arsenal'))</title>
+    <meta name="description" content="@yield('meta_description', __('Komuniti peminat Arsenal terbaik yang menampilkan berita terkini, video, pasaran perkhidmatan, dan barangan eksklusif.'))">
 
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
@@ -38,6 +38,33 @@
     <style>
         [x-cloak] {
             display: none !important;
+        }
+
+        /* FAQ chatbot FAB: chat icon only until open; pulse on load (no X flash) */
+        .faq-chatbot-fab {
+            position: relative;
+        }
+        .faq-chatbot-fab .faq-chatbot-icon-close {
+            display: none;
+        }
+        .faq-chatbot-fab.is-open .faq-chatbot-icon-chat {
+            display: none;
+        }
+        .faq-chatbot-fab.is-open .faq-chatbot-icon-close {
+            display: block;
+        }
+        .faq-chatbot-fab.is-attention {
+            animation: faq-chatbot-pulse 1.25s ease-in-out 3;
+        }
+        @keyframes faq-chatbot-pulse {
+            0%, 100% {
+                box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 0 0 0 rgba(220, 38, 38, 0.55);
+                transform: scale(1);
+            }
+            50% {
+                box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 0 0 14px rgba(220, 38, 38, 0);
+                transform: scale(1.06);
+            }
         }
         
         .transition-colors {
@@ -292,7 +319,7 @@
             }
         }
         
-        /* Mobile and Tablet Design (≤1024px) - Including iPad Pro */
+        /* Mobile and Tablet Design (?1024px) - Including iPad Pro */
         @media (max-width: 1024px) {
             /* Hide desktop navigation on mobile and tablet */
             .navbar-desktop {
@@ -326,7 +353,7 @@
             }
         }
         
-        /* Desktop Design (≥1025px) - Only true desktop */
+        /* Desktop Design (?1025px) - Only true desktop */
         @media (min-width: 1025px) {
             .navbar-desktop {
                 display: flex !important;
@@ -658,19 +685,19 @@
                     <!-- Desktop Navigation -->
                     <nav class="hidden xl:flex space-x-8 navbar-desktop">
                         <a href="{{ route('home') }}" class="text-gray-900 hover:text-red-600 px-3 py-2 text-sm font-medium transition-colors {{ request()->routeIs('home') ? 'text-red-600 border-b-2 border-red-600' : '' }}">
-                            Utama
+                            {{ __('Utama') }}
                         </a>
                         <a href="{{ route('blog.index') }}" class="text-gray-900 hover:text-red-600 px-3 py-2 text-sm font-medium transition-colors {{ request()->routeIs('blog.*') ? 'text-red-600 border-b-2 border-red-600' : '' }}">
-                            Berita
+                            {{ __('Berita') }}
                         </a>
                         <a href="{{ route('videos.index') }}" class="text-gray-900 hover:text-red-600 px-3 py-2 text-sm font-medium transition-colors {{ request()->routeIs('videos.*') ? 'text-red-600 border-b-2 border-red-600' : '' }}">
-                            Video
+                            {{ __('Video') }}
                         </a>
                         <a href="{{ route('services.index') }}" class="text-gray-900 hover:text-red-600 px-3 py-2 text-sm font-medium transition-colors {{ request()->routeIs('services.*') ? 'text-red-600 border-b-2 border-red-600' : '' }}">
-                            Komuniti
+                            {{ __('Komuniti') }}
                         </a>
                         <a href="{{ route('shop.index') }}" class="text-gray-900 hover:text-red-600 px-3 py-2 text-sm font-medium transition-colors {{ request()->routeIs('shop.*') ? 'text-red-600 border-b-2 border-red-600' : '' }}">
-                            Kedai Kami
+                            {{ __('Kedai Kami') }}
                         </a>
                     </nav>
 
@@ -695,7 +722,7 @@
                                     @endif
                                 </div>
                                 <div class="hidden xl:block">
-                                    <span class="text-sm font-medium text-gray-700 group-hover:text-red-600 transition-colors">Troli</span>
+                                    <span class="text-sm font-medium text-gray-700 group-hover:text-red-600 transition-colors">{{ __('Troli') }}</span>
                                     <div class="text-xs text-gray-900 cart-total">
                                         RM{{ number_format(\App\Models\Cart::getOrCreateCart()->item_count > 0 ? \App\Models\Cart::getOrCreateCart()->total : 0, 2) }}
                                     </div>
@@ -738,31 +765,31 @@
                                         <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2zm0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
                                         </svg>
-                                        Panel Kawalan
+                                        {{ __('Panel Kawalan') }}
                                     </a>
                                     <a href="{{ auth()->user()->is_seller ? route('seller.info') : route('profile.info') }}" class="{{ $userMenuLinkClass(request()->routeIs('profile.info', 'seller.info')) }}">
                                         <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
                                         </svg>
-                                        Profil
+                                        {{ __('Profil') }}
                                     </a>
                                     <a href="{{ route('checkout.orders') }}" class="{{ $userMenuLinkClass(request()->routeIs('checkout.orders', 'checkout.show', 'checkout.show-retry-payment', 'checkout.retry-payment', 'checkout.retry-payment-with-method', 'checkout.invoice.*')) }}">
                                         <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
                                         </svg>
-                                        Pesanan Saya
+                                        {{ __('Pesanan Saya') }}
                                     </a>
                                     <a href="{{ route('checkout.refunds') }}" class="{{ $userMenuLinkClass(request()->routeIs('checkout.refunds*')) }}">
                                         <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"></path>
                                         </svg>
-                                        Permohonan Refund
+                                        {{ __('Permohonan Refund') }}
                                     </a>
                                     <a href="{{ route('favourites.index') }}" class="{{ $userMenuLinkClass(request()->routeIs('favourites.index')) }} flex items-center">
                                         <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
                                         </svg>
-                                        Kegemaran
+                                        {{ __('Kegemaran') }}
                                         @if(auth()->check())
                                             @php $favouritesCount = auth()->user()->favourites()->count(); @endphp
                                             @if($favouritesCount > 0)
@@ -777,7 +804,7 @@
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
                                         </svg>
-                                        Alamat
+                                        {{ __('Alamat') }}
                                     </a>
                                     <div class="border-t border-gray-100 my-1"></div>
                                     <form method="POST" action="{{ route('logout') }}">
@@ -786,7 +813,7 @@
                                             <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
                                             </svg>
-                                            Log Keluar
+                                            {{ __('Log Keluar') }}
                                         </button>
                                     </form>
                                 </div>
@@ -794,10 +821,10 @@
                         @else
                             <div class="hidden xl:flex space-x-2">
                                 <a href="{{ route('login') }}" class="text-gray-700 hover:text-red-600 px-3 py-2 text-sm font-medium transition-colors">
-                                    Log Masuk
+                                    {{ __('Log Masuk') }}
                                 </a>
-                                <a href="{{ route('register') }}" class="bg-red-600 text-white hover:text-red-700 px-4 py-2 rounded-md text-sm font-medium transition-colors">
-                                    Sertai Kami
+                                <a href="{{ route('register') }}" class="bg-red-600 hover:bg-red-700 text-white hover:text-white px-4 py-2 rounded-md text-sm font-medium transition-colors">
+                                    {{ __('Sertai Kami') }}
                                 </a>
                             </div>
                         @endauth
@@ -851,41 +878,41 @@
                                 <svg class="w-5 h-5 mr-3 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
                                 </svg>
-                                Utama
+                                {{ __('Utama') }}
                             </a>
                             <a href="{{ route('blog.index') }}" class="flex items-center px-4 py-2 text-base font-medium text-gray-900 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors">
                                 <svg class="w-5 h-5 mr-3 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path>
                                 </svg>
-                                Berita
+                                {{ __('Berita') }}
                             </a>
                             <a href="{{ route('videos.index') }}" class="flex items-center px-4 py-2 text-base font-medium text-gray-900 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors">
                                 <svg class="w-5 h-5 mr-3 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
                                 </svg>
-                                Video
+                                {{ __('Video') }}
                             </a>
                             <a href="{{ route('services.index') }}" class="flex items-center px-4 py-2 text-base font-medium text-gray-900 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors">
                                 <svg class="w-5 h-5 mr-3 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
                                 </svg>
-                                Komuniti
+                                {{ __('Komuniti') }}
                             </a>
                             <a href="{{ route('shop.index') }}" class="flex items-center px-4 py-2 text-base font-medium text-gray-900 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors">
                                 <svg class="w-5 h-5 mr-3 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
                                 </svg>
-                                Kedai Kami
+                                {{ __('Kedai Kami') }}
                             </a>
                             
                             <!-- Auth buttons for non-logged in users -->
                             @guest
                                 <div class="pt-2 space-y-2">
                                     <a href="{{ route('login') }}" class="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:text-red-600 hover:border-red-300 transition-colors">
-                                        Log Masuk
+                                        {{ __('Log Masuk') }}
                                     </a>
                                     <a href="{{ route('register') }}" class="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 transition-colors">
-                                        Sertai Kami
+                                        {{ __('Sertai Kami') }}
                                     </a>
                                 </div>
                             @endguest
@@ -901,7 +928,7 @@
                                             <svg class="w-5 h-5 mr-3 text-gray-600" fill="currentColor" viewBox="0 0 24 24">
                                                 <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12L8.1 13h7.45c.75 0 1.41-.41 1.75-1.03L21.7 4H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/>
                                             </svg>
-                                            <span>Troli</span>
+                                            <span>{{ __('Troli') }}</span>
                                         </div>
                                         @if(\App\Models\Cart::getOrCreateCart()->item_count > 0)
                                             <span class="bg-red-600 text-white text-xs font-bold rounded-full h-6 w-6 flex items-center justify-center">
@@ -910,7 +937,7 @@
                                         @endif
                                     </a>
                                     <div class="mt-2 text-sm text-gray-600">
-                                        Total: RM{{ number_format(\App\Models\Cart::getOrCreateCart()->total, 2) }}
+                                        {{ __('Total:') }} RM{{ number_format(\App\Models\Cart::getOrCreateCart()->total, 2) }}
                                     </div>
                                 </div>
                             @endauth
@@ -938,31 +965,31 @@
                                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2zm0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
                                             </svg>
-                                            Panel Kawalan
+                                            {{ __('Panel Kawalan') }}
                                         </a>
                                         <a href="{{ auth()->user()->is_seller ? route('seller.info') : route('profile.info') }}" class="{{ $userMenuLinkClass(request()->routeIs('profile.info', 'seller.info'), true) }}">
                                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
                                             </svg>
-                                            Profil
+                                            {{ __('Profil') }}
                                         </a>
                                         <a href="{{ route('checkout.orders') }}" class="{{ $userMenuLinkClass(request()->routeIs('checkout.orders', 'checkout.show', 'checkout.show-retry-payment', 'checkout.retry-payment', 'checkout.retry-payment-with-method', 'checkout.invoice.*'), true) }}">
                                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
                                             </svg>
-                                            Pesanan Saya
+                                            {{ __('Pesanan Saya') }}
                                         </a>
                                         <a href="{{ route('checkout.refunds') }}" class="{{ $userMenuLinkClass(request()->routeIs('checkout.refunds*'), true) }}">
                                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M6 10l6 6m-6-6l6-6"></path>
                                             </svg>
-                                            Permohonan Refund
+                                            {{ __('Permohonan Refund') }}
                                         </a>
                                         <a href="{{ route('favourites.index') }}" class="{{ $userMenuLinkClass(request()->routeIs('favourites.index'), true) }}">
                                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
                                             </svg>
-                                            Kegemaran
+                                            {{ __('Kegemaran') }}
                                             @if(auth()->check())
                                                 @php $favouritesCount = auth()->user()->favourites()->count(); @endphp
                                                 @if($favouritesCount > 0)
@@ -986,7 +1013,7 @@
                                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
                                             </svg>
-                                            Log Keluar
+                                            {{ __('Log Keluar') }}
                                         </button>
                                     </form>
                                     
@@ -1098,32 +1125,32 @@
                                 <div class="bg-red-600 text-white rounded-lg px-3 py-2 font-bold text-xl">
                                     MG
                                 </div>
-                                <span class="ml-2 text-xl font-bold">MyGooners</span>
+                                <span class="ml-2 text-xl font-bold">{{ __('MyGooners') }}</span>
                             </div>
                             <p class="text-gray-300 text-sm">
-                                Komuniti peminat Arsenal terbaik yang menampilkan berita terkini, video, pasaran perkhidmatan, dan barangan eksklusif.
+                                {{ __('Komuniti peminat Arsenal terbaik yang menampilkan berita terkini, video, pasaran perkhidmatan, dan barangan eksklusif.') }}
                             </p>
                         </div>
                         
                         <div>
-                            <h3 class="text-lg font-semibold mb-4">Kandungan</h3>
+                            <h3 class="text-lg font-semibold mb-4">{{ __('Kandungan') }}</h3>
                             <ul class="space-y-2 text-sm">
-                                <li><a href="{{ route('blog.index') }}" class="text-gray-300 hover:text-white transition-colors">Berita Terkini</a></li>
-                                <li><a href="{{ route('videos.index') }}" class="text-gray-300 hover:text-white transition-colors">Podcast Video</a></li>
-                                <li><a href="{{ route('blog.category', 'match-reports') }}" class="text-gray-300 hover:text-white transition-colors">Laporan Perlawanan</a></li>
-                                <li><a href="{{ route('blog.category', 'transfer-news') }}" class="text-gray-300 hover:text-white transition-colors">Berita Pemindahan</a></li>
+                                <li><a href="{{ route('blog.index') }}" class="text-gray-300 hover:text-white transition-colors">{{ __('Berita Terkini') }}</a></li>
+                                <li><a href="{{ route('videos.index') }}" class="text-gray-300 hover:text-white transition-colors">{{ __('Podcast Video') }}</a></li>
+                                <li><a href="{{ route('blog.category', 'match-reports') }}" class="text-gray-300 hover:text-white transition-colors">{{ __('Laporan Perlawanan') }}</a></li>
+                                <li><a href="{{ route('blog.category', 'transfer-news') }}" class="text-gray-300 hover:text-white transition-colors">{{ __('Berita Pemindahan') }}</a></li>
                             </ul>
                         </div>
                         
                         <div>
-                            <h3 class="text-lg font-semibold mb-4">Komuniti</h3>
+                            <h3 class="text-lg font-semibold mb-4">{{ __('Komuniti') }}</h3>
                             <ul class="space-y-2 text-sm">
-                                <li><a href="{{ route('services.index') }}" class="text-gray-300 hover:text-white transition-colors">Komuniti</a></li>
-                                <li><a href="{{ route('shop.index') }}" class="text-gray-300 hover:text-white transition-colors">Kedai Kami</a></li>
-                                <li><a href="{{ route('register') }}" class="text-gray-300 hover:text-white transition-colors">Sertai Komuniti</a></li>
+                                <li><a href="{{ route('services.index') }}" class="text-gray-300 hover:text-white transition-colors">{{ __('Komuniti') }}</a></li>
+                                <li><a href="{{ route('shop.index') }}" class="text-gray-300 hover:text-white transition-colors">{{ __('Kedai Kami') }}</a></li>
+                                <li><a href="{{ route('register') }}" class="text-gray-300 hover:text-white transition-colors">{{ __('Sertai Komuniti') }}</a></li>
                             </ul>
                             
-                            <h3 class="text-lg font-semibold mb-4 mt-8">Berhubung</h3>
+                            <h3 class="text-lg font-semibold mb-4 mt-8">{{ __('Berhubung') }}</h3>
                             <div class="flex space-x-4">
                                 <a href="https://www.facebook.com/MyGooners1886" target="_blank" rel="noopener noreferrer" aria-label="Facebook" class="text-gray-300 hover:text-white transition-colors">
                                     <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -1151,8 +1178,8 @@
                     
                     <!-- Right Side - Newsletter Section -->
                     <div class="lg:w-96 lg:pl-8">
-                        <h3 class="text-2xl font-bold text-white mb-2">Kekal Terkini, Gooner!</h3>
-                        <p class="text-gray-300 mb-6">Dapatkan berita Arsenal terkini, kandungan eksklusif, dan kemas kini komuniti terus ke peti mel anda.</p>
+                        <h3 class="text-2xl font-bold text-white mb-2">{{ __('Kekal Terkini, Gooner!') }}</h3>
+                        <p class="text-gray-300 mb-6">{{ __('Dapatkan berita Arsenal terkini, kandungan eksklusif, dan kemas kini komuniti terus ke peti mel anda.') }}</p>
                         
                         <form class="space-y-4" x-data="newsletterForm()" @submit.prevent="submitForm">
                             @csrf
@@ -1160,7 +1187,7 @@
                                 <input type="email" 
                                        x-model="email"
                                        name="email" 
-                                       placeholder="Masukkan alamat emel anda" 
+                                       placeholder="{{ __('Masukkan alamat emel anda') }}" 
                                        required
                                        :disabled="loading"
                                        class="w-full px-4 py-3 rounded-lg border border-gray-600 bg-gray-800 text-white placeholder-gray-400 focus:ring-2 focus:ring-red-600 focus:border-transparent transition-all">
@@ -1171,13 +1198,13 @@
                                     x-show="!isSubscribed"
                                     :disabled="loading"
                                     class="w-full bg-red-600 hover:bg-red-700 disabled:bg-gray-600 text-white font-semibold px-6 py-3 rounded-lg transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-red-600 focus:ring-offset-2 focus:ring-offset-gray-900">
-                                <span x-show="!loading">Langgan</span>
+                                <span x-show="!loading">{{ __('Langgan') }}</span>
                                 <span x-show="loading" class="flex items-center justify-center">
                                     <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                                         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                                     </svg>
-                                    Memproses...
+                                    {{ __('Memproses...') }}
                                 </span>
                             </button>
                             
@@ -1187,13 +1214,13 @@
                                     @click="unsubscribe()"
                                     :disabled="loading"
                                     class="w-full bg-gray-600 hover:bg-gray-700 disabled:bg-gray-500 text-white font-semibold px-6 py-3 rounded-lg transition-all duration-200 hover:scale-105 focus:ring-2 focus:ring-gray-600 focus:ring-offset-2 focus:ring-offset-gray-900">
-                                <span x-show="!loading">Berhenti Langgan</span>
+                                <span x-show="!loading">{{ __('Berhenti Langgan') }}</span>
                                 <span x-show="loading" class="flex items-center justify-center">
                                     <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                                         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                                     </svg>
-                                    Memproses...
+                                    {{ __('Memproses...') }}
                                 </span>
                             </button>
                             
@@ -1205,27 +1232,30 @@
                                 <svg class="w-4 h-4 text-red-500 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
                                 </svg>
-                                Berita terkini
+                                {{ __('Berita terkini') }}
                             </div>
                             <div class="flex items-center">
                                 <svg class="w-4 h-4 text-red-500 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
                                 </svg>
-                                Kandungan eksklusif
+                                {{ __('Kandungan eksklusif') }}
                             </div>
                             <div class="flex items-center">
                                 <svg class="w-4 h-4 text-red-500 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
                                 </svg>
-                                Tiada spam, berhenti melanggan bila-bila masa
+                                {{ __('Tiada spam, berhenti melanggan bila-bila masa') }}
                             </div>
                         </div>
                     </div>
                 </div>
                 
-                <div class="border-t border-gray-800 mt-8 pt-8 text-center">
-                    <p class="text-gray-400 text-sm">
-                        © {{ date('Y') }} MyGooners. Hak cipta terpelihara. Dibina dengan ❤️ untuk peminat Arsenal.
+                <div class="border-t border-gray-800 mt-8 pt-8">
+                    <div class="flex flex-col sm:flex-row items-center justify-center gap-6 mb-6">
+                        @include('client.partials.language-switcher')
+                    </div>
+                    <p class="text-gray-400 text-sm text-center">
+                        &copy; {{ date('Y') }} MyGooners. {!! __('client.footer_rights') !!}
                     </p>
                 </div>
             </div>
@@ -1233,26 +1263,49 @@
     </div>
 
     <!-- Scripts -->
-    <script src="//unpkg.com/alpinejs" defer></script>
+    @php
+        $clientJsMessages = [
+            'variation_out_of_stock' => __('client_messages.variation_out_of_stock'),
+            'product_out_of_stock' => __('client_messages.product_out_of_stock'),
+            'stock_exceeds' => __('client_messages.msg_1858ef6f0305'),
+            'cart_add_error' => __('client_messages.cart_add_error'),
+            'copy_link_failed' => __('client_messages.copy_link_failed'),
+            'link_copied' => __('client_messages.link_copied'),
+            'favourite_remove_error' => __('client_messages.favourite_remove_error'),
+            'favourite_add_error' => __('client_messages.favourite_add_error'),
+            'favourite_removed' => __('client_messages.favourite_removed'),
+            'favourite_added' => __('client_messages.favourite_added'),
+            'adding_to_cart' => __('client_messages.adding_to_cart'),
+            'variation_label_default' => __('client_messages.variation_label_default'),
+            'cart_update_error' => __('client_messages.cart_update_error'),
+            'cart_remove_error' => __('client_messages.cart_remove_error'),
+            'cart_clear_error' => __('client_messages.cart_clear_error'),
+            'cart_product_added' => __('client_messages.cart_product_added'),
+        ];
+    @endphp
+    <script>window.clientMessages = @json($clientJsMessages);</script>
     @stack('scripts')
 
     <!-- FAQ Chatbot -->
-    <div x-data="faqChatbot()" x-init="init" class="fixed bottom-6 right-6 z-50" x-cloak>
+    <div x-data="faqChatbot()" x-init="init()" class="fixed bottom-6 right-6 z-50">
         <!-- Floating Button -->
-        <button @click="toggleChat()" 
-                class="bg-red-600 hover:bg-red-700 text-white rounded-full p-4 shadow-lg transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
-                :class="{ 'rotate-45': isOpen }">
-            <svg x-show="!isOpen" class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <button @click="toggleChat()"
+                type="button"
+                aria-label="{{ __('faq_chatbot.assistant_title') }}"
+                :aria-expanded="isOpen"
+                class="faq-chatbot-fab bg-red-600 hover:bg-red-700 text-white rounded-full p-4 shadow-lg transition-colors duration-300 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+                :class="{ 'is-open': isOpen, 'is-attention': attentionPulse && !isOpen }">
+            <svg class="faq-chatbot-icon-chat h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.477 8-10 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.477-8 10-8s10 3.582 10 8z"></path>
             </svg>
-            <svg x-show="isOpen" class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="faq-chatbot-icon-close h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
             </svg>
         </button>
 
-        <!-- Chat Interface -->
-        <div x-show="isOpen" 
-             x-transition:enter="transition ease-out duration-300"
+        <!-- Chat Interface (x-if avoids panel flash before Alpine hydrates) -->
+        <template x-if="isOpen">
+        <div x-transition:enter="transition ease-out duration-300"
              x-transition:enter-start="opacity-0 transform scale-95"
              x-transition:enter-end="opacity-100 transform scale-100"
              x-transition:leave="transition ease-in duration-200"
@@ -1268,8 +1321,8 @@
                             <span class="text-sm font-bold">MG</span>
                         </div>
                         <div>
-                            <h3 class="font-semibold">MyGooners Assistant</h3>
-                            <p class="text-xs text-red-100">Pilih soalan di bawah</p>
+                            <h3 class="font-semibold">{{ __('faq_chatbot.assistant_title') }}</h3>
+                            <p class="text-xs text-red-100">{{ __('faq_chatbot.assistant_subtitle') }}</p>
                         </div>
                     </div>
                     <button @click="toggleChat()" class="text-red-100 hover:text-white">
@@ -1288,7 +1341,7 @@
                         <span class="text-xs text-white font-bold">MG</span>
                     </div>
                     <div class="bg-gray-100 rounded-lg p-3 max-w-xs">
-                        <p class="text-sm">Halo! Saya adalah pembantu MyGooners. Pilih salah satu soalan popular di bawah untuk mendapatkan jawapan tentang Arsenal, laman web ini, dan banyak lagi.</p>
+                        <p class="text-sm">{{ __('faq_chatbot.welcome_message') }}</p>
                     </div>
                 </div>
 
@@ -1322,52 +1375,49 @@
 
             <!-- Quick Actions -->
             <div class="p-3 border-t border-gray-200">
-                <div class="text-xs text-gray-500 mb-2">Soalan Popular:</div>
+                <div class="text-xs text-gray-500 mb-2">{{ __('faq_chatbot.popular_questions') }}</div>
                 <div class="flex flex-wrap gap-2">
-                    <button @click="sendQuickMessage('Bagaimana nak join komuniti?')" 
+                    @foreach(trans('faq_chatbot.quick_actions') as $quickAction)
+                    <button @click="sendQuickMessage(@js($quickAction['trigger']))"
                             class="px-3 py-1 bg-gray-100 hover:bg-gray-200 text-xs rounded-full transition-colors">
-                        Join komuniti
+                        {{ $quickAction['label'] }}
                     </button>
-                    <button @click="sendQuickMessage('Bagaimana nak beli barang?')" 
-                            class="px-3 py-1 bg-gray-100 hover:bg-gray-200 text-xs rounded-full transition-colors">
-                        Beli barang
-                    </button>
-                    <button @click="sendQuickMessage('Tentang Arsenal')" 
-                            class="px-3 py-1 bg-gray-100 hover:bg-gray-200 text-xs rounded-full transition-colors">
-                        Tentang Arsenal
-                    </button>
+                    @endforeach
                 </div>
             </div>
         </div>
+        </template>
     </div>
 
+    @php
+        $faqChatbotI18n = [
+            'keywords' => trans('faq_chatbot.keywords'),
+            'greeting' => trans('faq_chatbot.greeting'),
+            'thanks' => trans('faq_chatbot.thanks'),
+            'goodbye' => trans('faq_chatbot.goodbye'),
+            'default' => trans('faq_chatbot.default'),
+        ];
+    @endphp
     <!-- FAQ Chatbot Script -->
     <script>
+        window.faqChatbotI18n = @json($faqChatbotI18n);
         function faqChatbot() {
             return {
                 isOpen: false,
+                attentionPulse: true,
                 messages: [],
                 isTyping: false,
-                
-                faqData: {
-                    'join komuniti': 'Untuk menyertai komuniti MyGooners, klik butang "Sertai Kami" di bahagian atas laman web dan daftar akaun baru. Selepas pendaftaran, anda boleh mengambil bahagian dalam perbincangan dan mengakses kandungan eksklusif!',
-                    'beli barang': 'Untuk membeli barang, lawati bahagian "Kedai" di menu utama. Anda akan menemui pelbagai barangan Arsenal dan produk komuniti. Pastikan anda log masuk untuk proses pembelian yang lancar.',
-                    'tentang arsenal': 'Arsenal FC adalah kelab bola sepak terkenal dari London yang bermain di Premier League. Mereka dikenali sebagai "The Gunners" dan mempunyai sejarah yang kaya dengan 13 kejuaraan liga dan 14 Piala FA.',
-                    'perkhidmatan': 'MyGooners menawarkan pelbagai perkhidmatan termasuk analisis perlawanan, podcast eksklusif, dan platform untuk peminat berkongsi pandangan. Lawati bahagian "Perkhidmatan" untuk maklumat lanjut.',
-                    'berita': 'Dapatkan berita Arsenal terkini di bahagian "Berita" laman web kami. Kami menyediakan laporan perlawanan, berita pemindahan pemain, dan analisis mendalam tentang prestasi pasukan.',
-                    'video': 'Tonton video dan podcast eksklusif di bahagian "Video". Kami ada kandungan seperti ulasan perlawanan, temubual pemain, dan analisis taktik yang menarik.',
-                    'help': 'Saya boleh membantu dengan soalan tentang:\n• Cara menyertai komuniti\n• Membeli barangan\n• Maklumat tentang Arsenal\n• Navigasi laman web\n• Perkhidmatan yang tersedia\n\nApa yang anda ingin tahu?'
-                },
-                
+                faqData: window.faqChatbotI18n.keywords,
+
                 init() {
-                    // On component init, check localStorage for isOpen
-                    const saved = localStorage.getItem('faqChatbotOpen');
-                    this.isOpen = saved === 'true' ? true : false;
+                    setTimeout(() => {
+                        this.attentionPulse = false;
+                    }, 4500);
                 },
                 
                 toggleChat() {
                     this.isOpen = !this.isOpen;
-                    localStorage.setItem('faqChatbotOpen', this.isOpen);
+                    this.attentionPulse = false;
                     if (this.isOpen) {
                         this.$nextTick(() => {
                             this.scrollToBottom();
@@ -1405,37 +1455,33 @@
                 },
                 
                 getBotResponse(message) {
-                    // Check for keywords in the message
-                    for (let keyword in this.faqData) {
+                    for (const keyword in this.faqData) {
                         if (message.includes(keyword)) {
                             return this.faqData[keyword];
                         }
                     }
-                    
-                    // Default responses for common patterns
+                    const i18n = window.faqChatbotI18n;
                     if (message.includes('halo') || message.includes('hello') || message.includes('hi')) {
-                        return 'Halo! Selamat datang ke MyGooners. Bagaimana saya boleh membantu anda hari ini?';
+                        return i18n.greeting;
                     }
-                    
                     if (message.includes('terima kasih') || message.includes('thank you')) {
-                        return 'Sama-sama! Saya sentiasa di sini untuk membantu. Ada lagi yang anda ingin tahu?';
+                        return i18n.thanks;
                     }
-                    
                     if (message.includes('bye') || message.includes('selamat tinggal')) {
-                        return 'Selamat tinggal! Jangan lupa untuk kembali lagi ke MyGooners. COYG! 🔴';
+                        return i18n.goodbye;
                     }
-                    
-                    // Default response
-                    return 'Maaf, saya tidak jumpa jawapan untuk pilihan itu. Sila pilih salah satu soalan popular di bawah. Saya boleh membantu dengan maklumat tentang Arsenal, cara guna laman web ini, dan banyak lagi!';
+                    return i18n.default;
                 },
-                
+
                 scrollToBottom() {
                     this.$nextTick(() => {
                         const container = this.$refs.messageContainer;
-                        container.scrollTop = container.scrollHeight;
+                        if (container) {
+                            container.scrollTop = container.scrollHeight;
+                        }
                     });
-                }
-            }
+                },
+            };
         }
     </script>
     
@@ -1547,8 +1593,6 @@
         });
     </script>
     
-    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    
     <!-- Newsletter Form Script -->
     <script>
         function newsletterForm() {
@@ -1590,7 +1634,7 @@
                         }
                     } catch (error) {
                         // Show error modal
-                        window.newsletterModal.showError('Ralat sistem. Sila cuba lagi.');
+                        window.newsletterModal.showError(@json(__('faq_chatbot.system_error')));
                     } finally {
                         this.loading = false;
                     }
@@ -1598,7 +1642,7 @@
                 
                 async unsubscribe() {
                     if (!this.email) {
-                        window.newsletterModal.showError('Sila masukkan alamat emel anda.');
+                        window.newsletterModal.showError(@json(__('Sila masukkan alamat emel anda.')));
                         return;
                     }
                     
@@ -1629,7 +1673,7 @@
                         }
                     } catch (error) {
                         // Show error modal
-                        window.newsletterModal.showError('Ralat sistem. Sila cuba lagi.');
+                        window.newsletterModal.showError(@json(__('faq_chatbot.system_error')));
                     } finally {
                         this.loading = false;
                     }
@@ -1641,12 +1685,12 @@
         window.newsletterModal = {
             showSuccess(message) {
                 console.log('Showing success modal:', message); // Debug log
-                this.showModal('Berjaya!', message, 'success');
+                this.showModal(@json(__('faq_chatbot.modal_success')), message, 'success');
             },
             
             showError(message) {
                 console.log('Showing error modal:', message); // Debug log
-                this.showModal('Perhatian', message, 'error');
+                this.showModal(@json(__('faq_chatbot.modal_attention')), message, 'error');
             },
             
             showModal(title, message, type) {
@@ -1718,6 +1762,8 @@
         });
     </script>
     
+    <script defer src="https://unpkg.com/alpinejs@3.13.5/dist/cdn.min.js"></script>
+
     <!-- Favourites Script -->
     <script src="{{ asset('js/favourites.js') }}"></script>
 
@@ -1737,7 +1783,7 @@
                 <div class="flex justify-center px-4 py-3">
                     <button id="modalButton" 
                             class="text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-                        OK
+                        {{ __('OK') }}
                     </button>
                 </div>
             </div>

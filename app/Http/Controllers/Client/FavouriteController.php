@@ -43,7 +43,7 @@ class FavouriteController extends Controller
         if ($existingFavourite) {
             return response()->json([
                 'success' => false,
-                'message' => 'Produk sudah ada dalam kegemaran anda'
+                'message' => __('client_messages.favourite_already_exists')
             ]);
         }
 
@@ -55,7 +55,7 @@ class FavouriteController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Produk berjaya ditambah ke kegemaran'
+            'message' => __('client_messages.favourite_added')
         ]);
     }
 
@@ -78,7 +78,7 @@ class FavouriteController extends Controller
         if (!$favourite) {
             return response()->json([
                 'success' => false,
-                'message' => 'Produk tidak dijumpai dalam kegemaran'
+                'message' => __('client_messages.favourite_not_found')
             ]);
         }
 
@@ -86,7 +86,7 @@ class FavouriteController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Produk berjaya dikeluarkan dari kegemaran'
+            'message' => __('client_messages.favourite_removed')
         ]);
     }
 

@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>Lupa Kata Laluan Admin - MyGooners</title>
-    <meta name="description" content="Reset kata laluan admin MyGooners">
+    <title>Lupa Kata Laluan Pentadbir - MyGooners</title>
+    <meta name="description" content="Set semula kata laluan pentadbir MyGooners">
     
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
@@ -55,15 +55,11 @@
             <div class="flex justify-center">
                 <div class="flex items-center">
                     <img src="{{ asset('images/official-logo.png') }}" alt="MyGooners Logo" class="h-12 w-auto rounded-lg">
-                    <span class="ml-3 text-2xl font-bold text-admin-900">Admin</span>
+                    <span class="ml-3 text-2xl font-bold text-admin-900">{{ __('Pentadbir') }}</span>
                 </div>
             </div>
-            <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
-                Lupa Kata Laluan?
-            </h2>
-            <p class="mt-2 text-center text-sm text-gray-600">
-                Masukkan alamat emel anda dan kami akan menghantar pautan untuk menetapkan semula kata laluan anda.
-            </p>
+            <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">{{ __('Lupa Kata Laluan?') }}</h2>
+            <p class="mt-2 text-center text-sm text-gray-600">{{ __('Masukkan alamat emel anda dan kami akan menghantar pautan untuk menetapkan semula kata laluan anda.') }}</p>
         </div>
 
         <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
@@ -102,9 +98,7 @@
                 <form class="space-y-6" method="POST" action="{{ route('admin.password.email') }}">
                     @csrf
                     <div>
-                        <label for="email" class="block text-sm font-medium text-gray-700">
-                            Alamat emel
-                        </label>
+                        <label for="email" class="block text-sm font-medium text-gray-700">{{ __('Alamat emel') }}</label>
                         <div class="mt-1">
                             <input id="email" 
                                    name="email" 
@@ -113,7 +107,7 @@
                                    required 
                                    value="{{ old('email') }}"
                                    class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-admin-500 focus:border-admin-500 sm:text-sm transition-all @error('email') border-red-500 @enderror"
-                                   placeholder="admin@mygooners.com">
+                                   placeholder="{{ __('admin@mygooners.com') }}">
                         </div>
                         @error('email')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -129,7 +123,7 @@
                                     <path d="M10 9a1 1 0 00-1 1v3a1 1 0 102 0v-3a1 1 0 00-1-1zm0-2a1 1 0 100-2 1 1 0 000 2z" />
                                 </svg>
                             </span>
-                            Hantar Pautan Reset
+                            Hantar Pautan Set Semula
                         </button>
                     </div>
                 </form>
@@ -138,17 +132,13 @@
                 <div class="mt-6 text-center">
                     <p class="text-sm text-gray-600">
                         Ingat kata laluan anda? 
-                        <a href="{{ route('admin.login') }}" class="font-medium text-admin-600 hover:text-admin-500 transition-colors">
-                            Log masuk di sini
-                        </a>
+                        <a href="{{ route('admin.login') }}" class="font-medium text-admin-600 hover:text-admin-500 transition-colors">{{ __('Log masuk di sini') }}</a>
                     </p>
                 </div>
 
                 <!-- Back to Site -->
                 <div class="mt-4 text-center">
-                    <a href="{{ route('home') }}" class="text-sm text-gray-500 hover:text-gray-700 transition-colors">
-                        ← Kembali ke MyGooners
-                    </a>
+                    <a href="{{ route('home') }}" class="text-sm text-gray-500 hover:text-gray-700 transition-colors">{{ __('← Kembali ke MyGooners') }}</a>
                 </div>
             </div>
         </div>
@@ -156,7 +146,7 @@
         <!-- Footer -->
         <div class="mt-8 text-center">
             <p class="text-xs text-gray-500">
-                MyGooners Panel Admin &copy; {{ date('Y') }} - Akses Selamat Sahaja
+                MyGooners Panel Pentadbir &copy; {{ date('Y') }} - Akses Selamat Sahaja
             </p>
         </div>
     </div>

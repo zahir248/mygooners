@@ -54,7 +54,7 @@ class ServiceController extends Controller
             $query->where('is_verified', true);
         }
 
-        $services = $query->orderBy('created_at', 'desc')->paginate(10);
+        $services = $query->orderBy('created_at', 'desc')->paginate(10)->withQueryString();
 
         $categories = ServiceCategory::namesForFilter();
 
@@ -68,7 +68,8 @@ class ServiceController extends Controller
         $services = Service::with('user')
             ->where('status', 'pending')
             ->orderBy('created_at', 'desc')
-            ->paginate(10);
+            ->paginate(10)
+            ->withQueryString();
 
         return view('admin.services.pending', compact('services'));
     }
@@ -134,7 +135,7 @@ class ServiceController extends Controller
         $service->save();
 
         return redirect()->route('admin.services.index')
-            ->with('success', 'Perkhidmatan berjaya dicipta!');
+            ->with('success', __('flash.service_created'));
     }
 
     public function show($id)
@@ -222,7 +223,7 @@ class ServiceController extends Controller
         $service->save();
 
         return redirect()->route('admin.services.index')
-            ->with('success', 'Perkhidmatan berjaya dikemaskini!');
+            ->with('success', __('flash.service_updated'));
     }
 
     public function approve($id)
@@ -262,7 +263,7 @@ class ServiceController extends Controller
                 $service->delete();
                 
                 return redirect()->route('admin.services.pending')
-                    ->with('success', 'Kemaskini perkhidmatan berjaya diluluskan!');
+                    ->with('success', __('flash.service_update_approved'));
             }
         }
         
@@ -273,7 +274,7 @@ class ServiceController extends Controller
         ]);
 
         return redirect()->route('admin.services.pending')
-            ->with('success', 'Perkhidmatan diluluskan dengan jayanya!');
+            ->with('success', __('flash.service_approved'));
     }
 
     public function reject(Request $request, $id)
@@ -292,7 +293,7 @@ class ServiceController extends Controller
             ]);
             
             return redirect()->route('admin.services.pending')
-                ->with('success', 'Kemaskini perkhidmatan berjaya ditolak!');
+                ->with('success', __('flash.service_update_rejected'));
         }
         
         // Regular service rejection
@@ -302,7 +303,7 @@ class ServiceController extends Controller
         ]);
 
         return redirect()->route('admin.services.pending')
-            ->with('success', 'Perkhidmatan ditolak dengan jayanya!');
+            ->with('success', __('flash.service_rejected'));
     }
 
     public function toggleStatus($id)
@@ -311,10 +312,10 @@ class ServiceController extends Controller
         
         if ($service->status === 'active') {
             $service->update(['status' => 'inactive']);
-            $message = 'Perkhidmatan telah dinyahaktifkan!';
+            $message = __('flash.service_deactivated');
         } else {
             $service->update(['status' => 'active']);
-            $message = 'Perkhidmatan telah diaktifkan!';
+            $message = __('flash.service_activated');
         }
 
         return redirect()->route('admin.services.index')
@@ -332,9 +333,9 @@ class ServiceController extends Controller
         $service->update(['status' => $request->status]);
         
         $statusMessages = [
-            'active' => 'Perkhidmatan telah diaktifkan!',
-            'inactive' => 'Perkhidmatan telah dinyahaktifkan!',
-            'pending' => 'Perkhidmatan telah ditetapkan sebagai menunggu!'
+            'active' => __('flash.service_activated'),
+            'inactive' => __('flash.service_deactivated'),
+            'pending' => __('flash.service_status_pending_set'),
         ];
 
         return redirect()->route('admin.services.index')
@@ -355,7 +356,7 @@ class ServiceController extends Controller
         $service->delete();
 
         return redirect()->route('admin.services.index')
-            ->with('success', 'Perkhidmatan dipadam dengan jayanya!');
+            ->with('success', __('flash.service_deleted'));
     }
 
     public function getServiceDetails($id)

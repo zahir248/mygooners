@@ -1,12 +1,12 @@
 @extends('layouts.app')
 
-@section('title', 'Kemaskini Perkhidmatan - MyGooners')
+@section('title', __('Kemaskini Perkhidmatan - MyGooners'))
 
 @section('content')
 <div class="max-w-4xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
     <div class="mb-8">
-        <h1 class="text-3xl font-bold text-gray-900 mb-2">Kemaskini Perkhidmatan</h1>
-        <p class="text-gray-600">Kemaskini maklumat perkhidmatan anda untuk permohonan kelulusan admin</p>
+        <h1 class="text-3xl font-bold text-gray-900 mb-2">{{ __('Kemaskini Perkhidmatan') }}</h1>
+        <p class="text-gray-600">{{ __('Kemaskini maklumat perkhidmatan anda untuk permohonan kelulusan admin') }}</p>
     </div>
 
     <div class="bg-white rounded-xl shadow-lg p-6">
@@ -15,19 +15,19 @@
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                    <label for="title" class="block text-sm font-medium text-gray-700 mb-2">Nama Perkhidmatan *</label>
+                    <label for="title" class="block text-sm font-medium text-gray-700 mb-2">{{ __('Nama Perkhidmatan *') }}</label>
                     <input type="text" id="title" name="title" value="{{ old('title', $service->title) }}" 
                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" 
-                           placeholder="Contoh: Servis Baiki Komputer" required>
+                           placeholder="{{ __('Contoh: Servis Baiki Komputer') }}" required>
                     @error('title')
                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                     @enderror
                 </div>
 
                 <div>
-                    <label for="category" class="block text-sm font-medium text-gray-700 mb-2">Kategori *</label>
+                    <label for="category" class="block text-sm font-medium text-gray-700 mb-2">{{ __('Kategori *') }}</label>
                     <select id="category" name="category" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                        <option value="">Pilih kategori</option>
+                        <option value="">{{ __('Pilih kategori') }}</option>
                         <option value="Coaching" {{ old('category', $service->category) == 'Coaching' ? 'selected' : '' }}>Coaching</option>
                         <option value="Transport" {{ old('category', $service->category) == 'Transport' ? 'selected' : '' }}>Pengangkutan</option>
                         <option value="Authentication" {{ old('category', $service->category) == 'Authentication' ? 'selected' : '' }}>Pengesahan</option>
@@ -44,10 +44,10 @@
             </div>
 
             <div>
-                <label for="description" class="block text-sm font-medium text-gray-700 mb-2">Penerangan Perkhidmatan *</label>
+                <label for="description" class="block text-sm font-medium text-gray-700 mb-2">{{ __('Penerangan Perkhidmatan *') }}</label>
                 <textarea id="description" name="description" rows="4" 
                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" 
-                          placeholder="Terangkan perkhidmatan anda dengan terperinci..." required>{{ old('description', $service->description) }}</textarea>
+                          placeholder="{{ __('Terangkan perkhidmatan anda dengan terperinci...') }}" required>{{ old('description', $service->description) }}</textarea>
                 @error('description')
                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                 @enderror
@@ -55,20 +55,20 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                    <label for="location" class="block text-sm font-medium text-gray-700 mb-2">Lokasi Perkhidmatan *</label>
+                    <label for="location" class="block text-sm font-medium text-gray-700 mb-2">{{ __('Lokasi Perkhidmatan *') }}</label>
                     <input type="text" id="location" name="location" value="{{ old('location', $service->location) }}" 
                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" 
-                           placeholder="Contoh: Kuala Lumpur, Selangor" required>
+                           placeholder="{{ __('Contoh: Kuala Lumpur, Selangor') }}" required>
                     @error('location')
                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                     @enderror
                 </div>
 
                 <div>
-                    <label for="pricing" class="block text-sm font-medium text-gray-700 mb-2">Harga Perkhidmatan *</label>
+                    <label for="pricing" class="block text-sm font-medium text-gray-700 mb-2">{{ __('Harga Perkhidmatan *') }}</label>
                     <input type="text" id="pricing" name="pricing" value="{{ old('pricing', $service->pricing) }}" 
                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" 
-                           placeholder="Contoh: RM50-100, RM100/sejam" required>
+                           placeholder="{{ __('Contoh: RM50-100, RM100/sejam') }}" required>
                     @error('pricing')
                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                     @enderror
@@ -76,20 +76,20 @@
             </div>
 
             <div>
-                <label for="contact_info" class="block text-sm font-medium text-gray-700 mb-2">Maklumat Hubungan *</label>
+                <label for="contact_info" class="block text-sm font-medium text-gray-700 mb-2">{{ __('Maklumat Hubungan *') }}</label>
                 <input type="text" id="contact_info" name="contact_info" value="{{ old('contact_info', $service->contact_info) }}" 
                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" 
-                       placeholder="Contoh: WhatsApp: 012-3456789, Email: service@example.com" required>
+                       placeholder="{{ __('Contoh: WhatsApp: 012-3456789, Email: service@example.com') }}" required>
                 @error('contact_info')
                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                 @enderror
             </div>
 
             <div>
-                <label for="tags" class="block text-sm font-medium text-gray-700 mb-2">Tag (Pisahkan dengan koma)</label>
+                <label for="tags" class="block text-sm font-medium text-gray-700 mb-2">{{ __('Tag (Pisahkan dengan koma)') }}</label>
                 <input type="text" id="tags" name="tags" value="{{ old('tags', is_array($service->tags) ? implode(', ', $service->tags) : '') }}" 
                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" 
-                       placeholder="Contoh: baiki komputer, IT support, troubleshooting">
+                       placeholder="{{ __('Contoh: baiki komputer, IT support, troubleshooting') }}">
                 @error('tags')
                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                 @enderror
@@ -98,7 +98,7 @@
             <!-- Current Images Section -->
             @if($service->images && count($service->images) > 0)
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Gambar Semasa</label>
+                <label class="block text-sm font-medium text-gray-700 mb-2">{{ __('Gambar Semasa') }}</label>
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                     @foreach($service->images as $index => $image)
                     <div class="relative">
@@ -106,21 +106,21 @@
                         <label class="absolute top-2 left-2">
                             <input type="checkbox" name="current_images[]" value="{{ $image }}" checked 
                                    class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
-                            <span class="ml-1 text-xs text-white bg-black bg-opacity-50 px-1 rounded">Simpan</span>
+                            <span class="ml-1 text-xs text-white bg-black bg-opacity-50 px-1 rounded">{{ __('Simpan') }}</span>
                         </label>
                     </div>
                     @endforeach
                 </div>
-                <p class="text-sm text-gray-500 mt-2">Tandakan gambar yang ingin dikekalkan</p>
+                <p class="text-sm text-gray-500 mt-2">{{ __('Tandakan gambar yang ingin dikekalkan') }}</p>
             </div>
             @endif
 
             <!-- New Images Section -->
             <div>
-                <label for="new_images" class="block text-sm font-medium text-gray-700 mb-2">Tambah Gambar Baharu</label>
+                <label for="new_images" class="block text-sm font-medium text-gray-700 mb-2">{{ __('Tambah Gambar Baharu') }}</label>
                 <input type="file" id="new_images" name="new_images[]" multiple accept="image/*" 
                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                <p class="text-sm text-gray-500 mt-1">Pilih gambar baharu untuk ditambah (maksimum 5MB setiap gambar)</p>
+                <p class="text-sm text-gray-500 mt-1">{{ __('Pilih gambar baharu untuk ditambah (maksimum 5MB setiap gambar)') }}</p>
                 @error('new_images.*')
                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                 @enderror
@@ -134,13 +134,13 @@
                         </svg>
                     </div>
                     <div class="ml-3">
-                        <h3 class="text-sm font-medium text-blue-800">Maklumat Penting</h3>
+                        <h3 class="text-sm font-medium text-blue-800">{{ __('Maklumat Penting') }}</h3>
                         <div class="mt-2 text-sm text-blue-700">
                             <ul class="list-disc list-inside space-y-1">
-                                <li>Perubahan akan dihantar untuk kelulusan admin</li>
-                                <li>Perkhidmatan anda akan kekal aktif sehingga kelulusan</li>
-                                <li>Admin akan menyemak permohonan dalam masa 1-3 hari bekerja</li>
-                                <li>Anda akan dimaklumkan melalui email selepas kelulusan</li>
+                                <li>{{ __('Perubahan akan dihantar untuk kelulusan admin') }}</li>
+                                <li>{{ __('Perkhidmatan anda akan kekal aktif sehingga kelulusan') }}</li>
+                                <li>{{ __('Admin akan menyemak permohonan dalam masa 1-3 hari bekerja') }}</li>
+                                <li>{{ __('Anda akan dimaklumkan melalui email selepas kelulusan') }}</li>
                             </ul>
                         </div>
                     </div>
@@ -148,12 +148,8 @@
             </div>
 
             <div class="flex gap-4">
-                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors">
-                    Hantar Permohonan Kemaskini
-                </button>
-                <a href="{{ route('dashboard') }}" class="bg-gray-300 hover:bg-gray-400 text-gray-700 px-6 py-3 rounded-lg font-semibold transition-colors">
-                    Batal
-                </a>
+                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors">{{ __('Hantar Permohonan Kemaskini') }}</button>
+                <a href="{{ route('dashboard') }}" class="bg-gray-300 hover:bg-gray-400 text-gray-700 px-6 py-3 rounded-lg font-semibold transition-colors">{{ __('Batal') }}</a>
             </div>
         </form>
     </div>

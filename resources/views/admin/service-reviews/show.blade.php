@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Detail Ulasan Perkhidmatan')
+@section('title', __('Butiran Ulasan Perkhidmatan'))
 
 @section('content')
 <div class="px-4 sm:px-6 lg:px-8 py-6">
@@ -8,8 +8,8 @@
     <div class="mb-6">
         <div class="flex items-center justify-between">
             <div>
-                <h1 class="text-2xl font-bold text-gray-900">Detail Ulasan Perkhidmatan</h1>
-                <p class="mt-2 text-sm text-gray-700">Lihat maklumat lengkap ulasan perkhidmatan</p>
+                <h1 class="text-2xl font-bold text-gray-900">{{ __('Butiran Ulasan Perkhidmatan') }}</h1>
+                <p class="mt-2 text-sm text-gray-700">{{ __('Lihat maklumat lengkap ulasan perkhidmatan') }}</p>
             </div>
             <div class="flex space-x-3">
                 <a href="{{ route('admin.service-reviews.index') }}" 
@@ -17,7 +17,7 @@
                     <svg class="-ml-1 mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
                     </svg>
-                    Kembali
+                    {{ __('Kembali') }}
                 </a>
             </div>
         </div>
@@ -29,16 +29,14 @@
             <h3 class="text-lg leading-6 font-medium text-gray-900">
                 Ulasan #{{ $review->id }}
             </h3>
-            <p class="mt-1 max-w-2xl text-sm text-gray-500">
-                Maklumat lengkap ulasan perkhidmatan
-            </p>
+            <p class="mt-1 max-w-2xl text-sm text-gray-500">{{ __('Maklumat lengkap ulasan perkhidmatan') }}</p>
         </div>
         
         <div class="border-t border-gray-200">
             <dl>
                 <!-- User Information -->
                 <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                    <dt class="text-sm font-medium text-gray-500">Pengguna</dt>
+                    <dt class="text-sm font-medium text-gray-500">{{ __('Pengguna') }}</dt>
                     <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                         <div class="flex items-center space-x-3">
                             @if($review->user && $review->user->profile_image)
@@ -70,7 +68,7 @@
 
                 <!-- Service Information -->
                 <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                    <dt class="text-sm font-medium text-gray-500">Perkhidmatan</dt>
+                    <dt class="text-sm font-medium text-gray-500">{{ __('Perkhidmatan') }}</dt>
                     <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                         <div class="flex items-start space-x-3">
                             <div class="flex-shrink-0 h-20 w-32">
@@ -99,7 +97,7 @@
 
                 <!-- Rating -->
                 <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                    <dt class="text-sm font-medium text-gray-500">Rating</dt>
+                    <dt class="text-sm font-medium text-gray-500">{{ __('Penilaian') }}</dt>
                     <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                         <div class="flex items-center">
                             @for($i = 1; $i <= 5; $i++)
@@ -120,7 +118,7 @@
 
                 <!-- Comment -->
                 <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                    <dt class="text-sm font-medium text-gray-500">Komen</dt>
+                    <dt class="text-sm font-medium text-gray-500">{{ __('Komen') }}</dt>
                     <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                         <div class="bg-gray-50 p-4 rounded-lg">
                             <p class="whitespace-pre-wrap">{{ $review->comment }}</p>
@@ -130,27 +128,21 @@
 
                 <!-- Status -->
                 <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                    <dt class="text-sm font-medium text-gray-500">Status</dt>
+                    <dt class="text-sm font-medium text-gray-500">{{ __('Status') }}</dt>
                     <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                         @if($review->status === 'approved')
-                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                Diluluskan
-                            </span>
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">{{ __('Diluluskan') }}</span>
                         @elseif($review->status === 'rejected')
-                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
-                                Ditolak
-                            </span>
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">{{ __('Ditolak') }}</span>
                         @else
-                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                                Menunggu
-                            </span>
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">{{ __('Menunggu') }}</span>
                         @endif
                     </dd>
                 </div>
 
                 <!-- Dates -->
                 <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                    <dt class="text-sm font-medium text-gray-500">Tarikh</dt>
+                    <dt class="text-sm font-medium text-gray-500">{{ __('Tarikh') }}</dt>
                     <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                         <div class="space-y-1">
                             <div><strong>Dicipta:</strong> {{ $review->created_at->format('j F Y, H:i') }}</div>
@@ -165,7 +157,7 @@
     <!-- Actions -->
     <div class="mt-6 bg-white shadow sm:rounded-lg">
         <div class="px-4 py-5 sm:p-6">
-            <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">Tindakan</h3>
+            <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">{{ __('Tindakan') }}</h3>
             <div class="flex flex-wrap gap-3">
                 @if($review->status === 'pending')
                     <form action="{{ route('admin.service-reviews.approve', $review) }}" method="POST" class="inline">
@@ -176,7 +168,7 @@
                             <svg class="-ml-1 mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                             </svg>
-                            Luluskan Ulasan
+                            {{ __('Luluskan Ulasan') }}
                         </button>
                     </form>
                     
@@ -188,7 +180,7 @@
                             <svg class="-ml-1 mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                             </svg>
-                            Tolak Ulasan
+                            {{ __('Tolak Ulasan') }}
                         </button>
                     </form>
                 @endif
@@ -199,7 +191,7 @@
                     <svg class="-ml-1 mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                     </svg>
-                    Padam Ulasan
+                    {{ __('Padam Ulasan') }}
                 </button>
             </div>
         </div>
@@ -218,35 +210,27 @@
             </div>
             
             <!-- Modal Title -->
-            <h3 class="text-lg font-medium text-gray-900 mt-4">Padam Ulasan</h3>
+            <h3 class="text-lg font-medium text-gray-900 mt-4">{{ __('Padam Ulasan') }}</h3>
             
             <!-- Modal Content -->
             <div class="mt-2 px-7 py-3">
-                <p class="text-sm text-gray-500">
-                    Adakah anda pasti mahu memadamkan ulasan ini?
-                </p>
+                <p class="text-sm text-gray-500">{{ __('Adakah anda pasti mahu memadamkan ulasan ini?') }}</p>
                 <div class="mt-3 bg-gray-50 p-3 rounded-md">
-                    <p class="text-xs text-gray-600 font-medium">Komen:</p>
+                    <p class="text-xs text-gray-600 font-medium">{{ __('Komen:') }}</p>
                     <p class="text-sm text-gray-800 mt-1" id="reviewComment">{{ Str::limit($review->comment, 100) }}</p>
                 </div>
-                <p class="text-xs text-red-600 mt-2">
-                    Tindakan ini tidak boleh dibatalkan.
-                </p>
+                <p class="text-xs text-red-600 mt-2">{{ __('Tindakan ini tidak boleh dibatalkan.') }}</p>
             </div>
             
             <!-- Modal Actions -->
             <div class="flex items-center justify-center gap-3 mt-4">
                 <button id="cancelDelete" 
-                        class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 text-sm">
-                    Batal
-                </button>
+                        class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 text-sm">{{ __('Batal') }}</button>
                 <form action="{{ route('admin.service-reviews.destroy', $review) }}" method="POST" class="inline">
                     @csrf
                     @method('DELETE')
                     <button type="submit" 
-                            class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 text-sm">
-                        Padam
-                    </button>
+                            class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 text-sm">{{ __('Padam') }}</button>
                 </form>
             </div>
         </div>

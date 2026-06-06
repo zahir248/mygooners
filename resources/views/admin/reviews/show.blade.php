@@ -4,15 +4,15 @@
 use Illuminate\Support\Str;
 @endphp
 
-@section('title', 'Butiran Ulasan')
+@section('title', __('Butiran Ulasan'))
 
 @section('content')
 <!-- Header Section -->
 <div class="px-4 sm:px-6 lg:px-8 py-6">
     <div class="sm:flex sm:items-center sm:justify-between">
         <div>
-            <h1 class="text-2xl font-bold text-gray-900">Butiran Ulasan</h1>
-            <p class="mt-2 text-sm text-gray-700">Lihat maklumat lengkap ulasan produk</p>
+            <h1 class="text-2xl font-bold text-gray-900">{{ __('Butiran Ulasan') }}</h1>
+            <p class="mt-2 text-sm text-gray-700">{{ __('Lihat maklumat lengkap ulasan produk') }}</p>
         </div>
         <div class="mt-4 sm:mt-0 flex space-x-3">
             <a href="{{ route('admin.reviews.index') }}" 
@@ -20,7 +20,7 @@ use Illuminate\Support\Str;
                 <svg class="-ml-1 mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
                 </svg>
-                Kembali ke Ulasan
+                {{ __('Kembali ke Ulasan') }}
             </a>
             
             <button type="button" 
@@ -29,7 +29,7 @@ use Illuminate\Support\Str;
                 <svg class="-ml-1 mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                 </svg>
-                Padam Ulasan
+                {{ __('Padam Ulasan') }}
             </button>
         </div>
     </div>
@@ -41,12 +41,12 @@ use Illuminate\Support\Str;
         <div class="lg:col-span-2">
             <div class="bg-white shadow overflow-hidden sm:rounded-lg">
                 <div class="px-6 py-4 border-b border-gray-200">
-                    <h2 class="text-lg font-medium text-gray-900">Maklumat Ulasan</h2>
+                    <h2 class="text-lg font-medium text-gray-900">{{ __('Maklumat Ulasan') }}</h2>
                 </div>
                 <div class="px-6 py-4">
                     <!-- Rating -->
                     <div class="mb-6">
-                        <label class="block text-sm font-medium text-gray-700 mb-3">Rating</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-3">{{ __('Penilaian') }}</label>
                         <div class="flex items-center">
                             @for($i = 1; $i <= 5; $i++)
                                 <svg class="w-6 h-6 {{ $i <= $review->rating ? 'text-yellow-400' : 'text-gray-300' }}" 
@@ -60,7 +60,7 @@ use Illuminate\Support\Str;
 
                     <!-- Comment -->
                     <div class="mb-6">
-                        <label class="block text-sm font-medium text-gray-700 mb-3">Komen Ulasan</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-3">{{ __('Komen Ulasan') }}</label>
                         <div class="bg-gray-50 rounded-lg p-4">
                             <p class="text-gray-900 leading-relaxed">{{ $review->comment }}</p>
                         </div>
@@ -68,7 +68,7 @@ use Illuminate\Support\Str;
 
                     @if($review->photos->count() > 0)
                         <div class="mb-6">
-                            <label class="block text-sm font-medium text-gray-700 mb-3">Gambar Ulasan</label>
+                            <label class="block text-sm font-medium text-gray-700 mb-3">{{ __('Gambar Ulasan') }}</label>
                             <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
                                 @foreach($review->photos as $photo)
                                     <a href="{{ $photo->image_url }}" target="_blank" rel="noopener noreferrer">
@@ -82,11 +82,11 @@ use Illuminate\Support\Str;
                     <!-- Dates -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Dicipta Pada</label>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">{{ __('Dicipta Pada') }}</label>
                             <p class="text-gray-900">{{ $review->created_at->format('F d, Y \a\t g:i A') }}</p>
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Kemas Kini Terakhir</label>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">{{ __('Kemas Kini Terakhir') }}</label>
                             <p class="text-gray-900">{{ $review->updated_at->format('F d, Y \a\t g:i A') }}</p>
                         </div>
                     </div>
@@ -99,7 +99,7 @@ use Illuminate\Support\Str;
             <!-- User Information -->
             <div class="bg-white shadow overflow-hidden sm:rounded-lg mb-6">
                 <div class="px-6 py-4 border-b border-gray-200">
-                    <h3 class="text-lg font-medium text-gray-900">Maklumat Pengguna</h3>
+                    <h3 class="text-lg font-medium text-gray-900">{{ __('Maklumat Pengguna') }}</h3>
                 </div>
                 <div class="px-6 py-4">
                     <div class="flex items-center mb-6">
@@ -122,8 +122,8 @@ use Illuminate\Support\Str;
                                 <span class="text-2xl font-bold text-gray-600">A</span>
                             </div>
                             <div>
-                                <h4 class="text-lg font-semibold text-gray-900">Anonim</h4>
-                                <p class="text-gray-600">Pengguna tidak berdaftar</p>
+                                <h4 class="text-lg font-semibold text-gray-900">{{ __('Anonim') }}</h4>
+                                <p class="text-gray-600">{{ __('Pengguna tidak berdaftar') }}</p>
                             </div>
                         @endif
                     </div>
@@ -131,25 +131,25 @@ use Illuminate\Support\Str;
                     <div class="space-y-3">
                         @if($review->user)
                             <div>
-                                <span class="text-sm font-medium text-gray-700">ID Pengguna:</span>
+                                <span class="text-sm font-medium text-gray-700">{{ __('ID Pengguna:') }}</span>
                                 <span class="text-sm text-gray-900 ml-2">{{ $review->user->id }}</span>
                             </div>
                             <div>
-                                <span class="text-sm font-medium text-gray-700">Menyertai:</span>
+                                <span class="text-sm font-medium text-gray-700">{{ __('Menyertai:') }}</span>
                                 <span class="text-sm text-gray-900 ml-2">{{ $review->user->created_at->format('M d, Y') }}</span>
                             </div>
                             <div>
-                                <span class="text-sm font-medium text-gray-700">Status:</span>
+                                <span class="text-sm font-medium text-gray-700">{{ __('Status:') }}</span>
                                 <span class="text-sm text-gray-900 ml-2">{{ ucfirst($review->user->status ?? 'aktif') }}</span>
                             </div>
                         @else
                             <div>
-                                <span class="text-sm font-medium text-gray-700">Jenis Pengguna:</span>
-                                <span class="text-sm text-gray-900 ml-2">Pengunjung</span>
+                                <span class="text-sm font-medium text-gray-700">{{ __('Jenis Pengguna:') }}</span>
+                                <span class="text-sm text-gray-900 ml-2">{{ __('Pengunjung') }}</span>
                             </div>
                             <div>
-                                <span class="text-sm font-medium text-gray-700">Status:</span>
-                                <span class="text-sm text-gray-900 ml-2">Tidak berdaftar</span>
+                                <span class="text-sm font-medium text-gray-700">{{ __('Status:') }}</span>
+                                <span class="text-sm text-gray-900 ml-2">{{ __('Tidak berdaftar') }}</span>
                             </div>
                         @endif
                     </div>
@@ -158,7 +158,7 @@ use Illuminate\Support\Str;
                     <div class="mt-6 pt-4 border-t border-gray-200">
                         <a href="{{ route('admin.users.show', $review->user->id) }}" 
                            class="text-red-600 hover:text-red-700 text-sm font-medium">
-                            Lihat Profil Pengguna →
+                            {{ __('Lihat Profil Pengguna →') }}
                         </a>
                     </div>
                     @endif
@@ -168,7 +168,7 @@ use Illuminate\Support\Str;
             <!-- Product Information -->
             <div class="bg-white shadow overflow-hidden sm:rounded-lg">
                 <div class="px-6 py-4 border-b border-gray-200">
-                    <h3 class="text-lg font-medium text-gray-900">Maklumat Produk</h3>
+                    <h3 class="text-lg font-medium text-gray-900">{{ __('Maklumat Produk') }}</h3>
                 </div>
                 <div class="px-6 py-4">
                     <div class="mb-6">
@@ -187,19 +187,19 @@ use Illuminate\Support\Str;
 
                     <div class="space-y-3">
                         <div>
-                            <span class="text-sm font-medium text-gray-700">ID Produk:</span>
+                            <span class="text-sm font-medium text-gray-700">{{ __('ID Produk:') }}</span>
                             <span class="text-sm text-gray-900 ml-2">{{ $review->product->id }}</span>
                         </div>
                         <div>
-                            <span class="text-sm font-medium text-gray-700">Kategori:</span>
+                            <span class="text-sm font-medium text-gray-700">{{ __('Kategori:') }}</span>
                             <span class="text-sm text-gray-900 ml-2">{{ $review->product->category }}</span>
                         </div>
                         <div>
-                            <span class="text-sm font-medium text-gray-700">Harga:</span>
+                            <span class="text-sm font-medium text-gray-700">{{ __('Harga:') }}</span>
                             <span class="text-sm text-gray-900 ml-2">RM{{ number_format($review->product->price, 2) }}</span>
                         </div>
                         <div>
-                            <span class="text-sm font-medium text-gray-700">Status:</span>
+                            <span class="text-sm font-medium text-gray-700">{{ __('Status:') }}</span>
                             <span class="text-sm text-gray-900 ml-2">{{ ucfirst($review->product->status) }}</span>
                         </div>
                     </div>
@@ -207,7 +207,7 @@ use Illuminate\Support\Str;
                     <div class="mt-6 pt-4 border-t border-gray-200">
                         <a href="{{ route('admin.products.show', $review->product->id) }}" 
                            class="text-red-600 hover:text-red-700 text-sm font-medium">
-                            Lihat Butiran Produk →
+                            {{ __('Lihat Butiran Produk →') }}
                         </a>
                     </div>
                 </div>
@@ -220,7 +220,7 @@ use Illuminate\Support\Str;
         <div class="mx-4 mt-6">
             <div class="bg-white shadow overflow-hidden sm:rounded-lg">
                 <div class="px-6 py-4 border-b border-gray-200">
-                    <h3 class="text-lg font-medium text-gray-900">Sejarah Ulasan</h3>
+                    <h3 class="text-lg font-medium text-gray-900">{{ __('Sejarah Ulasan') }}</h3>
                 </div>
                 <div class="px-6 py-4">
                     <div class="bg-gray-50 rounded-lg p-4">
@@ -245,19 +245,19 @@ use Illuminate\Support\Str;
                 </div>
                 
                 <!-- Modal Title -->
-                <h3 class="text-lg font-medium text-gray-900 mt-4">Padam Ulasan</h3>
+                <h3 class="text-lg font-medium text-gray-900 mt-4">{{ __('Padam Ulasan') }}</h3>
                 
                 <!-- Modal Content -->
                 <div class="mt-2 px-7 py-3">
                     <p class="text-sm text-gray-500">
-                        Adakah anda pasti mahu memadamkan ulasan ini?
+                        {{ __('Adakah anda pasti mahu memadamkan ulasan ini?') }}
                     </p>
                     <div class="mt-3 bg-gray-50 p-3 rounded-md">
-                        <p class="text-xs text-gray-600 font-medium">Komen:</p>
+                        <p class="text-xs text-gray-600 font-medium">{{ __('Komen:') }}</p>
                         <p class="text-sm text-gray-800 mt-1" id="reviewComment"></p>
                     </div>
                     <p class="text-xs text-red-600 mt-2">
-                        Tindakan ini tidak boleh dibatalkan.
+                        {{ __('Tindakan ini tidak boleh dibatalkan.') }}
                     </p>
                 </div>
                 
@@ -265,14 +265,14 @@ use Illuminate\Support\Str;
                 <div class="flex items-center justify-center gap-3 mt-4">
                     <button id="cancelDelete" 
                             class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 text-sm">
-                        Batal
+                        {{ __('Batal') }}
                     </button>
                     <form id="deleteForm" method="POST" class="inline">
                         @csrf
                         @method('DELETE')
                         <button type="submit" 
                                 class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 text-sm">
-                            Padam
+                            {{ __('Padam') }}
                         </button>
                     </form>
                 </div>

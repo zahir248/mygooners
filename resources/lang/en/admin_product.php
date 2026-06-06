@@ -1,0 +1,28 @@
+<?php
+
+return [
+    'variation_prefix' => 'Variant:',
+    'variation_this' => 'This variant',
+    'stock_label' => 'Stock:',
+    'variation_images' => 'Variant Images:',
+    'delete_confirm' => 'Are you sure you want to delete ":name"? This action cannot be undone.',
+    'error_load_variation' => 'Error loading variant data',
+    'error_empty_variation_name' => 'Variant name cannot be empty',
+    'error_invalid_stock' => 'Stock quantity must be a valid number and cannot be negative',
+    'error_sale_price_lower' => 'Sale price must be lower than the original price',
+    'error_update_variation' => 'Unable to update variant. Please try again.',
+    'success_update_variation' => 'Product variant updated successfully.',
+    'success_delete_variation' => 'Product variant deleted successfully.',
+    'category_filter' => 'Category: :category',
+    'stock_filter' => 'Stock: :status',
+    'stock_in_stock' => ':count In Stock',
+    'stock_low' => ':count Low Stock',
+    'variants_count' => ':count Variants',
+    'select_status_for' => 'Select new status for ":name"',
+    'stock_units' => ':count units',
+    'meta_description_label' => 'Meta Description:',
+    'btn_deactivate' => 'Deactivate',
+    'btn_activate' => 'Activate',
+    'btn_unfeature' => 'Unfeature',
+    'btn_feature' => 'Feature',
+];

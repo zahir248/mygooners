@@ -32,7 +32,7 @@ class RefundController extends Controller
             });
         }
 
-        $refunds = $query->orderBy('created_at', 'desc')->paginate(15);
+        $refunds = $query->orderBy('created_at', 'desc')->paginate(15)->withQueryString();
         
         $statusCounts = [
             'pending' => Refund::where('status', 'pending')->count(),
@@ -111,18 +111,18 @@ class RefundController extends Controller
             DB::commit();
 
             $statusMessages = [
-                'approved' => 'Permohonan refund telah diluluskan.',
-                'rejected' => 'Permohonan refund telah ditolak.',
-                'processing' => 'Status refund telah diubah kepada sedang diproses.',
-                'completed' => 'Refund telah selesai dan status pesanan telah dikemas kini.',
-                'pending' => 'Status refund telah dikembalikan kepada menunggu.',
+                'approved' => __('flash.refund_request_approved'),
+                'rejected' => __('flash.refund_request_rejected'),
+                'processing' => __('flash.refund_processing'),
+                'completed' => __('flash.refund_completed_order_updated'),
+                'pending' => __('flash.refund_pending_restored'),
             ];
 
-            return back()->with('success', $statusMessages[$request->status] ?? 'Status refund telah dikemas kini.');
+            return back()->with('success', $statusMessages[$request->status] ?? __('flash.refund_status_updated'));
 
         } catch (\Exception $e) {
             DB::rollBack();
-            return back()->with('error', 'Ralat berlaku semasa mengemas kini status refund.');
+            return back()->with('error', __('flash.refund_status_update_error'));
         }
     }
 

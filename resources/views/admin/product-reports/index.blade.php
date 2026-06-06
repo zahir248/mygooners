@@ -1,14 +1,14 @@
 @extends('layouts.admin')
 
-@section('title', 'Laporan Produk - Panel Admin')
+@section('title', __('Laporan Produk - Panel Pentadbir'))
 
 @section('content')
 <div class="py-6">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <!-- Header -->
         <div class="mb-8">
-            <h1 class="text-3xl font-bold text-gray-900">Laporan Produk</h1>
-            <p class="mt-2 text-gray-600">Gambaran keseluruhan semua produk, stok, dan prestasi jualan</p>
+            <h1 class="text-3xl font-bold text-gray-900">{{ __('Laporan Produk') }}</h1>
+            <p class="mt-2 text-gray-600">{{ __('Gambaran keseluruhan semua produk, stok, dan prestasi jualan') }}</p>
         </div>
 
         <!-- Summary Cards -->
@@ -21,7 +21,7 @@
                         </svg>
                     </div>
                     <div class="ml-4">
-                        <p class="text-sm font-medium text-gray-600">Jumlah Produk</p>
+                        <p class="text-sm font-medium text-gray-600">{{ __('Jumlah Produk') }}</p>
                         <p class="text-2xl font-bold text-gray-900">{{ number_format($summary['total_products']) }}</p>
                     </div>
                 </div>
@@ -35,7 +35,7 @@
                         </svg>
                     </div>
                     <div class="ml-4">
-                        <p class="text-sm font-medium text-gray-600">Produk Aktif</p>
+                        <p class="text-sm font-medium text-gray-600">{{ __('Produk Aktif') }}</p>
                         <p class="text-2xl font-bold text-gray-900">{{ number_format($summary['active_products']) }}</p>
                     </div>
                 </div>
@@ -49,7 +49,7 @@
                         </svg>
                     </div>
                     <div class="ml-4">
-                        <p class="text-sm font-medium text-gray-600">Jumlah Stok</p>
+                        <p class="text-sm font-medium text-gray-600">{{ __('Jumlah Stok') }}</p>
                         <p class="text-2xl font-bold text-gray-900">{{ number_format($summary['total_stock']) }}</p>
                     </div>
                 </div>
@@ -63,7 +63,7 @@
                         </svg>
                     </div>
                     <div class="ml-4">
-                        <p class="text-sm font-medium text-gray-600">Dengan Variasi</p>
+                        <p class="text-sm font-medium text-gray-600">{{ __('Dengan Variasi') }}</p>
                         <p class="text-2xl font-bold text-gray-900">{{ number_format($summary['products_with_variations']) }}</p>
                     </div>
                 </div>
@@ -77,7 +77,7 @@
                         </svg>
                     </div>
                     <div class="ml-4">
-                        <p class="text-sm font-medium text-gray-600">Jualan Bulan Lepas</p>
+                        <p class="text-sm font-medium text-gray-600">{{ __('Jualan Bulan Lepas') }}</p>
                         <p class="text-2xl font-bold text-gray-900">RM {{ number_format($summary['last_month_sales'], 2) }}</p>
                     </div>
                 </div>
@@ -87,7 +87,7 @@
         <!-- Quick Actions -->
         <div class="bg-white rounded-lg shadow mb-8">
             <div class="px-6 py-4 border-b border-gray-200">
-                <h3 class="text-lg font-medium text-gray-900">Tindakan Pantas</h3>
+                <h3 class="text-lg font-medium text-gray-900">{{ __('Tindakan Pantas') }}</h3>
             </div>
             <div class="p-6">
                                  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
@@ -99,8 +99,8 @@
                             </svg>
                         </div>
                         <div class="ml-4">
-                            <h4 class="text-sm font-medium text-gray-900">Laporan Stok</h4>
-                            <p class="text-sm text-gray-500">Lihat status stok semua produk</p>
+                            <h4 class="text-sm font-medium text-gray-900">{{ __('Laporan Stok') }}</h4>
+                            <p class="text-sm text-gray-500">{{ __('Lihat status stok semua produk') }}</p>
                         </div>
                     </a>
 
@@ -112,8 +112,8 @@
                             </svg>
                         </div>
                         <div class="ml-4">
-                            <h4 class="text-sm font-medium text-gray-900">Laporan Jualan</h4>
-                            <p class="text-sm text-gray-500">Analisis prestasi jualan produk</p>
+                            <h4 class="text-sm font-medium text-gray-900">{{ __('Laporan Jualan') }}</h4>
+                            <p class="text-sm text-gray-500">{{ __('Analisis prestasi jualan produk') }}</p>
                         </div>
                     </a>
 
@@ -125,8 +125,8 @@
                              </svg>
                          </div>
                          <div class="ml-4">
-                             <h4 class="text-sm font-medium text-gray-900">Eksport Stok</h4>
-                             <p class="text-sm text-gray-500">Muat turun laporan stok dalam CSV</p>
+                             <h4 class="text-sm font-medium text-gray-900">{{ __('Eksport Stok') }}</h4>
+                             <p class="text-sm text-gray-500">{{ __('Muat turun laporan stok dalam CSV') }}</p>
                          </div>
                      </a>
 
@@ -138,8 +138,8 @@
                              </svg>
                          </div>
                          <div class="ml-4">
-                             <h4 class="text-sm font-medium text-gray-900">Semua Produk</h4>
-                             <p class="text-sm text-gray-500">Lihat senarai lengkap semua produk</p>
+                             <h4 class="text-sm font-medium text-gray-900">{{ __('Semua Produk') }}</h4>
+                             <p class="text-sm text-gray-500">{{ __('Lihat senarai lengkap semua produk') }}</p>
                          </div>
                      </a>
 
@@ -151,8 +151,8 @@
                              </svg>
                          </div>
                          <div class="ml-4">
-                             <h4 class="text-sm font-medium text-gray-900">Eksport Jualan</h4>
-                             <p class="text-sm text-gray-500">Muat turun laporan jualan dalam CSV</p>
+                             <h4 class="text-sm font-medium text-gray-900">{{ __('Eksport Jualan') }}</h4>
+                             <p class="text-sm text-gray-500">{{ __('Muat turun laporan jualan dalam CSV') }}</p>
                          </div>
                      </a>
                 </div>
@@ -164,15 +164,15 @@
             <!-- Stock Status Distribution -->
             <div class="bg-white rounded-lg shadow">
                 <div class="px-6 py-4 border-b border-gray-200">
-                    <h3 class="text-lg font-medium text-gray-900">Status Stok</h3>
-                    <p class="text-sm text-gray-600">Taburan status stok produk</p>
+                    <h3 class="text-lg font-medium text-gray-900">{{ __('Status Stok') }}</h3>
+                    <p class="text-sm text-gray-600">{{ __('Taburan status stok produk') }}</p>
                 </div>
                 <div class="p-6">
                     <div class="space-y-4">
                         <div class="flex items-center justify-between">
                             <div class="flex items-center">
                                 <div class="w-3 h-3 bg-green-500 rounded-full mr-3"></div>
-                                <span class="text-sm text-gray-700">Ada Stok</span>
+                                <span class="text-sm text-gray-700">{{ __('Ada Stok') }}</span>
                             </div>
                             <div class="text-right">
                                 <span class="text-sm font-medium text-gray-900">
@@ -186,7 +186,7 @@
                         <div class="flex items-center justify-between">
                             <div class="flex items-center">
                                 <div class="w-3 h-3 bg-yellow-500 rounded-full mr-3"></div>
-                                <span class="text-sm text-gray-700">Stok Rendah</span>
+                                <span class="text-sm text-gray-700">{{ __('Stok Rendah') }}</span>
                             </div>
                             <div class="text-right">
                                 <span class="text-sm font-medium text-gray-900">
@@ -200,7 +200,7 @@
                         <div class="flex items-center justify-between">
                             <div class="flex items-center">
                                 <div class="w-3 h-3 bg-red-500 rounded-full mr-3"></div>
-                                <span class="text-sm text-gray-700">Habis Stok</span>
+                                <span class="text-sm text-gray-700">{{ __('Habis Stok') }}</span>
                             </div>
                             <div class="text-right">
                                 <span class="text-sm font-medium text-gray-900">
@@ -218,8 +218,8 @@
             <!-- Category Distribution -->
             <div class="bg-white rounded-lg shadow">
                 <div class="px-6 py-4 border-b border-gray-200">
-                    <h3 class="text-lg font-medium text-gray-900">Taburan Kategori</h3>
-                    <p class="text-sm text-gray-600">Produk mengikut kategori</p>
+                    <h3 class="text-lg font-medium text-gray-900">{{ __('Taburan Kategori') }}</h3>
+                    <p class="text-sm text-gray-600">{{ __('Produk mengikut kategori') }}</p>
                 </div>
                 <div class="p-6">
                     @if($categories->count() > 0)
@@ -257,8 +257,8 @@
             <!-- Stock Alerts -->
             <div class="bg-white rounded-lg shadow">
                 <div class="px-6 py-4 border-b border-gray-200">
-                    <h3 class="text-lg font-medium text-gray-900">Amaran Stok</h3>
-                    <p class="text-sm text-gray-600">Produk yang memerlukan perhatian</p>
+                    <h3 class="text-lg font-medium text-gray-900">{{ __('Amaran Stok') }}</h3>
+                    <p class="text-sm text-gray-600">{{ __('Produk yang memerlukan perhatian') }}</p>
                 </div>
                 <div class="p-6">
                     @php
@@ -269,7 +269,7 @@
                     @if($lowStockProducts->count() > 0 || $outOfStockProducts->count() > 0)
                         @if($lowStockProducts->count() > 0)
                             <div class="mb-4">
-                                <h4 class="text-sm font-medium text-yellow-800 mb-2">Stok Rendah (≤10)</h4>
+                                <h4 class="text-sm font-medium text-yellow-800 mb-2">{{ __('Stok Rendah (≤10)') }}</h4>
                                 <div class="space-y-2">
                                     @foreach($lowStockProducts as $product)
                                         <div class="flex items-center justify-between p-2 bg-yellow-50 rounded">
@@ -283,12 +283,12 @@
 
                         @if($outOfStockProducts->count() > 0)
                             <div>
-                                <h4 class="text-sm font-medium text-red-800 mb-2">Habis Stok</h4>
+                                <h4 class="text-sm font-medium text-red-800 mb-2">{{ __('Habis Stok') }}</h4>
                                 <div class="space-y-2">
                                     @foreach($outOfStockProducts as $product)
                                         <div class="flex items-center justify-between p-2 bg-red-50 rounded">
                                             <span class="text-sm text-gray-700">{{ Str::limit($product->title, 25) }}</span>
-                                            <span class="text-xs text-red-600 font-medium">0 unit</span>
+                                            <span class="text-xs text-red-600 font-medium">{{ __('0 unit') }}</span>
                                         </div>
                                     @endforeach
                                 </div>
@@ -305,8 +305,8 @@
             <!-- Sales Performance -->
             <div class="bg-white rounded-lg shadow">
                 <div class="px-6 py-4 border-b border-gray-200">
-                    <h3 class="text-lg font-medium text-gray-900">Prestasi Jualan</h3>
-                    <p class="text-sm text-gray-600">Jualan 30 hari lepas</p>
+                    <h3 class="text-lg font-medium text-gray-900">{{ __('Prestasi Jualan') }}</h3>
+                    <p class="text-sm text-gray-600">{{ __('Jualan 30 hari lepas') }}</p>
                 </div>
                 <div class="p-6">
                     <div class="text-center mb-4">
@@ -329,10 +329,10 @@
 
                     @if($topSellingProducts->count() > 0)
                         <div class="space-y-2">
-                            <h4 class="text-sm font-medium text-gray-900 mb-2">Produk Terlaris</h4>
+                            <h4 class="text-sm font-medium text-gray-900 mb-2">{{ __('Produk Terlaris') }}</h4>
                             @foreach($topSellingProducts as $item)
                                 <div class="flex items-center justify-between p-2 bg-gray-50 rounded">
-                                    <span class="text-sm text-gray-700">{{ Str::limit($item->product->title ?? 'N/A', 25) }}</span>
+                                    <span class="text-sm text-gray-700">{{ Str::limit($item->product->title ?? 'Tiada', 25) }}</span>
                                     <span class="text-xs text-gray-600 font-medium">{{ $item->total_quantity }} unit</span>
                                 </div>
                             @endforeach

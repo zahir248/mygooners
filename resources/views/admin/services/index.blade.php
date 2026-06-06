@@ -1,14 +1,14 @@
 @extends('layouts.admin')
 
-@section('title', 'Pengurusan Perkhidmatan')
+@section('title', __('Pengurusan Perkhidmatan'))
 
 @section('content')
 <!-- Header Section -->
 <div class="px-4 sm:px-6 lg:px-8 py-6">
     <div class="sm:flex sm:items-center sm:justify-between">
                     <div>
-                        <h1 class="text-2xl font-bold text-gray-900">Pengurusan Perkhidmatan</h1>
-            <p class="mt-2 text-sm text-gray-700">Urus semua perkhidmatan yang ditawarkan pengguna</p>
+                        <h1 class="text-2xl font-bold text-gray-900">{{ __('Pengurusan Perkhidmatan') }}</h1>
+            <p class="mt-2 text-sm text-gray-700">{{ __('Urus semua perkhidmatan yang ditawarkan pengguna') }}</p>
                     </div>
         <div class="mt-4 sm:mt-0">
             <a href="{{ route('admin.services.create') }}"
@@ -16,7 +16,7 @@
                 <svg class="-ml-1 mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                             </svg>
-                Cipta Perkhidmatan
+                {{ __('Cipta Perkhidmatan') }}
             </a>
                     </div>
                 </div>
@@ -26,13 +26,13 @@
 <div class="mx-4 bg-white shadow rounded-lg mb-6">
     <form method="GET" action="{{ route('admin.services.index') }}" class="px-6 py-4 border-b border-gray-200">
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-            <h3 class="text-lg font-medium text-gray-900 mb-4 sm:mb-0">Tapis Perkhidmatan</h3>
+            <h3 class="text-lg font-medium text-gray-900 mb-4 sm:mb-0">{{ __('Tapis Perkhidmatan') }}</h3>
             <div class="flex flex-col sm:flex-row gap-4">
                 <!-- Search -->
                 <div class="relative">
                             <input type="text" 
                                    name="search" 
-                           placeholder="Cari perkhidmatan..."
+                           placeholder="{{ __('Cari perkhidmatan...') }}"
                                    value="{{ request('search') }}"
                            class="pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-red-500 focus:border-red-500 sm:text-sm">
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -43,14 +43,14 @@
                         </div>
                 <!-- Status Filter -->
                 <select name="status" class="border border-gray-300 rounded-md px-3 py-2 focus:ring-red-500 focus:border-red-500 sm:text-sm">
-                                <option value="">Semua Status</option>
-                    <option value="active" {{ request('status') === 'active' ? 'selected' : '' }}>Aktif</option>
-                    <option value="rejected" {{ request('status') === 'rejected' ? 'selected' : '' }}>Ditolak</option>
-                    <option value="inactive" {{ request('status') === 'inactive' ? 'selected' : '' }}>Tidak Aktif</option>
+                                <option value="">{{ __('Semua Status') }}</option>
+                    <option value="active" {{ request('status') === 'active' ? 'selected' : '' }}>{{ __('Aktif') }}</option>
+                    <option value="rejected" {{ request('status') === 'rejected' ? 'selected' : '' }}>{{ __('Ditolak') }}</option>
+                    <option value="inactive" {{ request('status') === 'inactive' ? 'selected' : '' }}>{{ __('Tidak Aktif') }}</option>
                             </select>
                 <!-- Category Filter -->
                 <select name="category" class="border border-gray-300 rounded-md px-3 py-2 focus:ring-red-500 focus:border-red-500 sm:text-sm">
-                                <option value="">Semua Kategori</option>
+                                <option value="">{{ __('Semua Kategori') }}</option>
                     @foreach($categories as $category)
                         <option value="{{ $category }}" {{ request('category') === $category ? 'selected' : '' }}>
                             {{ $category }}
@@ -66,18 +66,18 @@
                            {{ request('verified') ? 'checked' : '' }}
                            class="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300 rounded">
                     <label for="verified" class="ml-2 block text-sm text-gray-900">
-                        Disahkan Sahaja
+                        {{ __('Disahkan Sahaja') }}
                     </label>
                         </div>
                 <!-- Filter Buttons -->
                 <div class="flex gap-2">
                             <button type="submit" 
                             class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 text-sm">
-                                Tapis
+                                {{ __('Tapis') }}
                             </button>
                     <a href="{{ route('admin.services.index') }}"
                        class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 text-sm">
-                        Reset
+                        {{ __('Set Semula') }}
                     </a>
                 </div>
             </div>
@@ -90,20 +90,20 @@
     <div class="px-6 py-4 border-b border-gray-200">
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
         <h3 class="text-lg font-medium text-gray-900">
-            Perkhidmatan ({{ $services->count() }})
+            {{ trans('admin_page.list_services', ['count' => $services->count()]) }}
         </h3>
             @if(request('search') || request('status') || request('category') || request('verified'))
                 <div class="mt-2 sm:mt-0">
                     <p class="text-sm text-gray-600">
-                        Tapisan aktif:
+                        {{ trans('admin_page.active_filters') }}
                         @if(request('search'))
                             <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 mr-1">
-                                Cari: "{{ request('search') }}"
+                                {{ trans('admin_page.search_filter', ['query' => request('search')]) }}
                             </span>
                         @endif
                         @if(request('status'))
                             <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 mr-1">
-                                Status: {{ request('status') === 'active' ? 'Aktif' : (request('status') === 'pending' ? 'Menunggu' : (request('status') === 'rejected' ? 'Ditolak' : 'Tidak Aktif')) }}
+                                {{ trans('admin_page.status_filter', ['status' => request('status') === 'active' ? trans('admin_page.status_active') : (request('status') === 'pending' ? trans('admin_page.status_pending') : (request('status') === 'rejected' ? trans('admin_page.status_rejected') : trans('admin_page.status_inactive')))]) }}
                             </span>
                         @endif
                         @if(request('category'))
@@ -113,7 +113,7 @@
                         @endif
                         @if(request('verified'))
                             <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 mr-1">
-                                Disahkan Sahaja
+                                {{ __('Disahkan Sahaja') }}
                             </span>
                         @endif
                     </p>
@@ -126,29 +126,15 @@
                         <table class="min-w-full divide-y divide-gray-200">
                             <thead class="bg-gray-50">
                                 <tr>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Perkhidmatan
-                        </th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Penyedia
-                        </th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Kategori
-                        </th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Status
-                        </th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Skor Kepercayaan
-                        </th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Tontonan
-                        </th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Tarikh
-                        </th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Perkhidmatan') }}</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Penyedia') }}</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Kategori') }}</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Status') }}</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Skor Kepercayaan') }}</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Tontonan') }}</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Tarikh') }}</th>
                         <th scope="col" class="relative px-6 py-3">
-                            <span class="sr-only">Tindakan</span>
+                            <span class="sr-only">{{ __('Tindakan') }}</span>
                         </th>
                                 </tr>
                             </thead>
@@ -175,12 +161,12 @@
                                             </p>
                                             @if($service->is_verified)
                                                 <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                                    Disahkan
+                                                    {{ __('Disahkan') }}
                                                 </span>
                                             @endif
                                         </div>
                                         <p class="text-sm text-gray-500 line-clamp-2">
-                                            ID Perkhidmatan: #{{ $service->id }} • {{ $service->location }} • {{ $service->pricing }}
+                                            {{ trans('admin_page.list_service_meta', ['id' => $service->id, 'location' => $service->location, 'pricing' => $service->pricing]) }}
                                         </p>
                                                 </div>
                                             </div>
@@ -201,15 +187,15 @@
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             @if($service->status === 'active')
                                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                                    Aktif
+                                                    {{ __('Aktif') }}
                                                 </span>
                                             @elseif($service->status === 'rejected')
                                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
-                                                    Ditolak
+                                                    {{ __('Ditolak') }}
                                                 </span>
                                             @else
                                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
-                                                    Tidak Aktif
+                                                    {{ __('Tidak Aktif') }}
                                                 </span>
                                             @endif
                                         </td>
@@ -253,7 +239,7 @@
                                     <button type="button" 
                                             onclick="openStatusModal({{ $service->id }}, '{{ $service->title }}', '{{ $service->status }}')"
                                             class="text-gray-600 hover:text-gray-900"
-                                            title="Ubah Status">
+                                            title="{{ __('Ubah Status') }}">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31.826 2.37 2.37a1.724 1.724 0 002.572 1.065c.426 1.756 2.924 1.756 3.35 0a1.724 1.724 0 002.573-1.066c1.543-.94 3.31.826 2.37-2.37a1.724 1.724 0 011.065-2.572c1.756-.426 1.756-2.924 0-3.35a1.724 1.724 0 00-1.066-2.573c.94-1.543-.826-3.31.826-2.37-2.37a1.724 1.724 0 00-2.572-1.065z"></path>
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
@@ -265,7 +251,7 @@
                                             <a href="{{ route('services.show', $service->slug) }}" 
                                                target="_blank"
                                                class="text-blue-600 hover:text-blue-900"
-                                               title="Lihat Perkhidmatan">
+                                               title="{{ __('Lihat Perkhidmatan') }}">
                                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
@@ -276,20 +262,20 @@
                                         <!-- Edit Service -->
                                         <a href="{{ route('admin.services.edit', $service->id) }}"
                                            class="text-red-600 hover:text-red-900"
-                                           title="Edit Perkhidmatan">
+                                           title="{{ __('Sunting Perkhidmatan') }}">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                                             </svg>
                                         </a>
                                         
-                                        <!-- Delete Service -->
+                                        <!-- Padam Perkhidmatan -->
                                         <form id="deleteServiceForm{{ $service->id }}" action="{{ route('admin.services.destroy', $service->id) }}" method="POST" class="inline">
                                             @csrf
                                             @method('DELETE')
                                             <button type="button" 
                                                     onclick="confirmDeleteService({{ $service->id }}, '{{ $service->title }}')" 
                                                     class="text-red-600 hover:text-red-900" 
-                                                    title="Padam Perkhidmatan">
+                                                    title="{{ __('Padam Perkhidmatan') }}">
                                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                                                 </svg>
@@ -297,7 +283,7 @@
                                         </form>
                                     </div>
                                 @else
-                                    <span class="text-gray-400 text-xs">Tiada tindakan tersedia</span>
+                                    <span class="text-gray-400 text-xs">{{ __('Tiada tindakan tersedia') }}</span>
                                 @endif
                                         </td>
                                     </tr>
@@ -305,49 +291,21 @@
                             </tbody>
                         </table>
                     </div>
-        <!-- Pagination -->
-        <div class="bg-white px-6 py-3 border-t border-gray-200">
-            <div class="flex items-center justify-between">
-                <div class="text-sm text-gray-700">
-                    Showing <span class="font-medium">{{ $services->firstItem() ?? 0 }}</span> to <span class="font-medium">{{ $services->lastItem() ?? 0 }}</span> of <span class="font-medium">{{ $services->total() }}</span> results
-                </div>
-                <div class="flex space-x-2">
-                    @if($services->onFirstPage())
-                        <button class="px-3 py-1 border border-gray-300 rounded-md text-sm text-gray-500 bg-gray-50 cursor-not-allowed">
-                            Previous
-                        </button>
-                    @else
-                        <a href="{{ $services->previousPageUrl() }}" class="px-3 py-1 border border-gray-300 rounded-md text-sm text-gray-700 bg-white hover:bg-gray-50">
-                            Previous
-                        </a>
-                    @endif
-                    
-                    @if($services->hasMorePages())
-                        <a href="{{ $services->nextPageUrl() }}" class="px-3 py-1 border border-gray-300 rounded-md text-sm text-gray-700 bg-white hover:bg-gray-50">
-                            Next
-                        </a>
-                    @else
-                        <button class="px-3 py-1 border border-gray-300 rounded-md text-sm text-gray-500 bg-gray-50 cursor-not-allowed">
-                            Next
-                        </button>
-                    @endif
-                </div>
-                    </div>
-                </div>
+        @include('admin.partials.pagination', ['paginator' => $services])
             @else
         <div class="px-6 py-12 text-center">
                     <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-3-3v6m8 5H7a2 2 0 01-2-2V7a2 2 0 012-2h10a2 2 0 012 2v10a2 2 0 01-2 2z"></path>
                     </svg>
-            <h3 class="mt-2 text-sm font-medium text-gray-900">Tiada perkhidmatan</h3>
-            <p class="mt-1 text-sm text-gray-500">Mula dengan mencipta perkhidmatan pertama anda.</p>
+            <h3 class="mt-2 text-sm font-medium text-gray-900">{{ __('Tiada perkhidmatan') }}</h3>
+            <p class="mt-1 text-sm text-gray-500">{{ __('Mula dengan mencipta perkhidmatan pertama anda.') }}</p>
             <div class="mt-6">
                 <a href="{{ route('admin.services.create') }}"
                    class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
                     <svg class="-ml-1 mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                     </svg>
-                    Cipta Perkhidmatan
+                    {{ __('Cipta Perkhidmatan') }}
                 </a>
                 </div>
         </div>
@@ -362,7 +320,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.732 15.5c-.77.833.192 2.5 1.732 2.5z"></path>
                     </svg>
                 </div>
-            <h3 class="text-lg font-medium text-gray-900 mt-4">Padam Perkhidmatan</h3>
+            <h3 class="text-lg font-medium text-gray-900 mt-4">{{ __('Padam Perkhidmatan') }}</h3>
                 <div class="mt-2 px-7 py-3">
                     <p class="text-sm text-gray-500">
                     Adakah anda pasti mahu memadamkan "<span id="deleteServiceTitle"></span>"? Tindakan ini tidak boleh diundur.
@@ -371,14 +329,14 @@
             <div class="flex justify-center space-x-4 mt-4">
                 <button onclick="closeDeleteServiceModal()" 
                         class="px-4 py-2 bg-gray-300 text-gray-800 text-sm font-medium rounded-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-300">
-                    Batal
+                    {{ __('Batal') }}
                 </button>
                 <form id="deleteServiceFormModal" method="POST" class="inline">
                         @csrf
                         @method('DELETE')
                     <button type="submit" 
                             class="px-4 py-2 bg-red-600 text-white text-sm font-medium rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500">
-                            Padam
+                            {{ __('Padam') }}
                         </button>
                     </form>
             </div>
@@ -396,7 +354,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                 </svg>
             </div>
-            <h3 class="text-lg font-medium text-gray-900 mt-4 text-center">Ubah Status Perkhidmatan</h3>
+            <h3 class="text-lg font-medium text-gray-900 mt-4 text-center">{{ __('Ubah Status Perkhidmatan') }}</h3>
             <div class="mt-2 px-7 py-3">
                 <p class="text-sm text-gray-500 text-center mb-4">
                     Pilih status baru untuk "<span id="statusServiceTitle"></span>"
@@ -411,7 +369,7 @@
                                 <span class="w-2 h-2 bg-green-400 rounded-full hidden"></span>
                             </span>
                             <span class="w-2 h-2 bg-green-400 rounded-full mr-2"></span>
-                            <span class="text-sm font-medium text-gray-700">Aktif</span>
+                            <span class="text-sm font-medium text-gray-700">{{ __('Aktif') }}</span>
                         </label>
                         <label class="flex items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors duration-150">
                             <input type="radio" name="status" value="inactive" class="sr-only">
@@ -419,7 +377,7 @@
                                 <span class="w-2 h-2 bg-gray-400 rounded-full hidden"></span>
                             </span>
                             <span class="w-2 h-2 bg-gray-400 rounded-full mr-2"></span>
-                            <span class="text-sm font-medium text-gray-700">Tidak Aktif</span>
+                            <span class="text-sm font-medium text-gray-700">{{ __('Tidak Aktif') }}</span>
                         </label>
                     </div>
                 </form>
@@ -427,11 +385,11 @@
             <div class="flex justify-center space-x-4 mt-4">
                 <button onclick="closeStatusModal()" 
                         class="px-4 py-2 bg-gray-300 text-gray-800 text-sm font-medium rounded-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-300">
-                        Batal
+                        {{ __('Batal') }}
                     </button>
                 <button onclick="submitStatusForm()" 
                         class="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    Kemas Kini
+                    {{ __('Kemas Kini') }}
                 </button>
             </div>
         </div>
@@ -477,7 +435,7 @@ function submitStatusForm() {
     const selectedStatus = form.querySelector('input[name="status"]:checked');
     
     if (!selectedStatus) {
-        alert('Sila pilih status baru');
+        alert(window.adminMessages.select_new_status);
         return;
     }
     

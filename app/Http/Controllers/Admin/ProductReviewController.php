@@ -37,7 +37,7 @@ class ProductReviewController extends Controller
             });
         }
 
-        $reviews = $query->latest()->paginate(20);
+        $reviews = $query->latest()->paginate(20)->withQueryString();
         $products = Product::orderBy('title')->get();
 
         return view('admin.reviews.index', compact('reviews', 'products'));
@@ -59,7 +59,7 @@ class ProductReviewController extends Controller
     {
         $review->update(['is_verified' => true]);
 
-        return redirect()->back()->with('success', 'Ulasan telah berjaya diluluskan.');
+        return redirect()->back()->with('success', __('flash.review_approved'));
     }
 
     /**
@@ -69,7 +69,7 @@ class ProductReviewController extends Controller
     {
         $review->update(['is_verified' => false]);
 
-        return redirect()->back()->with('success', 'Ulasan telah berjaya ditolak.');
+        return redirect()->back()->with('success', __('flash.review_rejected'));
     }
 
     /**
@@ -79,7 +79,7 @@ class ProductReviewController extends Controller
     {
         $review->delete();
 
-        return redirect()->route('admin.reviews.index')->with('success', 'Ulasan telah berjaya dipadamkan.');
+        return redirect()->route('admin.reviews.index')->with('success', __('flash.review_deleted'));
     }
 
     /**
@@ -98,15 +98,15 @@ class ProductReviewController extends Controller
         switch ($request->action) {
             case 'approve':
                 $reviews->update(['is_verified' => true]);
-                $message = 'Ulasan yang dipilih telah berjaya diluluskan.';
+                $message = __('flash.reviews_bulk_approved');
                 break;
             case 'reject':
                 $reviews->update(['is_verified' => false]);
-                $message = 'Ulasan yang dipilih telah berjaya ditolak.';
+                $message = __('flash.reviews_bulk_rejected');
                 break;
             case 'delete':
                 $reviews->delete();
-                $message = 'Ulasan yang dipilih telah berjaya dipadamkan.';
+                $message = __('flash.reviews_bulk_deleted');
                 break;
         }
 

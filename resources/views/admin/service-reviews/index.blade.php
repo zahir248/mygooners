@@ -1,14 +1,14 @@
 @extends('layouts.admin')
 
-@section('title', 'Pengurusan Ulasan Perkhidmatan')
+@section('title', __('Pengurusan Ulasan Perkhidmatan'))
 
 @section('content')
 <!-- Header Section -->
 <div class="px-4 sm:px-6 lg:px-8 py-6">
     <div class="sm:flex sm:items-center sm:justify-between">
         <div>
-            <h1 class="text-2xl font-bold text-gray-900">Pengurusan Ulasan Perkhidmatan</h1>
-            <p class="mt-2 text-sm text-gray-700">Urus semua ulasan perkhidmatan Arsenal yang diterima</p>
+            <h1 class="text-2xl font-bold text-gray-900">{{ __('Pengurusan Ulasan Perkhidmatan') }}</h1>
+            <p class="mt-2 text-sm text-gray-700">{{ __('Urus semua ulasan perkhidmatan Arsenal yang diterima') }}</p>
         </div>
         <div class="mt-4 sm:mt-0">
         <a href="{{ route('admin.service-reviews.statistics') }}" 
@@ -16,7 +16,7 @@
                 <svg class="-ml-1 mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
                 </svg>
-            Lihat Statistik
+            {{ __('Lihat Statistik') }}
         </a>
     </div>
     </div>
@@ -26,13 +26,13 @@
 <div class="mx-4 bg-white shadow rounded-lg mb-6">
     <form method="GET" action="{{ route('admin.service-reviews.index') }}" class="px-6 py-4 border-b border-gray-200">
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-            <h3 class="text-lg font-medium text-gray-900 mb-4 sm:mb-0">Tapis Ulasan</h3>
+            <h3 class="text-lg font-medium text-gray-900 mb-4 sm:mb-0">{{ __('Tapis Ulasan') }}</h3>
             <div class="flex flex-col sm:flex-row gap-4">
                 <!-- Search -->
                 <div class="relative">
                     <input type="text" 
                            name="search" 
-                           placeholder="Cari ulasan..."
+                           placeholder="{{ __('Cari ulasan...') }}"
                            value="{{ request('search') }}"
                            class="pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-red-500 focus:border-red-500 sm:text-sm">
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -43,7 +43,7 @@
                 </div>
                 <!-- Service Filter -->
                 <select name="service_id" class="border border-gray-300 rounded-md px-3 py-2 focus:ring-red-500 focus:border-red-500 sm:text-sm">
-                    <option value="">Semua Perkhidmatan</option>
+                    <option value="">{{ __('Semua Perkhidmatan') }}</option>
                     @foreach($services as $service)
                         <option value="{{ $service->id }}" {{ request('service_id') == $service->id ? 'selected' : '' }}>
                             {{ Str::limit($service->title, 30) }}
@@ -52,22 +52,20 @@
                 </select>
                 <!-- Rating Filter -->
                 <select name="rating" class="border border-gray-300 rounded-md px-3 py-2 focus:ring-red-500 focus:border-red-500 sm:text-sm">
-                    <option value="">Semua Rating</option>
-                    <option value="5" {{ request('rating') == '5' ? 'selected' : '' }}>5 Bintang</option>
-                    <option value="4" {{ request('rating') == '4' ? 'selected' : '' }}>4 Bintang</option>
-                    <option value="3" {{ request('rating') == '3' ? 'selected' : '' }}>3 Bintang</option>
-                    <option value="2" {{ request('rating') == '2' ? 'selected' : '' }}>2 Bintang</option>
-                    <option value="1" {{ request('rating') == '1' ? 'selected' : '' }}>1 Bintang</option>
+                    <option value="">{{ __('Semua Penilaian') }}</option>
+                    <option value="5" {{ request('rating') == '5' ? 'selected' : '' }}>{{ __('5 Bintang') }}</option>
+                    <option value="4" {{ request('rating') == '4' ? 'selected' : '' }}>{{ __('4 Bintang') }}</option>
+                    <option value="3" {{ request('rating') == '3' ? 'selected' : '' }}>{{ __('3 Bintang') }}</option>
+                    <option value="2" {{ request('rating') == '2' ? 'selected' : '' }}>{{ __('2 Bintang') }}</option>
+                    <option value="1" {{ request('rating') == '1' ? 'selected' : '' }}>{{ __('1 Bintang') }}</option>
                 </select>
                 <!-- Filter Buttons -->
                 <div class="flex gap-2">
                     <button type="submit" 
-                            class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 text-sm">
-                    Tapis
-                </button>
+                            class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 text-sm">{{ __('Tapis') }}</button>
                     <a href="{{ route('admin.service-reviews.index') }}"
                        class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 text-sm">
-                        Reset
+                        {{ __('Set Semula') }}
                 </a>
             </div>
                 </div>
@@ -80,15 +78,15 @@
     <div class="px-6 py-4 border-b border-gray-200">
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
             <h3 class="text-lg font-medium text-gray-900">
-                Ulasan ({{ $reviews->total() }})
+                {{ trans('admin_page.list_reviews', ['count' => $reviews->total()]) }}
             </h3>
             @if(request('search') || request('service_id') || request('rating'))
                 <div class="mt-2 sm:mt-0">
                     <p class="text-sm text-gray-600">
-                        Tapisan aktif:
+                        {{ trans('admin_page.active_filters') }}
                         @if(request('search'))
                             <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 mr-1">
-                                Cari: "{{ request('search') }}"
+                                {{ trans('admin_page.search_filter', ['query' => request('search')]) }}
                             </span>
                         @endif
                         @if(request('service_id'))
@@ -117,23 +115,13 @@
             <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-gray-50">
                     <tr>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Pengguna
-                        </th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Perkhidmatan
-                        </th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Rating
-                        </th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Komen
-                        </th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Tarikh
-                        </th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Pengguna') }}</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Perkhidmatan') }}</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Rating') }}</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Komen') }}</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Tarikh') }}</th>
                         <th scope="col" class="relative px-6 py-3">
-                            <span class="sr-only">Tindakan</span>
+                            <span class="sr-only">{{ __('Tindakan') }}</span>
                         </th>
                     </tr>
                 </thead>
@@ -195,7 +183,7 @@
                                             </p>
                                         </div>
                                         <p class="text-sm text-gray-500 line-clamp-2">
-                                            ID Perkhidmatan: #{{ $review->service->id }} • {{ $review->service->category }}
+                                            {{ trans('admin_page.list_review_service_meta', ['id' => $review->service->id, 'category' => $review->service->category]) }}
                                         </p>
                                     </div>
                                 </div>
@@ -234,7 +222,7 @@
                                     <!-- View Review -->
                                     <a href="{{ route('admin.service-reviews.show', $review) }}" 
                                        class="text-blue-600 hover:text-blue-900"
-                                       title="Lihat Ulasan">
+                                       title="{{ __('Lihat Ulasan') }}">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
@@ -248,7 +236,7 @@
                                             @method('PATCH')
                                             <button type="submit" 
                                                     class="text-green-600 hover:text-green-900"
-                                                    title="Luluskan Ulasan">
+                                                    title="{{ __('Luluskan Ulasan') }}">
                                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                                                 </svg>
@@ -260,7 +248,7 @@
                                             @method('PATCH')
                                             <button type="submit" 
                                                     class="text-yellow-600 hover:text-yellow-900"
-                                                    title="Tolak Ulasan">
+                                                    title="{{ __('Tolak Ulasan') }}">
                                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                                                 </svg>
@@ -272,7 +260,7 @@
                                     <button type="button" 
                                             onclick="openDeleteModal({{ $review->id }}, '{{ Str::limit($review->comment, 50) }}')"
                                             class="text-red-600 hover:text-red-900"
-                                            title="Padam Ulasan">
+                                            title="{{ __('Padam Ulasan') }}">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                                         </svg>
@@ -285,41 +273,13 @@
             </table>
     </div>
 
-    <!-- Pagination -->
-        <div class="bg-white px-6 py-3 border-t border-gray-200">
-            <div class="flex items-center justify-between">
-                <div class="text-sm text-gray-700">
-                    Showing <span class="font-medium">{{ $reviews->firstItem() ?? 0 }}</span> to <span class="font-medium">{{ $reviews->lastItem() ?? 0 }}</span> of <span class="font-medium">{{ $reviews->total() }}</span> results
-                </div>
-                <div class="flex space-x-2">
-                    @if($reviews->onFirstPage())
-                        <button class="px-3 py-1 border border-gray-300 rounded-md text-sm text-gray-500 bg-gray-50 cursor-not-allowed">
-                            Previous
-                        </button>
-                    @else
-                        <a href="{{ $reviews->previousPageUrl() }}" class="px-3 py-1 border border-gray-300 rounded-md text-sm text-gray-700 bg-white hover:bg-gray-50">
-                            Previous
-                        </a>
-                    @endif
-                    
-                    @if($reviews->hasMorePages())
-                        <a href="{{ $reviews->nextPageUrl() }}" class="px-3 py-1 border border-gray-300 rounded-md text-sm text-gray-700 bg-white hover:bg-gray-50">
-                            Next
-                        </a>
-                    @else
-                        <button class="px-3 py-1 border border-gray-300 rounded-md text-sm text-gray-500 bg-gray-50 cursor-not-allowed">
-                            Next
-                        </button>
-                    @endif
-                </div>
-            </div>
-        </div>
+    @include('admin.partials.pagination', ['paginator' => $reviews])
     @else
         <div class="px-6 py-12 text-center">
             <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
             </svg>
-            <h3 class="mt-2 text-sm font-medium text-gray-900">Tiada ulasan</h3>
+            <h3 class="mt-2 text-sm font-medium text-gray-900">{{ __('Tiada ulasan') }}</h3>
             <p class="mt-1 text-sm text-gray-500">
                 @if(request('service_id') || request('rating') || request('search'))
                     Tiada ulasan dijumpai yang sepadan dengan kriteria tapisan anda.
@@ -339,9 +299,7 @@
             @if(request('service_id') || request('rating') || request('search'))
                 <div class="mt-4">
                     <a href="{{ route('admin.service-reviews.index') }}" 
-                       class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
-                        Reset Semua Tapisan
-                    </a>
+                       class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">{{ __('Reset Semua Tapisan') }}</a>
                 </div>
             @endif
         </div>
@@ -360,35 +318,27 @@
             </div>
             
             <!-- Modal Title -->
-            <h3 class="text-lg font-medium text-gray-900 mt-4">Padam Ulasan</h3>
+            <h3 class="text-lg font-medium text-gray-900 mt-4">{{ __('Padam Ulasan') }}</h3>
             
             <!-- Modal Content -->
             <div class="mt-2 px-7 py-3">
-                <p class="text-sm text-gray-500">
-                    Adakah anda pasti mahu memadamkan ulasan ini?
-                </p>
+                <p class="text-sm text-gray-500">{{ __('Adakah anda pasti mahu memadamkan ulasan ini?') }}</p>
                 <div class="mt-3 bg-gray-50 p-3 rounded-md">
-                    <p class="text-xs text-gray-600 font-medium">Komen:</p>
+                    <p class="text-xs text-gray-600 font-medium">{{ __('Komen:') }}</p>
                     <p class="text-sm text-gray-800 mt-1" id="reviewComment"></p>
                 </div>
-                <p class="text-xs text-red-600 mt-2">
-                    Tindakan ini tidak boleh dibatalkan.
-                </p>
+                <p class="text-xs text-red-600 mt-2">{{ __('Tindakan ini tidak boleh dibatalkan.') }}</p>
             </div>
             
             <!-- Modal Actions -->
             <div class="flex items-center justify-center gap-3 mt-4">
                 <button id="cancelDelete" 
-                        class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 text-sm">
-                    Batal
-                </button>
+                        class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 text-sm">{{ __('Batal') }}</button>
                 <form id="deleteForm" method="POST" class="inline">
                     @csrf
                     @method('DELETE')
                     <button type="submit" 
-                            class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 text-sm">
-                        Padam
-                    </button>
+                            class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 text-sm">{{ __('Padam') }}</button>
                 </form>
             </div>
         </div>

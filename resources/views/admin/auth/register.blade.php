@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>Minta Akses Admin - MyGooners</title>
-    <meta name="description" content="Minta akses admin ke panel admin MyGooners">
+    <title>Minta Akses Pentadbir - MyGooners</title>
+    <meta name="description" content="Minta akses pentadbir ke panel pentadbir MyGooners">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -52,15 +52,11 @@
                     <div class="bg-admin-800 text-white rounded-lg px-4 py-3 font-bold text-xl">
                         MG
                     </div>
-                    <span class="ml-3 text-2xl font-bold text-admin-900">Admin</span>
+                    <span class="ml-3 text-2xl font-bold text-admin-900">{{ __('Pentadbir') }}</span>
                 </div>
             </div>
-            <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
-                Minta akses admin
-            </h2>
-            <p class="mt-2 text-center text-sm text-gray-600">
-                Memohon keistimewaan pentadbiran MyGooners
-            </p>
+            <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">{{ __('Minta akses pentadbir') }}</h2>
+            <p class="mt-2 text-center text-sm text-gray-600">{{ __('Memohon keistimewaan pentadbiran MyGooners') }}</p>
         </div>
 
         <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
@@ -74,9 +70,7 @@
                             </svg>
                         </div>
                         <div class="ml-3">
-                            <p class="text-sm text-blue-700">
-                                Permintaan akses admin disemak secara manual. Anda akan dihubungi setelah permohonan anda diproses.
-                            </p>
+                            <p class="text-sm text-blue-700">{{ __('Permintaan akses pentadbir disemak secara manual. Anda akan dihubungi setelah permohonan anda diproses.') }}</p>
                         </div>
                     </div>
                 </div>
@@ -99,7 +93,7 @@
                     <!-- Name -->
                     <div>
                         <label for="name" class="block text-sm font-medium text-gray-700">
-                            Nama penuh <span class="text-red-500">*</span>
+                            {{ trans('admin_page.full_name') }} <span class="text-red-500">*</span>
                         </label>
                         <div class="mt-1">
                             <input id="name" 
@@ -109,7 +103,7 @@
                                    required
                                    value="{{ old('name') }}"
                                    class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-admin-500 focus:border-admin-500 sm:text-sm transition-all"
-                                   placeholder="John Smith">
+                                   placeholder="{{ __('Ahmad bin Ali') }}">
                         </div>
                     </div>
 
@@ -126,14 +120,14 @@
                                    required
                                    value="{{ old('email') }}"
                                    class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-admin-500 focus:border-admin-500 sm:text-sm transition-all"
-                                   placeholder="john@example.com">
+                                   placeholder="{{ __('john@example.com') }}">
                         </div>
                     </div>
 
                     <!-- Password -->
                     <div>
                         <label for="password" class="block text-sm font-medium text-gray-700">
-                            Kata laluan <span class="text-red-500">*</span>
+                            {{ trans('admin_page.password') }} <span class="text-red-500">*</span>
                         </label>
                         <div class="mt-1">
                             <input id="password" 
@@ -142,7 +136,7 @@
                                    autocomplete="new-password" 
                                    required
                                    class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-admin-500 focus:border-admin-500 sm:text-sm transition-all"
-                                   placeholder="••••••••">
+                                   placeholder="{{ __('••••••••') }}">
                         </div>
                     </div>
 
@@ -158,40 +152,36 @@
                                    autocomplete="new-password" 
                                    required
                                    class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-admin-500 focus:border-admin-500 sm:text-sm transition-all"
-                                   placeholder="••••••••">
+                                   placeholder="{{ __('••••••••') }}">
                         </div>
                     </div>
 
                     <!-- Role/Position -->
                     <div>
-                        <label for="position" class="block text-sm font-medium text-gray-700">
-                            Peranan/jawatan yang diminta
-                        </label>
+                        <label for="position" class="block text-sm font-medium text-gray-700">{{ __('Peranan/jawatan yang diminta') }}</label>
                         <div class="mt-1">
                             <select id="position" 
                                     name="position" 
                                     class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-admin-500 focus:border-admin-500 sm:text-sm transition-all">
-                                <option value="">Pilih peranan</option>
-                                <option value="content_moderator" {{ old('position') == 'content_moderator' ? 'selected' : '' }}>Moderator Kandungan</option>
-                                <option value="user_moderator" {{ old('position') == 'user_moderator' ? 'selected' : '' }}>Moderator Pengguna</option>
-                                <option value="service_reviewer" {{ old('position') == 'service_reviewer' ? 'selected' : '' }}>Penyemak Perkhidmatan</option>
-                                <option value="product_manager" {{ old('position') == 'product_manager' ? 'selected' : '' }}>Pengurus Produk</option>
-                                <option value="admin" {{ old('position') == 'admin' ? 'selected' : '' }}>Pentadbir</option>
+                                <option value="">{{ __('Pilih peranan') }}</option>
+                                <option value="content_moderator" {{ old('position') == 'content_moderator' ? 'selected' : '' }}>{{ __('Moderator Kandungan') }}</option>
+                                <option value="user_moderator" {{ old('position') == 'user_moderator' ? 'selected' : '' }}>{{ __('Moderator Pengguna') }}</option>
+                                <option value="service_reviewer" {{ old('position') == 'service_reviewer' ? 'selected' : '' }}>{{ __('Penyemak Perkhidmatan') }}</option>
+                                <option value="product_manager" {{ old('position') == 'product_manager' ? 'selected' : '' }}>{{ __('Pengurus Produk') }}</option>
+                                <option value="admin" {{ old('position') == 'admin' ? 'selected' : '' }}>{{ __('Pentadbir') }}</option>
                             </select>
                         </div>
                     </div>
 
                     <!-- Reason -->
                     <div>
-                        <label for="reason" class="block text-sm font-medium text-gray-700">
-                            Mengapa anda memerlukan akses admin?
-                        </label>
+                        <label for="reason" class="block text-sm font-medium text-gray-700">{{ __('Mengapa anda memerlukan akses pentadbir?') }}</label>
                         <div class="mt-1">
                             <textarea id="reason" 
                                       name="reason" 
                                       rows="3"
                                       class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-admin-500 focus:border-admin-500 sm:text-sm transition-all"
-                                      placeholder="Terangkan latar belakang anda dan mengapa anda memerlukan akses pentadbiran...">{{ old('reason') }}</textarea>
+                                      placeholder="{{ __('Terangkan latar belakang anda dan mengapa anda memerlukan akses pentadbiran...') }}">{{ old('reason') }}</textarea>
                         </div>
                     </div>
 
@@ -208,9 +198,7 @@
                             <label for="terms" class="font-medium text-gray-700">
                                 Saya bersetuju dengan terma dan syarat admin <span class="text-red-500">*</span>
                             </label>
-                            <p class="text-gray-500">
-                                Saya faham bahawa keistimewaan admin datang dengan tanggungjawab dan akan digunakan dengan sewajarnya.
-                            </p>
+                            <p class="text-gray-500">{{ __('Saya faham bahawa keistimewaan admin datang dengan tanggungjawab dan akan digunakan dengan sewajarnya.') }}</p>
                         </div>
                     </div>
 
@@ -223,7 +211,7 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
                                 </svg>
                             </span>
-                            Hantar permintaan akses admin
+                            Hantar permintaan akses pentadbir
                         </button>
                     </div>
                 </form>
@@ -235,7 +223,7 @@
                             <div class="w-full border-t border-gray-300"></div>
                         </div>
                         <div class="relative flex justify-center text-sm">
-                            <span class="px-2 bg-white text-gray-500">Sudah mempunyai akses admin?</span>
+                            <span class="px-2 bg-white text-gray-500">{{ __('Sudah mempunyai akses pentadbir?') }}</span>
                         </div>
                     </div>
                 </div>
@@ -243,17 +231,13 @@
                 <!-- Login Link -->
                 <div class="mt-6 text-center">
                     <p class="text-sm text-gray-600">
-                        <a href="{{ route('admin.login') }}" class="font-medium text-admin-600 hover:text-admin-500 transition-colors">
-                            Log masuk ke panel admin
-                        </a>
+                        <a href="{{ route('admin.login') }}" class="font-medium text-admin-600 hover:text-admin-500 transition-colors">{{ __('Log masuk ke panel pentadbir') }}</a>
                     </p>
                 </div>
 
                 <!-- Back to Site -->
                 <div class="mt-4 text-center">
-                    <a href="{{ route('home') }}" class="text-sm text-gray-500 hover:text-gray-700 transition-colors">
-                        ← Kembali ke MyGooners
-                    </a>
+                    <a href="{{ route('home') }}" class="text-sm text-gray-500 hover:text-gray-700 transition-colors">{{ __('← Kembali ke MyGooners') }}</a>
                 </div>
             </div>
         </div>
@@ -261,7 +245,7 @@
         <!-- Footer -->
         <div class="mt-8 text-center">
             <p class="text-xs text-gray-500">
-                MyGooners Admin Panel &copy; {{ date('Y') }} - Secure Access Only
+                Panel Pentadbir MyGooners &copy; {{ date('Y') }} - Akses Selamat Sahaja
             </p>
         </div>
     </div>

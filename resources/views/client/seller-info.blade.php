@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Maklumat Penjual - MyGooners')
+@section('title', __('Maklumat Penjual - MyGooners'))
 
 @section('content')
 <div x-data="{ showIdModal: false, showSelfieModal: false, showProfileModal: false }" x-effect="document.body.classList.toggle('overflow-hidden', showProfileModal)" class="min-h-screen bg-gray-50 pb-8">
@@ -10,21 +10,21 @@
         <div class="mb-6 sm:mb-8">
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div class="flex-1">
-                    <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">Maklumat Penjual</h1>
-                    <p class="text-sm sm:text-base text-gray-600 leading-relaxed">Maklumat lengkap perniagaan dan dokumen pengesahan anda</p>
+                    <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">{{ __('Maklumat Penjual') }}</h1>
+                    <p class="text-sm sm:text-base text-gray-600 leading-relaxed">{{ __('Maklumat lengkap perniagaan dan dokumen pengesahan anda') }}</p>
                 </div>
                 <div class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
                     <button @click="showProfileModal = true" class="inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 sm:px-4 sm:py-2 rounded-lg font-medium transition-colors text-sm sm:text-base">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
                         </svg>
-                        Kemaskini Maklumat Peribadi
+                        {{ __('Kemaskini Maklumat Peribadi') }}
                     </button>
                     <a href="{{ route('dashboard') }}" class="inline-flex items-center justify-center gap-2 bg-gray-600 hover:bg-gray-700 text-white px-4 py-3 sm:px-4 sm:py-2 rounded-lg font-medium transition-colors text-sm sm:text-base">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
                         </svg>
-                        Kembali ke Dashboard
+                        {{ __('Kembali ke Dashboard') }}
                     </a>
                 </div>
             </div>
@@ -50,11 +50,11 @@
                             <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
                             </svg>
-                            Penjual Disahkan
+                            {{ __('Penjual Disahkan') }}
                         </span>
                         <span class="text-gray-500 text-sm">{{ $user->business_name }}</span>
                     </div>
-                    <p class="text-gray-600 text-sm sm:text-base">{{ $user->bio ?: 'Tiada bio dinyatakan' }}</p>
+                    <p class="text-gray-600 text-sm sm:text-base">{{ $user->bio ?: __('Tiada bio dinyatakan') }}</p>
                 </div>
             </div>
         </div>
@@ -67,32 +67,32 @@
                     <svg class="w-5 h-5 text-blue-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
                     </svg>
-                    Maklumat Perniagaan
+                    {{ __('Maklumat Perniagaan') }}
                 </h3>
                 <div class="space-y-3 sm:space-y-4">
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Nama Perniagaan</label>
-                        <p class="text-gray-900 font-medium text-sm sm:text-base break-words">{{ $user->business_name ?: 'Tidak dinyatakan' }}</p>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">{{ __('Nama Perniagaan') }}</label>
+                        <p class="text-gray-900 font-medium text-sm sm:text-base break-words">{{ $user->business_name ?: __('Tidak dinyatakan') }}</p>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Jenis Perniagaan</label>
-                        <p class="text-gray-900 text-sm sm:text-base break-words">{{ $user->business_type ?: 'Tidak dinyatakan' }}</p>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">{{ __('Jenis Perniagaan') }}</label>
+                        <p class="text-gray-900 text-sm sm:text-base break-words">{{ $user->business_type ?: __('Tidak dinyatakan') }}</p>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">No. Pendaftaran Perniagaan</label>
-                        <p class="text-gray-900 text-sm sm:text-base break-words">{{ $user->business_registration ?: 'Tidak dinyatakan' }}</p>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">{{ __('No. Pendaftaran Perniagaan') }}</label>
+                        <p class="text-gray-900 text-sm sm:text-base break-words">{{ $user->business_registration ?: __('Tidak dinyatakan') }}</p>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Alamat Perniagaan</label>
-                        <p class="text-gray-900 text-sm sm:text-base break-words">{{ $user->business_address ?: 'Tidak dinyatakan' }}</p>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">{{ __('Alamat Perniagaan') }}</label>
+                        <p class="text-gray-900 text-sm sm:text-base break-words">{{ $user->business_address ?: __('Tidak dinyatakan') }}</p>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Kawasan Operasi</label>
-                        <p class="text-gray-900 text-sm sm:text-base break-words">{{ $user->operating_area ?: 'Tidak dinyatakan' }}</p>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">{{ __('Kawasan Operasi') }}</label>
+                        <p class="text-gray-900 text-sm sm:text-base break-words">{{ $user->operating_area ?: __('Tidak dinyatakan') }}</p>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Laman Web/Sosial Media</label>
-                        <p class="text-gray-900 text-sm sm:text-base break-words">{{ $user->website ?: 'Tidak dinyatakan' }}</p>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">{{ __('Laman Web/Sosial Media') }}</label>
+                        <p class="text-gray-900 text-sm sm:text-base break-words">{{ $user->website ?: __('Tidak dinyatakan') }}</p>
                     </div>
                 </div>
             </div>
@@ -103,36 +103,36 @@
                     <svg class="w-5 h-5 text-green-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
                     </svg>
-                    Maklumat Peribadi & Hubungan
+                    {{ __('Maklumat Peribadi & Hubungan') }}
                 </h3>
                 <div class="space-y-3 sm:space-y-4">
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Nama Penuh</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">{{ __('Nama Penuh') }}</label>
                         <p class="text-gray-900 font-medium text-sm sm:text-base break-words">{{ $user->name }}</p>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">{{ __('Email') }}</label>
                         <p class="text-gray-900 text-sm sm:text-base break-words">{{ $user->email }}</p>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Telefon</label>
-                        <p class="text-gray-900 text-sm sm:text-base break-words">{{ $user->phone ?: 'Tidak dinyatakan' }}</p>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">{{ __('Telefon') }}</label>
+                        <p class="text-gray-900 text-sm sm:text-base break-words">{{ $user->phone ?: __('Tidak dinyatakan') }}</p>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Lokasi</label>
-                        <p class="text-gray-900 text-sm sm:text-base break-words">{{ $user->location ?: 'Tidak dinyatakan' }}</p>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">{{ __('Lokasi') }}</label>
+                        <p class="text-gray-900 text-sm sm:text-base break-words">{{ $user->location ?: __('Tidak dinyatakan') }}</p>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Tahun Pengalaman</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">{{ __('Tahun Pengalaman') }}</label>
                         <p class="text-gray-900 text-sm sm:text-base">{{ $user->years_experience ? $user->years_experience . ' tahun' : 'Tidak dinyatakan' }}</p>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Kemahiran</label>
-                        <p class="text-gray-900 text-sm sm:text-base break-words">{{ $user->skills ?: 'Tidak dinyatakan' }}</p>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">{{ __('Kemahiran') }}</label>
+                        <p class="text-gray-900 text-sm sm:text-base break-words">{{ $user->skills ?: __('Tidak dinyatakan') }}</p>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Kawasan Perkhidmatan</label>
-                        <p class="text-gray-900 text-sm sm:text-base break-words">{{ $user->service_areas ?: 'Tidak dinyatakan' }}</p>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">{{ __('Kawasan Perkhidmatan') }}</label>
+                        <p class="text-gray-900 text-sm sm:text-base break-words">{{ $user->service_areas ?: __('Tidak dinyatakan') }}</p>
                     </div>
                 </div>
             </div>
@@ -144,23 +144,21 @@
                 <svg class="w-5 h-5 text-purple-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                 </svg>
-                Dokumen Pengesahan
+                {{ __('Dokumen Pengesahan') }}
             </h3>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                 @if($user->id_document)
                     <div class="border border-gray-200 rounded-lg p-4">
                         <div class="flex items-center justify-between mb-3">
-                            <h4 class="font-semibold text-gray-900 text-sm sm:text-base">Dokumen ID</h4>
-                            <button @click="showIdModal = true" class="text-blue-600 hover:text-blue-800 text-sm font-medium">
-                                Lihat Dokumen
-                            </button>
+                            <h4 class="font-semibold text-gray-900 text-sm sm:text-base">{{ __('Dokumen ID') }}</h4>
+                            <button @click="showIdModal = true" class="text-blue-600 hover:text-blue-800 text-sm font-medium">{{ __('Lihat Dokumen') }}</button>
                         </div>
                         <div class="bg-gray-50 rounded-lg p-3">
                             <div class="flex items-center gap-2">
                                 <svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
                                 </svg>
-                                <span class="text-sm text-gray-600">Dokumen ID telah dimuat naik</span>
+                                <span class="text-sm text-gray-600">{{ __('Dokumen ID telah dimuat naik') }}</span>
                             </div>
                         </div>
                     </div>
@@ -169,17 +167,15 @@
                 @if($user->selfie_with_id)
                     <div class="border border-gray-200 rounded-lg p-4">
                         <div class="flex items-center justify-between mb-3">
-                            <h4 class="font-semibold text-gray-900 text-sm sm:text-base">Selfie Bersama ID</h4>
-                            <button @click="showSelfieModal = true" class="text-blue-600 hover:text-blue-800 text-sm font-medium">
-                                Lihat Selfie
-                            </button>
+                            <h4 class="font-semibold text-gray-900 text-sm sm:text-base">{{ __('Selfie Bersama ID') }}</h4>
+                            <button @click="showSelfieModal = true" class="text-blue-600 hover:text-blue-800 text-sm font-medium">{{ __('Lihat Selfie') }}</button>
                         </div>
                         <div class="bg-gray-50 rounded-lg p-3">
                             <div class="flex items-center gap-2">
                                 <svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
                                 </svg>
-                                <span class="text-sm text-gray-600">Selfie ID telah dimuat naik</span>
+                                <span class="text-sm text-gray-600">{{ __('Selfie ID telah dimuat naik') }}</span>
                             </div>
                         </div>
                     </div>
@@ -195,19 +191,19 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                     </svg>
                 </div>
-                <h3 class="text-lg font-bold text-blue-900">Status Akaun Penjual</h3>
+                <h3 class="text-lg font-bold text-blue-900">{{ __('Status Akaun Penjual') }}</h3>
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 text-sm">
                 <div class="bg-white rounded-lg p-3 border border-blue-200">
-                    <div class="font-semibold text-blue-900">Status</div>
-                    <div class="text-blue-700">Disahkan & Aktif</div>
+                    <div class="font-semibold text-blue-900">{{ __('Status') }}</div>
+                    <div class="text-blue-700">{{ __('Disahkan & Aktif') }}</div>
                 </div>
                 <div class="bg-white rounded-lg p-3 border border-blue-200">
-                    <div class="font-semibold text-blue-900">Tarikh Pendaftaran</div>
+                    <div class="font-semibold text-blue-900">{{ __('Tarikh Pendaftaran') }}</div>
                     <div class="text-blue-700">{{ $user->created_at->format('d M Y') }}</div>
                 </div>
                 <div class="bg-white rounded-lg p-3 border border-blue-200 sm:col-span-2 lg:col-span-1">
-                    <div class="font-semibold text-blue-900">Kemaskini Terakhir</div>
+                    <div class="font-semibold text-blue-900">{{ __('Kemaskini Terakhir') }}</div>
                     <div class="text-blue-700">{{ $user->updated_at->format('d M Y') }}</div>
                 </div>
             </div>
@@ -219,14 +215,14 @@
     <div x-show="showIdModal" style="display: none;" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60">
         <div class="bg-white rounded-lg shadow-lg max-w-lg w-full p-6 relative">
             <button @click="showIdModal = false" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
-            <h3 class="text-xl font-bold mb-4">Dokumen ID</h3>
+            <h3 class="text-xl font-bold mb-4">{{ __('Dokumen ID') }}</h3>
             @php $idDoc = $user->id_document; @endphp
             @if($idDoc && Str::endsWith(strtolower($idDoc), ['.jpg', '.jpeg', '.png', '.gif']))
-                <img src="{{ route('seller.document', ['filename' => basename($idDoc)]) }}" alt="Dokumen ID" class="w-full max-w-md mx-auto rounded shadow">
+                <img src="{{ route('seller.document', ['filename' => basename($idDoc)]) }}" alt="{{ __('Dokumen ID') }}" class="w-full max-w-md mx-auto rounded shadow">
             @elseif($idDoc && Str::endsWith(strtolower($idDoc), ['.pdf']))
                 <embed src="{{ route('seller.document', ['filename' => basename($idDoc)]) }}" type="application/pdf" class="w-full h-80 rounded shadow" />
             @else
-                <p class="text-gray-500">Tidak dapat memaparkan dokumen ini.</p>
+                <p class="text-gray-500">{{ __('Tidak dapat memaparkan dokumen ini.') }}</p>
             @endif
         </div>
     </div>
@@ -235,12 +231,12 @@
     <div x-show="showSelfieModal" style="display: none;" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60">
         <div class="bg-white rounded-lg shadow-lg max-w-lg w-full p-6 relative">
             <button @click="showSelfieModal = false" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
-            <h3 class="text-xl font-bold mb-4">Selfie Bersama ID</h3>
+            <h3 class="text-xl font-bold mb-4">{{ __('Selfie Bersama ID') }}</h3>
             @php $selfie = $user->selfie_with_id; @endphp
             @if($selfie && Str::endsWith(strtolower($selfie), ['.jpg', '.jpeg', '.png', '.gif']))
                 <img src="{{ route('seller.image', ['filename' => basename($selfie)]) }}" alt="Selfie ID" class="w-full max-w-md mx-auto rounded shadow">
             @else
-                <p class="text-gray-500">Tidak dapat memaparkan selfie ini.</p>
+                <p class="text-gray-500">{{ __('Tidak dapat memaparkan selfie ini.') }}</p>
             @endif
         </div>
     </div>
@@ -250,8 +246,8 @@
         <div @click.away="showProfileModal = false" class="bg-white rounded-lg shadow-lg w-full max-w-4xl my-4 sm:my-8 flex flex-col max-h-[calc(100vh-2rem)] sm:max-h-[calc(100vh-4rem)]">
             <!-- Modal Header -->
             <div class="flex items-center justify-between p-4 sm:p-6 border-b border-gray-200 flex-shrink-0">
-                <h3 class="text-lg sm:text-xl font-bold text-gray-900">Kemaskini Maklumat Peribadi</h3>
-                <button @click="showProfileModal = false" class="text-gray-500 hover:text-gray-700 text-2xl" aria-label="Tutup">&times;</button>
+                <h3 class="text-lg sm:text-xl font-bold text-gray-900">{{ __('Kemaskini Maklumat Peribadi') }}</h3>
+                <button @click="showProfileModal = false" class="text-gray-500 hover:text-gray-700 text-2xl" aria-label="{{ __('Tutup') }}">&times;</button>
             </div>
             
             <!-- Modal Body with Scroll -->
@@ -260,27 +256,27 @@
                     @csrf
                     <div class="grid grid-cols-2 gap-3 sm:gap-4 lg:gap-6">
                         <div>
-                            <label class="block text-sm sm:text-base font-medium text-gray-700 mb-2">Nama</label>
+                            <label class="block text-sm sm:text-base font-medium text-gray-700 mb-2">{{ __('Nama') }}</label>
                             <input type="text" name="name" class="w-full border border-gray-300 rounded-lg px-3 py-3 sm:py-2 text-sm sm:text-base focus:ring-2 focus:ring-blue-500 focus:border-blue-500" value="{{ old('name', $user->name) }}" required>
                         </div>
                         <div>
-                            <label class="block text-sm sm:text-base font-medium text-gray-700 mb-2">Email</label>
+                            <label class="block text-sm sm:text-base font-medium text-gray-700 mb-2">{{ __('Email') }}</label>
                             <input type="email" name="email" class="w-full border border-gray-300 rounded-lg px-3 py-3 sm:py-2 text-sm sm:text-base focus:ring-2 focus:ring-blue-500 focus:border-blue-500" value="{{ old('email', $user->email) }}" required>
                         </div>
                         <div>
-                            <label class="block text-sm sm:text-base font-medium text-gray-700 mb-2">No. Telefon</label>
+                            <label class="block text-sm sm:text-base font-medium text-gray-700 mb-2">{{ __('No. Telefon') }}</label>
                             <input type="text" name="phone" class="w-full border border-gray-300 rounded-lg px-3 py-3 sm:py-2 text-sm sm:text-base focus:ring-2 focus:ring-blue-500 focus:border-blue-500" value="{{ old('phone', $user->phone) }}" required>
                         </div>
                         <div>
-                            <label class="block text-sm sm:text-base font-medium text-gray-700 mb-2">Bio</label>
+                            <label class="block text-sm sm:text-base font-medium text-gray-700 mb-2">{{ __('Bio') }}</label>
                             <textarea name="bio" rows="3" class="w-full border border-gray-300 rounded-lg px-3 py-3 sm:py-2 text-sm sm:text-base focus:ring-2 focus:ring-blue-500 focus:border-blue-500">{{ old('bio', $user->bio) }}</textarea>
                         </div>
                         <div>
-                            <label class="block text-sm sm:text-base font-medium text-gray-700 mb-2">Lokasi</label>
+                            <label class="block text-sm sm:text-base font-medium text-gray-700 mb-2">{{ __('Lokasi') }}</label>
                             <input type="text" name="location" class="w-full border border-gray-300 rounded-lg px-3 py-3 sm:py-2 text-sm sm:text-base focus:ring-2 focus:ring-blue-500 focus:border-blue-500" value="{{ old('location', $user->location) }}">
                         </div>
                         <div class="col-span-2">
-                            <label class="block text-sm sm:text-base font-medium text-gray-700 mb-2">Gambar Profil</label>
+                            <label class="block text-sm sm:text-base font-medium text-gray-700 mb-2">{{ __('Gambar Profil') }}</label>
                             @php $profileImg = trim($user->profile_image ?? ''); @endphp
                             @if($profileImg !== '')
                                 @if(Str::startsWith($profileImg, 'http'))
@@ -301,44 +297,44 @@
                                 <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
                                 </svg>
-                                Maklumat Penjual
+                                {{ __('Maklumat Penjual') }}
                             </h4>
                         </div>
                         
                         <div>
-                            <label class="block font-medium text-gray-700 mb-1">Nama Perniagaan</label>
+                            <label class="block font-medium text-gray-700 mb-1">{{ __('Nama Perniagaan') }}</label>
                             <input type="text" name="business_name" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500" value="{{ old('business_name', $user->business_name) }}">
                         </div>
                         <div>
-                            <label class="block font-medium text-gray-700 mb-1">Jenis Perniagaan</label>
+                            <label class="block font-medium text-gray-700 mb-1">{{ __('Jenis Perniagaan') }}</label>
                             <input type="text" name="business_type" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500" value="{{ old('business_type', $user->business_type) }}">
                         </div>
                         <div>
-                            <label class="block font-medium text-gray-700 mb-1">No. Pendaftaran Perniagaan</label>
+                            <label class="block font-medium text-gray-700 mb-1">{{ __('No. Pendaftaran Perniagaan') }}</label>
                             <input type="text" name="business_registration" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500" value="{{ old('business_registration', $user->business_registration) }}">
                         </div>
                         <div>
-                            <label class="block text-sm sm:text-base font-medium text-gray-700 mb-2">Alamat Perniagaan</label>
+                            <label class="block text-sm sm:text-base font-medium text-gray-700 mb-2">{{ __('Alamat Perniagaan') }}</label>
                             <input type="text" name="business_address" class="w-full border border-gray-300 rounded-lg px-3 py-3 sm:py-2 text-sm sm:text-base focus:ring-2 focus:ring-blue-500 focus:border-blue-500" value="{{ old('business_address', $user->business_address) }}">
                         </div>
                         <div>
-                            <label class="block text-sm sm:text-base font-medium text-gray-700 mb-2">Kawasan Operasi / Wilayah</label>
+                            <label class="block text-sm sm:text-base font-medium text-gray-700 mb-2">{{ __('Kawasan Operasi / Wilayah') }}</label>
                             <input type="text" name="operating_area" class="w-full border border-gray-300 rounded-lg px-3 py-3 sm:py-2 text-sm sm:text-base focus:ring-2 focus:ring-blue-500 focus:border-blue-500" value="{{ old('operating_area', $user->operating_area) }}">
                         </div>
                         <div>
-                            <label class="block text-sm sm:text-base font-medium text-gray-700 mb-2">Laman Web / Media Sosial</label>
+                            <label class="block text-sm sm:text-base font-medium text-gray-700 mb-2">{{ __('Laman Web / Media Sosial') }}</label>
                             <input type="text" name="website" class="w-full border border-gray-300 rounded-lg px-3 py-3 sm:py-2 text-sm sm:text-base focus:ring-2 focus:ring-blue-500 focus:border-blue-500" value="{{ old('website', $user->website) }}">
                         </div>
                         <div>
-                            <label class="block text-sm sm:text-base font-medium text-gray-700 mb-2">Tahun Pengalaman</label>
+                            <label class="block text-sm sm:text-base font-medium text-gray-700 mb-2">{{ __('Tahun Pengalaman') }}</label>
                             <input type="number" name="years_experience" class="w-full border border-gray-300 rounded-lg px-3 py-3 sm:py-2 text-sm sm:text-base focus:ring-2 focus:ring-blue-500 focus:border-blue-500" value="{{ old('years_experience', $user->years_experience) }}">
                         </div>
                         <div>
-                            <label class="block font-medium text-gray-700 mb-2">Kemahiran / Tag / Kepakaran</label>
+                            <label class="block font-medium text-gray-700 mb-2">{{ __('Kemahiran / Tag / Kepakaran') }}</label>
                             <input type="text" name="skills" class="w-full border border-gray-300 rounded-lg px-3 py-3 sm:py-2 text-sm sm:text-base focus:ring-2 focus:ring-blue-500 focus:border-blue-500" value="{{ old('skills', $user->skills) }}">
                         </div>
                         <div>
-                            <label class="block font-medium text-gray-700 mb-2">Kawasan Perkhidmatan / Liputan</label>
+                            <label class="block font-medium text-gray-700 mb-2">{{ __('Kawasan Perkhidmatan / Liputan') }}</label>
                             <input type="text" name="service_areas" class="w-full border border-gray-300 rounded-lg px-3 py-3 sm:py-2 text-sm sm:text-base focus:ring-2 focus:ring-blue-500 focus:border-blue-500" value="{{ old('service_areas', $user->skills) }}">
                         </div>
                         
@@ -349,12 +345,12 @@
                                 <svg class="w-5 h-5 text-purple-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                                 </svg>
-                                Dokumen Pengesahan
+                                {{ __('Dokumen Pengesahan') }}
                             </h4>
                         </div>
                         
                         <div>
-                            <label class="block text-sm sm:text-base font-medium text-gray-700 mb-2">Kad Pengenalan / Sijil / Lesen Perniagaan</label>
+                            <label class="block text-sm sm:text-base font-medium text-gray-700 mb-2">{{ __('Kad Pengenalan / Sijil / Lesen Perniagaan') }}</label>
                             @php $idDoc = $user->id_document; @endphp
                             @if($idDoc)
                                 <div class="mb-3">
@@ -366,27 +362,27 @@
                                                 <svg class="w-6 h-6 sm:w-8 sm:h-8 text-gray-400 mx-auto mb-1" fill="currentColor" viewBox="0 0 20 20">
                                                     <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd"/>
                                                 </svg>
-                                                <span class="text-xs text-gray-500">PDF Document</span>
+                                                <span class="text-xs text-gray-500">{{ __('PDF Document') }}</span>
                                             </div>
                                         </div>
                                     @endif
-                                    <p class="text-xs text-gray-500 mt-1">Dokumen semasa</p>
+                                    <p class="text-xs text-gray-500 mt-1">{{ __('Dokumen semasa') }}</p>
                                 </div>
                             @endif
                             <input type="file" name="id_document" class="w-full border border-gray-300 rounded-lg px-3 py-3 sm:py-2 text-sm sm:text-base focus:ring-2 focus:ring-blue-500 focus:border-blue-500" accept="image/*,application/pdf">
-                            <p class="text-xs text-gray-500 mt-1">Gantikan jika ingin kemaskini</p>
+                            <p class="text-xs text-gray-500 mt-1">{{ __('Gantikan jika ingin kemaskini') }}</p>
                         </div>
                         <div>
-                            <label class="block text-sm sm:text-base font-medium text-gray-700 mb-2">Selfie Bersama Kad Pengenalan</label>
+                            <label class="block text-sm sm:text-base font-medium text-gray-700 mb-2">{{ __('Selfie Bersama Kad Pengenalan') }}</label>
                             @php $selfie = $user->selfie_with_id; @endphp
                             @if($selfie)
                                 <div class="mb-3">
                                     <img src="{{ route('seller.image', ['filename' => basename($selfie)]) }}" alt="Selfie with ID" class="w-24 h-24 sm:w-32 sm:h-32 object-cover rounded-lg border-2 border-gray-200">
-                                    <p class="text-xs text-gray-500 mt-1">Selfie semasa</p>
+                                    <p class="text-xs text-gray-500 mt-1">{{ __('Selfie semasa') }}</p>
                                 </div>
                             @endif
                             <input type="file" name="selfie_with_id" class="w-full border border-gray-300 rounded-lg px-3 py-3 sm:py-2 text-sm sm:text-base focus:ring-2 focus:ring-blue-500 focus:border-blue-500" accept="image/*">
-                            <p class="text-xs text-gray-500 mt-1">Gantikan jika ingin kemaskini</p>
+                            <p class="text-xs text-gray-500 mt-1">{{ __('Gantikan jika ingin kemaskini') }}</p>
                         </div>
                     </div>
                 </form>
@@ -394,12 +390,8 @@
             
             <!-- Modal Footer -->
             <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-3 p-4 sm:p-6 border-t border-gray-200 flex-shrink-0">
-                <button @click="showProfileModal = false" class="px-4 py-3 sm:py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg font-medium transition-colors">
-                    Batal
-                </button>
-                <button type="submit" form="profile-update-form" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 sm:py-2 rounded-lg font-semibold transition-colors">
-                    Simpan Maklumat
-                </button>
+                <button @click="showProfileModal = false" class="px-4 py-3 sm:py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg font-medium transition-colors">{{ __('Batal') }}</button>
+                <button type="submit" form="profile-update-form" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 sm:py-2 rounded-lg font-semibold transition-colors">{{ __('Simpan Maklumat') }}</button>
             </div>
         </div>
         

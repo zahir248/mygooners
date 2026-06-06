@@ -1,14 +1,14 @@
 @extends('layouts.admin')
 
-@section('title', 'Pengurusan Artikel')
+@section('title', __('Pengurusan Artikel'))
 
 @section('content')
 <!-- Header Section -->
 <div class="px-4 sm:px-6 lg:px-8 py-6">
     <div class="sm:flex sm:items-center sm:justify-between">
         <div>
-            <h1 class="text-2xl font-bold text-gray-900">Pengurusan Artikel</h1>
-            <p class="mt-2 text-sm text-gray-700">Urus semua artikel berita dan catatan blog Arsenal</p>
+            <h1 class="text-2xl font-bold text-gray-900">{{ __('Pengurusan Artikel') }}</h1>
+            <p class="mt-2 text-sm text-gray-700">{{ __('Urus semua artikel berita dan catatan blog Arsenal') }}</p>
         </div>
         <div class="mt-4 sm:mt-0">
             <a href="{{ route('admin.articles.create') }}" 
@@ -16,7 +16,7 @@
                 <svg class="-ml-1 mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                 </svg>
-                Cipta Artikel
+                {{ __('Cipta Artikel') }}
             </a>
         </div>
     </div>
@@ -28,13 +28,13 @@
 <div class="mx-4 bg-white shadow rounded-lg mb-6">
     <form method="GET" action="{{ route('admin.articles.index') }}" class="px-6 py-4 border-b border-gray-200">
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-            <h3 class="text-lg font-medium text-gray-900 mb-4 sm:mb-0">Tapis Artikel</h3>
+            <h3 class="text-lg font-medium text-gray-900 mb-4 sm:mb-0">{{ __('Tapis Artikel') }}</h3>
             <div class="flex flex-col sm:flex-row gap-4">
                 <!-- Search -->
                 <div class="relative">
                     <input type="text" 
                            name="search"
-                           placeholder="Cari artikel..." 
+                           placeholder="{{ __('Cari artikel...') }}" 
                            value="{{ request('search') }}"
                            class="pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-red-500 focus:border-red-500 sm:text-sm">
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -46,14 +46,14 @@
                 
                 <!-- Status Filter -->
                 <select name="status" class="border border-gray-300 rounded-md px-3 py-2 focus:ring-red-500 focus:border-red-500 sm:text-sm">
-                    <option value="">Semua Status</option>
-                    <option value="published" {{ request('status') === 'published' ? 'selected' : '' }}>Diterbitkan</option>
-                    <option value="draft" {{ request('status') === 'draft' ? 'selected' : '' }}>Draf</option>
+                    <option value="">{{ __('Semua Status') }}</option>
+                    <option value="published" {{ request('status') === 'published' ? 'selected' : '' }}>{{ __('Diterbitkan') }}</option>
+                    <option value="draft" {{ request('status') === 'draft' ? 'selected' : '' }}>{{ __('Draf') }}</option>
                 </select>
                 
                 <!-- Category Filter -->
                 <select name="category" class="border border-gray-300 rounded-md px-3 py-2 focus:ring-red-500 focus:border-red-500 sm:text-sm">
-                    <option value="">Semua Kategori</option>
+                    <option value="">{{ __('Semua Kategori') }}</option>
                     @foreach($categories as $category)
                         <option value="{{ $category }}" {{ request('category') === $category ? 'selected' : '' }}>
                             {{ $category }}
@@ -70,7 +70,7 @@
                            {{ request('featured') ? 'checked' : '' }}
                            class="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300 rounded">
                     <label for="featured" class="ml-2 block text-sm text-gray-900">
-                        Artikel Pilihan
+                        {{ __('Artikel Pilihan') }}
                     </label>
                 </div>
                 
@@ -78,11 +78,11 @@
                 <div class="flex gap-2">
                     <button type="submit" 
                             class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 text-sm">
-                        Tapis
+                        {{ __('Tapis') }}
                     </button>
                     <a href="{{ route('admin.articles.index') }}" 
                        class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 text-sm">
-                        Reset
+                        {{ __('Set Semula') }}
                     </a>
                 </div>
             </div>
@@ -95,21 +95,21 @@
     <div class="px-6 py-4 border-b border-gray-200">
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
         <h3 class="text-lg font-medium text-gray-900">
-            Artikel ({{ $articles->count() }})
+            {{ trans('admin_page.list_articles', ['count' => $articles->total()]) }}
         </h3>
             
             @if(request('search') || request('status') || request('category') || request('featured'))
                 <div class="mt-2 sm:mt-0">
                     <p class="text-sm text-gray-600">
-                        Tapisan aktif:
+                        {{ trans('admin_page.active_filters') }}
                         @if(request('search'))
                             <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 mr-1">
-                                Cari: "{{ request('search') }}"
+                                {{ trans('admin_page.search_filter', ['query' => request('search')]) }}
                             </span>
                         @endif
                         @if(request('status'))
                             <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 mr-1">
-                                Status: {{ request('status') === 'published' ? 'Diterbitkan' : 'Draf' }}
+                                {{ trans('admin_page.status_filter', ['status' => request('status') === 'published' ? trans('admin_page.published') : trans('admin_page.draft')]) }}
                             </span>
                         @endif
                         @if(request('category'))
@@ -119,7 +119,7 @@
                         @endif
                         @if(request('featured'))
                             <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 mr-1">
-                                Artikel Pilihan
+                                {{ __('Artikel Pilihan') }}
                             </span>
                         @endif
                     </p>
@@ -128,28 +128,18 @@
         </div>
     </div>
     
-    @if($articles->count() > 0)
+    @if($articles->total() > 0)
         <div class="overflow-x-auto">
             <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-gray-50">
                     <tr>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Artikel
-                        </th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Kategori
-                        </th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Status
-                        </th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Tontonan
-                        </th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Tarikh
-                        </th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Artikel') }}</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Kategori') }}</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Status') }}</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Tontonan') }}</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Tarikh') }}</th>
                         <th scope="col" class="relative px-6 py-3">
-                            <span class="sr-only">Tindakan</span>
+                            <span class="sr-only">{{ __('Tindakan') }}</span>
                         </th>
                     </tr>
                 </thead>
@@ -178,12 +168,12 @@
                                             </p>
                                             @if($article->is_featured)
                                                 <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                                                    Utama
+                                                    {{ __('Utama') }}
                                                 </span>
                                             @endif
                                         </div>
                                         <p class="text-sm text-gray-500 line-clamp-2">
-                                            ID Artikel: #{{ $article->id }} • {{ $article->slug }}
+                                            {{ trans('admin_page.list_article_meta', ['id' => $article->id, 'slug' => $article->slug]) }}
                                         </p>
                                     </div>
                                 </div>
@@ -199,14 +189,14 @@
                                         <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
                                             <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
                                         </svg>
-                                        Diterbitkan
+                                        {{ __('Diterbitkan') }}
                                     </span>
                                 @else
                                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
                                         <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
                                             <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd"></path>
                                         </svg>
-                                        Draf
+                                        {{ __('Draf') }}
                                     </span>
                                 @endif
                             </td>
@@ -232,7 +222,7 @@
                                         <a href="{{ route('blog.show', $article->slug) }}" 
                                            target="_blank"
                                            class="text-gray-400 hover:text-gray-600" 
-                                           title="View Article">
+                                           title="{{ __('Lihat Artikel') }}">
                                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
@@ -242,7 +232,7 @@
                                         <a href="{{ route('admin.articles.preview-existing', $article->id) }}" 
                                            target="_blank"
                                            class="text-gray-400 hover:text-gray-600" 
-                                           title="Preview Article">
+                                           title="{{ __('Pratonton Artikel') }}">
                                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
@@ -253,7 +243,7 @@
                                     <!-- Edit Article -->
                                     <a href="{{ route('admin.articles.edit', $article->id) }}" 
                                        class="text-indigo-600 hover:text-indigo-900" 
-                                       title="Edit Article">
+                                       title="{{ __('Sunting Artikel') }}">
                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                                         </svg>
@@ -262,7 +252,7 @@
                                     <!-- Delete Article -->
                                     <button onclick="confirmDelete({{ $article->id }}, '{{ $article->title }}')" 
                                             class="text-red-600 hover:text-red-900" 
-                                            title="Delete Article">
+                                            title="{{ __('Padam Artikel') }}">
                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1-1H8a1 1 0 00-1 1v3M4 7h16"></path>
                                         </svg>
@@ -275,37 +265,22 @@
             </table>
         </div>
         
-        <!-- Pagination -->
-        <div class="bg-white px-6 py-3 border-t border-gray-200">
-            <div class="flex items-center justify-between">
-                <div class="text-sm text-gray-700">
-                    Showing <span class="font-medium">1</span> to <span class="font-medium">{{ $articles->count() }}</span> of <span class="font-medium">{{ $articles->count() }}</span> results
-                </div>
-                <div class="flex space-x-2">
-                    <button class="px-3 py-1 border border-gray-300 rounded-md text-sm text-gray-500 bg-gray-50 cursor-not-allowed">
-                        Previous
-                    </button>
-                    <button class="px-3 py-1 border border-gray-300 rounded-md text-sm text-gray-500 bg-gray-50 cursor-not-allowed">
-                        Next
-                    </button>
-                </div>
-            </div>
-        </div>
+        @include('admin.partials.pagination', ['paginator' => $articles])
     @else
         <!-- Empty State -->
         <div class="text-center py-12">
             <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
             </svg>
-            <h3 class="mt-2 text-sm font-medium text-gray-900">No articles</h3>
-            <p class="mt-1 text-sm text-gray-500">Get started by creating your first Arsenal article.</p>
+            <h3 class="mt-2 text-sm font-medium text-gray-900">{{ __('Tiada artikel') }}</h3>
+            <p class="mt-1 text-sm text-gray-500">{{ __('Mulakan dengan mencipta artikel Arsenal pertama anda.') }}</p>
             <div class="mt-6">
                 <a href="{{ route('admin.articles.create') }}" 
                    class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
                     <svg class="-ml-1 mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                     </svg>
-                    Create Article
+                    {{ __('Cipta Artikel') }}
                 </a>
             </div>
         </div>
@@ -321,23 +296,23 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.732 15.5c-.77.833.192 2.5 1.732 2.5z"></path>
                 </svg>
             </div>
-            <h3 class="text-lg font-medium text-gray-900 mt-4">Delete Article</h3>
+            <h3 class="text-lg font-medium text-gray-900 mt-4">{{ __('Padam Artikel') }}</h3>
             <div class="mt-2 px-7 py-3">
                 <p class="text-sm text-gray-500">
-                    Are you sure you want to delete "<span id="deleteArticleTitle"></span>"? This action cannot be undone.
+                    Adakah anda pasti mahu memadamkan "<span id="deleteArticleTitle"></span>"? Tindakan ini tidak boleh diundur.
                 </p>
             </div>
             <div class="flex justify-center space-x-4 mt-4">
                 <button onclick="closeDeleteModal()" 
                         class="px-4 py-2 bg-gray-300 text-gray-800 text-sm font-medium rounded-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-300">
-                    Cancel
+                    {{ __('Batal') }}
                 </button>
                 <form id="deleteForm" method="POST" class="inline">
                     @csrf
                     @method('DELETE')
                     <button type="submit" 
                             class="px-4 py-2 bg-red-600 text-white text-sm font-medium rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500">
-                        Delete
+                        {{ __('Padam') }}
                     </button>
                 </form>
             </div>

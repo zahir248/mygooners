@@ -1,14 +1,14 @@
 @extends('layouts.admin')
 
-@section('title', 'Edit Video')
+@section('title', __('Sunting Video'))
 
 @section('content')
 <!-- Header Section -->
 <div class="px-4 sm:px-6 lg:px-8 py-6">
     <div class="sm:flex sm:items-center sm:justify-between">
         <div>
-            <h1 class="text-2xl font-bold text-gray-900">Edit Video</h1>
-            <p class="mt-2 text-sm text-gray-700">Kemaskini video: {{ $video->title }}</p>
+            <h1 class="text-2xl font-bold text-gray-900">{{ __('Sunting Video') }}</h1>
+            <p class="mt-2 text-sm text-gray-700">{{ trans('admin_page.update_video', ['title' => $video->title]) }}</p>
         </div>
         <div class="mt-4 sm:mt-0 flex space-x-3">
             <a href="{{ route('videos.show', $video->slug) }}" 
@@ -18,14 +18,14 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
                 </svg>
-                Pratonton
+                {{ __('Pratonton') }}
             </a>
             <a href="{{ route('admin.videos.index') }}" 
                class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
                 <svg class="-ml-1 mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
                 </svg>
-                Kembali ke Video
+                {{ __('Kembali ke Video') }}
             </a>
         </div>
     </div>
@@ -38,13 +38,13 @@
     <!-- Video Content -->
     <div class="bg-white shadow rounded-lg">
         <div class="px-6 py-4 border-b border-gray-200">
-            <h3 class="text-lg font-medium text-gray-900">Kandungan Video</h3>
+            <h3 class="text-lg font-medium text-gray-900">{{ __('Kandungan Video') }}</h3>
         </div>
         <div class="px-6 py-4 space-y-6">
             <!-- Title -->
             <div>
                 <label for="title" class="block text-sm font-medium text-gray-700 mb-2">
-                    Tajuk Video <span class="text-red-500">*</span>
+                    {{ trans('admin_page.video_title') }} <span class="text-red-500">*</span>
                 </label>
                 <input type="text" 
                        name="title" 
@@ -52,7 +52,7 @@
                        value="{{ old('title', $video->title) }}"
                        required
                        class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-red-500 focus:border-red-500 @error('title') border-red-500 @enderror"
-                       placeholder="Masukkan tajuk video...">
+                       placeholder="{{ __('Masukkan tajuk video...') }}">
                 @error('title')
                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                 @enderror
@@ -68,7 +68,7 @@
                           rows="6" 
                           required
                           class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-red-500 focus:border-red-500 @error('description') border-red-500 @enderror"
-                          placeholder="Tulis deskripsi video anda di sini...">{{ old('description', $video->description) }}</textarea>
+                          placeholder="{{ __('Tulis deskripsi video anda di sini...') }}">{{ old('description', $video->description) }}</textarea>
                 @error('description')
                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                 @enderror
@@ -77,7 +77,7 @@
             <!-- YouTube Video ID -->
             <div>
                 <label for="youtube_video_id" class="block text-sm font-medium text-gray-700 mb-2">
-                    ID Video YouTube <span class="text-red-500">*</span>
+                    {{ trans('admin_page.youtube_video_id') }} <span class="text-red-500">*</span>
                 </label>
                 <input type="text" 
                        name="youtube_video_id" 
@@ -85,9 +85,9 @@
                        value="{{ old('youtube_video_id', $video->youtube_video_id) }}"
                        required
                        class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-red-500 focus:border-red-500 @error('youtube_video_id') border-red-500 @enderror"
-                       placeholder="Contoh: dQw4w9WgXcQ">
+                       placeholder="{{ __('Contoh: dQw4w9WgXcQ') }}">
                 <p class="mt-1 text-sm text-gray-500">
-                    Masukkan ID video YouTube atau URL penuh. Contoh: <strong>dQw4w9WgXcQ</strong> atau <strong>https://www.youtube.com/watch?v=dQw4w9WgXcQ</strong>
+                    {{ __('Masukkan ID video YouTube atau URL penuh. Contoh:') }} <strong>dQw4w9WgXcQ</strong> {{ __('atau') }} <strong>https://www.youtube.com/watch?v=dQw4w9WgXcQ</strong>
                 </p>
                 @error('youtube_video_id')
                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -96,16 +96,14 @@
 
             <!-- Duration -->
             <div>
-                <label for="duration" class="block text-sm font-medium text-gray-700 mb-2">
-                    Tempoh Video
-                </label>
+                <label for="duration" class="block text-sm font-medium text-gray-700 mb-2">{{ __('Tempoh Video') }}</label>
                 <input type="text" 
                        name="duration" 
                        id="duration" 
                        value="{{ old('duration', $video->duration) }}"
                        class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-red-500 focus:border-red-500 @error('duration') border-red-500 @enderror"
-                       placeholder="Contoh: 5:30 atau 10:45">
-                <p class="mt-1 text-sm text-gray-500">Format: MM:SS atau HH:MM:SS</p>
+                       placeholder="{{ __('Contoh: 5:30 atau 10:45') }}">
+                <p class="mt-1 text-sm text-gray-500">{{ __('Format: MM:SS atau HH:MM:SS') }}</p>
                 @error('duration')
                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                 @enderror
@@ -113,13 +111,11 @@
 
             <!-- Thumbnail Upload -->
             <div>
-                <label for="thumbnail" class="block text-sm font-medium text-gray-700 mb-2">
-                    Thumbnail Video
-                </label>
+                <label for="thumbnail" class="block text-sm font-medium text-gray-700 mb-2">{{ __('Thumbnail Video') }}</label>
                 
                 @if($video->thumbnail)
                     <div class="mb-4">
-                        <p class="text-sm font-medium text-gray-700 mb-2">Thumbnail Semasa:</p>
+                        <p class="text-sm font-medium text-gray-700 mb-2">{{ __('Thumbnail Semasa:') }}</p>
                         <div class="flex items-start space-x-4">
                             <img src="{{ route('video.thumbnail', $video->thumbnail) }}" 
                                  alt="Pratonton Thumbnail Semasa" 
@@ -132,16 +128,16 @@
                                     <svg class="-ml-1 mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                                     </svg>
-                                    Buang Thumbnail
+                                    {{ __('Buang Thumbnail') }}
                                 </button>
-                                <p class="text-xs text-gray-500">Klik untuk membuang thumbnail semasa</p>
+                                <p class="text-xs text-gray-500">{{ __('Klik untuk membuang thumbnail semasa') }}</p>
                             </div>
                         </div>
                         <input type="hidden" name="remove_thumbnail" id="remove_thumbnail" value="0">
                     </div>
                 @else
                     <div class="mb-4">
-                        <p class="text-sm font-medium text-gray-700 mb-2">Thumbnail YouTube:</p>
+                        <p class="text-sm font-medium text-gray-700 mb-2">{{ __('Thumbnail YouTube:') }}</p>
                         <img src="https://img.youtube.com/vi/{{ $video->youtube_video_id }}/maxresdefault.jpg" 
                              alt="Thumbnail YouTube" 
                              class="h-32 w-48 object-cover rounded-lg border border-gray-300"
@@ -156,20 +152,20 @@
                         </svg>
                         <div class="flex text-sm text-gray-600">
                             <label for="thumbnail" class="relative cursor-pointer bg-white rounded-md font-medium text-red-600 hover:text-red-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-red-500">
-                                <span>Muat naik fail baru</span>
+                                <span>{{ __('Muat naik fail baru') }}</span>
                                 <input id="thumbnail" name="thumbnail" type="file" class="sr-only" accept="image/*">
                             </label>
-                            <p class="pl-1">atau seret dan lepaskan</p>
+                            <p class="pl-1">{{ __('atau seret dan lepaskan') }}</p>
                         </div>
-                        <p class="text-xs text-gray-500">PNG, JPG, GIF sehingga 2MB</p>
+                        <p class="text-xs text-gray-500">{{ __('PNG, JPG, GIF sehingga 2MB') }}</p>
                     </div>
                 </div>
                 <div id="image-preview" class="mt-4 hidden">
-                    <p class="text-sm font-medium text-gray-700 mb-2">Pratonton Thumbnail Baharu:</p>
+                    <p class="text-sm font-medium text-gray-700 mb-2">{{ __('Pratonton Thumbnail Baharu:') }}</p>
                     <img id="preview-img" src="" alt="Pratonton Thumbnail" class="h-32 w-48 object-cover rounded-lg border border-gray-300">
-                    <button type="button" id="remove-image" class="mt-2 text-sm text-red-600 hover:text-red-500">Buang Thumbnail</button>
+                    <button type="button" id="remove-image" class="mt-2 text-sm text-red-600 hover:text-red-500">{{ __('Buang Thumbnail') }}</button>
                 </div>
-                <p class="mt-1 text-sm text-gray-500">Pilihan: Jika tidak dimuat naik, thumbnail semasa akan dikekalkan</p>
+                <p class="mt-1 text-sm text-gray-500">{{ __('Pilihan: Jika tidak dimuat naik, thumbnail semasa akan dikekalkan') }}</p>
                 @error('thumbnail')
                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                 @enderror
@@ -177,9 +173,7 @@
 
             <!-- Video Preview -->
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">
-                    Pratonton Video
-                </label>
+                <label class="block text-sm font-medium text-gray-700 mb-2">{{ __('Pratonton Video') }}</label>
                 <div class="aspect-video bg-gray-100 rounded-lg overflow-hidden">
                     <iframe src="{{ $video->embed_url }}" 
                             class="w-full h-full"
@@ -200,20 +194,20 @@
     <!-- Video Settings -->
     <div class="bg-white shadow rounded-lg">
         <div class="px-6 py-4 border-b border-gray-200">
-            <h3 class="text-lg font-medium text-gray-900">Tetapan Video</h3>
+            <h3 class="text-lg font-medium text-gray-900">{{ __('Tetapan Video') }}</h3>
         </div>
         <div class="px-6 py-4 space-y-6">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <!-- Category -->
                 <div>
                     <label for="category" class="block text-sm font-medium text-gray-700 mb-2">
-                        Kategori <span class="text-red-500">*</span>
+                        {{ trans('admin_page.category') }} <span class="text-red-500">*</span>
                     </label>
                     <select name="category" 
                             id="category" 
                             required
                             class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-red-500 focus:border-red-500 @error('category') border-red-500 @enderror">
-                        <option value="">Pilih kategori</option>
+                        <option value="">{{ __('Pilih kategori') }}</option>
                         @foreach($categories as $category)
                             <option value="{{ $category }}" {{ old('category', $video->category) === $category ? 'selected' : '' }}>
                                 {{ $category }}
@@ -228,14 +222,14 @@
                 <!-- Status -->
                 <div>
                     <label for="status" class="block text-sm font-medium text-gray-700 mb-2">
-                        Status Penerbitan <span class="text-red-500">*</span>
+                        {{ trans('admin_page.publication_status') }} <span class="text-red-500">*</span>
                     </label>
                     <select name="status" 
                             id="status" 
                             required
                             class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-red-500 focus:border-red-500 @error('status') border-red-500 @enderror">
-                        <option value="draft" {{ old('status', $video->status) === 'draft' ? 'selected' : '' }}>Simpan sebagai Draf</option>
-                        <option value="published" {{ old('status', $video->status) === 'published' ? 'selected' : '' }}>Diterbitkan</option>
+                        <option value="draft" {{ old('status', $video->status) === 'draft' ? 'selected' : '' }}>{{ trans('admin_page.save_as_draft') }}</option>
+                        <option value="published" {{ old('status', $video->status) === 'published' ? 'selected' : '' }}>{{ trans('admin_page.published') }}</option>
                     </select>
                     @error('status')
                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -245,16 +239,14 @@
 
             <!-- Tags -->
             <div>
-                <label for="tags" class="block text-sm font-medium text-gray-700 mb-2">
-                    Tag
-                </label>
+                <label for="tags" class="block text-sm font-medium text-gray-700 mb-2">{{ __('Tag') }}</label>
                 <input type="text" 
                        name="tags" 
                        id="tags" 
                        value="{{ old('tags', is_array($video->tags) ? implode(', ', $video->tags) : '') }}"
                        class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-red-500 focus:border-red-500 @error('tags') border-red-500 @enderror"
-                       placeholder="arsenal, premier league, match highlights, pemain">
-                <p class="mt-1 text-sm text-gray-500">Pilihan: Masukkan tag yang berkaitan dipisahkan dengan koma</p>
+                       placeholder="{{ __('arsenal, premier league, match highlights, pemain') }}">
+                <p class="mt-1 text-sm text-gray-500">{{ __('Pilihan: Masukkan tag yang berkaitan dipisahkan dengan koma') }}</p>
                 @error('tags')
                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                 @enderror
@@ -268,9 +260,7 @@
                        value="1"
                        {{ old('is_featured', $video->is_featured) ? 'checked' : '' }}
                        class="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300 rounded">
-                <label for="is_featured" class="ml-2 block text-sm text-gray-900">
-                    Tandakan sebagai video pilihan
-                </label>
+                <label for="is_featured" class="ml-2 block text-sm text-gray-900">{{ __('Tandakan sebagai video pilihan') }}</label>
             </div>
         </div>
     </div>
@@ -278,40 +268,36 @@
     <!-- SEO Settings -->
     <div class="bg-white shadow rounded-lg">
         <div class="px-6 py-4 border-b border-gray-200">
-            <h3 class="text-lg font-medium text-gray-900">Tetapan SEO</h3>
-            <p class="text-sm text-gray-500">Pilihan: Kustomkan maklumat meta SEO</p>
+            <h3 class="text-lg font-medium text-gray-900">{{ __('Tetapan SEO') }}</h3>
+            <p class="text-sm text-gray-500">{{ __('Pilihan: Kustomkan maklumat meta SEO') }}</p>
         </div>
         <div class="px-6 py-4 space-y-6">
-            <!-- Meta Title -->
+            <!-- Tajuk Meta -->
             <div>
-                <label for="meta_title" class="block text-sm font-medium text-gray-700 mb-2">
-                    Tajuk Meta
-                </label>
+                <label for="meta_title" class="block text-sm font-medium text-gray-700 mb-2">{{ __('Tajuk Meta') }}</label>
                 <input type="text" 
                        name="meta_title" 
                        id="meta_title" 
                        value="{{ old('meta_title') }}"
                        maxlength="60"
                        class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-red-500 focus:border-red-500 @error('meta_title') border-red-500 @enderror"
-                       placeholder="Tajuk SEO tersuai (lalai kepada tajuk video)">
-                <p class="mt-1 text-sm text-gray-500">Disyorkan: 50-60 aksara</p>
+                       placeholder="{{ __('Tajuk SEO tersuai (lalai kepada tajuk video)') }}">
+                <p class="mt-1 text-sm text-gray-500">{{ __('Disyorkan: 50-60 aksara') }}</p>
                 @error('meta_title')
                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                 @enderror
             </div>
 
-            <!-- Meta Description -->
+            <!-- Huraian Meta -->
             <div>
-                <label for="meta_description" class="block text-sm font-medium text-gray-700 mb-2">
-                    Deskripsi Meta
-                </label>
+                <label for="meta_description" class="block text-sm font-medium text-gray-700 mb-2">{{ __('Deskripsi Meta') }}</label>
                 <textarea name="meta_description" 
                           id="meta_description" 
                           rows="3" 
                           maxlength="160"
                           class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-red-500 focus:border-red-500 @error('meta_description') border-red-500 @enderror"
-                          placeholder="Deskripsi SEO tersuai (lalai kepada deskripsi video)">{{ old('meta_description') }}</textarea>
-                <p class="mt-1 text-sm text-gray-500">Disyorkan: 150-160 aksara</p>
+                          placeholder="{{ __('Deskripsi SEO tersuai (lalai kepada deskripsi video)') }}">{{ old('meta_description') }}</textarea>
+                <p class="mt-1 text-sm text-gray-500">{{ __('Disyorkan: 150-160 aksara') }}</p>
                 @error('meta_description')
                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                 @enderror
@@ -319,16 +305,14 @@
 
             <!-- Keywords -->
             <div>
-                <label for="keywords" class="block text-sm font-medium text-gray-700 mb-2">
-                    Kata Kunci
-                </label>
+                <label for="keywords" class="block text-sm font-medium text-gray-700 mb-2">{{ __('Kata Kunci') }}</label>
                 <input type="text" 
                        name="keywords" 
                        id="keywords" 
                        value="{{ old('keywords') }}"
                        class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-red-500 focus:border-red-500 @error('keywords') border-red-500 @enderror"
-                       placeholder="arsenal, video, perlawanan, pemain, highlights">
-                <p class="mt-1 text-sm text-gray-500">Pilihan: Masukkan kata kunci yang berkaitan dipisahkan dengan koma</p>
+                       placeholder="{{ __('arsenal, video, perlawanan, pemain, highlights') }}">
+                <p class="mt-1 text-sm text-gray-500">{{ __('Pilihan: Masukkan kata kunci yang berkaitan dipisahkan dengan koma') }}</p>
                 @error('keywords')
                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                 @enderror
@@ -339,13 +323,9 @@
     <!-- Form Actions -->
     <div class="flex justify-end space-x-3">
         <a href="{{ route('admin.videos.index') }}" 
-           class="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
-            Batal
-        </a>
+           class="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">{{ __('Batal') }}</a>
         <button type="submit" 
-                class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
-            Kemas Kini Video
-        </button>
+                class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">{{ __('Kemas Kini Video') }}</button>
     </div>
 </form>
 @endsection
@@ -440,7 +420,7 @@ const removeThumbnailInput = document.getElementById('remove_thumbnail');
 
 if (removeCurrentThumbnailBtn) {
     removeCurrentThumbnailBtn.addEventListener('click', function() {
-        if (confirm('Adakah anda pasti mahu membuang thumbnail semasa? Thumbnail YouTube akan digunakan sebagai gantian.')) {
+        if (confirm(@json(__('Adakah anda pasti mahu membuang thumbnail semasa? Thumbnail YouTube akan digunakan sebagai gantian.')))) {
             // Set the hidden input to indicate thumbnail should be removed
             removeThumbnailInput.value = '1';
             
@@ -457,9 +437,7 @@ if (removeCurrentThumbnailBtn) {
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
                     </svg>
                     <div class="ml-3">
-                        <p class="text-sm text-yellow-700">
-                            Thumbnail akan dibuang semasa menyimpan. Thumbnail YouTube akan digunakan sebagai gantian.
-                        </p>
+                        <p class="text-sm text-yellow-700">{{ __('Thumbnail akan dibuang semasa menyimpan. Thumbnail YouTube akan digunakan sebagai gantian.') }}</p>
                     </div>
                 </div>
             `;

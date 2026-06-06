@@ -34,12 +34,8 @@ class VideoCategoryController extends Controller
         $categories = $query
             ->orderBy('sort_order')
             ->orderBy('name')
-            ->get()
-            ->map(function (VideoCategory $category) {
-                $category->videos_count = $category->videosCount();
-
-                return $category;
-            });
+            ->paginate(15)
+            ->withQueryString();
 
         return view('admin.video-categories.index', compact('categories'));
     }
@@ -66,7 +62,7 @@ class VideoCategoryController extends Controller
 
         return redirect()
             ->route('admin.video-categories.index')
-            ->with('success', 'Kategori video berjaya ditambah.');
+            ->with('success', __('flash.video_category_created'));
     }
 
     public function edit(VideoCategory $videoCategory)
@@ -102,7 +98,7 @@ class VideoCategoryController extends Controller
 
         return redirect()
             ->route('admin.video-categories.index')
-            ->with('success', 'Kategori video berjaya dikemas kini.');
+            ->with('success', __('flash.video_category_updated'));
     }
 
     public function destroy(VideoCategory $videoCategory)
@@ -110,13 +106,13 @@ class VideoCategoryController extends Controller
         if ($videoCategory->videosCount() > 0) {
             return redirect()
                 ->route('admin.video-categories.index')
-                ->with('error', 'Kategori ini masih digunakan oleh video. Sila tukar kategori video tersebut terlebih dahulu.');
+                ->with('error', __('flash.video_category_in_use'));
         }
 
         $videoCategory->delete();
 
         return redirect()
             ->route('admin.video-categories.index')
-            ->with('success', 'Kategori video berjaya dipadam.');
+            ->with('success', __('flash.video_category_deleted'));
     }
 }

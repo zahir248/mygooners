@@ -53,7 +53,7 @@ class ServiceController extends Controller
             ->first();
 
         if (!$service) {
-            abort(404, 'Perkhidmatan tidak dijumpai.');
+            abort(404, __('client_messages.service_not_found'));
         }
 
         // Increment view count

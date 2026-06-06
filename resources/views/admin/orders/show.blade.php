@@ -1,13 +1,13 @@
 @extends('layouts.admin')
 
-@section('title', 'Butiran Pesanan - ' . $order->order_number)
+@section('title', __('Butiran Pesanan') . ' - ' . $order->order_number)
 
 @section('content')
 <div class="container mx-auto px-4 py-8">
     <!-- Header -->
     <div class="flex justify-between items-center mb-8">
         <div>
-            <h1 class="text-3xl font-bold text-gray-900">Butiran Pesanan</h1>
+            <h1 class="text-3xl font-bold text-gray-900">{{ __('Butiran Pesanan') }}</h1>
             <p class="text-gray-600 mt-2">{{ $order->order_number }}</p>
         </div>
         
@@ -19,19 +19,19 @@
                     <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                     </svg>
-                    Lihat Invois
+                    {{ __('Lihat Invois') }}
                 </a>
                 <a href="{{ route('admin.orders.invoice.download', $order->id) }}" 
                    class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">
                     <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                     </svg>
-                    Muat Turun Invois
+                    {{ __('Muat Turun Invois') }}
                 </a>
             @endif
             <a href="{{ route('admin.orders.index') }}" 
                class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">
-                Kembali ke Senarai
+                {{ __('Kembali ke Senarai') }}
             </a>
         </div>
     </div>
@@ -42,7 +42,7 @@
             <!-- Order Items -->
             <div class="bg-white rounded-xl shadow-lg overflow-hidden">
                 <div class="px-6 py-4 border-b border-gray-200">
-                    <h2 class="text-xl font-bold text-gray-900">Item Pesanan</h2>
+                    <h2 class="text-xl font-bold text-gray-900">{{ __('Item Pesanan') }}</h2>
                 </div>
                 
                 <div class="divide-y divide-gray-200">
@@ -90,13 +90,13 @@
             <!-- Shipping Information -->
             <div class="bg-white rounded-xl shadow-lg overflow-hidden">
                 <div class="px-6 py-4 border-b border-gray-200">
-                    <h2 class="text-xl font-bold text-gray-900">Maklumat Penghantaran</h2>
+                    <h2 class="text-xl font-bold text-gray-900">{{ __('Maklumat Penghantaran') }}</h2>
                 </div>
                 
                 <div class="p-6">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
-                            <h3 class="font-medium text-gray-900 mb-2">Alamat Penghantaran</h3>
+                            <h3 class="font-medium text-gray-900 mb-2">{{ __('Alamat Penghantaran') }}</h3>
                             <div class="text-gray-600 space-y-1">
                                 <p class="font-medium">{{ $order->shipping_name }}</p>
                                 <p>{{ $order->shipping_email }}</p>
@@ -108,7 +108,7 @@
                         </div>
                         
                         <div>
-                            <h3 class="font-medium text-gray-900 mb-2">Alamat Bil</h3>
+                            <h3 class="font-medium text-gray-900 mb-2">{{ __('Alamat Bil') }}</h3>
                             <div class="text-gray-600 space-y-1">
                                 <p class="font-medium">{{ $order->billing_name }}</p>
                                 <p>{{ $order->billing_email }}</p>
@@ -126,7 +126,7 @@
                 <!-- Order Notes -->
                 <div class="bg-white rounded-xl shadow-lg overflow-hidden">
                     <div class="px-6 py-4 border-b border-gray-200">
-                        <h2 class="text-xl font-bold text-gray-900">Nota Pesanan</h2>
+                        <h2 class="text-xl font-bold text-gray-900">{{ __('Nota Pesanan') }}</h2>
                     </div>
                     
                     <div class="p-6">
@@ -139,7 +139,7 @@
             @if($order->payment_status === 'refunded' && $order->refunds->count() > 0)
                 <div class="bg-white rounded-xl shadow-lg overflow-hidden">
                     <div class="px-6 py-4 border-b border-gray-200">
-                        <h2 class="text-xl font-bold text-gray-900">Butiran Refund</h2>
+                        <h2 class="text-xl font-bold text-gray-900">{{ __('Butiran Bayaran Balik') }}</h2>
                     </div>
                     
                     <div class="p-6">
@@ -147,7 +147,7 @@
                             @foreach($order->refunds as $refund)
                                 <div class="bg-gray-50 rounded-lg p-4 border border-gray-200">
                                     <div class="flex items-center justify-between mb-3">
-                                        <span class="text-sm font-medium text-gray-600">Refund #{{ $refund->id }}</span>
+                                        <span class="text-sm font-medium text-gray-600">Bayaran Balik #{{ $refund->id }}</span>
                                         <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $refund->getStatusBadgeClass() }}">
                                             {{ $refund->getStatusDisplayName() }}
                                         </span>
@@ -156,27 +156,27 @@
                                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-600">
                                         <div class="space-y-2">
                                             <div class="flex justify-between">
-                                                <span class="font-medium">Jumlah Refund:</span>
+                                                <span class="font-medium">{{ __('Jumlah Bayaran Balik:') }}</span>
                                                 <span class="font-semibold text-gray-900">{{ $refund->getFormattedRefundAmount() }}</span>
                                             </div>
                                             
                                             @if($refund->bank_name)
                                                 <div class="flex justify-between">
-                                                    <span>Bank:</span>
+                                                    <span>{{ __('Bank:') }}</span>
                                                     <span>{{ $refund->bank_name }}</span>
                                                 </div>
                                             @endif
                                             
                                             @if($refund->bank_account_number)
                                                 <div class="flex justify-between">
-                                                    <span>Akaun Bank:</span>
+                                                    <span>{{ __('Akaun Bank:') }}</span>
                                                     <span>{{ $refund->bank_account_number }}</span>
                                                 </div>
                                             @endif
                                             
                                             @if($refund->bank_account_holder)
                                                 <div class="flex justify-between">
-                                                    <span>Pemegang Akaun:</span>
+                                                    <span>{{ __('Pemegang Akaun:') }}</span>
                                                     <span>{{ $refund->bank_account_holder }}</span>
                                                 </div>
                                             @endif
@@ -185,26 +185,26 @@
                                         <div class="space-y-2">
                                             @if($refund->tracking_number)
                                                 <div class="flex justify-between">
-                                                    <span>Tracking:</span>
+                                                    <span>{{ __('Tracking:') }}</span>
                                                     <span>{{ $refund->tracking_number }}</span>
                                                 </div>
                                             @endif
                                             
                                             @if($refund->shipping_courier)
                                                 <div class="flex justify-between">
-                                                    <span>Kurier:</span>
+                                                    <span>{{ __('Kurier:') }}</span>
                                                     <span>{{ $refund->shipping_courier }}</span>
                                                 </div>
                                             @endif
                                             
                                             <div class="flex justify-between">
-                                                <span>Tarikh Permohonan:</span>
+                                                <span>{{ __('Tarikh Permohonan:') }}</span>
                                                 <span>{{ $refund->created_at->format('d/m/Y H:i') }}</span>
                                             </div>
                                             
                                             @if($refund->updated_at != $refund->created_at)
                                                 <div class="flex justify-between">
-                                                    <span>Tarikh Kemas Kini:</span>
+                                                    <span>{{ __('Tarikh Kemas Kini:') }}</span>
                                                     <span>{{ $refund->updated_at->format('d/m/Y H:i') }}</span>
                                                 </div>
                                             @endif
@@ -213,7 +213,7 @@
                                     
                                     @if($refund->admin_notes)
                                         <div class="mt-4 pt-4 border-t border-gray-200">
-                                            <span class="text-sm font-medium text-gray-600">Nota Admin:</span>
+                                            <span class="text-sm font-medium text-gray-600">{{ __('Nota Pentadbir:') }}</span>
                                             <p class="text-sm text-gray-700 mt-2">{{ $refund->admin_notes }}</p>
                                         </div>
                                     @endif
@@ -225,7 +225,7 @@
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
                                             </svg>
-                                            Lihat Butiran Refund
+                                            {{ __('Lihat Butiran Bayaran Balik') }}
                                         </a>
                                     </div>
                                 </div>
@@ -239,28 +239,28 @@
                 <!-- Tracking Information -->
                 <div class="bg-white rounded-xl shadow-lg overflow-hidden">
                     <div class="px-6 py-4 border-b border-gray-200">
-                        <h2 class="text-xl font-bold text-gray-900">Maklumat Penjejakan</h2>
+                        <h2 class="text-xl font-bold text-gray-900">{{ __('Maklumat Penjejakan') }}</h2>
                     </div>
                     
                     <div class="p-6">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             @if($order->tracking_number)
                                 <div>
-                                    <h3 class="font-medium text-gray-900 mb-2">Nombor Penjejakan</h3>
+                                    <h3 class="font-medium text-gray-900 mb-2">{{ __('Nombor Penjejakan') }}</h3>
                                     <a href="{{ $order->getTrackingUrl() }}" 
                                        target="_blank" 
                                        class="text-lg font-bold text-blue-600 hover:text-blue-800 underline cursor-pointer">
                                         {{ $order->tracking_number }}
                                     </a>
-                                    <p class="text-sm text-gray-500 mt-1">Klik nombor di atas untuk menjejak penghantaran di tracking.my</p>
+                                    <p class="text-sm text-gray-500 mt-1">{{ __('Klik nombor di atas untuk menjejak penghantaran di tracking.my') }}</p>
                                 </div>
                             @endif
                             
                             @if($order->shipping_courier)
                                 <div>
-                                    <h3 class="font-medium text-gray-900 mb-2">Kurier Penghantaran</h3>
+                                    <h3 class="font-medium text-gray-900 mb-2">{{ __('Kurier Penghantaran') }}</h3>
                                     <p class="text-lg font-bold text-gray-900">{{ $order->shipping_courier }}</p>
-                                    <p class="text-sm text-gray-500 mt-1">Syarikat penghantaran yang digunakan</p>
+                                    <p class="text-sm text-gray-500 mt-1">{{ __('Syarikat penghantaran yang digunakan') }}</p>
                                 </div>
                             @endif
                         </div>
@@ -268,7 +268,7 @@
                         @if($order->shipped_at)
                             <div class="mt-4 pt-4 border-t border-gray-200">
                                 <p class="text-sm text-gray-600">
-                                    <strong>Tarikh Penghantaran:</strong> {{ $order->shipped_at->format('d/m/Y H:i') }}
+                                    <strong>{{ trans('admin_page.shipping_date') }}</strong> {{ $order->shipped_at->format('d/m/Y H:i') }}
                                 </p>
                             </div>
                         @endif
@@ -282,60 +282,60 @@
             <!-- Order Information -->
             <div class="bg-white rounded-xl shadow-lg overflow-hidden">
                 <div class="px-6 py-4 border-b border-gray-200">
-                    <h2 class="text-xl font-bold text-gray-900">Maklumat Pesanan</h2>
+                    <h2 class="text-xl font-bold text-gray-900">{{ __('Maklumat Pesanan') }}</h2>
                 </div>
                 
                 <div class="p-6 space-y-4">
                     <div>
-                        <span class="text-gray-600 text-sm">Nombor Pesanan</span>
+                        <span class="text-gray-600 text-sm">{{ __('Nombor Pesanan') }}</span>
                         <p class="font-medium">{{ $order->order_number }}</p>
                     </div>
                     
                     <div>
-                        <span class="text-gray-600 text-sm">Tarikh Pesanan</span>
+                        <span class="text-gray-600 text-sm">{{ __('Tarikh Pesanan') }}</span>
                         <p class="font-medium">{{ $order->created_at->format('d/m/Y H:i') }}</p>
                     </div>
                     
                     <div>
-                        <span class="text-gray-600 text-sm">Kaedah Pembayaran</span>
+                        <span class="text-gray-600 text-sm">{{ __('Kaedah Pembayaran') }}</span>
                         <p class="font-medium">{{ $order->getPaymentMethodDisplayName() }}</p>
                     </div>
                     
                     @if($order->stripe_payment_intent_id)
                         <div>
-                            <span class="text-gray-600 text-sm">Stripe Payment Intent</span>
+                            <span class="text-gray-600 text-sm">{{ __('Stripe Payment Intent') }}</span>
                             <p class="font-medium text-sm">{{ $order->stripe_payment_intent_id }}</p>
                         </div>
                     @endif
                     
                     @if($order->toyyibpay_bill_code)
                         <div>
-                            <span class="text-gray-600 text-sm">ToyyibPay Bill Code</span>
+                            <span class="text-gray-600 text-sm">{{ __('ToyyibPay Bill Code') }}</span>
                             <p class="font-medium text-sm">{{ $order->toyyibpay_bill_code }}</p>
                         </div>
                     @endif
                     
                     @if($order->fpl_manager_name && $order->fpl_team_name)
                         <div>
-                            <span class="text-gray-600 text-sm">FPL Manager</span>
+                            <span class="text-gray-600 text-sm">{{ __('FPL Manager') }}</span>
                             <p class="font-medium">{{ $order->fpl_manager_name }}</p>
                         </div>
                         <div>
-                            <span class="text-gray-600 text-sm">FPL Team</span>
+                            <span class="text-gray-600 text-sm">{{ __('FPL Team') }}</span>
                             <p class="font-medium">{{ $order->fpl_team_name }}</p>
                         </div>
                     @endif
                     
                     @if($order->shipped_at)
                         <div>
-                            <span class="text-gray-600 text-sm">Tarikh Penghantaran</span>
+                            <span class="text-gray-600 text-sm">{{ __('Tarikh Penghantaran') }}</span>
                             <p class="font-medium">{{ $order->shipped_at->format('d/m/Y H:i') }}</p>
                         </div>
                     @endif
                     
                                          @if($order->tracking_number)
                          <div>
-                             <span class="text-gray-600 text-sm">Nombor Penjejakan</span>
+                             <span class="text-gray-600 text-sm">{{ __('Nombor Penjejakan') }}</span>
                              <a href="{{ $order->getTrackingUrl() }}" 
                                 target="_blank" 
                                 class="font-medium text-blue-600 hover:text-blue-800 underline cursor-pointer">
@@ -346,14 +346,14 @@
                     
                     @if($order->shipping_courier)
                         <div>
-                            <span class="text-gray-600 text-sm">Kurier Penghantaran</span>
+                            <span class="text-gray-600 text-sm">{{ __('Kurier Penghantaran') }}</span>
                             <p class="font-medium">{{ $order->shipping_courier }}</p>
                         </div>
                     @endif
                     
                     @if($order->delivered_at)
                         <div>
-                            <span class="text-gray-600 text-sm">Tarikh Penerimaan</span>
+                            <span class="text-gray-600 text-sm">{{ __('Tarikh Penerimaan') }}</span>
                             <p class="font-medium">{{ $order->delivered_at->format('d/m/Y H:i') }}</p>
                         </div>
                     @endif
@@ -363,25 +363,25 @@
             <!-- Order Summary -->
             <div class="bg-white rounded-xl shadow-lg overflow-hidden">
                 <div class="px-6 py-4 border-b border-gray-200">
-                    <h2 class="text-xl font-bold text-gray-900">Ringkasan Pesanan</h2>
+                    <h2 class="text-xl font-bold text-gray-900">{{ __('Ringkasan Pesanan') }}</h2>
                 </div>
                 
                 <div class="p-6 space-y-3">
                     <div class="flex justify-between">
-                        <span class="text-gray-600">Jumlah Harga:</span>
+                        <span class="text-gray-600">{{ __('Jumlah Harga:') }}</span>
                         <span class="font-medium">{{ $order->getFormattedSubtotal() }}</span>
                     </div>
                     <div class="flex justify-between">
-                        <span class="text-gray-600">Penghantaran:</span>
+                        <span class="text-gray-600">{{ __('Penghantaran:') }}</span>
                         <span class="font-medium text-green-600">{{ $order->getFormattedShippingCost() }}</span>
                     </div>
                     <div class="flex justify-between">
-                        <span class="text-gray-600">Cukai:</span>
+                        <span class="text-gray-600">{{ __('Cukai:') }}</span>
                         <span class="font-medium">{{ $order->getFormattedTax() }}</span>
                     </div>
                     <div class="border-t border-gray-300 pt-3">
                         <div class="flex justify-between font-bold text-lg">
-                            <span>Jumlah Keseluruhan:</span>
+                            <span>{{ __('Jumlah Keseluruhan:') }}</span>
                             <span class="text-red-600">{{ $order->getFormattedTotal() }}</span>
                         </div>
                     </div>
@@ -391,13 +391,13 @@
             <!-- Status Management -->
             <div class="bg-white rounded-xl shadow-lg overflow-hidden">
                 <div class="px-6 py-4 border-b border-gray-200">
-                    <h2 class="text-xl font-bold text-gray-900">Pengurusan Status</h2>
+                    <h2 class="text-xl font-bold text-gray-900">{{ __('Pengurusan Status') }}</h2>
                 </div>
                 
                 <div class="p-6 space-y-6">
                     <!-- Order Status -->
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Status Pesanan</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">{{ __('Status Pesanan') }}</label>
                         <form method="POST" action="{{ route('admin.orders.update-status', $order->id) }}" class="space-y-3">
                             @csrf
                             @method('PATCH')
@@ -411,22 +411,22 @@
                             
                             <!-- Tracking Information (shown when shipped is selected) -->
                             <div id="trackingFields" class="space-y-3" style="display: {{ $order->status == 'shipped' ? 'block' : 'none' }};">
-                                <h4 class="text-sm font-medium text-gray-700">Maklumat Penjejakan</h4>
+                                <h4 class="text-sm font-medium text-gray-700">{{ __('Maklumat Penjejakan') }}</h4>
                                 
                                 <!-- Tracking Number -->
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Nombor Penjejakan</label>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">{{ __('Nombor Penjejakan') }}</label>
                                     <input type="text" name="tracking_number" value="{{ $order->tracking_number }}" 
-                                           placeholder="Masukkan nombor penjejakan" 
+                                           placeholder="{{ __('Masukkan nombor penjejakan') }}" 
                                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                                 </div>
                                 
                                 <!-- Shipping Courier -->
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Kurier Penghantaran</label>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">{{ __('Kurier Penghantaran') }}</label>
                                     <select name="shipping_courier" id="shippingCourierSelect" 
                                             class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                                        <option value="">Pilih Kurier</option>
+                                        <option value="">{{ __('Pilih Kurier') }}</option>
                                         <option value="Pos Malaysia" {{ $order->shipping_courier == 'Pos Malaysia' ? 'selected' : '' }}>Pos Malaysia</option>
                                         <option value="J&T" {{ $order->shipping_courier == 'J&T' ? 'selected' : '' }}>J&T</option>
                                         <option value="DHL" {{ $order->shipping_courier == 'DHL' ? 'selected' : '' }}>DHL</option>
@@ -449,11 +449,11 @@
                                 </div>
                             </div>
                             
-                            <textarea name="notes" placeholder="Nota (pilihan)" rows="3" 
+                            <textarea name="notes" placeholder="{{ __('Nota (pilihan)') }}" rows="3" 
                                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">{{ $order->notes }}</textarea>
                             
                             <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg font-medium transition-colors">
-                                Kemas Kini Status
+                                {{ __('Kemas Kini Status') }}
                             </button>
                         </form>
                     </div>
@@ -461,7 +461,7 @@
                     <!-- Tracking Information (for shipped orders) -->
                     @if($order->status === 'shipped')
                         <div class="border-t border-gray-200 pt-4">
-                            <h3 class="text-lg font-medium text-gray-900 mb-3">Kemas Kini Maklumat Penjejakan</h3>
+                            <h3 class="text-lg font-medium text-gray-900 mb-3">{{ __('Kemas Kini Maklumat Penjejakan') }}</h3>
                             <form method="POST" action="{{ route('admin.orders.update-status', $order->id) }}" class="space-y-3">
                                 @csrf
                                 @method('PATCH')
@@ -469,22 +469,22 @@
                                 
                                 <!-- Tracking Number -->
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Nombor Penjejakan</label>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">{{ __('Nombor Penjejakan') }}</label>
                                     <input type="text" name="tracking_number" value="{{ $order->tracking_number }}" 
-                                           placeholder="Masukkan nombor penjejakan" 
+                                           placeholder="{{ __('Masukkan nombor penjejakan') }}" 
                                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                                 </div>
                                 
                                 <!-- Shipping Courier -->
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Kurier Penghantaran</label>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">{{ __('Kurier Penghantaran') }}</label>
                                     <input type="text" name="shipping_courier" value="{{ $order->shipping_courier }}" 
-                                           placeholder="Contoh: Pos Malaysia, J&T, etc." 
+                                           placeholder="{{ __('Contoh: Pos Malaysia, J&T, etc.') }}" 
                                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                                 </div>
                                 
                                 <button type="submit" class="w-full bg-purple-600 hover:bg-purple-700 text-white py-2 px-4 rounded-lg font-medium transition-colors">
-                                    Kemas Kini Maklumat Penjejakan
+                                    {{ __('Kemas Kini Maklumat Penjejakan') }}
                                 </button>
                             </form>
                         </div>
@@ -492,7 +492,7 @@
 
                     <!-- Payment Status -->
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Status Pembayaran</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">{{ __('Status Pembayaran') }}</label>
                         <form method="POST" action="{{ route('admin.orders.update-payment-status', $order->id) }}">
                             @csrf
                             @method('PATCH')
@@ -504,7 +504,7 @@
                             </select>
                             
                             <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-lg font-medium transition-colors">
-                                Kemas Kini Pembayaran
+                                {{ __('Kemas Kini Pembayaran') }}
                             </button>
                         </form>
                     </div>
@@ -512,7 +512,7 @@
                     <!-- Current Status Display -->
                     <div class="border-t border-gray-200 pt-4">
                         <div class="flex justify-between items-center mb-2">
-                            <span class="text-sm font-medium text-gray-700">Status Semasa:</span>
+                            <span class="text-sm font-medium text-gray-700">{{ __('Status Semasa:') }}</span>
                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $order->getStatusBadgeClass() }}">
                                 @switch($order->status)
                                     @case('pending')
@@ -537,7 +537,7 @@
                         </div>
                         
                         <div class="flex justify-between items-center">
-                            <span class="text-sm font-medium text-gray-700">Pembayaran:</span>
+                            <span class="text-sm font-medium text-gray-700">{{ __('Pembayaran:') }}</span>
                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $order->getPaymentStatusBadgeClass() }}">
                                 @switch($order->payment_status)
                                     @case('pending')
@@ -565,7 +565,7 @@
                             <a href="{{ $order->getTrackingUrl() }}" 
                                target="_blank"
                                class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg font-medium transition-colors block text-center">
-                                📦 Jejak Penghantaran
+                                {{ __('📦 Jejak Penghantaran') }}
                             </a>
                         </div>
                     @endif
@@ -573,7 +573,7 @@
                     <!-- Invoice Actions -->
                     @if($order->payment_status === 'paid' || ($order->status !== 'pending' && $order->status !== 'cancelled'))
                         <div class="border-t border-gray-200 pt-4">
-                            <h3 class="text-sm font-medium text-gray-700 mb-3">Invois</h3>
+                            <h3 class="text-sm font-medium text-gray-700 mb-3">{{ __('Invois') }}</h3>
                             <div class="space-y-2">
                                 <a href="{{ route('admin.orders.invoice', $order->id) }}" 
                                    target="_blank"
@@ -581,14 +581,14 @@
                                     <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                                     </svg>
-                                    Lihat Invois
+                                    {{ __('Lihat Invois') }}
                                 </a>
                                 <a href="{{ route('admin.orders.invoice.download', $order->id) }}" 
                                    class="w-full bg-purple-600 hover:bg-purple-700 text-white py-2 px-4 rounded-lg font-medium transition-colors block text-center">
                                     <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                                     </svg>
-                                    Muat Turun Invois
+                                    {{ __('Muat Turun Invois') }}
                                 </a>
                             </div>
                         </div>
@@ -598,11 +598,11 @@
                     @if(in_array($order->status, ['pending', 'cancelled']))
                         <div class="border-t border-gray-200 pt-4">
                             <form method="POST" action="{{ route('admin.orders.destroy', $order->id) }}" 
-                                  onsubmit="return confirm('Adakah anda pasti mahu memadamkan pesanan ini?')">
+                                  onsubmit="return confirm(@json(__('Adakah anda pasti mahu memadamkan pesanan ini?')))">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-lg font-medium transition-colors">
-                                    Padam Pesanan
+                                    {{ __('Padam Pesanan') }}
                                 </button>
                             </form>
                         </div>

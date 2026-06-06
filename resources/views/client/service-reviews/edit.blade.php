@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Sunting Ulasan - ' . $service->title)
+@section('title', __('Sunting Ulasan - ') . $service->title)
 
 @section('content')
 <div class="min-h-screen bg-gray-50 py-8">
@@ -13,9 +13,9 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
                     </svg>
                 </a>
-                <h1 class="text-2xl sm:text-3xl font-bold text-gray-900">Sunting Ulasan</h1>
+                <h1 class="text-2xl sm:text-3xl font-bold text-gray-900">{{ __('Sunting Ulasan') }}</h1>
             </div>
-            <p class="text-gray-600">Kemas kini ulasan anda untuk perkhidmatan ini</p>
+            <p class="text-gray-600">{{ __('Kemas kini ulasan anda untuk perkhidmatan ini') }}</p>
         </div>
 
         <!-- Service Info -->
@@ -57,7 +57,7 @@
                 
                 <!-- Rating -->
                 <div class="mb-6">
-                    <label class="block text-sm font-medium text-gray-700 mb-3">Rating *</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-3">{{ __('Rating *') }}</label>
                     <div class="flex items-center space-x-2">
                         @for($i = 1; $i <= 5; $i++)
                             <input type="radio" name="rating" id="rating-{{ $i }}" value="{{ $i }}" 
@@ -81,13 +81,13 @@
 
                 <!-- Comment -->
                 <div class="mb-6">
-                    <label for="comment" class="block text-sm font-medium text-gray-700 mb-2">Ulasan Anda *</label>
+                    <label for="comment" class="block text-sm font-medium text-gray-700 mb-2">{{ __('Ulasan Anda *') }}</label>
                     <textarea 
-                        id="comment" 
-                        name="comment" 
-                        rows="6" 
+                        id="comment"
+                        name="comment"
+                        rows="6"
                         class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-arsenal focus:border-transparent resize-none"
-                        placeholder="Kongsi pengalaman anda dengan perkhidmatan ini. Apa yang anda suka? Apa yang boleh diperbaiki? (Minimum 10 aksara)"
+                        placeholder="{{ __('Kongsi pengalaman anda dengan perkhidmatan ini. Apa yang anda suka? Apa yang boleh diperbaiki? (Minimum 10 aksara)') }}"
                         required
                     >{{ old('comment', $review->comment) }}</textarea>
                     <div class="mt-1 text-sm text-gray-500">
@@ -103,18 +103,14 @@
                     <div class="flex space-x-3">
                         <a href="{{ route('services.show', $service->slug) }}" 
                            class="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
-                            Batal
+                            {{ __('Batal') }}
                         </a>
                         <button type="button" 
                                 onclick="openDeleteModal()"
-                                class="px-6 py-3 border border-red-300 text-red-700 rounded-lg hover:bg-red-50 transition-colors">
-                            Padam Ulasan
-                        </button>
+                                class="px-6 py-3 border border-red-300 text-red-700 rounded-lg hover:bg-red-50 transition-colors">{{ __('Padam Ulasan') }}</button>
                     </div>
                     <button type="submit" 
-                            class="px-8 py-3 bg-arsenal hover:bg-red-700 text-white rounded-lg font-medium transition-colors">
-                        Kemas Kini Ulasan
-                    </button>
+                            class="px-8 py-3 bg-arsenal hover:bg-red-700 text-white rounded-lg font-medium transition-colors">{{ __('Kemas Kini Ulasan') }}</button>
                 </div>
             </form>
         </div>
@@ -126,7 +122,7 @@
     <div class="bg-white rounded-xl shadow-2xl max-w-md w-full">
         <!-- Modal Header -->
         <div class="flex items-center justify-between p-6 border-b border-gray-200">
-            <h3 class="text-lg font-semibold text-gray-900">Padam Ulasan</h3>
+            <h3 class="text-lg font-semibold text-gray-900">{{ __('Padam Ulasan') }}</h3>
             <button onclick="closeDeleteModal()" class="text-gray-400 hover:text-gray-600 transition-colors">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
@@ -145,10 +141,8 @@
                     </div>
                 </div>
                 <div class="flex-1">
-                    <h4 class="text-base font-medium text-gray-900 mb-2">Adakah anda pasti?</h4>
-                    <p class="text-sm text-gray-600">
-                        Tindakan ini tidak boleh dibatalkan. Ulasan anda akan dipadamkan secara kekal dan tidak dapat dipulihkan.
-                    </p>
+                    <h4 class="text-base font-medium text-gray-900 mb-2">{{ __('Adakah anda pasti?') }}</h4>
+                    <p class="text-sm text-gray-600">{{ __('Tindakan ini tidak boleh dibatalkan. Ulasan anda akan dipadamkan secara kekal dan tidak dapat dipulihkan.') }}</p>
                 </div>
             </div>
         </div>
@@ -156,16 +150,12 @@
         <!-- Modal Footer -->
         <div class="flex items-center justify-end space-x-3 p-6 border-t border-gray-200">
             <button onclick="closeDeleteModal()" 
-                    class="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
-                Batal
-            </button>
+                    class="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">{{ __('Batal') }}</button>
             <form action="{{ route('service.reviews.destroy', [$service, $review]) }}" method="POST" class="inline">
                 @csrf
                 @method('DELETE')
                 <button type="submit" 
-                        class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors">
-                    Padam Ulasan
-                </button>
+                        class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors">{{ __('Padam Ulasan') }}</button>
             </form>
         </div>
     </div>
@@ -193,12 +183,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const ratingText = document.getElementById('rating-text');
     const commentTextarea = document.getElementById('comment');
     const charCount = document.getElementById('char-count');
-
     // Rating star functionality
     ratingStars.forEach(star => {
         star.addEventListener('click', function() {
             const rating = this.dataset.rating;
-            
             // Update radio button
             document.getElementById(`rating-${rating}`).checked = true;
             
@@ -250,7 +238,6 @@ document.addEventListener('DOMContentLoaded', function() {
     commentTextarea.addEventListener('input', function() {
         const count = this.value.length;
         charCount.textContent = count;
-        
         if (count < 10) {
             charCount.classList.add('text-red-600');
             charCount.classList.remove('text-gray-500');

@@ -96,7 +96,7 @@ class ProductController extends Controller
             $query->where('is_featured', true);
         }
 
-        $products = $query->orderBy('created_at', 'desc')->paginate(10);
+        $products = $query->orderBy('created_at', 'desc')->paginate(10)->withQueryString();
 
         $categories = ProductCategory::namesForFilter();
 
@@ -213,7 +213,7 @@ class ProductController extends Controller
 
         $this->syncProductStockFromVariations($product, (int) $request->stock_quantity);
 
-        return redirect()->route('admin.products.index')->with('success', 'Produk berjaya dicipta.');
+        return redirect()->route('admin.products.index')->with('success', __('flash.product_created'));
     }
 
     public function show($id)
@@ -406,7 +406,7 @@ class ProductController extends Controller
 
         $this->syncProductStockFromVariations($product, $manualStockQuantity);
 
-        return redirect()->route('admin.products.index')->with('success', 'Produk berjaya dikemas kini.');
+        return redirect()->route('admin.products.index')->with('success', __('flash.product_updated'));
     }
 
     public function toggleStatus($id)
@@ -442,12 +442,12 @@ class ProductController extends Controller
         $product->save();
 
         $statusMessages = [
-            'active' => 'Produk telah diaktifkan!',
-            'inactive' => 'Produk telah dinyahaktifkan!',
-            'rejected' => 'Produk telah ditolak!'
+            'active' => __('flash.product_status_activated'),
+            'inactive' => __('flash.product_status_deactivated'),
+            'rejected' => __('flash.product_status_rejected'),
         ];
 
-        $message = $statusMessages[$request->status] ?? 'Status produk telah dikemas kini!';
+        $message = $statusMessages[$request->status] ?? __('flash.product_status_updated');
 
         return redirect()->back()->with('success', $message);
     }
@@ -499,11 +499,11 @@ class ProductController extends Controller
         if (request()->expectsJson() || request()->ajax()) {
             return response()->json([
                 'success' => true,
-                'message' => 'Product variation deleted successfully.'
+                'message' => 'Varian produk berjaya dipadam.'
             ]);
         }
 
-        return redirect()->back()->with('success', 'Product variation deleted successfully.');
+        return redirect()->back()->with('success', __('flash.product_variation_deleted'));
     }
 
     public function getVariationForEdit($variationId)
@@ -564,11 +564,11 @@ class ProductController extends Controller
             if ($request->expectsJson() || $request->ajax()) {
                 return response()->json([
                     'success' => true,
-                    'message' => 'Product variation updated successfully.'
+                    'message' => 'Varian produk berjaya dikemas kini.'
                 ]);
             }
 
-            return redirect()->back()->with('success', 'Product variation updated successfully.');
+            return redirect()->back()->with('success', __('flash.product_variation_updated'));
         } catch (\Throwable $e) {
             \Log::error('Unable to update variation', [
                 'variation_id' => $variationId,
@@ -578,11 +578,11 @@ class ProductController extends Controller
             if ($request->expectsJson() || $request->ajax()) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Unable to update variation. Please try again.',
+                    'message' => __('flash.product_variation_update_error'),
                 ], 500);
             }
 
-            return redirect()->back()->with('error', 'Unable to update variation. Please try again.');
+            return redirect()->back()->with('error', __('flash.product_variation_update_error'));
         }
     }
 

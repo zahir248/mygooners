@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Lupa Kata Laluan - MyGooners</title>
+    <title>{{ __('Lupa Kata Laluan - MyGooners') }}</title>
     <meta name="description" content="Reset kata laluan MyGooners">
     
     <!-- Favicon -->
@@ -73,11 +73,11 @@
         <div class="max-w-md w-full relative z-10">
             <div class="bg-white rounded-xl shadow-lg p-8">
                 <div class="flex items-center space-x-2 mb-4 pl-1 pt-1">
-                    <a href="{{ route('login') }}" class="flex items-center text-gray-500 text-sm font-normal hover:text-gray-700 focus:outline-none" aria-label="Kembali ke Log Masuk">
+                    <a href="{{ route('login') }}" class="flex items-center text-gray-500 text-sm font-normal hover:text-gray-700 focus:outline-none" aria-label="{{ __('Kembali ke Log Masuk') }}">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                         </svg>
-                        <span>Back</span>
+                        <span>{{ __('Back') }}</span>
                     </a>
                 </div>
                 
@@ -85,26 +85,22 @@
                     <svg class="mx-auto h-12 w-12 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
                     </svg>
-                    <h2 class="mt-4 text-3xl font-extrabold text-gray-900">
-                        Lupa Kata Laluan?
-                    </h2>
-                    <p class="mt-2 text-sm text-gray-600">
-                        Masukkan alamat emel anda dan kami akan menghantar pautan untuk menetapkan semula kata laluan anda.
-                    </p>
+                    <h2 class="mt-4 text-3xl font-extrabold text-gray-900">{{ __('Lupa Kata Laluan?') }}</h2>
+                    <p class="mt-2 text-sm text-gray-600">{{ __('Masukkan alamat emel anda dan kami akan menghantar pautan untuk menetapkan semula kata laluan anda.') }}</p>
                 </div>
 
                 <form class="mt-8 space-y-6" method="POST" action="{{ route('password.email') }}">
                     @csrf
                     <div>
-                        <label for="email" class="sr-only">Alamat emel</label>
+                        <label for="email" class="sr-only">{{ __('Alamat emel') }}</label>
                         <input id="email" 
-                               name="email" 
-                               type="email" 
-                               autocomplete="email" 
-                               required 
+                               name="email"
+                               type="email"
+                               autocomplete="email"
+                               required
                                value="{{ old('email') }}"
                                class="appearance-none relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-red-500 focus:border-red-500 focus:z-10 sm:text-sm @error('email') border-red-500 @enderror" 
-                               placeholder="Alamat emel">
+                               placeholder="{{ __('Alamat emel') }}">
                         @error('email')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                         @enderror
@@ -119,17 +115,15 @@
                                     <path d="M10 9a1 1 0 00-1 1v3a1 1 0 102 0v-3a1 1 0 00-1-1zm0-2a1 1 0 100-2 1 1 0 000 2z" />
                                 </svg>
                             </span>
-                            Hantar Pautan Reset
+                            {{ __('Hantar Pautan Reset') }}
                         </button>
                     </div>
                 </form>
 
                 <div class="text-center mt-8">
                     <p class="text-sm text-gray-600">
-                        Ingat kata laluan anda? 
-                        <a href="{{ route('login') }}" class="font-medium text-red-600 hover:text-red-500">
-                            Log masuk di sini
-                        </a>
+                        {{ __('Ingat kata laluan anda?') }} 
+                        <a href="{{ route('login') }}" class="font-medium text-red-600 hover:text-red-500">{{ __('Log masuk di sini') }}</a>
                     </p>
                 </div>
             </div>

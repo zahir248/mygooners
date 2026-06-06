@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Permohonan Penjual - MyGooners')
+@section('title', __('Permohonan Penjual - MyGooners'))
 
 @section('content')
 <div class="min-h-screen bg-gray-50 py-8">
@@ -8,42 +8,40 @@
         <!-- Header -->
         <div class="mb-8">
             <div>
-                <h1 class="text-3xl font-bold text-gray-900">Permohonan Penjual</h1>
-                <p class="text-gray-600 mt-2">Semak maklumat permohonan penjual anda</p>
+                <h1 class="text-3xl font-bold text-gray-900">{{ __('Permohonan Penjual') }}</h1>
+                <p class="text-gray-600 mt-2">{{ __('Semak maklumat permohonan penjual anda') }}</p>
             </div>
         </div>
 
         <!-- Status Badge -->
         <div class="mb-6">
-            <span class="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm font-medium">
-                Menunggu Kelulusan Admin
-            </span>
+            <span class="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm font-medium">{{ __('Menunggu Kelulusan Admin') }}</span>
         </div>
 
         <!-- Main Content -->
         <div class="bg-white rounded-xl shadow-lg overflow-hidden">
             <!-- Personal Information -->
             <div class="p-6 border-b border-gray-200">
-                <h2 class="text-xl font-semibold text-gray-900 mb-4">Maklumat Peribadi</h2>
+                <h2 class="text-xl font-semibold text-gray-900 mb-4">{{ __('Maklumat Peribadi') }}</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Nama</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">{{ __('Nama') }}</label>
                         <p class="text-gray-900">{{ $user->name }}</p>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">{{ __('Email') }}</label>
                         <p class="text-gray-900">{{ $user->email }}</p>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">No. Telefon</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">{{ __('No. Telefon') }}</label>
                         <p class="text-gray-900">{{ $user->phone ?? 'Tidak dinyatakan' }}</p>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Lokasi</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">{{ __('Lokasi') }}</label>
                         <p class="text-gray-900">{{ $user->location ?? 'Tidak dinyatakan' }}</p>
                     </div>
                     <div class="md:col-span-2">
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Bio</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">{{ __('Bio') }}</label>
                         <p class="text-gray-900">{{ $user->bio ?? 'Tidak dinyatakan' }}</p>
                     </div>
                 </div>
@@ -51,59 +49,59 @@
 
             <!-- Business Information -->
             <div class="p-6 border-b border-gray-200">
-                <h2 class="text-xl font-semibold text-gray-900 mb-4">Maklumat Perniagaan</h2>
+                <h2 class="text-xl font-semibold text-gray-900 mb-4">{{ __('Maklumat Perniagaan') }}</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Nama Perniagaan</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">{{ __('Nama Perniagaan') }}</label>
                         <p class="text-gray-900">{{ $user->business_name ?? 'Tidak dinyatakan' }}</p>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Jenis Perniagaan</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">{{ __('Jenis Perniagaan') }}</label>
                         <p class="text-gray-900">
                             @switch($user->business_type)
                                 @case('individual')
-                                    Individu
+                                    {{ __('Individu') }}
                                     @break
                                 @case('company')
-                                    Syarikat
+                                    {{ __('Syarikat') }}
                                     @break
                                 @case('freelance')
-                                    Freelance
+                                    {{ __('Freelance') }}
                                     @break
                                 @case('other')
-                                    Lain-lain
+                                    {{ __('Lain-lain') }}
                                     @break
                                 @default
-                                    Tidak dinyatakan
+                                    {{ __('Tidak dinyatakan') }}
                             @endswitch
                         </p>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">No. Pendaftaran Perniagaan</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">{{ __('No. Pendaftaran Perniagaan') }}</label>
                         <p class="text-gray-900">{{ $user->business_registration ?? 'Tidak dinyatakan' }}</p>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Tahun Pengalaman</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">{{ __('Tahun Pengalaman') }}</label>
                         <p class="text-gray-900">{{ $user->years_experience ?? '0' }} tahun</p>
                     </div>
                     <div class="md:col-span-2">
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Alamat Perniagaan</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">{{ __('Alamat Perniagaan') }}</label>
                         <p class="text-gray-900">{{ $user->business_address ?? 'Tidak dinyatakan' }}</p>
                     </div>
                     <div class="md:col-span-2">
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Kawasan Operasi / Wilayah</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">{{ __('Kawasan Operasi / Wilayah') }}</label>
                         <p class="text-gray-900">{{ $user->operating_area ?? 'Tidak dinyatakan' }}</p>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Laman Web / Media Sosial</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">{{ __('Laman Web / Media Sosial') }}</label>
                         <p class="text-gray-900">{{ $user->website ?? 'Tidak dinyatakan' }}</p>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Kawasan Perkhidmatan / Liputan</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">{{ __('Kawasan Perkhidmatan / Liputan') }}</label>
                         <p class="text-gray-900">{{ $user->service_areas ?? 'Tidak dinyatakan' }}</p>
                     </div>
                     <div class="md:col-span-2">
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Kemahiran / Tag / Kepakaran</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">{{ __('Kemahiran / Tag / Kepakaran') }}</label>
                         <p class="text-gray-900">{{ $user->skills ?? 'Tidak dinyatakan' }}</p>
                     </div>
                 </div>
@@ -111,26 +109,26 @@
 
             <!-- Documents -->
             <div class="p-6 border-b border-gray-200">
-                <h2 class="text-xl font-semibold text-gray-900 mb-4">Dokumen</h2>
+                <h2 class="text-xl font-semibold text-gray-900 mb-4">{{ __('Dokumen') }}</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Kad Pengenalan / Sijil / Lesen Perniagaan</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">{{ __('Kad Pengenalan / Sijil / Lesen Perniagaan') }}</label>
                         @if($user->id_document)
                             <a href="{{ route('seller.document', ['filename' => basename($user->id_document)]) }}" target="_blank" class="text-blue-600 hover:text-blue-800 underline">
-                                Lihat Dokumen
+                                {{ __('Lihat Dokumen') }}
                             </a>
                         @else
-                            <p class="text-gray-500">Tidak dimuat naik</p>
+                            <p class="text-gray-500">{{ __('Tidak dimuat naik') }}</p>
                         @endif
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Selfie Bersama Kad Pengenalan</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">{{ __('Selfie Bersama Kad Pengenalan') }}</label>
                         @if($user->selfie_with_id)
                             <a href="{{ route('seller.image', ['filename' => basename($user->selfie_with_id)]) }}" target="_blank" class="text-blue-600 hover:text-blue-800 underline">
-                                Lihat Gambar
+                                {{ __('Lihat Gambar') }}
                             </a>
                         @else
-                            <p class="text-gray-500">Tidak dimuat naik</p>
+                            <p class="text-gray-500">{{ __('Tidak dimuat naik') }}</p>
                         @endif
                     </div>
                 </div>
@@ -138,10 +136,10 @@
 
             <!-- Application Details -->
             <div class="p-6">
-                <h2 class="text-xl font-semibold text-gray-900 mb-4">Maklumat Permohonan</h2>
+                <h2 class="text-xl font-semibold text-gray-900 mb-4">{{ __('Maklumat Permohonan') }}</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Tarikh Permohonan</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">{{ __('Tarikh Permohonan') }}</label>
                         <p class="text-gray-900">
                             @if($user->seller_application_date)
                                 {{ $user->seller_application_date->format('d/m/Y H:i') }}
@@ -151,8 +149,8 @@
                         </p>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
-                        <p class="text-gray-900">Menunggu kelulusan admin</p>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">{{ __('Status') }}</label>
+                        <p class="text-gray-900">{{ __('Menunggu kelulusan admin') }}</p>
                     </div>
                 </div>
             </div>
@@ -161,9 +159,7 @@
         <!-- Action Buttons -->
         <div class="mt-6 flex gap-4">
             <a href="{{ route('dashboard') }}" 
-               class="flex-1 bg-gray-600 hover:bg-gray-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors text-center">
-                Kembali ke Dashboard
-            </a>
+               class="flex-1 bg-gray-600 hover:bg-gray-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors text-center">{{ __('Kembali ke Dashboard') }}</a>
             <div class="flex-1">
                 @include('client.partials.cancel-modal', [
                     'action' => route('seller.request.cancel'),

@@ -35,12 +35,8 @@ class ProductCategoryController extends Controller
         $categories = $query
             ->orderBy('sort_order')
             ->orderBy('name')
-            ->get()
-            ->map(function (ProductCategory $category) {
-                $category->products_count = $category->productsCount();
-
-                return $category;
-            });
+            ->paginate(15)
+            ->withQueryString();
 
         return view('admin.product-categories.index', compact('categories'));
     }
@@ -69,7 +65,7 @@ class ProductCategoryController extends Controller
 
         return redirect()
             ->route('admin.product-categories.index')
-            ->with('success', 'Kategori produk berjaya ditambah.');
+            ->with('success', __('flash.product_category_created'));
     }
 
     public function edit(ProductCategory $productCategory)
@@ -107,7 +103,7 @@ class ProductCategoryController extends Controller
 
         return redirect()
             ->route('admin.product-categories.index')
-            ->with('success', 'Kategori produk berjaya dikemas kini.');
+            ->with('success', __('flash.product_category_updated'));
     }
 
     public function destroy(ProductCategory $productCategory)
@@ -115,13 +111,13 @@ class ProductCategoryController extends Controller
         if ($productCategory->productsCount() > 0) {
             return redirect()
                 ->route('admin.product-categories.index')
-                ->with('error', 'Kategori ini masih digunakan oleh produk. Sila tukar kategori produk tersebut terlebih dahulu.');
+                ->with('error', __('flash.product_category_in_use'));
         }
 
         $productCategory->delete();
 
         return redirect()
             ->route('admin.product-categories.index')
-            ->with('success', 'Kategori produk berjaya dipadam.');
+            ->with('success', __('flash.product_category_deleted'));
     }
 }

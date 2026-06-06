@@ -22,7 +22,7 @@ class RefundController extends Controller
 
         // Check if order can request refund
         if (!$order->canRequestRefund()) {
-            return redirect()->route('checkout.orders')->with('error', 'Pesanan ini tidak boleh memohon refund.');
+            return redirect()->route('checkout.orders')->with('error', __('client_messages.msg_9f41cf6641e8'));
         }
 
         return view('client.refunds.create', compact('order'));
@@ -37,7 +37,7 @@ class RefundController extends Controller
 
         // Check if order can request refund
         if (!$order->canRequestRefund()) {
-            return redirect()->route('checkout.orders')->with('error', 'Pesanan ini tidak boleh memohon refund.');
+            return redirect()->route('checkout.orders')->with('error', __('client_messages.msg_9f41cf6641e8'));
         }
 
         $request->validate([
@@ -47,7 +47,7 @@ class RefundController extends Controller
             'refund_reason.required' => 'Sebab refund diperlukan.',
             'refund_reason.min' => 'Sebab refund mesti sekurang-kurangnya 10 aksara.',
             'refund_reason.max' => 'Sebab refund tidak boleh melebihi 1000 aksara.',
-            'images.*.required' => 'Sila muat naik 3 gambar sebagai bukti.',
+            'images.*.required' => __('flash.refund_images_required'),
             'images.*.image' => 'Fail mesti dalam format gambar.',
             'images.*.mimes' => 'Format gambar yang diterima: JPEG, PNG, JPG.',
             'images.*.max' => 'Saiz gambar tidak boleh melebihi 2MB.',
@@ -55,7 +55,7 @@ class RefundController extends Controller
 
         // Check if exactly 3 images are uploaded
         if (!$request->hasFile('images') || count($request->file('images')) !== 3) {
-            return back()->withErrors(['images' => 'Sila muat naik tepat 3 gambar sebagai bukti.'])->withInput();
+            return back()->withErrors(['images' => __('flash.refund_exactly_3_images')])->withInput();
         }
 
         try {
@@ -87,13 +87,13 @@ class RefundController extends Controller
 
             DB::commit();
 
-            return redirect()->route('checkout.orders')->with('success', 'Permohonan refund anda telah berjaya dihantar. Admin akan menyemak permohonan anda dalam masa 24-48 jam.');
+            return redirect()->route('checkout.orders')->with('success', __('client_messages.msg_e2191b89736a'));
 
         } catch (\Exception $e) {
             DB::rollBack();
             \Log::error('Refund creation error: ' . $e->getMessage());
             \Log::error('Stack trace: ' . $e->getTraceAsString());
-            return back()->with('error', 'Ralat berlaku semasa menghantar permohonan refund: ' . $e->getMessage())->withInput();
+            return back()->with('error', __('client_messages.refund_submit_failed', ['error' => $e->getMessage()]))->withInput();
         }
     }
 
@@ -126,7 +126,7 @@ class RefundController extends Controller
 
         // Only allow updates for approved refunds
         if ($refund->status !== 'approved') {
-            return back()->with('error', 'Hanya refund yang diluluskan boleh dikemas kini.');
+            return back()->with('error', __('client_messages.msg_a82d7d6fa677'));
         }
 
         $request->validate([
@@ -156,14 +156,14 @@ class RefundController extends Controller
             if ($refund->bank_name && $refund->bank_account_number && $refund->bank_account_holder && $refund->tracking_number && $refund->shipping_courier) {
                 // Update status to processing since all information is complete
                 $refund->update(['status' => 'processing']);
-                return back()->with('success', 'Maklumat refund anda telah lengkap dan status telah diubah kepada "Sedang Diproses". Refund akan diproses dalam masa 3-5 hari bekerja.');
+                return back()->with('success', __('client_messages.msg_4d8e16b2a69a'));
             } else {
-                return back()->with('success', 'Maklumat refund anda telah berjaya dikemas kini. Sila lengkapkan semua maklumat untuk memulakan proses refund.');
+                return back()->with('success', __('client_messages.msg_50f8364b65d7'));
             }
 
         } catch (\Exception $e) {
             \Log::error('Refund update error: ' . $e->getMessage());
-            return back()->with('error', 'Ralat berlaku semasa mengemas kini maklumat refund: ' . $e->getMessage())->withInput();
+            return back()->with('error', __('client_messages.refund_update_failed', ['error' => $e->getMessage()]))->withInput();
         }
     }
 } 

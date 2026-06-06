@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Laporan Stok Produk - Panel Admin')
+@section('title', __('Laporan Stok Produk - Panel Pentadbir'))
 
 @section('content')
 <div class="py-6">
@@ -9,17 +9,17 @@
         <div class="mb-8">
             <div class="flex items-center justify-between">
                 <div>
-                    <h1 class="text-3xl font-bold text-gray-900">Laporan Stok Produk</h1>
-                    <p class="mt-2 text-gray-600">Status stok terperinci untuk semua produk dan variasi</p>
+                    <h1 class="text-3xl font-bold text-gray-900">{{ __('Laporan Stok Produk') }}</h1>
+                    <p class="mt-2 text-gray-600">{{ __('Status stok terperinci untuk semua produk dan variasi') }}</p>
                 </div>
                 <div class="flex space-x-3">
                     <a href="{{ route('admin.product-reports.index') }}" 
                        class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50">
-                        Kembali
+                        {{ __('Kembali') }}
                     </a>
                     <a href="{{ route('admin.product-reports.stock.export') }}?{{ http_build_query(request()->all()) }}" 
                        class="px-4 py-2 bg-green-600 border border-transparent rounded-md text-sm font-medium text-white hover:bg-green-700">
-                        Eksport CSV
+                        {{ __('Eksport CSV') }}
                     </a>
                 </div>
             </div>
@@ -35,7 +35,7 @@
                         </svg>
                     </div>
                     <div class="ml-4">
-                        <p class="text-sm font-medium text-gray-600">Jumlah Produk</p>
+                        <p class="text-sm font-medium text-gray-600">{{ __('Jumlah Produk') }}</p>
                         <p class="text-2xl font-bold text-gray-900">{{ number_format($stockSummary['total_products']) }}</p>
                     </div>
                 </div>
@@ -49,7 +49,7 @@
                         </svg>
                     </div>
                     <div class="ml-4">
-                        <p class="text-sm font-medium text-gray-600">Ada Stok</p>
+                        <p class="text-sm font-medium text-gray-600">{{ __('Ada Stok') }}</p>
                         <p class="text-2xl font-bold text-gray-900">{{ number_format($stockSummary['in_stock']) }}</p>
                     </div>
                 </div>
@@ -63,7 +63,7 @@
                         </svg>
                     </div>
                     <div class="ml-4">
-                        <p class="text-sm font-medium text-gray-600">Habis Stok</p>
+                        <p class="text-sm font-medium text-gray-600">{{ __('Habis Stok') }}</p>
                         <p class="text-2xl font-bold text-gray-900">{{ number_format($stockSummary['out_of_stock']) }}</p>
                     </div>
                 </div>
@@ -77,7 +77,7 @@
                         </svg>
                     </div>
                     <div class="ml-4">
-                        <p class="text-sm font-medium text-gray-600">Stok Rendah</p>
+                        <p class="text-sm font-medium text-gray-600">{{ __('Stok Rendah') }}</p>
                         <p class="text-2xl font-bold text-gray-900">{{ number_format($stockSummary['low_stock']) }}</p>
                     </div>
                 </div>
@@ -91,7 +91,7 @@
                         </svg>
                     </div>
                     <div class="ml-4">
-                        <p class="text-sm font-medium text-gray-600">Nilai Stok</p>
+                        <p class="text-sm font-medium text-gray-600">{{ __('Nilai Stok') }}</p>
                         <p class="text-2xl font-bold text-gray-900">RM {{ number_format($stockSummary['total_stock_value'], 2) }}</p>
                     </div>
                 </div>
@@ -101,24 +101,24 @@
         <!-- Filters -->
         <div class="bg-white rounded-lg shadow mb-8">
             <div class="px-6 py-4 border-b border-gray-200">
-                <h3 class="text-lg font-medium text-gray-900">Penapis</h3>
+                <h3 class="text-lg font-medium text-gray-900">{{ __('Penapis') }}</h3>
             </div>
             <div class="p-6">
                 <form method="GET" action="{{ route('admin.product-reports.stock') }}" class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div>
-                        <label for="stock_status" class="block text-sm font-medium text-gray-700 mb-2">Status Stok</label>
+                        <label for="stock_status" class="block text-sm font-medium text-gray-700 mb-2">{{ __('Status Stok') }}</label>
                         <select name="stock_status" id="stock_status" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            <option value="">Semua Status</option>
-                            <option value="in_stock" {{ request('stock_status') === 'in_stock' ? 'selected' : '' }}>Ada Stok</option>
-                            <option value="out_of_stock" {{ request('stock_status') === 'out_of_stock' ? 'selected' : '' }}>Habis Stok</option>
-                            <option value="low_stock" {{ request('stock_status') === 'low_stock' ? 'selected' : '' }}>Stok Rendah (≤10)</option>
+                            <option value="">{{ __('Semua Status') }}</option>
+                            <option value="in_stock" {{ request('stock_status') === 'in_stock' ? 'selected' : '' }}>{{ __('Ada Stok') }}</option>
+                            <option value="out_of_stock" {{ request('stock_status') === 'out_of_stock' ? 'selected' : '' }}>{{ __('Habis Stok') }}</option>
+                            <option value="low_stock" {{ request('stock_status') === 'low_stock' ? 'selected' : '' }}>{{ __('Stok Rendah (≤10)') }}</option>
                         </select>
                     </div>
 
                     <div>
-                        <label for="category" class="block text-sm font-medium text-gray-700 mb-2">Kategori</label>
+                        <label for="category" class="block text-sm font-medium text-gray-700 mb-2">{{ __('Kategori') }}</label>
                         <select name="category" id="category" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            <option value="">Semua Kategori</option>
+                            <option value="">{{ __('Semua Kategori') }}</option>
                             @foreach($categories as $category)
                                 <option value="{{ $category }}" {{ request('category') === $category ? 'selected' : '' }}>{{ $category }}</option>
                             @endforeach
@@ -128,11 +128,11 @@
                     <div class="flex items-end space-x-3">
                         <a href="{{ route('admin.product-reports.stock') }}" 
                            class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50">
-                            Reset
+                            {{ __('Set Semula') }}
                         </a>
                         <button type="submit" 
                                 class="px-4 py-2 bg-blue-600 border border-transparent rounded-md text-sm font-medium text-white hover:bg-blue-700">
-                            Terapkan Penapis
+                            {{ __('Terapkan Penapis') }}
                         </button>
                     </div>
                 </form>
@@ -142,25 +142,25 @@
         <!-- Stock Table -->
         <div class="bg-white rounded-lg shadow">
             <div class="px-6 py-4 border-b border-gray-200">
-                <h3 class="text-lg font-medium text-gray-900">Senarai Stok Produk</h3>
+                <h3 class="text-lg font-medium text-gray-900">{{ __('Senarai Stok Produk') }}</h3>
             </div>
             <div class="overflow-x-auto">
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-gray-50">
                         <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Produk</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Penjual</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kategori</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Stok Asas</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Variasi</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jumlah Stok</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tindakan</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Produk') }}</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Penjual') }}</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Kategori') }}</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Stok Asas') }}</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Variasi') }}</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Jumlah Stok') }}</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Status') }}</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Tindakan') }}</th>
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
                         @forelse($products as $product)
-                        <tr class="{{ $product->stock_quantity <= 0 ? 'bg-red-50' : ($product->stock_quantity <= 10 ? 'bg-yellow-50' : '') }}">
+                        <tr class="{{ $product->stock_quantity<= 0 ? 'bg-red-50' : ($product->stock_quantity<= 10 ? 'bg-yellow-50' : '') }}">
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <div class="flex items-center">
                                     <div class="flex-shrink-0 h-10 w-10">
@@ -181,7 +181,7 @@
                                 </div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="text-sm text-gray-900">{{ $product->user->name ?? 'N/A' }}</div>
+                                <div class="text-sm text-gray-900">{{ $product->user->name ?? 'Tiada' }}</div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
@@ -201,7 +201,7 @@
                                             @foreach($product->variations as $variation)
                                                 <div class="flex justify-between">
                                                     <span>{{ $variation->name }}:</span>
-                                                    <span class="{{ $variation->stock_quantity <= 0 ? 'text-red-600' : ($variation->stock_quantity <= 5 ? 'text-yellow-600' : 'text-green-600') }}">
+                                                    <span class="{{ $variation->stock_quantity<= 0 ? 'text-red-600' : ($variation->stock_quantity<= 5 ? 'text-yellow-600' : 'text-green-600') }}">
                                                         {{ $variation->stock_quantity }}
                                                     </span>
                                                 </div>
@@ -209,7 +209,7 @@
                                         </div>
                                     </div>
                                 @else
-                                    <span class="text-sm text-gray-500">Tiada variasi</span>
+                                    <span class="text-sm text-gray-500">{{ __('Tiada variasi') }}</span>
                                 @endif
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
@@ -225,17 +225,17 @@
                                 </div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                @if($product->stock_quantity <= 0)
+                                @if($product->stock_quantity<= 0)
                                     <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800">
-                                        Habis Stok
+                                        {{ __('Habis Stok') }}
                                     </span>
-                                @elseif($product->stock_quantity <= 10)
+                                @elseif($product->stock_quantity<= 10)
                                     <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">
-                                        Stok Rendah
+                                        {{ __('Stok Rendah') }}
                                     </span>
                                 @else
                                     <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
-                                        Ada Stok
+                                        {{ __('Ada Stok') }}
                                     </span>
                                 @endif
                             </td>
@@ -244,7 +244,7 @@
                                     <!-- Show Product Details -->
                                     <a href="{{ route('admin.products.show', $product->id) }}"
                                        class="text-blue-600 hover:text-blue-900"
-                                       title="Butiran Produk">
+                                       title="{{ __('Butiran Produk') }}">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
@@ -254,7 +254,7 @@
                                     <!-- Edit Product -->
                                     <a href="{{ route('admin.products.edit', $product->id) }}"
                                        class="text-red-600 hover:text-red-900"
-                                       title="Edit Produk">
+                                       title="{{ __('Sunting Produk') }}">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                                         </svg>
@@ -265,7 +265,7 @@
                         @empty
                         <tr>
                             <td colspan="8" class="px-6 py-4 text-center text-gray-500">
-                                Tiada produk dijumpai dengan penapis yang dipilih.
+                                {{ __('Tiada produk dijumpai dengan penapis yang dipilih.') }}
                             </td>
                         </tr>
                         @endforelse
@@ -273,11 +273,7 @@
                 </table>
             </div>
             
-            @if($products->hasPages())
-            <div class="px-6 py-4 border-t border-gray-200">
-                {{ $products->appends(request()->query())->links() }}
-            </div>
-            @endif
+            @include('admin.partials.pagination', ['paginator' => $products])
         </div>
 
         <!-- Stock Alerts -->
@@ -285,7 +281,7 @@
         <div class="mt-8">
             <div class="bg-white rounded-lg shadow">
                 <div class="px-6 py-4 border-b border-gray-200">
-                    <h3 class="text-lg font-medium text-gray-900">Amaran Stok</h3>
+                    <h3 class="text-lg font-medium text-gray-900">{{ __('Amaran Stok') }}</h3>
                 </div>
                 <div class="p-6">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -302,7 +298,7 @@
                                         {{ $stockSummary['out_of_stock'] }} produk telah habis stok
                                     </h3>
                                     <div class="mt-2 text-sm text-red-700">
-                                        <p>Produk ini perlu diisi semula atau dihentikan sementara.</p>
+                                        <p>{{ __('Produk ini perlu diisi semula atau dihentikan sementara.') }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -322,7 +318,7 @@
                                         {{ $stockSummary['low_stock'] }} produk mempunyai stok rendah
                                     </h3>
                                     <div class="mt-2 text-sm text-yellow-700">
-                                        <p>Produk ini perlu diisi semula segera.</p>
+                                        <p>{{ __('Produk ini perlu diisi semula segera.') }}</p>
                                     </div>
                                 </div>
                             </div>

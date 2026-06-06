@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Pratonton Perkhidmatan - MyGooners')
+@section('title', __('Pratonton Perkhidmatan - MyGooners'))
 
 @section('content')
 <div class="max-w-4xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
@@ -13,7 +13,7 @@
             </div>
             <div>
                 <h1 class="text-3xl font-bold text-gray-900">{{ $service->title }}</h1>
-                <p class="text-gray-600">Pratonton perkhidmatan yang menunggu kelulusan admin</p>
+                <p class="text-gray-600">{{ __('Pratonton perkhidmatan yang menunggu kelulusan admin') }}</p>
             </div>
         </div>
     </div>
@@ -23,11 +23,11 @@
             <svg class="w-5 h-5 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"/>
             </svg>
-            <span class="font-semibold text-yellow-800">Status: Menunggu Kelulusan</span>
+            <span class="font-semibold text-yellow-800">{{ __('Status: Menunggu Kelulusan') }}</span>
         </div>
         <p class="text-yellow-700 mt-2 text-sm">
             Perkhidmatan ini akan dipaparkan kepada pengguna lain setelah diluluskan oleh admin. 
-            Proses semakan biasanya mengambil masa 1-3 hari bekerja.
+            {{ __('Proses semakan biasanya mengambil masa 1-3 hari bekerja.') }}
         </p>
     </div>
 
@@ -69,24 +69,24 @@
                 </div>
                 <div class="text-right">
                     <div class="text-2xl font-bold text-gray-900">{{ $service->pricing }}</div>
-                    <div class="text-sm text-gray-500">Harga Perkhidmatan</div>
+                    <div class="text-sm text-gray-500">{{ __('Harga Perkhidmatan') }}</div>
                 </div>
             </div>
 
             <!-- Service Description -->
             <div class="mb-6">
-                <h3 class="text-lg font-semibold text-gray-900 mb-2">Penerangan Perkhidmatan</h3>
+                <h3 class="text-lg font-semibold text-gray-900 mb-2">{{ __('Penerangan Perkhidmatan') }}</h3>
                 <p class="text-gray-700 leading-relaxed">{{ $service->description }}</p>
             </div>
 
             <!-- Service Details -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                 <div>
-                    <h4 class="font-semibold text-gray-900 mb-2">Maklumat Hubungan</h4>
+                    <h4 class="font-semibold text-gray-900 mb-2">{{ __('Maklumat Hubungan') }}</h4>
                     <p class="text-gray-700">{{ $service->contact_info }}</p>
                 </div>
                 <div>
-                    <h4 class="font-semibold text-gray-900 mb-2">Lokasi</h4>
+                    <h4 class="font-semibold text-gray-900 mb-2">{{ __('Lokasi') }}</h4>
                     <p class="text-gray-700">{{ $service->location }}</p>
                 </div>
             </div>
@@ -94,7 +94,7 @@
             <!-- Tags -->
             @if($service->tags && is_array($service->tags) && count($service->tags) > 0)
             <div class="mb-6">
-                <h4 class="font-semibold text-gray-900 mb-2">Tag</h4>
+                <h4 class="font-semibold text-gray-900 mb-2">{{ __('Tag') }}</h4>
                 <div class="flex flex-wrap gap-2">
                     @foreach($service->tags as $tag)
                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
@@ -108,8 +108,8 @@
             <!-- Submission Info -->
             <div class="border-t border-gray-200 pt-4">
                 <div class="text-sm text-gray-500">
-                    <p><strong>Tarikh Permohonan:</strong> {{ $service->created_at->format('d F Y, H:i') }}</p>
-                    <p><strong>ID Permohonan:</strong> #{{ $service->id }}</p>
+                    <p><strong>{{ __('Tarikh Permohonan:') }}</strong> {{ $service->created_at->format('d F Y, H:i') }}</p>
+                    <p><strong>{{ __('ID Permohonan:') }}</strong> #{{ $service->id }}</p>
                 </div>
             </div>
         </div>
@@ -118,9 +118,7 @@
     <!-- Action Buttons -->
     <div class="mt-6 flex gap-4">
         <a href="{{ route('dashboard') }}" 
-           class="flex-1 bg-gray-600 hover:bg-gray-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors text-center">
-            Kembali ke Dashboard
-        </a>
+           class="flex-1 bg-gray-600 hover:bg-gray-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors text-center">{{ __('Kembali ke Dashboard') }}</a>
         <div class="flex-1">
             @include('client.partials.cancel-modal', [
                 'action' => route('service.cancel', $service->id),

@@ -1,0 +1,32 @@
+<?php
+
+return [
+    'order_number' => 'Pesanan #:number',
+    'created_on' => 'Dibuat pada :date',
+    'quantity' => 'Kuantiti: :qty',
+    'unit_price' => 'Harga seunit: :price',
+    'items_in_cart' => ':count item dalam troli',
+    'order_count' => ':count pesanan',
+    'refund_number' => 'Refund #:id - :order_number',
+    'orders_with_status' => 'Pesanan :status',
+    'no_orders_with_status' => 'Tiada Pesanan :status',
+    'no_orders_status_found' => 'Tiada pesanan dengan status ":status" ditemui.',
+    'auto_delivery_countdown' => '⚠️ Pesanan akan ditandakan sebagai diterima secara automatik dalam :countdown',
+    'fpl_join_hint' => 'Gunakan kod liga :code untuk menyertai liga Fantasy Premier League MyGooners.',
+    'toggle_status_title' => 'Tidak boleh tukar status semasa permohonan kemaskini sedang menunggu kelulusan',
+    'confirm_cancel_prefix' => 'Adakah anda pasti mahu membatalkan pesanan',
+    'confirm_mark_delivered_prefix' => 'Adakah anda pasti mahu menandakan pesanan',
+    'confirm_mark_delivered_suffix' => 'sebagai diterima?',
+    'years_experience' => ':count tahun',
+    'order_auto_mark_received_in' => 'Pesanan akan ditandakan sebagai diterima secara automatik dalam :countdown',
+    'order_cancelled_at' => 'Pesanan ini telah dibatalkan pada :date',
+    'order_refunded_and_processing' => 'Pesanan ini telah dikembalikan dan refund sedang diproses',
+    'refund_amount_processed' => 'Jumlah :amount telah diproses',
+    'refund_statuses' => [
+        'pending' => 'Menunggu',
+        'approved' => 'Diluluskan',
+        'rejected' => 'Ditolak',
+        'processing' => 'Sedang Diproses',
+        'completed' => 'Selesai',
+    ],
+];

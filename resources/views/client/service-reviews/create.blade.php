@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Tulis Ulasan - ' . $service->title)
+@section('title', __('Tulis Ulasan - ') . $service->title)
 
 @section('content')
 <div class="min-h-screen bg-gray-50 py-8">
@@ -13,9 +13,9 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
                     </svg>
                 </a>
-                <h1 class="text-2xl sm:text-3xl font-bold text-gray-900">Tulis Ulasan</h1>
+                <h1 class="text-2xl sm:text-3xl font-bold text-gray-900">{{ __('Tulis Ulasan') }}</h1>
             </div>
-            <p class="text-gray-600">Kongsi pengalaman anda dengan perkhidmatan ini</p>
+            <p class="text-gray-600">{{ __('Kongsi pengalaman anda dengan perkhidmatan ini') }}</p>
         </div>
 
         <!-- Service Info -->
@@ -56,7 +56,7 @@
                 
                 <!-- Rating -->
                 <div class="mb-6">
-                    <label class="block text-sm font-medium text-gray-700 mb-3">Rating *</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-3">{{ __('Rating *') }}</label>
                     <div class="flex items-center space-x-2">
                         @for($i = 1; $i <= 5; $i++)
                             <input type="radio" name="rating" id="rating-{{ $i }}" value="{{ $i }}" class="hidden" required>
@@ -70,7 +70,7 @@
                         @endfor
                     </div>
                     <div class="mt-2 text-sm text-gray-500">
-                        <span id="rating-text">Pilih rating</span>
+                        <span id="rating-text">{{ __('Pilih rating') }}</span>
                     </div>
                     @error('rating')
                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -79,13 +79,13 @@
 
                 <!-- Comment -->
                 <div class="mb-6">
-                    <label for="comment" class="block text-sm font-medium text-gray-700 mb-2">Ulasan Anda *</label>
+                    <label for="comment" class="block text-sm font-medium text-gray-700 mb-2">{{ __('Ulasan Anda *') }}</label>
                     <textarea 
-                        id="comment" 
-                        name="comment" 
-                        rows="6" 
+                        id="comment"
+                        name="comment"
+                        rows="6"
                         class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-arsenal focus:border-transparent resize-none"
-                        placeholder="Kongsi pengalaman anda dengan perkhidmatan ini. Apa yang anda suka? Apa yang boleh diperbaiki? (Minimum 10 aksara)"
+                        placeholder="{{ __('Kongsi pengalaman anda dengan perkhidmatan ini. Apa yang anda suka? Apa yang boleh diperbaiki? (Minimum 10 aksara)') }}"
                         required
                     >{{ old('comment') }}</textarea>
                     <div class="mt-1 text-sm text-gray-500">
@@ -100,43 +100,41 @@
                 <div class="flex items-center justify-between">
                     <a href="{{ route('services.show', $service->slug) }}" 
                        class="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
-                        Batal
+                        {{ __('Batal') }}
                     </a>
                     <button type="submit" 
-                            class="px-8 py-3 bg-arsenal hover:bg-red-700 text-white rounded-lg font-medium transition-colors">
-                        Hantar Ulasan
-                    </button>
+                            class="px-8 py-3 bg-arsenal hover:bg-red-700 text-white rounded-lg font-medium transition-colors">{{ __('Hantar Ulasan') }}</button>
                 </div>
             </form>
         </div>
 
         <!-- Review Guidelines -->
         <div class="bg-blue-50 border border-blue-200 rounded-xl p-6 mt-8">
-            <h3 class="text-lg font-semibold text-blue-900 mb-3">Garis Panduan Ulasan</h3>
+            <h3 class="text-lg font-semibold text-blue-900 mb-3">{{ __('Garis Panduan Ulasan') }}</h3>
             <ul class="text-sm text-blue-800 space-y-2">
                 <li class="flex items-start space-x-2">
                     <svg class="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                         <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
                     </svg>
-                    <span>Berikan maklum balas yang jujur dan membina</span>
+                    <span>{{ __('Berikan maklum balas yang jujur dan membina') }}</span>
                 </li>
                 <li class="flex items-start space-x-2">
                     <svg class="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                         <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
                     </svg>
-                    <span>Fokus pada kualiti perkhidmatan, kesesuaian, dan pengalaman keseluruhan</span>
+                    <span>{{ __('Fokus pada kualiti perkhidmatan, kesesuaian, dan pengalaman keseluruhan') }}</span>
                 </li>
                 <li class="flex items-start space-x-2">
                     <svg class="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                         <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
                     </svg>
-                    <span>Elakkan serangan peribadi atau bahasa yang tidak sesuai</span>
+                    <span>{{ __('Elakkan serangan peribadi atau bahasa yang tidak sesuai') }}</span>
                 </li>
                 <li class="flex items-start space-x-2">
                     <svg class="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                         <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
                     </svg>
-                    <span>Ulasan anda akan dipaparkan dengan segera kepada pelanggan lain</span>
+                    <span>{{ __('Ulasan anda akan dipaparkan dengan segera kepada pelanggan lain') }}</span>
                 </li>
             </ul>
         </div>
@@ -152,12 +150,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const ratingText = document.getElementById('rating-text');
     const commentTextarea = document.getElementById('comment');
     const charCount = document.getElementById('char-count');
-
     // Rating star functionality
     ratingStars.forEach(star => {
         star.addEventListener('click', function() {
             const rating = this.dataset.rating;
-            
             // Update radio button
             document.getElementById(`rating-${rating}`).checked = true;
             
@@ -206,7 +202,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     s.classList.remove('text-yellow-400');
                     s.classList.add('text-gray-300');
                 });
-                ratingText.textContent = 'Pilih rating';
+                ratingText.textContent = @json(__('Pilih rating'));
             }
         });
     });
@@ -215,7 +211,6 @@ document.addEventListener('DOMContentLoaded', function() {
     commentTextarea.addEventListener('input', function() {
         const count = this.value.length;
         charCount.textContent = count;
-        
         if (count < 10) {
             charCount.classList.add('text-red-600');
             charCount.classList.remove('text-gray-500');

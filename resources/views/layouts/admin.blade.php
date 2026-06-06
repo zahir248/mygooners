@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>@yield('title', 'Panel Admin - MyGooners')</title>
-    <meta name="description" content="Panel Admin MyGooners - Urus kandungan komuniti peminat Arsenal, pengguna, dan perkhidmatan.">
+    <title>@yield('title', __('admin.default_title'))</title>
+    <meta name="description" content="{{ __('admin.meta_description') }}">
 
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
@@ -86,6 +86,27 @@
         .admin-sidebar {
             transition: transform 0.3s ease-in-out;
         }
+
+        .admin-sidebar-nav {
+            scrollbar-gutter: stable;
+        }
+
+        .admin-sidebar-nav::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .admin-sidebar-nav::-webkit-scrollbar-track {
+            background: #1e293b;
+        }
+
+        .admin-sidebar-nav::-webkit-scrollbar-thumb {
+            background: #475569;
+            border-radius: 3px;
+        }
+
+        .admin-sidebar-nav::-webkit-scrollbar-thumb:hover {
+            background: #64748b;
+        }
         
         @media (max-width: 768px) {
             .admin-sidebar.closed {
@@ -107,20 +128,20 @@
         </div>
 
         <!-- Sidebar -->
-        <div class="fixed inset-y-0 left-0 z-50 w-64 bg-admin-800 admin-sidebar lg:translate-x-0" 
+        <div class="fixed inset-y-0 left-0 z-50 flex w-64 flex-col bg-admin-800 admin-sidebar lg:translate-x-0" 
              :class="{ 'closed': !sidebarOpen }"
              x-show="sidebarOpen || window.innerWidth >= 1024">
             
             <!-- Logo -->
-            <div class="flex items-center justify-center h-16 px-4 bg-admin-900">
+            <div class="flex h-16 flex-shrink-0 items-center justify-center px-4 bg-admin-900">
                 <div class="flex items-center">
                     <img src="{{ asset('images/official-logo.png') }}" alt="MyGooners Logo" class="h-12 w-auto rounded-lg">
-                    <span class="ml-2 text-lg font-bold text-white">{{ auth()->user()->role === 'writer' ? 'Writer' : 'Admin' }}</span>
+                    <span class="ml-2 text-lg font-bold text-white">{{ auth()->user()->role === 'writer' ? __('admin.role_writer') : __('admin.role_admin') }}</span>
                 </div>
             </div>
 
-            <!-- Navigation -->
-            <nav class="mt-8 px-4">
+            <!-- Navigation (scrollable when submenus expand) -->
+            <nav class="admin-sidebar-nav mt-4 min-h-0 flex-1 overflow-y-auto overflow-x-hidden px-4 pb-6">
                 <ul class="space-y-2">
                     @if(auth()->user()->role !== 'writer')
                     <!-- Dashboard -->
@@ -131,7 +152,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z"></path>
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5a2 2 0 012-2h4a2 2 0 012 2v4H8V5z"></path>
                             </svg>
-                            Panel Kawalan
+                            {{ __('admin.nav_dashboard') }}
                         </a>
                     </li>
                     @endif
@@ -143,7 +164,7 @@
                             <svg class="mr-3 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                             </svg>
-                            Artikel
+                            {{ __('admin.nav_articles') }}
                             <svg class="ml-auto h-4 w-4 transform transition-transform duration-200" :class="{ 'rotate-90': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                             </svg>
@@ -152,13 +173,13 @@
                             <li>
                                 <a href="{{ route('admin.articles.index') }}"
                                    class="flex items-center px-4 py-2 text-sm font-medium rounded-md transition-colors {{ request()->routeIs('admin.articles.*') ? 'bg-admin-700 text-white' : 'text-admin-300 hover:bg-admin-700 hover:text-white' }}">
-                                    Semua Artikel
+                                    {{ __('admin.nav_all_articles') }}
                                 </a>
                             </li>
                             <li>
                                 <a href="{{ route('admin.article-categories.index') }}"
                                    class="flex items-center px-4 py-2 text-sm font-medium rounded-md transition-colors {{ request()->routeIs('admin.article-categories.*') ? 'bg-admin-700 text-white' : 'text-admin-300 hover:bg-admin-700 hover:text-white' }}">
-                                    Kategori Artikel
+                                    {{ __('admin.nav_article_categories') }}
                                 </a>
                             </li>
                         </ul>
@@ -172,7 +193,7 @@
                             <svg class="mr-3 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
                             </svg>
-                            Video
+                            {{ __('admin.nav_videos') }}
                             <svg class="ml-auto h-4 w-4 transform transition-transform duration-200" :class="{ 'rotate-90': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                             </svg>
@@ -181,13 +202,13 @@
                             <li>
                                 <a href="{{ route('admin.videos.index') }}"
                                    class="flex items-center px-4 py-2 text-sm font-medium rounded-md transition-colors {{ request()->routeIs('admin.videos.index', 'admin.videos.create', 'admin.videos.edit', 'admin.videos.store', 'admin.videos.update', 'admin.videos.destroy') ? 'bg-admin-700 text-white' : 'text-admin-300 hover:bg-admin-700 hover:text-white' }}">
-                                    Semua Video
+                                    {{ __('admin.nav_all_videos') }}
                                 </a>
                             </li>
                             <li>
                                 <a href="{{ route('admin.video-categories.index') }}"
                                    class="flex items-center px-4 py-2 text-sm font-medium rounded-md transition-colors {{ request()->routeIs('admin.video-categories.*') ? 'bg-admin-700 text-white' : 'text-admin-300 hover:bg-admin-700 hover:text-white' }}">
-                                    Kategori Video
+                                    {{ __('admin.nav_video_categories') }}
                                 </a>
                             </li>
                         </ul>
@@ -200,7 +221,7 @@
                             <svg class="mr-3 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0V6a2 2 0 012 2v6a2 2 0 01-2 2H8a2 2 0 01-2-2V8a2 2 0 012-2h8z"></path>
                             </svg>
-                            Perkhidmatan
+                            {{ __('admin.nav_services') }}
                             <svg class="ml-auto h-4 w-4 transform transition-transform duration-200" :class="{ 'rotate-90': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                             </svg>
@@ -209,19 +230,19 @@
                             <li>
                                 <a href="{{ route('admin.services.index') }}"
                                    class="flex items-center px-4 py-2 text-sm font-medium rounded-md transition-colors {{ request()->routeIs('admin.services.index') ? 'bg-admin-700 text-white' : 'text-admin-300 hover:bg-admin-700 hover:text-white' }}">
-                                    Semua Perkhidmatan
+                                    {{ __('admin.nav_all_services') }}
                                 </a>
                             </li>
                             <li>
                                 <a href="{{ route('admin.service-categories.index') }}"
                                    class="flex items-center px-4 py-2 text-sm font-medium rounded-md transition-colors {{ request()->routeIs('admin.service-categories.*') ? 'bg-admin-700 text-white' : 'text-admin-300 hover:bg-admin-700 hover:text-white' }}">
-                                    Kategori Perkhidmatan
+                                    {{ __('admin.nav_service_categories') }}
                                 </a>
                             </li>
                             <li>
                                 <a href="{{ route('admin.services.pending') }}"
                                    class="flex items-center px-4 py-2 text-sm font-medium rounded-md transition-colors {{ request()->routeIs('admin.services.pending') ? 'bg-admin-700 text-white' : 'text-admin-300 hover:bg-admin-700 hover:text-white' }}">
-                                    Menunggu Kelulusan
+                                    {{ __('admin.nav_pending_approval') }}
                                     @if(isset($stats['pending_services']) && $stats['pending_services'] > 0)
                                         <span class="ml-2 bg-red-600 text-white text-xs rounded-full px-2 py-1">
                                             {{ $stats['pending_services'] }}
@@ -232,7 +253,7 @@
                             <li>
                                 <a href="{{ route('admin.service-reviews.index') }}"
                                    class="flex items-center px-4 py-2 text-sm font-medium rounded-md transition-colors {{ request()->routeIs('admin.service-reviews.*') ? 'bg-admin-700 text-white' : 'text-admin-300 hover:bg-admin-700 hover:text-white' }}">
-                                    Ulasan Perkhidmatan
+                                    {{ __('admin.nav_service_reviews') }}
                                 </a>
                             </li>
                         </ul>
@@ -245,7 +266,7 @@
                             <svg class="mr-3 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
                             </svg>
-                            Produk
+                            {{ __('admin.nav_products') }}
                             <svg class="ml-auto h-4 w-4 transform transition-transform duration-200" :class="{ 'rotate-90': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                             </svg>
@@ -254,25 +275,25 @@
                             <li>
                                 <a href="{{ route('admin.products.index') }}"
                                    class="flex items-center px-4 py-2 text-sm font-medium rounded-md transition-colors {{ request()->routeIs('admin.products.index') ? 'bg-admin-700 text-white' : 'text-admin-300 hover:bg-admin-700 hover:text-white' }}">
-                                    Semua Produk
+                                    {{ __('admin.nav_all_products') }}
                                 </a>
                             </li>
                             <li>
                                 <a href="{{ route('admin.product-categories.index') }}"
                                    class="flex items-center px-4 py-2 text-sm font-medium rounded-md transition-colors {{ request()->routeIs('admin.product-categories.*') ? 'bg-admin-700 text-white' : 'text-admin-300 hover:bg-admin-700 hover:text-white' }}">
-                                    Kategori Produk
+                                    {{ __('admin.nav_product_categories') }}
                                 </a>
                             </li>
                             <li>
                                 <a href="{{ route('admin.reviews.index') }}"
                                    class="flex items-center px-4 py-2 text-sm font-medium rounded-md transition-colors {{ request()->routeIs('admin.reviews.*') ? 'bg-admin-700 text-white' : 'text-admin-300 hover:bg-admin-700 hover:text-white' }}">
-                                    Ulasan Produk
+                                    {{ __('admin.nav_product_reviews') }}
                                 </a>
                             </li>
                             <li>
                                 <a href="{{ route('admin.product-reports.index') }}"
                                    class="flex items-center px-4 py-2 text-sm font-medium rounded-md transition-colors {{ request()->routeIs('admin.product-reports.*') ? 'bg-admin-700 text-white' : 'text-admin-300 hover:bg-admin-700 hover:text-white' }}">
-                                    Laporan Produk
+                                    {{ __('admin.nav_product_reports') }}
                                 </a>
                             </li>
                         </ul>
@@ -285,7 +306,7 @@
                             <svg class="mr-3 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
                             </svg>
-                            Pesanan
+                            {{ __('admin.nav_orders') }}
                         </a>
                     </li>
 
@@ -296,7 +317,7 @@
                             <svg class="mr-3 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"></path>
                             </svg>
-                            Refund
+                            {{ __('admin.nav_refunds') }}
                         </a>
                     </li>
 
@@ -307,7 +328,7 @@
                             <svg class="mr-3 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
                             </svg>
-                            Pengguna
+                            {{ __('admin.nav_users') }}
                             <svg class="ml-auto h-4 w-4 transform transition-transform duration-200" :class="{ 'rotate-90': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                             </svg>
@@ -316,19 +337,19 @@
                             <li>
                                 <a href="{{ route('admin.users.index') }}"
                                    class="flex items-center px-4 py-2 text-sm font-medium rounded-md transition-colors {{ request()->routeIs('admin.users.*') ? 'bg-admin-700 text-white' : 'text-admin-300 hover:bg-admin-700 hover:text-white' }}">
-                                    Semua Pengguna
+                                    {{ __('admin.nav_all_users') }}
                                 </a>
                             </li>
                             <li>
                                 <a href="{{ route('admin.seller-requests.index') }}"
                                    class="flex items-center px-4 py-2 text-sm font-medium rounded-md transition-colors {{ request()->routeIs('admin.seller-requests.index') ? 'bg-admin-700 text-white' : 'text-admin-300 hover:bg-admin-700 hover:text-white' }}">
-                                    Senarai Penjual
+                                    {{ __('admin.nav_seller_list') }}
                                 </a>
                             </li>
                             <li>
                                 <a href="{{ route('admin.seller-requests.pending') }}"
                                    class="flex items-center px-4 py-2 text-sm font-medium rounded-md transition-colors {{ request()->routeIs('admin.seller-requests.pending') ? 'bg-admin-700 text-white' : 'text-admin-300 hover:bg-admin-700 hover:text-white' }}">
-                                    Menunggu Kelulusan
+                                    {{ __('admin.nav_pending_approval') }}
                                     @if(isset($stats['pending_sellers']) && $stats['pending_sellers'] > 0)
                                         <span class="ml-2 bg-red-600 text-white text-xs rounded-full px-2 py-1">
                                             {{ $stats['pending_sellers'] }}
@@ -347,7 +368,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                             </svg>
-                            Tetapan
+                            {{ __('admin.nav_settings') }}
                         </a>
                     </li>
 
@@ -358,7 +379,7 @@
                             <svg class="mr-3 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
                             </svg>
-                            Newsletter
+                            {{ __('admin.nav_newsletter') }}
                         </a>
                     </li>
 
@@ -369,7 +390,7 @@
                             <svg class="mr-3 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                             </svg>
-                            Log Sistem
+                            {{ __('admin.nav_system_logs') }}
                         </a>
                     </li>
                     @endif
@@ -385,7 +406,7 @@
                             <svg class="mr-3 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
                             </svg>
-                            Lihat Laman
+                            {{ __('admin.nav_view_site') }}
                         </a>
                     </li>
                 </ul>
@@ -413,13 +434,15 @@
 
                         <!-- Right side -->
                         <div class="flex items-center space-x-4">
+                            @include('admin.partials.language-switcher')
+
                             @if(auth()->user()->role !== 'writer')
                             <!-- Notifications -->
                             <div class="relative" x-data="{ notificationsOpen: false }">
                                 <button type="button"
                                         @click="notificationsOpen = !notificationsOpen"
                                         class="p-2 text-gray-400 hover:text-gray-500 hover:bg-gray-100 rounded-md relative focus:outline-none focus:ring-2 focus:ring-red-500"
-                                        aria-label="Notifikasi"
+                                        aria-label="{{ __('admin.notifications') }}"
                                         :aria-expanded="notificationsOpen">
                                     <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
@@ -440,8 +463,8 @@
                                      x-cloak
                                      class="absolute right-0 mt-2 w-80 bg-white rounded-md shadow-lg py-1 z-50 ring-1 ring-black ring-opacity-5">
                                     <div class="px-4 py-3 border-b border-gray-100">
-                                        <h3 class="text-sm font-semibold text-gray-900">Notifikasi</h3>
-                                        <p class="text-xs text-gray-500 mt-0.5">Perkara yang memerlukan tindakan</p>
+                                        <h3 class="text-sm font-semibold text-gray-900">{{ __('admin.notifications') }}</h3>
+                                        <p class="text-xs text-gray-500 mt-0.5">{{ __('admin.notifications_subtitle') }}</p>
                                     </div>
                                     @if(!empty($adminNotifications))
                                         <ul class="max-h-72 overflow-y-auto py-1">
@@ -463,7 +486,7 @@
                                             <svg class="mx-auto h-10 w-10 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
                                             </svg>
-                                            <p class="mt-2 text-sm text-gray-500">Tiada notifikasi baharu</p>
+                                            <p class="mt-2 text-sm text-gray-500">{{ __('admin.notifications_empty') }}</p>
                                         </div>
                                     @endif
                                 </div>
@@ -485,14 +508,14 @@
                                 <div x-show="open" @click.away="open = false" x-cloak 
                                      class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 ring-1 ring-black ring-opacity-5">
                                     <div class="px-4 py-2 text-xs text-gray-500 border-b border-gray-100">
-                                        {{ auth()->user()->role === 'writer' ? 'Penulis' : 'Pentadbir' }}
+                                        {{ auth()->user()->role === 'writer' ? __('admin.role_writer') : __('admin.role_admin') }}
                                     </div>
-                                    <a href="{{ route('admin.profile') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profil Saya</a>
+                                    <a href="{{ route('admin.profile') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">{{ __('admin.my_profile') }}</a>
                                     <div class="border-t border-gray-100"></div>
                                     <form method="POST" action="{{ route('admin.logout') }}">
                                         @csrf
                                         <button type="submit" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                            Log Keluar
+                                            {{ __('admin.logout') }}
                                         </button>
                                     </form>
                                 </div>
@@ -541,14 +564,27 @@
             <!-- Footer -->
             <footer class="bg-white border-t border-gray-200 px-4 py-4">
                 <div class="flex justify-between items-center text-sm text-gray-500">
-                    <p>© {{ date('Y') }} Panel Admin MyGooners. Dibina dengan ❤️ untuk peminat Arsenal.</p>
-                    <p>Version 1.0</p>
+                    <p>© {{ date('Y') }} {{ __('admin.footer_copyright') }}</p>
+                    <p>{{ __('admin.version') }}</p>
                 </div>
             </footer>
         </div>
     </div>
 
     <!-- Scripts -->
+    @php
+        $adminJsMessages = [
+            'fill_required_fields' => __('flash.fill_required_fields'),
+            'fill_variant_name' => __('flash.fill_variant_name'),
+            'select_new_status' => __('flash.select_new_status'),
+            'upload_invalid_response' => __('flash.upload_invalid_response'),
+            'upload_failed_status' => __('flash.upload_failed_status'),
+            'upload_network_error' => __('flash.upload_network_error'),
+            'fill_subject_content' => __('Sila isi subjek dan kandungan terlebih dahulu.'),
+            'new_variant' => __('Varian Baru'),
+        ];
+    @endphp
+    <script>window.adminMessages = @json($adminJsMessages);</script>
     <script src="//unpkg.com/alpinejs" defer></script>
     @stack('scripts')
 </body>

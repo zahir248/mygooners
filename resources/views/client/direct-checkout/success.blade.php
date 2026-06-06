@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Pesanan Berjaya - MyGooners')
-@section('meta_description', 'Pesanan anda telah berjaya dibuat di MyGooners.')
+@section('title', __('Pesanan Berjaya - MyGooners'))
+@section('meta_description', __('Pesanan anda telah berjaya dibuat di MyGooners.'))
 
 @section('content')
 <!-- Success Banner -->
@@ -13,8 +13,8 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                 </svg>
             </div>
-            <h1 class="text-3xl font-bold text-green-900 mb-2">Pesanan Berjaya!</h1>
-            <p class="text-green-700">Terima kasih atas pembelian anda. Pesanan anda telah berjaya dibuat.</p>
+            <h1 class="text-3xl font-bold text-green-900 mb-2">{{ __('Pesanan Berjaya!') }}</h1>
+            <p class="text-green-700">{{ __('Terima kasih atas pembelian anda. Pesanan anda telah berjaya dibuat.') }}</p>
             @if($order->payment_status === 'paid')
                 <div class="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
                     <div class="flex items-center justify-center space-x-2">
@@ -22,7 +22,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
                         </svg>
                         <p class="text-blue-800 font-medium">Emel pengesahan telah dihantar ke {{ $order->shipping_email }}</p>
-                        <p class="text-blue-700 text-sm mt-1">Nota: Invois PDF mungkin tidak dilampirkan kerana isu teknikal. Sila hubungi kami jika anda memerlukan invois.</p>
+                        <p class="text-blue-700 text-sm mt-1">{{ __('Nota: Invois PDF mungkin tidak dilampirkan kerana isu teknikal. Sila hubungi kami jika anda memerlukan invois.') }}</p>
                     </div>
                     @if($order->billing_email !== $order->shipping_email)
                         <p class="text-blue-700 text-sm mt-1">Dan juga ke {{ $order->billing_email }}</p>
@@ -43,12 +43,12 @@
                 </svg>
             </div>
             <div class="flex-1">
-                <h3 class="text-sm font-medium text-blue-900 mb-1">Apa Yang Seterusnya?</h3>
+                <h3 class="text-sm font-medium text-blue-900 mb-1">{{ __('Apa Yang Seterusnya?') }}</h3>
                 <div class="text-sm text-blue-800 space-y-1">
-                    <p>• <strong>Pengesahan:</strong> Anda akan menerima emel pengesahan pesanan dalam beberapa minit</p>
-                    <p>• <strong>Pemprosesan:</strong> Pesanan anda akan diproses dan dihantar dalam 1-2 hari bekerja</p>
-                    <p>• <strong>Penjejakan:</strong> Anda akan menerima nombor pengesanan penghantaran melalui emel</p>
-                    <p>• <strong>Pembatalan:</strong> Anda boleh membatalkan pesanan ini dalam tempoh 24 jam dari masa pembelian</p>
+                    <p>{{ __('•') }}<strong>{{ __('Pengesahan:') }}</strong> {{ __('Anda akan menerima emel pengesahan pesanan dalam beberapa minit') }}</p>
+                    <p>{{ __('•') }}<strong>{{ __('Pemprosesan:') }}</strong> {{ __('Pesanan anda akan diproses dan dihantar dalam 1-2 hari bekerja') }}</p>
+                    <p>{{ __('•') }}<strong>{{ __('Penjejakan:') }}</strong> {{ __('Anda akan menerima nombor pengesanan penghantaran melalui emel') }}</p>
+                    <p>{{ __('•') }}<strong>{{ __('Pembatalan:') }}</strong> {{ __('Anda boleh membatalkan pesanan ini dalam tempoh 24 jam dari masa pembelian') }}</p>
                 </div>
             </div>
             <button onclick="toggleDirectSuccessBanner()" class="flex-shrink-0 text-blue-600 hover:text-blue-800 transition-colors">
@@ -64,48 +64,48 @@
 <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <div class="bg-white rounded-xl shadow-lg overflow-hidden">
         <div class="px-6 py-4 border-b border-gray-200">
-            <h2 class="text-xl font-bold text-gray-900">Maklumat Pesanan</h2>
+            <h2 class="text-xl font-bold text-gray-900">{{ __('Maklumat Pesanan') }}</h2>
         </div>
         
         <div class="p-6 space-y-6">
             <!-- Order Details -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Butiran Pesanan</h3>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">{{ __('Butiran Pesanan') }}</h3>
                     <div class="space-y-2 text-sm">
                         <div class="flex justify-between">
-                            <span class="text-gray-600">Nombor Pesanan:</span>
+                            <span class="text-gray-600">{{ __('Nombor Pesanan:') }}</span>
                             <span class="font-medium">{{ $order->order_number }}</span>
                         </div>
                         <div class="flex justify-between">
-                            <span class="text-gray-600">Tarikh Pesanan:</span>
+                            <span class="text-gray-600">{{ __('Tarikh Pesanan:') }}</span>
                             <span class="font-medium">{{ $order->created_at->format('d/m/Y H:i') }}</span>
                         </div>
                         <div class="flex justify-between">
-                            <span class="text-gray-600">Status:</span>
+                            <span class="text-gray-600">{{ __('Status:') }}</span>
                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $order->getStatusBadgeClass() }}">
                                 {{ ucfirst($order->status) }}
                             </span>
                         </div>
                         <div class="flex justify-between">
-                            <span class="text-gray-600">Kaedah Pembayaran:</span>
+                            <span class="text-gray-600">{{ __('Kaedah Pembayaran:') }}</span>
                             <span class="font-medium">{{ $order->getPaymentMethodDisplayName() }}</span>
                         </div>
                         <div class="flex justify-between">
-                            <span class="text-gray-600">Status Pembayaran:</span>
+                            <span class="text-gray-600">{{ __('Status Pembayaran:') }}</span>
                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $order->getPaymentStatusBadgeClass() }}">
                                 {{ ucfirst($order->payment_status) }}
                             </span>
                         </div>
                         <div class="flex justify-between">
-                            <span class="text-gray-600">Jumlah Keseluruhan:</span>
+                            <span class="text-gray-600">{{ __('Jumlah Keseluruhan:') }}</span>
                             <span class="font-bold text-lg text-red-600">{{ $order->getFormattedTotal() }}</span>
                         </div>
                     </div>
                 </div>
                 
                 <div>
-                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Alamat Penghantaran</h3>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">{{ __('Alamat Penghantaran') }}</h3>
                     <div class="text-sm text-gray-600 space-y-1">
                         <p class="font-medium text-gray-900">{{ $order->shipping_name }}</p>
                         <p>{{ $order->shipping_email }}</p>
@@ -119,7 +119,7 @@
             
             <!-- Order Items -->
             <div>
-                <h3 class="text-lg font-semibold text-gray-900 mb-3">Item Pesanan</h3>
+                <h3 class="text-lg font-semibold text-gray-900 mb-3">{{ __('Item Pesanan') }}</h3>
                 <div class="border border-gray-200 rounded-lg overflow-hidden">
                     @foreach($order->items as $item)
                         <div class="flex items-center p-4 border-b border-gray-200 last:border-b-0">
@@ -148,23 +148,23 @@
             
             <!-- Order Summary -->
             <div class="bg-gray-50 rounded-lg p-4">
-                <h3 class="text-lg font-semibold text-gray-900 mb-3">Ringkasan Pesanan</h3>
+                <h3 class="text-lg font-semibold text-gray-900 mb-3">{{ __('Ringkasan Pesanan') }}</h3>
                 <div class="space-y-2 text-sm">
                     <div class="flex justify-between">
-                        <span class="text-gray-600">Jumlah Harga:</span>
+                        <span class="text-gray-600">{{ __('Jumlah Harga:') }}</span>
                         <span class="font-medium">{{ $order->getFormattedSubtotal() }}</span>
                     </div>
                     <div class="flex justify-between">
-                        <span class="text-gray-600">Penghantaran:</span>
-                        <span class="font-medium text-green-600">Percuma</span>
+                        <span class="text-gray-600">{{ __('Penghantaran:') }}</span>
+                        <span class="font-medium text-green-600">{{ __('Percuma') }}</span>
                     </div>
                     <div class="flex justify-between">
-                        <span class="text-gray-600">Cukai:</span>
+                        <span class="text-gray-600">{{ __('Cukai:') }}</span>
                         <span class="font-medium">RM0.00</span>
                     </div>
                     <div class="border-t border-gray-300 pt-2">
                         <div class="flex justify-between font-bold">
-                            <span>Jumlah Keseluruhan:</span>
+                            <span>{{ __('Jumlah Keseluruhan:') }}</span>
                             <span class="text-red-600">{{ $order->getFormattedTotal() }}</span>
                         </div>
                     </div>
@@ -173,7 +173,7 @@
             
             @if($order->notes)
                 <div>
-                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Nota Pesanan</h3>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">{{ __('Nota Pesanan') }}</h3>
                     <div class="bg-gray-50 rounded-lg p-4">
                         <p class="text-sm text-gray-700">{{ $order->notes }}</p>
                     </div>
@@ -184,25 +184,25 @@
     
     <!-- Next Steps -->
     <div class="mt-8 bg-blue-50 rounded-xl p-6">
-        <h3 class="text-lg font-semibold text-blue-900 mb-4">Langkah Seterusnya</h3>
+        <h3 class="text-lg font-semibold text-blue-900 mb-4">{{ __('Langkah Seterusnya') }}</h3>
         <div class="space-y-3 text-sm text-blue-800">
             <div class="flex items-start">
                 <div class="flex-shrink-0 w-6 h-6 bg-blue-200 rounded-full flex items-center justify-center mr-3 mt-0.5">
                     <span class="text-blue-800 font-bold text-xs">1</span>
                 </div>
-                <p>Anda akan menerima emel pengesahan dengan butiran pesanan lengkap.</p>
+                <p>{{ __('Anda akan menerima emel pengesahan dengan butiran pesanan lengkap.') }}</p>
             </div>
             <div class="flex items-start">
                 <div class="flex-shrink-0 w-6 h-6 bg-blue-200 rounded-full flex items-center justify-center mr-3 mt-0.5">
                     <span class="text-blue-800 font-bold text-xs">2</span>
                 </div>
-                <p>Tim kami akan memproses pesanan anda dalam masa 1-2 hari bekerja.</p>
+                <p>{{ __('Tim kami akan memproses pesanan anda dalam masa 1-2 hari bekerja.') }}</p>
             </div>
             <div class="flex items-start">
                 <div class="flex-shrink-0 w-6 h-6 bg-blue-200 rounded-full flex items-center justify-center mr-3 mt-0.5">
                     <span class="text-blue-800 font-bold text-xs">3</span>
                 </div>
-                <p>Anda akan diberitahu melalui emel apabila pesanan anda dihantar.</p>
+                <p>{{ __('Anda akan diberitahu melalui emel apabila pesanan anda dihantar.') }}</p>
             </div>
         </div>
     </div>
@@ -210,17 +210,11 @@
     <!-- Action Buttons -->
     <div class="mt-8 flex flex-col sm:flex-row gap-4">
         <a href="{{ route('checkout.show', $order) }}" 
-           class="flex-1 bg-red-600 hover:bg-red-700 text-white py-3 px-6 rounded-lg font-medium text-center transition-colors">
-            Lihat Butiran Pesanan
-        </a>
+           class="flex-1 bg-red-600 hover:bg-red-700 text-white py-3 px-6 rounded-lg font-medium text-center transition-colors">{{ __('Lihat Butiran Pesanan') }}</a>
         <a href="{{ route('checkout.orders') }}" 
-           class="flex-1 border-2 border-red-600 text-red-600 hover:bg-red-600 hover:text-white py-3 px-6 rounded-lg font-medium text-center transition-colors">
-            Lihat Semua Pesanan
-        </a>
+           class="flex-1 border-2 border-red-600 text-red-600 hover:bg-red-600 hover:text-white py-3 px-6 rounded-lg font-medium text-center transition-colors">{{ __('Lihat Semua Pesanan') }}</a>
         <a href="{{ route('shop.index') }}" 
-           class="flex-1 border-2 border-gray-300 text-gray-700 hover:bg-gray-50 py-3 px-6 rounded-lg font-medium text-center transition-colors">
-            Teruskan Membeli
-        </a>
+           class="flex-1 border-2 border-gray-300 text-gray-700 hover:bg-gray-50 py-3 px-6 rounded-lg font-medium text-center transition-colors">{{ __('Teruskan Membeli') }}</a>
     </div>
 </div>
 

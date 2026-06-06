@@ -41,7 +41,7 @@ class ArticleController extends Controller
             $query->where('is_featured', true);
         }
         
-        $articles = $query->with('author')->orderBy('created_at', 'desc')->get();
+        $articles = $query->with('author')->orderBy('created_at', 'desc')->paginate(15)->withQueryString();
         
         $categories = ArticleCategory::namesForSelect();
 
@@ -124,7 +124,7 @@ class ArticleController extends Controller
                     'error' => $image->getError(),
                     'error_message' => $image->getErrorMessage()
                 ]);
-                return back()->withErrors(['cover_image' => 'Image upload failed: ' . $image->getErrorMessage()]);
+                return back()->withErrors(['cover_image' => __('flash.image_upload_failed', ['message' => $image->getErrorMessage()])]);
             }
             
             $filename = 'articles/' . time() . '_' . Str::slug($request->title) . '.' . $image->getClientOriginalExtension();
@@ -154,18 +154,18 @@ class ArticleController extends Controller
                             'filename' => $filename,
                             'stored_path' => $stored
                         ]);
-                        return back()->withErrors(['cover_image' => 'File was not created properly']);
+                        return back()->withErrors(['cover_image' => __('flash.image_file_invalid')]);
                     }
                 } else {
                     \Log::error('Failed to store image file');
-                    return back()->withErrors(['cover_image' => 'Failed to store image file']);
+                    return back()->withErrors(['cover_image' => __('flash.image_store_failed')]);
                 }
             } catch (Exception $e) {
                 \Log::error('Exception during image storage', [
                     'error' => $e->getMessage(),
                     'trace' => $e->getTraceAsString()
                 ]);
-                return back()->withErrors(['cover_image' => 'Error storing image: ' . $e->getMessage()]);
+                return back()->withErrors(['cover_image' => __('flash.image_save_error', ['message' => $e->getMessage()])]);
             }
         } else {
             \Log::info('No image file detected in request', [
@@ -198,7 +198,7 @@ class ArticleController extends Controller
         ]);
 
         return redirect()->route('admin.articles.index')
-            ->with('success', 'Article created successfully!');
+            ->with('success', __('flash.article_created'));
     }
 
     public function edit($id)
@@ -299,18 +299,18 @@ class ArticleController extends Controller
                             'filename' => $filename,
                             'stored_path' => $stored
                         ]);
-                        return back()->withErrors(['cover_image' => 'File was not created properly']);
+                        return back()->withErrors(['cover_image' => __('flash.image_file_invalid')]);
                     }
                 } else {
                     \Log::error('Failed to store image file in update');
-                    return back()->withErrors(['cover_image' => 'Failed to store image file']);
+                    return back()->withErrors(['cover_image' => __('flash.image_store_failed')]);
                 }
             } catch (Exception $e) {
                 \Log::error('Exception during image storage in update', [
                     'error' => $e->getMessage(),
                     'trace' => $e->getTraceAsString()
                 ]);
-                return back()->withErrors(['cover_image' => 'Error storing image: ' . $e->getMessage()]);
+                return back()->withErrors(['cover_image' => __('flash.image_save_error', ['message' => $e->getMessage()])]);
             }
         } else {
             \Log::info('No image file detected in update request');
@@ -334,7 +334,7 @@ class ArticleController extends Controller
         $article->update($data);
 
         return redirect()->route('admin.articles.index')
-            ->with('success', 'Article updated successfully!');
+            ->with('success', __('flash.article_updated'));
     }
 
     public function destroy($id)
@@ -349,7 +349,7 @@ class ArticleController extends Controller
         $article->delete();
 
         return redirect()->route('admin.articles.index')
-            ->with('success', 'Article deleted successfully!');
+            ->with('success', __('flash.article_deleted'));
     }
 
     public function preview(Request $request)

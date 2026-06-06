@@ -4,12 +4,12 @@
 use Illuminate\Support\Str;
 @endphp
 
-@section('title', $product->title . ' - Arsenal Shop - MyGooners')
+@section('title', $product->title . __('shop_page.title_suffix'))
 @section('meta_description', $product->description)
 
 @section('meta_tags')
 <!-- Open Graph Meta Tags -->
-<meta property="og:title" content="{{ $product->title }} - Arsenal Shop">
+<meta property="og:title" content="{{ $product->title . __('shop_page.og_title_suffix') }}">
 <meta property="og:description" content="{{ $product->description }}">
 @if($product->images && count($product->images) > 0)
 <meta property="og:image" content="{{ route('product.image', basename($product->images[0])) }}">
@@ -22,14 +22,14 @@ use Illuminate\Support\Str;
 
 <!-- Twitter Meta Tags -->
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="{{ $product->title }} - Arsenal Shop">
+<meta name="twitter:title" content="{{ $product->title . __('shop_page.og_title_suffix') }}">
 <meta name="twitter:description" content="{{ $product->description }}">
 @if($product->images && count($product->images) > 0)
 <meta name="twitter:image" content="{{ route('product.image', basename($product->images[0])) }}">
 @endif
 
 <!-- Additional Meta Tags -->
-<meta name="keywords" content="Arsenal, {{ implode(', ', $product->tags) }}, merchandise, shop">
+<meta name="keywords" content="{{ __('shop_page.meta_keywords', ['tags' => implode(', ', $product->tags ?? [])]) }}">
 @endsection
 
 @section('content')
@@ -65,17 +65,11 @@ use Illuminate\Support\Str;
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
                 </svg>
             </div>
-            <h3 class="text-lg font-bold text-gray-900 text-center mb-2">Log Masuk Diperlukan</h3>
-            <p class="text-gray-600 text-center mb-6">
-                Anda perlu log masuk terlebih dahulu untuk menambah item ke troli. Sila log masuk untuk meneruskan.
-            </p>
+            <h3 class="text-lg font-bold text-gray-900 text-center mb-2">{{ __('Log Masuk Diperlukan') }}</h3>
+            <p class="text-gray-600 text-center mb-6">{{ __('Anda perlu log masuk terlebih dahulu untuk menambah item ke troli. Sila log masuk untuk meneruskan.') }}</p>
             <div class="flex space-x-3">
-                <button onclick="hideLoginModal()" class="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-colors">
-                    Batal
-                </button>
-                <button onclick="goToLogin()" class="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg font-medium hover:bg-red-700 transition-colors">
-                    Log Masuk
-                </button>
+                <button onclick="hideLoginModal()" class="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-colors">{{ __('Batal') }}</button>
+                <button onclick="goToLogin()" class="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg font-medium hover:bg-red-700 transition-colors">{{ __('Log Masuk') }}</button>
             </div>
         </div>
     </div>
@@ -98,11 +92,11 @@ use Illuminate\Support\Str;
 <div class="bg-gray-50 border-b border-gray-200">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4">
         <nav class="flex items-center space-x-1 sm:space-x-2 text-xs sm:text-sm text-gray-600 overflow-x-auto">
-            <a href="{{ route('home') }}" class="hover:text-red-600 transition-colors whitespace-nowrap">Utama</a>
+            <a href="{{ route('home') }}" class="hover:text-red-600 transition-colors whitespace-nowrap">{{ __('Utama') }}</a>
             <svg class="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
             </svg>
-            <a href="{{ route('shop.index') }}" class="hover:text-red-600 transition-colors whitespace-nowrap">Kedai</a>
+            <a href="{{ route('shop.index') }}" class="hover:text-red-600 transition-colors whitespace-nowrap">{{ __('Kedai') }}</a>
             <svg class="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
             </svg>
@@ -180,13 +174,11 @@ use Illuminate\Support\Str;
                                                     <!-- Base product badges -->
                     @if($product->sale_price)
                         <span class="bg-red-600 text-white px-4 py-2 rounded-full text-sm font-bold">
-                            {{ $product->discount_percentage }}% OFF
+                            {{ __('shop_page.percent_off', ['percent' => $product->discount_percentage]) }}
                         </span>
                     @endif
                     @if($product->is_featured)
-                        <span class="bg-yellow-400 text-gray-900 px-4 py-2 rounded-full text-sm font-bold">
-                            UTAMA
-                        </span>
+                        <span class="bg-yellow-400 text-gray-900 px-4 py-2 rounded-full text-sm font-bold">{{ __('UTAMA') }}</span>
                                                     @endif
                                                 @elseif($imageData['type'] === 'variant')
                                                     <!-- Variant badges -->
@@ -199,16 +191,16 @@ use Illuminate\Support\Str;
                                                     @endphp
                                                     @if($variant && $variant->sale_price && $variantDiscountPercentage > 0)
                                                         <span class="bg-red-600 text-white px-4 py-2 rounded-full text-sm font-bold">
-                                                            {{ $variantDiscountPercentage }}% OFF
+                                                            {{ __('shop_page.percent_off', ['percent' => $variantDiscountPercentage]) }}
                                                         </span>
                                                     @endif
                     @endif
                 </div>
 
-                                            @if($imageData['type'] === 'product' && $product->calculated_stock <= 5)
+                                            @if($imageData['type'] === 'product' && $product->calculated_stock<= 5)
                     <div class="absolute bottom-4 left-4">
                         <span class="bg-orange-500 text-white px-4 py-2 rounded-full text-sm font-medium">
-                            Hanya {{ $product->calculated_stock }} tinggal dalam stok
+                            {{ __('shop_page.only_left_in_stock', ['count' => $product->calculated_stock]) }}
                         </span>
                     </div>
                 @endif
@@ -243,17 +235,11 @@ use Illuminate\Support\Str;
 
                 <!-- Share Options - Desktop Only (Above Reviews on Mobile) -->
                 <div class="mt-6 hidden lg:block">
-                    <h3 class="font-semibold text-gray-900 mb-4">Kongsi Produk Ini</h3>
+                    <h3 class="font-semibold text-gray-900 mb-4">{{ __('Kongsi Produk Ini') }}</h3>
                     <div class="flex flex-wrap gap-3">
-                        <button onclick="shareOnFacebook()" class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors flex-1 min-w-[120px]">
-                            Facebook
-                        </button>
-                        <button onclick="shareOnTwitter()" class="!bg-sky-500 !hover:bg-sky-600 !text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors flex-1 min-w-[120px] border-0" style="background-color: #0ea5e9 !important; color: white !important;">
-                            Twitter
-                        </button>
-                        <button onclick="copyToClipboard()" class="border border-gray-300 text-gray-700 py-2 px-4 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors flex-1 min-w-[120px]">
-                            Salin Pautan
-                        </button>
+                        <button onclick="shareOnFacebook()" class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors flex-1 min-w-[120px]">{{ __('Facebook') }}</button>
+                        <button onclick="shareOnTwitter()" class="!bg-sky-500 !hover:bg-sky-600 !text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors flex-1 min-w-[120px] border-0" style="background-color: #0ea5e9 !important; color: white !important;">{{ __('Twitter') }}</button>
+                        <button onclick="copyToClipboard()" class="border border-gray-300 text-gray-700 py-2 px-4 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors flex-1 min-w-[120px]">{{ __('Salin Pautan') }}</button>
                     </div>
                 </div>
 
@@ -262,7 +248,7 @@ use Illuminate\Support\Str;
                     <div class="bg-white rounded-xl shadow-2xl w-full max-w-md mx-2">
                         <!-- Modal Header -->
                         <div class="flex items-center justify-between p-4 sm:p-6 border-b border-gray-200">
-                            <h3 class="text-lg sm:text-xl font-bold text-gray-900">Salin Pautan</h3>
+                            <h3 class="text-lg sm:text-xl font-bold text-gray-900">{{ __('Salin Pautan') }}</h3>
                             <button onclick="closeCopyLinkModal()" class="text-gray-400 hover:text-gray-600 transition-colors p-1">
                                 <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
@@ -273,15 +259,13 @@ use Illuminate\Support\Str;
                         <!-- Modal Body -->
                         <div class="p-4 sm:p-6">
                             <div class="mb-4">
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Pautan Produk:</label>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">{{ __('Pautan Produk:') }}</label>
                                 <div class="flex items-center space-x-2">
                                     <input type="text" id="product-link-input" value="{{ request()->url() }}" 
                                            class="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900 bg-gray-50" 
                                            readonly>
                                     <button onclick="copyLinkToClipboard()" 
-                                            class="bg-arsenal hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-                                        Salin
-                                    </button>
+                                            class="bg-arsenal hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">{{ __('Salin') }}</button>
                                 </div>
                             </div>
                             
@@ -289,16 +273,14 @@ use Illuminate\Support\Str;
                                 <svg class="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
                                 </svg>
-                                <span>Pautan telah disalin ke papan klip</span>
+                                <span>{{ __('Pautan telah disalin ke papan klip') }}</span>
                             </div>
                         </div>
 
                         <!-- Modal Footer -->
                         <div class="flex justify-end p-4 sm:p-6 pt-0 border-t border-gray-200">
                             <button onclick="closeCopyLinkModal()" 
-                                    class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-                                Tutup
-                            </button>
+                                    class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">{{ __('Tutup') }}</button>
                         </div>
                     </div>
                 </div>
@@ -318,7 +300,7 @@ use Illuminate\Support\Str;
                             <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path>
                             <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"></path>
                         </svg>
-                        {{ number_format($product->views_count) }} tontonan
+                        {{ number_format($product->views_count) }} {{ __('tontonan') }}
                     </div>
                 </div>
                 
@@ -340,8 +322,8 @@ use Illuminate\Support\Str;
                         @endfor
                     </div>
                     <span class="text-base sm:text-lg font-semibold text-gray-900">{{ number_format($product->average_rating, 1) }}</span>
-                    <span class="text-sm sm:text-base text-gray-500">({{ $product->reviews_count }} ulasan)</span>
-                    <a href="#reviews" class="text-red-600 hover:text-red-700 font-medium text-sm sm:text-base">Baca Ulasan</a>
+                    <span class="text-sm sm:text-base text-gray-500">({{ __('shop_page.reviews_count', ['count' => $product->reviews_count]) }})</span>
+                    <a href="#reviews" class="text-red-600 hover:text-red-700 font-medium text-sm sm:text-base">{{ __('Baca Ulasan') }}</a>
                 </div>
 
                 <!-- Price -->
@@ -351,7 +333,7 @@ use Illuminate\Support\Str;
                             @if($selectedVariation)
                                 <!-- Show selected variant price and stock -->
                                 <div class="mb-2">
-                                    <span class="text-sm text-gray-600">Harga Varian Terpilih:</span>
+                                    <span class="text-sm text-gray-600">{{ __('Harga Varian Terpilih:') }}</span>
                                 </div>
                                 @if($selectedVariation->sale_price)
                                     <span class="text-2xl sm:text-3xl lg:text-4xl font-bold text-red-600">RM{{ number_format($selectedVariation->sale_price, 2) }}</span>
@@ -366,13 +348,13 @@ use Illuminate\Support\Str;
                                     @if($selectedVariation->stock_quantity > 0)
                                         <span class="text-green-600 font-medium text-sm sm:text-base">✓ Dalam Stok ({{ $selectedVariation->stock_quantity }} tersedia)</span>
                                     @else
-                                        <span class="text-red-600 font-medium text-sm sm:text-base">✗ Kehabisan Stok</span>
+                                        <span class="text-red-600 font-medium text-sm sm:text-base">{{ __('✗ Kehabisan Stok') }}</span>
                             @endif
                                 </div>
                         @else
                                 <!-- Show base product price and stock -->
                                 <div class="mb-2">
-                                    <span class="text-sm text-gray-600">Harga Produk:</span>
+                                    <span class="text-sm text-gray-600">{{ __('Harga Produk:') }}</span>
                                 </div>
                                 @if($product->sale_price)
                                     <span class="text-2xl sm:text-3xl lg:text-4xl font-bold text-red-600">RM{{ number_format($product->sale_price, 2) }}</span>
@@ -387,7 +369,7 @@ use Illuminate\Support\Str;
                                     @if($product->calculated_stock > 0)
                                         <span class="text-green-600 font-medium text-sm sm:text-base">✓ Dalam Stok ({{ $product->calculated_stock }} tersedia)</span>
                                     @else
-                                        <span class="text-red-600 font-medium text-sm sm:text-base">✗ Kehabisan Stok</span>
+                                        <span class="text-red-600 font-medium text-sm sm:text-base">{{ __('✗ Kehabisan Stok') }}</span>
                                     @endif
                                 </div>
                             @endif
@@ -405,7 +387,7 @@ use Illuminate\Support\Str;
                                 @if($product->calculated_stock > 0)
                                     <span class="text-green-600 font-medium text-sm sm:text-base">✓ Dalam Stok ({{ $product->calculated_stock }} tersedia)</span>
                                 @else
-                                    <span class="text-red-600 font-medium text-sm sm:text-base">✗ Kehabisan Stok</span>
+                                    <span class="text-red-600 font-medium text-sm sm:text-base">{{ __('✗ Kehabisan Stok') }}</span>
                                 @endif
                             </div>
                         @endif
@@ -417,7 +399,7 @@ use Illuminate\Support\Str;
 
             <!-- Product Description -->
             <div class="mb-6 sm:mb-8">
-                <h3 class="text-lg sm:text-xl font-semibold text-gray-900 mb-2 sm:mb-3">Penerangan</h3>
+                <h3 class="text-lg sm:text-xl font-semibold text-gray-900 mb-2 sm:mb-3">{{ __('Penerangan') }}</h3>
                 <div class="prose text-gray-700 leading-relaxed text-sm sm:text-base">
                     <p class="whitespace-pre-line">{{ $product->description }}</p>
                 </div>
@@ -427,26 +409,26 @@ use Illuminate\Support\Str;
             @if($product->hasVariations())
                 <div class="mb-6 sm:mb-8">
                     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-0 mb-3 sm:mb-4">
-                        <h3 class="text-lg sm:text-xl font-semibold text-gray-900">{{ $product->variation_label ?: 'Pilihan Varian' }}</h3>
+                        <h3 class="text-lg sm:text-xl font-semibold text-gray-900">{{ $product->variation_label ?: __('Pilihan Varian') }}</h3>
                         @if($selectedVariation)
                             <button 
-                                onclick="clearVariationSelection()" 
+                                onclick="clearVariationSelection()"
                                 class="text-sm bg-gray-100 hover:bg-gray-200 text-gray-700 px-2 sm:px-3 py-2 rounded-lg transition-colors flex items-center self-start sm:self-auto"
-                                title="Kembali ke produk asas">
+                                title="{{ __('shop_page.back_to_base_product') }}">
                                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                                 </svg>
-                                Padam Varian
+                                {{ __('Padam Varian') }}
                         </button>
                         @endif
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                         @foreach($product->activeVariations as $variation)
-                            <div class="border border-gray-200 rounded-lg p-4 transition-all duration-200 variation-option relative {{ $selectedVariantId == $variation->id ? 'border-red-500 active' : '' }} {{ $variation->stock_quantity <= 0 ? 'opacity-60 cursor-not-allowed bg-gray-50' : 'hover:border-red-500 cursor-pointer' }}" 
+                            <div class="border border-gray-200 rounded-lg p-4 transition-all duration-200 variation-option relative {{ $selectedVariantId == $variation->id ? 'border-red-500 active' : '' }} {{ $variation->stock_quantity<= 0 ? 'opacity-60 cursor-not-allowed bg-gray-50' : 'hover:border-red-500 cursor-pointer' }}" 
                                     data-variation-id="{{ $variation->id }}"
-                                 data-out-of-stock="{{ $variation->stock_quantity <= 0 ? '1' : '0' }}"
+                                 data-out-of-stock="{{ $variation->stock_quantity<= 0 ? '1' : '0' }}"
                                  onclick="toggleVariation({{ $variation->id }})"
-                                 title="{{ $selectedVariantId == $variation->id ? 'Klik untuk buang pilihan' : 'Klik untuk pilih varian ini' }}">
+                                 title="{{ $selectedVariantId == $variation->id ? __('shop_page.click_clear_variant') : __('shop_page.click_select_variant') }}">
                                 <!-- Selection indicator (hidden) -->
                                 <div class="absolute top-2 right-2 w-6 h-6 border-2 border-gray-300 rounded-full selection-indicator hidden">
                                     <svg class="w-full h-full text-white" fill="currentColor" viewBox="0 0 20 20">
@@ -456,8 +438,8 @@ use Illuminate\Support\Str;
                                 <div class="flex items-center justify-center">
                                     <h4 class="font-medium text-gray-900 text-center">{{ $variation->name }}</h4>
                                 </div>
-                                @if($variation->stock_quantity <= 0)
-                                    <p class="text-center text-xs text-red-600 mt-2">No Stock</p>
+                                @if($variation->stock_quantity<= 0)
+                                    <p class="text-center text-xs text-red-600 mt-2">{{ __('No Stock') }}</p>
                                 @endif
                             </div>
                         @endforeach
@@ -472,11 +454,11 @@ use Illuminate\Support\Str;
                 <div class="mb-4">
                     <button class="favourite-btn inline-flex items-center space-x-2 px-4 py-2 border border-gray-300 rounded-lg hover:border-red-300 hover:bg-red-50 transition-colors" 
                             data-product-id="{{ $product->id }}"
-                            title="Add to favourites">
+                            title="{{ __('shop_page.add_to_favourites') }}">
                         <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
                         </svg>
-                        <span class="text-sm font-medium text-gray-700">Tambah ke Kegemaran</span>
+                        <span class="text-sm font-medium text-gray-700">{{ __('Tambah ke Kegemaran') }}</span>
                     </button>
                 </div>
             @endauth
@@ -486,15 +468,15 @@ use Illuminate\Support\Str;
                 @php
                     // Check if all variants and base product are out of stock
                     $allVariationsOutOfStock = $product->activeVariations->every(function($variation) {
-                        return $variation->stock_quantity <= 0;
+                        return $variation->stock_quantity<= 0;
                     });
-                    $baseProductOutOfStock = $product->calculated_stock <= 0;
+                    $baseProductOutOfStock = $product->calculated_stock<= 0;
                     $everythingOutOfStock = $allVariationsOutOfStock && $baseProductOutOfStock;
                 @endphp
                 
                 <div class="flex items-center space-x-4 mb-4">
                     <div>
-                        <label for="quantity" class="block text-sm font-medium text-gray-700 mb-2">Kuantiti</label>
+                        <label for="quantity" class="block text-sm font-medium text-gray-700 mb-2">{{ __('Kuantiti') }}</label>
                         <select id="quantity" class="border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-transparent w-full sm:w-auto" {{ $everythingOutOfStock ? 'disabled' : '' }}>
                             @for($i = 1; $i <= 10; $i++)
                                 <option value="{{ $i }}">{{ $i }}</option>
@@ -508,36 +490,20 @@ use Illuminate\Support\Str;
                     @if($product->hasVariations())
                         <div class="flex flex-col sm:flex-row gap-3">
                             @if($everythingOutOfStock)
-                                <button class="flex-1 bg-gray-300 text-gray-600 py-3 sm:py-4 px-4 sm:px-6 rounded-lg font-bold text-base sm:text-lg cursor-not-allowed" disabled>
-                                    No Stock
-                                </button>
-                                <button class="flex-1 border-2 border-gray-300 text-gray-600 py-3 sm:py-4 px-4 sm:px-6 rounded-lg font-bold text-base sm:text-lg cursor-not-allowed" disabled>
-                                    Maklumkan Apabila Tersedia
-                                </button>
+                                <button class="flex-1 bg-gray-300 text-gray-600 py-3 sm:py-4 px-4 sm:px-6 rounded-lg font-bold text-base sm:text-lg cursor-not-allowed" disabled>{{ __('No Stock') }}</button>
+                                <button class="flex-1 border-2 border-gray-300 text-gray-600 py-3 sm:py-4 px-4 sm:px-6 rounded-lg font-bold text-base sm:text-lg cursor-not-allowed" disabled>{{ __('Maklumkan Apabila Tersedia') }}</button>
                             @else
-                                <button id="add-to-cart-btn" onclick="addToCart()" class="flex-1 bg-arsenal hover:bg-arsenal text-white py-3 sm:py-4 px-4 sm:px-6 rounded-lg font-bold text-base sm:text-lg transition-colors">
-                                    Tambah ke Troli
-                                </button>
-                                <button id="buy-now-btn" onclick="buyNow()" class="flex-1 border-2 border-red-600 text-red-600 hover:bg-red-600 hover:text-white py-3 sm:py-4 px-4 sm:px-6 rounded-lg font-bold text-base sm:text-lg transition-colors">
-                                    Beli Sekarang
-                                </button>
+                                <button id="add-to-cart-btn" onclick="addToCart()" class="flex-1 bg-arsenal hover:bg-arsenal text-white py-3 sm:py-4 px-4 sm:px-6 rounded-lg font-bold text-base sm:text-lg transition-colors">{{ __('Tambah ke Troli') }}</button>
+                                <button id="buy-now-btn" onclick="buyNow()" class="flex-1 border-2 border-red-600 text-red-600 hover:bg-red-600 hover:text-white py-3 sm:py-4 px-4 sm:px-6 rounded-lg font-bold text-base sm:text-lg transition-colors">{{ __('Beli Sekarang') }}</button>
                             @endif
                         </div>
                     @else
                         @if($product->calculated_stock > 0)
-                            <button onclick="addToCartSimple()" class="w-full bg-arsenal hover:bg-arsenal text-white py-3 sm:py-4 px-4 sm:px-6 rounded-lg font-bold text-base sm:text-lg transition-colors">
-                                Tambah ke Troli
-                            </button>
-                            <button onclick="buyNowSimple()" class="w-full border-2 border-red-600 text-red-600 hover:bg-red-600 hover:text-white py-3 sm:py-4 px-4 sm:px-6 rounded-lg font-bold text-base sm:text-lg transition-colors">
-                                Beli Sekarang
-                            </button>
+                            <button onclick="addToCartSimple()" class="w-full bg-arsenal hover:bg-arsenal text-white py-3 sm:py-4 px-4 sm:px-6 rounded-lg font-bold text-base sm:text-lg transition-colors">{{ __('Tambah ke Troli') }}</button>
+                            <button onclick="buyNowSimple()" class="w-full border-2 border-red-600 text-red-600 hover:bg-red-600 hover:text-white py-3 sm:py-4 px-4 sm:px-6 rounded-lg font-bold text-base sm:text-lg transition-colors">{{ __('Beli Sekarang') }}</button>
                         @else
-                            <button class="w-full bg-gray-300 text-gray-600 py-3 sm:py-4 px-4 sm:px-6 rounded-lg font-bold text-base sm:text-lg cursor-not-allowed" disabled>
-                                No Stock
-                            </button>
-                            <button class="w-full border-2 border-gray-300 text-gray-600 py-3 sm:py-4 px-4 sm:px-6 rounded-lg font-bold text-base sm:text-lg cursor-not-allowed" disabled>
-                                Maklumkan Apabila Tersedia
-                            </button>
+                            <button class="w-full bg-gray-300 text-gray-600 py-3 sm:py-4 px-4 sm:px-6 rounded-lg font-bold text-base sm:text-lg cursor-not-allowed" disabled>{{ __('No Stock') }}</button>
+                            <button class="w-full border-2 border-gray-300 text-gray-600 py-3 sm:py-4 px-4 sm:px-6 rounded-lg font-bold text-base sm:text-lg cursor-not-allowed" disabled>{{ __('Maklumkan Apabila Tersedia') }}</button>
                         @endif
                     @endif
                 </div>
@@ -550,26 +516,26 @@ use Illuminate\Support\Str;
                         <svg class="w-5 h-5 text-green-600 mr-2" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
                         </svg>
-                        Produk MyGooners Rasmi
+                        {{ __('Produk MyGooners Rasmi') }}
                     </div>
                     <div class="flex items-center">
                         <svg class="w-5 h-5 text-green-600 mr-2" fill="currentColor" viewBox="0 0 20 20">
                             <path d="M8 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM15 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z"></path>
                             <path d="M3 4a1 1 0 00-1 1v10a1 1 0 001 1h1.05a2.5 2.5 0 014.9 0H10a1 1 0 001-1V5a1 1 0 00-1-1H3zM14 7a1 1 0 00-1 1v6.05A2.5 2.5 0 0115.95 16H17a1 1 0 001-1V8a1 1 0 00-1-1h-3z"></path>
                         </svg>
-                        Penghantaran Percuma Seluruh Malaysia
+                        {{ __('Penghantaran Percuma Seluruh Malaysia') }}
                     </div>
                     <div class="flex items-center">
                         <svg class="w-5 h-5 text-green-600 mr-2" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.293l-3-3a1 1 0 00-1.414-1.414l-3 3a1 1 0 001.414 1.414L9 9.414V13a1 1 0 102 0V9.414l1.293 1.293a1 1 0 001.414-1.414z" clip-rule="evenodd"></path>
                         </svg>
-                        Pulangan 30 Hari
+                        {{ __('Pulangan 30 Hari') }}
                     </div>
                     <div class="flex items-center">
                         <svg class="w-5 h-5 text-green-600 mr-2" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"></path>
                         </svg>
-                        Sokongan Pelanggan
+                        {{ __('Sokongan Pelanggan') }}
                     </div>
                 </div>
             </div>
@@ -577,7 +543,7 @@ use Illuminate\Support\Str;
             <!-- Tags -->
             @if($product->tags)
                 <div class="mt-4 sm:mt-6">
-                    <h3 class="text-base sm:text-lg font-semibold text-gray-900 mb-2 sm:mb-3">Tags</h3>
+                    <h3 class="text-base sm:text-lg font-semibold text-gray-900 mb-2 sm:mb-3">{{ __('Tags') }}</h3>
                     <div class="flex flex-wrap gap-2">
                         @foreach($product->tags as $tag)
                             <span class="bg-gray-100 text-gray-700 px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm">
@@ -594,17 +560,11 @@ use Illuminate\Support\Str;
 
     <!-- Share Options - All Screen Sizes (Above Reviews on Mobile) -->
     <div class="mt-8 lg:hidden">
-        <h3 class="font-semibold text-gray-900 mb-4">Kongsi Produk Ini</h3>
+        <h3 class="font-semibold text-gray-900 mb-4">{{ __('Kongsi Produk Ini') }}</h3>
         <div class="flex flex-wrap gap-3">
-            <button onclick="shareOnFacebook()" class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors flex-1 min-w-[120px]">
-                Facebook
-            </button>
-            <button onclick="shareOnTwitter()" class="!bg-sky-500 !hover:bg-sky-600 !text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors flex-1 min-w-[120px] border-0" style="background-color: #0ea5e9 !important; color: white !important;">
-                Twitter
-            </button>
-            <button onclick="copyToClipboard()" class="border border-gray-300 text-gray-700 py-2 px-4 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors flex-1 min-w-[120px]">
-                Salin Pautan
-            </button>
+            <button onclick="shareOnFacebook()" class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors flex-1 min-w-[120px]">{{ __('Facebook') }}</button>
+            <button onclick="shareOnTwitter()" class="!bg-sky-500 !hover:bg-sky-600 !text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors flex-1 min-w-[120px] border-0" style="background-color: #0ea5e9 !important; color: white !important;">{{ __('Twitter') }}</button>
+            <button onclick="copyToClipboard()" class="border border-gray-300 text-gray-700 py-2 px-4 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors flex-1 min-w-[120px]">{{ __('Salin Pautan') }}</button>
         </div>
     </div>
 
@@ -612,7 +572,7 @@ use Illuminate\Support\Str;
     <div id="reviews" class="mt-12 lg:mt-8 mb-8 lg:mb-16">
         <div class="bg-white rounded-xl shadow-lg p-4 sm:p-6 lg:p-8">
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 sm:gap-0 mb-6 sm:mb-8">
-                <h2 class="text-2xl sm:text-3xl font-bold text-gray-900">Ulasan Pelanggan</h2>
+                <h2 class="text-2xl sm:text-3xl font-bold text-gray-900">{{ __('Ulasan Pelanggan') }}</h2>
                 <div class="flex items-center space-x-2">
                     <div class="flex items-center">
                         @for($i = 1; $i <= 5; $i++)
@@ -622,7 +582,7 @@ use Illuminate\Support\Str;
                         @endfor
                     </div>
                     <span class="text-xl sm:text-2xl font-bold text-gray-900">{{ number_format($product->average_rating, 1) }}</span>
-                    <span class="text-sm sm:text-base text-gray-500">({{ $product->reviews_count }} ulasan)</span>
+                    <span class="text-sm sm:text-base text-gray-500">({{ __('shop_page.reviews_count', ['count' => $product->reviews_count]) }})</span>
                 </div>
             </div>
 
@@ -690,8 +650,8 @@ use Illuminate\Support\Str;
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
                             </svg>
                         </div>
-                        <h3 class="text-lg font-medium text-gray-900 mb-2">Tiada ulasan lagi</h3>
-                        <p class="text-gray-600 text-sm sm:text-base">Jadilah yang pertama untuk berkongsi pengalaman anda dengan produk ini!</p>
+                        <h3 class="text-lg font-medium text-gray-900 mb-2">{{ __('Tiada ulasan lagi') }}</h3>
+                        <p class="text-gray-600 text-sm sm:text-base">{{ __('Jadilah yang pertama untuk berkongsi pengalaman anda dengan produk ini!') }}</p>
                     </div>
                 @endif
                 
@@ -704,7 +664,7 @@ use Illuminate\Support\Str;
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
                             </svg>
-                            Lihat Semua Ulasan ({{ $product->reviews->count() }})
+                            {{ __('shop_page.view_all_reviews', ['count' => $product->reviews->count()]) }}
                         </button>
                     </div>
                 @endif
@@ -724,14 +684,14 @@ use Illuminate\Support\Str;
                                     @php $profileImg = trim(auth()->user()->profile_image ?? ''); @endphp
                                     @if($profileImg !== '')
                                         @if(Str::startsWith($profileImg, 'http'))
-                                            <img src="{{ $profileImg }}" alt="Anda" 
+                                            <img src="{{ $profileImg }}" alt="{{ __('Anda') }}" 
                                                  class="w-12 h-12 sm:w-14 sm:h-14 rounded-full border-2 border-blue-200 shadow-sm object-cover">
                                         @else
-                                            <img src="{{ asset('storage/' . $profileImg) }}" alt="Anda" 
+                                            <img src="{{ asset('storage/' . $profileImg) }}" alt="{{ __('Anda') }}" 
                                                  class="w-12 h-12 sm:w-14 sm:h-14 rounded-full border-2 border-blue-200 shadow-sm object-cover">
                                         @endif
                                     @else
-                                        <img src="{{ asset('images/profile-image-default.png') }}" alt="Anda" 
+                                        <img src="{{ asset('images/profile-image-default.png') }}" alt="{{ __('Anda') }}" 
                                              class="w-12 h-12 sm:w-14 sm:h-14 rounded-full border-2 border-blue-200 shadow-sm object-cover">
                                     @endif
                                 </div>
@@ -740,8 +700,8 @@ use Illuminate\Support\Str;
                                 <div class="flex-1 min-w-0">
                                     <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-3">
                                         <div class="flex-1">
-                                                                                         <h4 class="font-semibold text-blue-900 text-base sm:text-lg mb-1">Anda</h4>
-                                            <p class="text-blue-700 text-sm mb-2">Ulasan anda untuk produk ini</p>
+                                                                                         <h4 class="font-semibold text-blue-900 text-base sm:text-lg mb-1">{{ __('Anda') }}</h4>
+                                            <p class="text-blue-700 text-sm mb-2">{{ __('Ulasan anda untuk produk ini') }}</p>
                                             <div class="flex items-center space-x-3 mb-2">
                                                 <!-- Rating Stars -->
                                                 <div class="flex items-center">
@@ -766,7 +726,7 @@ use Illuminate\Support\Str;
                                                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                                                 </svg>
-                                                Sunting
+                                                {{ __('Sunting') }}
                                             </a>
                                             <button type="button" 
                                                     onclick="openDeleteReviewModal({{ $userReview->id }})" 
@@ -774,7 +734,7 @@ use Illuminate\Support\Str;
                                                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                                                 </svg>
-                                                Padam
+                                                {{ __('Padam') }}
                 </button>
                                         </div>
                                     </div>
@@ -797,18 +757,14 @@ use Illuminate\Support\Str;
                         </div>
                     @else
                         <a href="{{ route('reviews.create', $product) }}" 
-                           class="inline-block bg-arsenal hover:bg-red-700 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-medium transition-colors text-sm sm:text-base">
-                            Tulis Ulasan
-                        </a>
+                           class="inline-block bg-arsenal hover:bg-red-700 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-medium transition-colors text-sm sm:text-base">{{ __('Tulis Ulasan') }}</a>
                     @endif
                 @else
                     <div class="text-center">
-                        <p class="text-gray-600 mb-3">Log masuk untuk menulis ulasan</p>
+                        <p class="text-gray-600 mb-3">{{ __('Log masuk untuk menulis ulasan') }}</p>
                         <a href="{{ route('login') }}" 
-                           class="inline-block bg-arsenal hover:bg-red-700 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-medium transition-colors text-sm sm:text-base">
-                            Log Masuk
-                        </a>
-                        <p class="text-sm text-gray-500 mt-2">Atau <a href="{{ route('register') }}" class="text-arsenal hover:text-red-700 underline">daftar akaun baru</a></p>
+                           class="inline-block bg-arsenal hover:bg-red-700 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-medium transition-colors text-sm sm:text-base">{{ __('Log Masuk') }}</a>
+                        <p class="text-sm text-gray-500 mt-2">{{ __('Atau') }} <a href="{{ route('register') }}" class="text-arsenal hover:text-red-700 underline">{{ __('daftar akaun baru') }}</a></p>
                     </div>
                 @endauth
             </div>
@@ -818,8 +774,8 @@ use Illuminate\Support\Str;
     <!-- Related Products -->
     <div>
         <div class="mb-6 sm:mb-8">
-            <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">Anda Mungkin Suka</h2>
-            <p class="text-gray-600 text-sm sm:text-base">Lebih banyak barangan Arsenal yang mungkin menarik minat anda</p>
+            <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">{{ __('Anda Mungkin Suka') }}</h2>
+            <p class="text-gray-600 text-sm sm:text-base">{{ __('Lebih banyak barangan Arsenal yang mungkin menarik minat anda') }}</p>
         </div>
         
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
@@ -839,9 +795,7 @@ use Illuminate\Support\Str;
                         @endif
                         @if($relatedProduct->sale_price)
                             <div class="absolute top-3 left-3">
-                                <span class="bg-red-600 text-white px-3 py-1 rounded-full text-sm font-bold">
-                                    SALE
-                                </span>
+                                <span class="bg-red-600 text-white px-3 py-1 rounded-full text-sm font-bold">{{ __('SALE') }}</span>
                             </div>
                         @endif
                     </div>
@@ -883,7 +837,7 @@ use Illuminate\Support\Str;
     <div class="bg-white rounded-xl shadow-2xl max-w-md w-full">
         <!-- Modal Header -->
         <div class="flex items-center justify-between p-6 border-b border-gray-200">
-            <h3 class="text-lg font-semibold text-gray-900">Padam Ulasan</h3>
+            <h3 class="text-lg font-semibold text-gray-900">{{ __('Padam Ulasan') }}</h3>
             <button onclick="closeDeleteReviewModal()" class="text-gray-400 hover:text-gray-600 transition-colors">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
@@ -902,10 +856,8 @@ use Illuminate\Support\Str;
                     </div>
                 </div>
                 <div class="flex-1">
-                    <h4 class="text-base font-medium text-gray-900 mb-2">Adakah anda pasti?</h4>
-                    <p class="text-sm text-gray-600">
-                        Tindakan ini tidak boleh dibatalkan. Ulasan anda akan dipadamkan secara kekal dan tidak dapat dipulihkan.
-                    </p>
+                    <h4 class="text-base font-medium text-gray-900 mb-2">{{ __('Adakah anda pasti?') }}</h4>
+                    <p class="text-sm text-gray-600">{{ __('Tindakan ini tidak boleh dibatalkan. Ulasan anda akan dipadamkan secara kekal dan tidak dapat dipulihkan.') }}</p>
                 </div>
             </div>
         </div>
@@ -913,16 +865,12 @@ use Illuminate\Support\Str;
         <!-- Modal Footer -->
         <div class="flex items-center justify-end space-x-3 p-6 border-t border-gray-200">
             <button onclick="closeDeleteReviewModal()" 
-                    class="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
-                Batal
-            </button>
+                    class="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">{{ __('Batal') }}</button>
             <form id="delete-review-form" action="" method="POST" class="inline">
                 @csrf
                 @method('DELETE')
                 <button type="submit" 
-                        class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors">
-                    Padam Ulasan
-                </button>
+                        class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors">{{ __('Padam Ulasan') }}</button>
             </form>
         </div>
     </div>
@@ -935,7 +883,6 @@ use Illuminate\Support\Str;
 function openDeleteReviewModal(reviewId) {
     const modal = document.getElementById('delete-review-modal');
     const form = document.getElementById('delete-review-form');
-    
     // Set the form action to the correct delete route
     form.action = `/shop/{{ $product->slug }}/review/${reviewId}`;
     
@@ -1012,20 +959,16 @@ function updateCounter() {
 function handleImageSelection(index) {
     const carousel = document.getElementById('image-carousel');
     if (!carousel) return;
-    
     const images = carousel.querySelectorAll('img');
     if (images[index]) {
         const img = images[index];
         const variationId = img.dataset.variationId;
-        
         // Only clear and select if we're not already on a variant page
         const urlParams = new URLSearchParams(window.location.search);
         const currentVariant = urlParams.get('variant');
-        
         if (!currentVariant) {
             // Clear ALL variant selections first
             clearVariantSelection();
-            
             // If this is a variation image, then select that specific variation
             if (variationId) {
                 console.log('Selecting variation from carousel:', variationId);
@@ -1055,7 +998,6 @@ function prevImage() {
 function initCarouselTouch() {
     const carousel = document.getElementById('image-carousel');
     if (!carousel) return;
-    
     carousel.addEventListener('touchstart', (e) => {
         isDragging = true;
         startX = e.touches[0].clientX;
@@ -1074,10 +1016,8 @@ function initCarouselTouch() {
     carousel.addEventListener('touchend', () => {
         if (!isDragging) return;
         isDragging = false;
-        
         const diff = currentX - startX;
         const threshold = carousel.offsetWidth * 0.3;
-        
         if (Math.abs(diff) > threshold) {
             if (diff > 0 && currentImageIndex > 0) {
                 prevImage();
@@ -1097,7 +1037,6 @@ function changeMainImage(imageSrc, thumbnail, variationId = null) {
     console.log('changeMainImage called with:', { imageSrc, variationId });
     
     document.getElementById('mainImage').src = imageSrc;
-    
     // Clear ALL thumbnails first (both product and variant)
     document.querySelectorAll('.product-thumbnail, .variation-thumbnail').forEach(thumb => {
         thumb.classList.remove('ring-2', 'ring-red-500');
@@ -1105,10 +1044,8 @@ function changeMainImage(imageSrc, thumbnail, variationId = null) {
     
     // Add active state ONLY to the clicked thumbnail
     thumbnail.classList.add('ring-2', 'ring-red-500');
-    
     // Clear ALL variant selections first
     clearVariantSelection();
-    
     // If this is a variation image, then select that specific variation
     if (variationId) {
         console.log('Selecting variation:', variationId);
@@ -1121,18 +1058,16 @@ function changeMainImage(imageSrc, thumbnail, variationId = null) {
 function toggleVariation(variationId) {
     const variationOption = document.querySelector(`.variation-option[data-variation-id="${variationId}"]`);
     if (variationOption && variationOption.getAttribute('data-out-of-stock') === '1') {
-        alert('Selected size is out of stock.');
+        alert(window.clientMessages.variation_out_of_stock);
         return;
     }
 
     // Check if we're currently on a variant page
     const urlParams = new URLSearchParams(window.location.search);
     const currentVariant = urlParams.get('variant');
-    
     console.log('Toggle clicked for variant:', variationId);
     console.log('Current variant in URL:', currentVariant);
     console.log('Current URL:', window.location.href);
-    
     // Find the clicked variation to get its name
     const clickedVariation = productVariations.find(v => v.id === variationId);
     if (!clickedVariation) {
@@ -1142,12 +1077,10 @@ function toggleVariation(variationId) {
     
     const clickedVariantName = clickedVariation.name;
     console.log('Clicked variant name:', clickedVariantName);
-    
     if (currentVariant) {
         // We're on a variant page
         const decodedCurrentVariant = decodeURIComponent(currentVariant);
         console.log('Decoded current variant:', decodedCurrentVariant);
-        
         if (decodedCurrentVariant === clickedVariantName) {
             // Same variant clicked, just update the UI without reloading
             console.log('Same variant clicked, updating UI only');
@@ -1166,14 +1099,12 @@ function toggleVariation(variationId) {
 
 function refreshPageWithVariant(variationId) {
     const currentUrl = new URL(window.location);
-    
     if (variationId) {
         // Find the variation name by ID
         const variation = productVariations.find(v => v.id === variationId);
         if (variation) {
             // Use the raw variant name - URLSearchParams will handle encoding properly
             currentUrl.searchParams.set('variant', variation.name);
-            
             // Debug log
             console.log('Setting variant:', variation.name);
         }
@@ -1188,7 +1119,6 @@ function refreshPageWithVariant(variationId) {
 
 function selectVariation(variationId) {
     console.log('selectVariation called with:', variationId);
-    
     // Check if we're currently clearing selections
     if (isClearingSelection) {
         console.log('selectVariation blocked - currently clearing selections');
@@ -1200,12 +1130,10 @@ function selectVariation(variationId) {
         console.log('Clearing option in selectVariation:', option);
         option.classList.remove('border-red-500', 'bg-red-50', 'shadow-lg', 'scale-105', 'active');
         option.classList.add('border-gray-200');
-        
         // Also remove any inline styles
         option.style.borderColor = '';
         option.style.borderWidth = '';
         option.style.backgroundColor = '';
-        
         // Hide selection indicator for all options
         const indicator = option.querySelector('.selection-indicator');
         if (indicator) {
@@ -1220,7 +1148,6 @@ function selectVariation(variationId) {
         console.log('Found selected variant box:', selectedButton);
         selectedButton.classList.remove('border-gray-200');
         selectedButton.classList.add('border-red-500', 'active');
-        
         // Force the border to be visible by adding !important equivalent
         selectedButton.style.borderColor = '#ef4444'; // red-500 color
         selectedButton.style.borderWidth = '2px';
@@ -1234,7 +1161,6 @@ function selectVariation(variationId) {
         selectedVariation = variation;
         updateProductPrice(variation);
         enableAddToCart();
-        
         // Find and display the variant image in the carousel
         const variantImage = document.querySelector(`img[data-variation-id="${variationId}"]`);
         if (variantImage) {
@@ -1250,20 +1176,16 @@ function selectVariation(variationId) {
 function clearVariantSelection() {
     console.log('Clearing variant selection...');
     isClearingSelection = true; // Set flag to prevent selectVariation
-    
     // Remove active state from all variation options
     document.querySelectorAll('.variation-option').forEach(option => {
         console.log('Clearing option:', option);
-        
         // Remove all possible active classes
         option.classList.remove('border-red-500', 'bg-red-50', 'shadow-lg', 'scale-105', 'active');
         option.classList.add('border-gray-200');
-        
         // Also remove any inline styles that might override CSS
         option.style.borderColor = '';
         option.style.borderWidth = '';
         option.style.backgroundColor = '';
-        
         // Hide selection indicator for all options
         const indicator = option.querySelector('.selection-indicator');
         if (indicator) {
@@ -1275,7 +1197,6 @@ function clearVariantSelection() {
     // Reset product price and title to base product
     resetProductPrice();
     enableAddToCart();
-    
     // Clear selected variation only if we're not in the process of setting it
     if (!window.location.search.includes('variant=')) {
         selectedVariation = null;
@@ -1297,11 +1218,9 @@ function clearVariationSelection() {
 
 function updateProductPrice(variation) {
     console.log('updateProductPrice called with variation:', variation);
-    
     const priceDisplay = document.getElementById('product-price-display');
     const productTitle = document.getElementById('product-title');
     const stockStatus = document.getElementById('stock-status');
-    
     console.log('Found elements:', {
         priceDisplay: priceDisplay,
         productTitle: productTitle,
@@ -1315,7 +1234,6 @@ function updateProductPrice(variation) {
     
     const finalPrice = variation.final_price;
     const originalPrice = variation.original_price;
-    
     console.log('Price data:', {
         finalPrice: finalPrice,
         originalPrice: originalPrice,
@@ -1326,14 +1244,13 @@ function updateProductPrice(variation) {
     // Update product title to show variant name
     productTitle.textContent = variation.name;
     console.log('Updated product title to:', variation.name);
-    
     // Update stock status
     if (stockStatus) {
         if (variation.stock_quantity > 0) {
             stockStatus.textContent = `✓ Dalam Stok (${variation.stock_quantity} tersedia)`;
             stockStatus.className = 'text-green-600 font-medium';
         } else {
-            stockStatus.textContent = '✗ Kehabisan Stok';
+            stockStatus.textContent = @json(__('✗ Kehabisan Stok'));
             stockStatus.className = 'text-red-600 font-medium';
         }
         console.log('Updated stock status to:', stockStatus.textContent);
@@ -1343,7 +1260,7 @@ function updateProductPrice(variation) {
         const savings = originalPrice - finalPrice;
         const newHTML = `
             <div class="mb-2">
-                <span class="text-sm text-gray-600">Harga Varian Terpilih:</span>
+                <span class="text-sm text-gray-600">{{ __('Harga Varian Terpilih:') }}</span>
             </div>
             <span class="text-4xl font-bold text-red-600">RM${parseFloat(finalPrice).toFixed(2)}</span>
             <span class="text-2xl text-gray-500 line-through">RM${parseFloat(originalPrice).toFixed(2)}</span>
@@ -1353,7 +1270,7 @@ function updateProductPrice(variation) {
             <div class="mt-2">
                 ${variation.stock_quantity > 0 ? 
                     `<span class="text-green-600 font-medium">✓ Dalam Stok (${variation.stock_quantity} tersedia)</span>` :
-                    `<span class="text-red-600 font-medium">✗ Kehabisan Stok</span>`
+                    `<span class="text-red-600 font-medium">{{ __('✗ Kehabisan Stok') }}</span>`
                 }
             </div>
         `;
@@ -1362,13 +1279,13 @@ function updateProductPrice(variation) {
     } else {
         const newHTML = `
             <div class="mb-2">
-                <span class="text-sm text-gray-600">Harga Varian Terpilih:</span>
+                <span class="text-sm text-gray-600">{{ __('Harga Varian Terpilih:') }}</span>
             </div>
             <span class="text-4xl font-bold text-gray-900">RM${parseFloat(finalPrice).toFixed(2)}</span>
             <div class="mt-2">
                 ${variation.stock_quantity > 0 ? 
                     `<span class="text-green-600 font-medium">✓ Dalam Stok (${variation.stock_quantity} tersedia)</span>` :
-                    `<span class="text-red-600 font-medium">✗ Kehabisan Stok</span>`
+                    `<span class="text-red-600 font-medium">{{ __('✗ Kehabisan Stok') }}</span>`
                 }
             </div>
         `;
@@ -1383,20 +1300,19 @@ function resetProductPrice() {
     const priceDisplay = document.getElementById('product-price-display');
     const productTitle = document.getElementById('product-title');
     const stockStatus = document.getElementById('stock-status');
-    
     // Reset product title to original product name
     productTitle.textContent = '{{ $product->title }}';
     
     // Reset stock status
     if (stockStatus) {
-        stockStatus.textContent = 'Pilih varian atau beli produk asas';
+        stockStatus.textContent = @json(__('Pilih varian atau beli produk asas'));
         stockStatus.className = 'text-gray-600';
     }
     @if($product->hasVariations())
         @if($product->sale_price)
             priceDisplay.innerHTML = `
                 <div class="mb-2">
-                    <span class="text-sm text-gray-600">Harga Produk:</span>
+                    <span class="text-sm text-gray-600">{{ __('Harga Produk:') }}</span>
                 </div>
                 <span class="text-4xl font-bold text-red-600">RM{{ number_format($product->sale_price, 2) }}</span>
                 <span class="text-2xl text-gray-500 line-through">RM{{ number_format($product->price, 2) }}</span>
@@ -1407,21 +1323,21 @@ function resetProductPrice() {
                     @if($product->calculated_stock > 0)
                         <span class="text-green-600 font-medium">✓ Dalam Stok ({{ $product->calculated_stock }} tersedia)</span>
                     @else
-                        <span class="text-red-600 font-medium">✗ Kehabisan Stok</span>
+                        <span class="text-red-600 font-medium">{{ __('✗ Kehabisan Stok') }}</span>
                     @endif
                 </div>
             `;
         @else
             priceDisplay.innerHTML = `
                 <div class="mb-2">
-                    <span class="text-sm text-gray-600">Harga Produk:</span>
+                    <span class="text-sm text-gray-600">{{ __('Harga Produk:') }}</span>
                 </div>
                 <span class="text-4xl font-bold text-gray-900">RM{{ number_format($product->price, 2) }}</span>
                 <div class="mt-2">
                     @if($product->calculated_stock > 0)
                         <span class="text-green-600 font-medium">✓ Dalam Stok ({{ $product->calculated_stock }} tersedia)</span>
                     @else
-                        <span class="text-red-600 font-medium">✗ Kehabisan Stok</span>
+                        <span class="text-red-600 font-medium">{{ __('✗ Kehabisan Stok') }}</span>
                     @endif
                 </div>
             `;
@@ -1438,7 +1354,7 @@ function resetProductPrice() {
                     @if($product->calculated_stock > 0)
                         <span class="text-green-600 font-medium">✓ Dalam Stok ({{ $product->calculated_stock }} tersedia)</span>
                     @else
-                        <span class="text-red-600 font-medium">✗ Kehabisan Stok</span>
+                        <span class="text-red-600 font-medium">{{ __('✗ Kehabisan Stok') }}</span>
                     @endif
                 </div>
             `;
@@ -1449,7 +1365,7 @@ function resetProductPrice() {
                     @if($product->calculated_stock > 0)
                         <span class="text-green-600 font-medium">✓ Dalam Stok ({{ $product->calculated_stock }} tersedia)</span>
                     @else
-                        <span class="text-red-600 font-medium">✗ Kehabisan Stok</span>
+                        <span class="text-red-600 font-medium">{{ __('✗ Kehabisan Stok') }}</span>
                     @endif
                 </div>
             `;
@@ -1462,23 +1378,20 @@ function resetProductPrice() {
 function enableAddToCart() {
     const addToCartBtn = document.getElementById('add-to-cart-btn');
     const buyNowBtn = document.getElementById('buy-now-btn');
-    
     if (selectedVariation) {
         // Variation selected
         if (selectedVariation.stock_quantity > 0) {
-            addToCartBtn.textContent = 'Tambah ke Troli';
+            addToCartBtn.textContent = @json(__('Tambah ke Troli'));
             addToCartBtn.className = 'flex-1 bg-arsenal hover:bg-arsenal text-white py-4 px-6 rounded-lg font-bold text-lg transition-colors';
             addToCartBtn.disabled = false;
-            
-            buyNowBtn.textContent = 'Beli Sekarang';
+            buyNowBtn.textContent = @json(__('Beli Sekarang'));
             buyNowBtn.className = 'flex-1 border-2 border-red-600 text-red-600 hover:bg-red-600 hover:text-white py-4 px-6 rounded-lg font-bold text-lg transition-colors';
             buyNowBtn.disabled = false;
         } else {
-            addToCartBtn.textContent = 'Kehabisan Stok';
+            addToCartBtn.textContent = @json(__('Kehabisan Stok'));
             addToCartBtn.className = 'flex-1 bg-gray-300 text-gray-600 py-4 px-6 rounded-lg font-bold text-lg cursor-not-allowed';
             addToCartBtn.disabled = true;
-            
-            buyNowBtn.textContent = 'Kehabisan Stok';
+            buyNowBtn.textContent = @json(__('Kehabisan Stok'));
             buyNowBtn.className = 'flex-1 border-2 border-gray-300 text-gray-600 py-4 px-6 rounded-lg font-bold text-lg cursor-not-allowed';
             buyNowBtn.disabled = true;
         }
@@ -1486,19 +1399,17 @@ function enableAddToCart() {
         // No variation selected - check if base product has stock
         const baseProductStock = {{ $product->calculated_stock }};
         if (baseProductStock > 0) {
-            addToCartBtn.textContent = 'Tambah ke Troli';
+            addToCartBtn.textContent = @json(__('Tambah ke Troli'));
             addToCartBtn.className = 'flex-1 bg-arsenal hover:bg-arsenal text-white py-4 px-6 rounded-lg font-bold text-lg transition-colors';
             addToCartBtn.disabled = false;
-            
-            buyNowBtn.textContent = 'Beli Sekarang';
+            buyNowBtn.textContent = @json(__('Beli Sekarang'));
             buyNowBtn.className = 'flex-1 border-2 border-red-600 text-red-600 hover:bg-red-600 hover:text-white py-4 px-6 rounded-lg font-bold text-lg transition-colors';
             buyNowBtn.disabled = false;
         } else {
-            addToCartBtn.textContent = 'Kehabisan Stok';
+            addToCartBtn.textContent = @json(__('Kehabisan Stok'));
             addToCartBtn.className = 'flex-1 bg-gray-300 text-gray-600 py-4 px-6 rounded-lg font-bold text-lg cursor-not-allowed';
             addToCartBtn.disabled = true;
-            
-            buyNowBtn.textContent = 'Kehabisan Stok';
+            buyNowBtn.textContent = @json(__('Kehabisan Stok'));
             buyNowBtn.className = 'flex-1 border-2 border-gray-300 text-gray-600 py-4 px-6 rounded-lg font-bold text-lg cursor-not-allowed';
             buyNowBtn.disabled = true;
         }
@@ -1508,25 +1419,23 @@ function enableAddToCart() {
 function disableAddToCart() {
     const addToCartBtn = document.getElementById('add-to-cart-btn');
     const buyNowBtn = document.getElementById('buy-now-btn');
-    
-    addToCartBtn.textContent = 'Tambah ke Troli';
+    addToCartBtn.textContent = @json(__('Tambah ke Troli'));
     addToCartBtn.className = 'flex-1 bg-arsenal hover:bg-arsenal text-white py-4 px-6 rounded-lg font-bold text-lg transition-colors';
     addToCartBtn.disabled = false;
-    
-    buyNowBtn.textContent = 'Beli Sekarang';
+    buyNowBtn.textContent = @json(__('Beli Sekarang'));
     buyNowBtn.className = 'flex-1 border-2 border-red-600 text-red-600 hover:bg-red-600 hover:text-white py-4 px-6 rounded-lg font-bold text-lg transition-colors';
     buyNowBtn.disabled = false;
 }
 
 function shareOnFacebook() {
     const url = encodeURIComponent(window.location.href);
-    const title = encodeURIComponent('{{ $product->title }} - Arsenal Shop');
+    const title = encodeURIComponent(@json(__('shop_page.share_title', ['title' => $product->title])));
     window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`, '_blank', 'width=600,height=400');
 }
 
 function shareOnTwitter() {
     const url = encodeURIComponent(window.location.href);
-    const text = encodeURIComponent('Check out this Arsenal merchandise: {{ $product->title }}');
+    const text = encodeURIComponent(@json(__('shop_page.share_text', ['title' => $product->title])));
     window.open(`https://twitter.com/intent/tweet?url=${url}&text=${text}`, '_blank', 'width=600,height=400');
 }
 
@@ -1546,7 +1455,6 @@ function copyLinkToClipboard() {
     const linkInput = document.getElementById('product-link-input');
     linkInput.select();
     linkInput.setSelectionRange(0, 99999); // For mobile devices
-    
     navigator.clipboard.writeText(linkInput.value).then(function() {
         // Show success message
         const successMessage = document.querySelector('#copy-link-modal .text-gray-600');
@@ -1554,7 +1462,7 @@ function copyLinkToClipboard() {
             <svg class="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
             </svg>
-            <span class="text-green-600 font-medium">Pautan berjaya disalin!</span>
+            <span class="text-green-600 font-medium">{{ __('Pautan berjaya disalin!') }}</span>
         `;
         
         // Reset message after 3 seconds
@@ -1563,12 +1471,12 @@ function copyLinkToClipboard() {
                 <svg class="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
                     <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
                 </svg>
-                <span>Pautan telah disalin ke papan klip</span>
+                <span>{{ __('Pautan telah disalin ke papan klip') }}</span>
             `;
         }, 3000);
     }).catch(function(err) {
         console.error('Could not copy text: ', err);
-        alert('Gagal menyalin pautan. Sila cuba lagi.');
+        alert(window.clientMessages.copy_link_failed);
     });
 }
 
@@ -1578,7 +1486,6 @@ function addToCart() {
         const quantity = parseInt(document.getElementById('quantity').value);
         const productId = {{ $product->id }};
         const variationId = selectedVariation ? selectedVariation.id : null;
-        
         // Debug logging
         console.log('addToCart called with:', {
             quantity: quantity,
@@ -1594,20 +1501,26 @@ function addToCart() {
             name: selectedVariation.name,
             price: selectedVariation.price
         } : 'null');
+
+        @if($product->hasVariations())
+        if (!selectedVariation) {
+            alert(@json(__('client_messages.pick_variation_first', ['label' => $product->variation_label ?: __('client_messages.variation_label_default')])));
+            return;
+        }
+        @endif
         
         // Validate stock
         const stockQuantity = selectedVariation ? selectedVariation.stock_quantity : {{ $product->calculated_stock }};
         if (stockQuantity < quantity) {
-            alert('Requested quantity exceeds available stock.');
+            alert(window.clientMessages.stock_exceeds);
             return;
         }
         
         // Show loading state
         const addToCartBtn = document.getElementById('add-to-cart-btn');
         const originalText = addToCartBtn.textContent;
-        addToCartBtn.textContent = 'Menambah...';
+        addToCartBtn.textContent = window.clientMessages.adding_to_cart;
         addToCartBtn.disabled = true;
-        
         const requestData = {
             product_id: productId,
             variation_id: variationId,
@@ -1615,7 +1528,6 @@ function addToCart() {
         };
         
         console.log('Sending request data:', requestData);
-        
         fetch('{{ route("cart.add") }}', {
             method: 'POST',
             headers: {
@@ -1638,7 +1550,7 @@ function addToCart() {
         })
         .catch(error => {
             console.error('Error:', error);
-            alert('Ralat semasa menambah ke troli');
+            alert(window.clientMessages.cart_add_error);
         })
         .finally(() => {
             // Reset button state
@@ -1666,16 +1578,15 @@ function addToCartSimple() {
         // Validate stock
         const stockQuantity = {{ $product->calculated_stock }};
         if (stockQuantity < quantity) {
-            alert('Requested quantity exceeds available stock.');
+            alert(window.clientMessages.stock_exceeds);
             return;
         }
         
         // Show loading state
         const addToCartBtn = event.target; // Get the button that was clicked
         const originalText = addToCartBtn.textContent;
-        addToCartBtn.textContent = 'Menambah...';
+        addToCartBtn.textContent = window.clientMessages.adding_to_cart;
         addToCartBtn.disabled = true;
-        
         const requestData = {
             product_id: productId,
             variation_id: null, // No variation for simple products
@@ -1683,7 +1594,6 @@ function addToCartSimple() {
         };
         
         console.log('Sending request data:', requestData);
-        
         fetch('{{ route("cart.add") }}', {
             method: 'POST',
             headers: {
@@ -1706,7 +1616,7 @@ function addToCartSimple() {
         })
         .catch(error => {
             console.error('Error:', error);
-            alert('Ralat semasa menambah ke troli');
+            alert(window.clientMessages.cart_add_error);
         })
         .finally(() => {
             // Reset button state
@@ -1741,11 +1651,10 @@ function buyNow() {
         const quantity = parseInt(document.getElementById('quantity').value);
         const productId = {{ $product->id }};
         const variationId = selectedVariation ? selectedVariation.id : null;
-        
         // Validate stock
         const stockQuantity = selectedVariation ? selectedVariation.stock_quantity : {{ $product->calculated_stock }};
         if (stockQuantity < quantity) {
-            alert('Requested quantity exceeds available stock.');
+            alert(window.clientMessages.stock_exceeds);
             return;
         }
         
@@ -1766,7 +1675,7 @@ function buyNowSimple() {
         // Validate stock
         const stockQuantity = {{ $product->calculated_stock }};
         if (stockQuantity < quantity) {
-            alert('Requested quantity exceeds available stock.');
+            alert(window.clientMessages.stock_exceeds);
             return;
         }
         
@@ -1783,11 +1692,9 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize carousel
     if (totalImages > 1) {
         initCarouselTouch();
-        
         // Set up navigation buttons
         const prevBtn = document.getElementById('prev-btn');
         const nextBtn = document.getElementById('next-btn');
-        
         if (prevBtn) {
             prevBtn.addEventListener('click', prevImage);
         }
@@ -1816,10 +1723,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const variant = productVariations.find(v => v.id === backendVariant.id);
         if (variant) {
             console.log('Found matching variant in productVariations:', variant);
-            
             // Set the selected variation
             selectedVariation = variant;
-            
             // Use setTimeout to ensure DOM is fully ready before updating price
             setTimeout(() => {
                 console.log('Calling updateProductPrice with delay...');
@@ -1839,17 +1744,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 const variantBox = document.querySelector(`.variation-option[data-variation-id="${variant.id}"]`);
                 console.log('Looking for variant box with data-variation-id:', variant.id);
                 console.log('Found variant box:', variantBox);
-                
                 if (variantBox) {
                     console.log('Applying styling to variant box');
                     console.log('Before styling - classes:', variantBox.className);
                     console.log('Before styling - border color:', variantBox.style.borderColor);
-                    
                     variantBox.classList.remove('border-gray-200');
                     variantBox.classList.add('border-red-500', 'active');
                     variantBox.style.borderColor = '#ef4444'; // red-500 color
                     variantBox.style.borderWidth = '2px';
-                    
                     console.log('After styling - classes:', variantBox.className);
                     console.log('After styling - border color:', variantBox.style.borderColor);
                     console.log('After styling - border width:', variantBox.style.borderWidth);
@@ -1872,7 +1774,6 @@ document.addEventListener('DOMContentLoaded', function() {
         // Fallback: Check for variant parameter in URL
         const urlParams = new URLSearchParams(window.location.search);
         const variantParam = urlParams.get('variant');
-        
         if (variantParam) {
             const decodedVariantName = decodeURIComponent(variantParam);
             console.log('Found variant parameter in URL:', decodedVariantName);
@@ -1888,10 +1789,8 @@ document.addEventListener('DOMContentLoaded', function() {
             });
             if (variant) {
                 console.log('Found variant from URL:', variant);
-                
                 // Set the selected variation
                 selectedVariation = variant;
-                
                 // Use setTimeout to ensure DOM is fully ready before updating price
                 setTimeout(() => {
                     console.log('Calling updateProductPrice with delay (URL fallback)...');
@@ -1958,10 +1857,8 @@ document.addEventListener('DOMContentLoaded', function() {
 function showSuccessMessage(message) {
     const successMessage = document.getElementById('success-message');
     const messageText = document.getElementById('success-message-text');
-    
     messageText.textContent = message;
     successMessage.classList.remove('hidden');
-    
     // Auto-hide after 5 seconds
     setTimeout(() => {
         hideSuccessMessage();
@@ -1991,7 +1888,6 @@ function filterReviews(rating) {
     const filterButtons = document.querySelectorAll('.filter-btn');
     const noReviewsMessage = document.getElementById('no-reviews-message');
     let visibleCount = 0;
-
     // Update filter button styles
     filterButtons.forEach(btn => {
         btn.classList.remove('active', 'bg-arsenal', 'text-white');
@@ -2002,7 +1898,6 @@ function filterReviews(rating) {
     const clickedButton = event.target;
     clickedButton.classList.remove('bg-gray-100', 'text-gray-700');
     clickedButton.classList.add('active', 'bg-arsenal', 'text-white');
-
     // Filter reviews
     reviewItems.forEach(item => {
         if (rating === 'all' || parseInt(item.dataset.rating) === rating) {
@@ -2072,7 +1967,7 @@ document.addEventListener('DOMContentLoaded', function() {
         <!-- Modal Header -->
         <div class="flex items-center justify-between p-4 sm:p-6 border-b border-gray-200 flex-shrink-0">
             <div class="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-4">
-                <h3 class="text-xl sm:text-2xl font-bold text-gray-900">Ulasan Pelanggan</h3>
+                <h3 class="text-xl sm:text-2xl font-bold text-gray-900">{{ __('Ulasan Pelanggan') }}</h3>
                 <div class="flex items-center space-x-2">
                     <div class="flex items-center">
                         @for($i = 1; $i <= 5; $i++)
@@ -2081,7 +1976,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             </svg>
                         @endfor
                         <span class="ml-2 text-base sm:text-lg font-bold text-gray-900">{{ number_format($product->average_rating, 1) }}</span>
-                        <span class="text-xs sm:text-sm text-gray-500">({{ $product->reviews_count }} ulasan)</span>
+                        <span class="text-xs sm:text-sm text-gray-500">({{ __('shop_page.reviews_count', ['count' => $product->reviews_count]) }})</span>
                     </div>
                 </div>
             </div>
@@ -2097,10 +1992,10 @@ document.addEventListener('DOMContentLoaded', function() {
             <!-- Rating Filter - Fixed at top -->
             <div class="p-4 sm:p-6 pb-3 sm:pb-4 border-b border-gray-200 flex-shrink-0">
                 <div class="flex flex-wrap items-center gap-2 sm:gap-3">
-                    <span class="text-xs sm:text-sm font-medium text-gray-700 w-full sm:w-auto mb-2 sm:mb-0">Tapis mengikut rating:</span>
+                    <span class="text-xs sm:text-sm font-medium text-gray-700 w-full sm:w-auto mb-2 sm:mb-0">{{ __('Tapis mengikut rating:') }}</span>
                     <button onclick="filterReviews('all')" 
                             class="filter-btn active px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-colors bg-arsenal text-white">
-                        Semua ({{ $product->reviews->count() }})
+                        {{ __('shop_page.filter_all_reviews', ['count' => $product->reviews->count()]) }}
                     </button>
                     <button onclick="filterReviews(5)" 
                             class="filter-btn px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200">
@@ -2190,8 +2085,8 @@ document.addEventListener('DOMContentLoaded', function() {
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
                         </svg>
                     </div>
-                    <h3 class="text-base sm:text-lg font-medium text-gray-900 mb-2">Tiada ulasan dijumpai</h3>
-                    <p class="text-gray-600 text-xs sm:text-sm">Tiada ulasan yang sepadan dengan penapis yang dipilih.</p>
+                    <h3 class="text-base sm:text-lg font-medium text-gray-900 mb-2">{{ __('Tiada ulasan dijumpai') }}</h3>
+                    <p class="text-gray-600 text-xs sm:text-sm">{{ __('Tiada ulasan yang sepadan dengan penapis yang dipilih.') }}</p>
                 </div>
             </div>
         </div>

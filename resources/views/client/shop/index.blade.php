@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Kedai Arsenal - Barangan Rasmi - MyGooners')
-@section('meta_description', 'Beli barangan Arsenal rasmi, jersi, aksesori, dan item eksklusif. Dapatkan peralatan Arsenal terkini dan sokong Gunners dengan gaya.')
+@section('title', __('Kedai Arsenal - Barangan Rasmi - MyGooners'))
+@section('meta_description', __('Beli barangan Arsenal rasmi, jersi, aksesori, dan item eksklusif. Dapatkan peralatan Arsenal terkini dan sokong Gunners dengan gaya.'))
 
 @section('content')
 <!-- Success Message Display -->
@@ -36,17 +36,11 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
                 </svg>
             </div>
-            <h3 class="text-lg font-bold text-gray-900 text-center mb-2">Log Masuk Diperlukan</h3>
-            <p class="text-gray-600 text-center mb-6">
-                Anda perlu log masuk terlebih dahulu untuk menambah item ke troli. Sila log masuk untuk meneruskan.
-            </p>
+            <h3 class="text-lg font-bold text-gray-900 text-center mb-2">{{ __('Log Masuk Diperlukan') }}</h3>
+            <p class="text-gray-600 text-center mb-6">{{ __('Anda perlu log masuk terlebih dahulu untuk menambah item ke troli. Sila log masuk untuk meneruskan.') }}</p>
             <div class="flex space-x-3">
-                <button onclick="hideLoginModal()" class="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-colors">
-                    Batal
-                </button>
-                <button onclick="goToLogin()" class="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg font-medium hover:bg-red-700 transition-colors">
-                    Log Masuk
-                </button>
+                <button onclick="hideLoginModal()" class="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-colors">{{ __('Batal') }}</button>
+                <button onclick="goToLogin()" class="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg font-medium hover:bg-red-700 transition-colors">{{ __('Log Masuk') }}</button>
             </div>
         </div>
     </div>
@@ -61,13 +55,13 @@
             <div class="flex flex-col lg:flex-row lg:items-end lg:space-x-4 space-y-4 lg:space-y-0">
                 <!-- Search -->
                 <div class="flex-1">
-                    <label for="search" class="block text-sm font-medium text-gray-700 mb-2">Cari Produk</label>
+                    <label for="search" class="block text-sm font-medium text-gray-700 mb-2">{{ __('Cari Produk') }}</label>
                     <div class="relative">
                         <input type="text" 
                                id="search"
-                               name="search" 
+                               name="search"
                                value="{{ $search }}" 
-                               placeholder="Cari jersi, aksesori..." 
+                               placeholder="{{ __('Cari jersi, aksesori...') }}" 
                                class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent">
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                             <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -79,9 +73,9 @@
 
                 <!-- Category Filter -->
                 <div class="lg:w-48">
-                    <label for="category" class="block text-sm font-medium text-gray-700 mb-2">Kategori</label>
+                    <label for="category" class="block text-sm font-medium text-gray-700 mb-2">{{ __('Kategori') }}</label>
                     <select id="category" name="category" class="w-full py-3 px-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent">
-                        <option value="">Semua Kategori</option>
+                        <option value="">{{ __('Semua Kategori') }}</option>
                         @foreach($categories as $cat)
                             <option value="{{ strtolower($cat) }}" {{ strtolower($category) === strtolower($cat) ? 'selected' : '' }}>
                                 {{ $cat }}
@@ -92,21 +86,19 @@
 
                 <!-- Sort Filter -->
                 <div class="lg:w-48">
-                    <label for="sort" class="block text-sm font-medium text-gray-700 mb-2">Susun Mengikut</label>
+                    <label for="sort" class="block text-sm font-medium text-gray-700 mb-2">{{ __('Susun Mengikut') }}</label>
                     <select id="sort" name="sort" class="w-full py-3 px-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent">
-                        <option value="newest" {{ $sort === 'newest' ? 'selected' : '' }}>Terbaru Dahulu</option>
-                        <option value="popular" {{ $sort === 'popular' ? 'selected' : '' }}>Paling Popular</option>
-                        <option value="price_low" {{ $sort === 'price_low' ? 'selected' : '' }}>Harga: Rendah ke Tinggi</option>
-                        <option value="price_high" {{ $sort === 'price_high' ? 'selected' : '' }}>Harga: Tinggi ke Rendah</option>
-                        <option value="rating" {{ $sort === 'rating' ? 'selected' : '' }}>Rating Tertinggi</option>
+                        <option value="newest" {{ $sort === 'newest' ? 'selected' : '' }}>{{ __('Terbaru Dahulu') }}</option>
+                        <option value="popular" {{ $sort === 'popular' ? 'selected' : '' }}>{{ __('Paling Popular') }}</option>
+                        <option value="price_low" {{ $sort === 'price_low' ? 'selected' : '' }}>{{ __('Harga: Rendah ke Tinggi') }}</option>
+                        <option value="price_high" {{ $sort === 'price_high' ? 'selected' : '' }}>{{ __('Harga: Tinggi ke Rendah') }}</option>
+                        <option value="rating" {{ $sort === 'rating' ? 'selected' : '' }}>{{ __('Rating Tertinggi') }}</option>
                     </select>
                 </div>
 
                 <!-- Search Button -->
                 <div>
-                    <button type="submit" class="w-full lg:w-auto bg-arsenal hover:bg-arsenal text-white px-8 py-3 rounded-lg font-medium transition-colors">
-                        Gunakan Penapis
-                    </button>
+                    <button type="submit" class="w-full lg:w-auto bg-arsenal hover:bg-arsenal text-white px-8 py-3 rounded-lg font-medium transition-colors">{{ __('Gunakan Penapis') }}</button>
                 </div>
             </div>
         </form>
@@ -121,18 +113,18 @@
             <div>
                 <h2 class="text-2xl font-bold text-gray-900">
                     @if($search || $category)
-                        Hasil Carian ({{ $products->count() }} dijumpai)
+                        {{ __('shop_page.search_results_title', ['count' => $products->count()]) }}
                     @else
-                        Semua Produk ({{ $products->count() }})
+                        {{ __('shop_page.all_products_title', ['count' => $products->count()]) }}
                     @endif
                 </h2>
-                <p class="text-gray-600 mt-1">Barangan Arsenal rasmi dan item eksklusif</p>
+                <p class="text-gray-600 mt-1">{{ __('Barangan Arsenal rasmi dan item eksklusif') }}</p>
             </div>
             <div class="flex items-center space-x-2 text-sm text-gray-500">
                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                     <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path>
                 </svg>
-                <span>Disusun mengikut: {{ ucfirst(str_replace('_', ' ', $sort)) }}</span>
+                <span>{{ __('shop_page.sorted_by', ['label' => __('shop_page.sort.' . ($sort ?: 'newest'))]) }}</span>
             </div>
         </div>
 
@@ -157,25 +149,21 @@
                         <div class="absolute top-3 left-3 space-y-2">
                             @if($product->sale_price)
                                 <span class="bg-red-600 text-white px-3 py-1 rounded-full text-sm font-bold">
-                                    {{ round((($product->price - $product->sale_price) / $product->price) * 100) }}% OFF
+                                    {{ __('shop_page.percent_off', ['percent' => round((($product->price - $product->sale_price) / $product->price) * 100)]) }}
                                 </span>
                             @endif
                             @if($product->is_featured)
-                                <span class="bg-yellow-400 text-gray-900 px-3 py-1 rounded-full text-sm font-bold">
-                                    UTAMA
-                                </span>
+                                <span class="bg-yellow-400 text-gray-900 px-3 py-1 rounded-full text-sm font-bold">{{ __('UTAMA') }}</span>
                             @endif
                         </div>
                         @if($product->is_out_of_stock)
                             <div class="absolute bottom-3 left-3">
-                                <span class="bg-red-600 text-white px-3 py-1 rounded-full text-sm font-medium">
-                                    No Stock
-                                </span>
+                                <span class="bg-red-600 text-white px-3 py-1 rounded-full text-sm font-medium">{{ __('No Stock') }}</span>
                             </div>
-                        @elseif($product->calculated_stock <= 5)
+                        @elseif($product->calculated_stock<= 5)
                             <div class="absolute bottom-3 left-3">
                                 <span class="bg-orange-500 text-white px-3 py-1 rounded-full text-sm font-medium">
-                                    Hanya {{ $product->calculated_stock }} tinggal
+                                    {{ __('shop_page.only_left', ['count' => $product->calculated_stock]) }}
                                 </span>
                             </div>
                         @endif
@@ -184,7 +172,7 @@
                             @auth
                                 <button class="favourite-btn bg-white hover:bg-gray-100 text-gray-700 p-2 rounded-full shadow-lg transition-colors" 
                                         data-product-id="{{ $product->id }}"
-                                        title="Tambah ke kegemaran">
+                                        title="{{ __('Tambah ke kegemaran') }}">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
                                     </svg>
@@ -216,7 +204,7 @@
                                     </svg>
                                 @endfor
                             </div>
-                            <span class="ml-2 text-gray-600">({{ $product->reviews_count }} ulasan)</span>
+                            <span class="ml-2 text-gray-600">({{ __('shop_page.reviews_count', ['count' => $product->reviews_count]) }})</span>
                         </div>
                         <div class="flex items-center justify-between">
                             <div>
@@ -234,9 +222,9 @@
                                     <svg class="w-4 h-4 text-white mr-2" fill="currentColor" viewBox="0 0 24 24">
                                         <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12L8.1 13h7.45c.75 0 1.41-.41 1.75-1.03L21.7 4H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/>
                                     </svg>
-                                    <span class="text-xs">{{ $product->is_out_of_stock ? 'No Stock' : 'Tambah' }}</span>
+                                    <span class="text-xs">{{ $product->is_out_of_stock ? __('No Stock') : __('shop_page.add') }}</span>
                                 </button>
-                                <a href="{{ route('shop.show', $product->slug) }}" class="inline-block bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">Lihat</a>
+                                <a href="{{ route('shop.show', $product->slug) }}" class="inline-block bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">{{ __('Lihat') }}</a>
                             </div>
                         </div>
                     </div>
@@ -252,15 +240,14 @@
             <svg class="mx-auto h-16 w-16 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2a4 4 0 014-4h3m4 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v4"></path>
             </svg>
-            <h3 class="mt-2 text-lg font-medium text-gray-900">Tiada produk dijumpai</h3>
-            <p class="mt-1 text-gray-500">Cuba ubah penapis carian atau semak ejaan anda.</p>
+            <h3 class="mt-2 text-lg font-medium text-gray-900">{{ __('Tiada produk dijumpai') }}</h3>
+            <p class="mt-1 text-gray-500">{{ __('Cuba ubah penapis carian atau semak ejaan anda.') }}</p>
         </div>
     @endif
 </div>
 @endsection
 
 @push('scripts')
-<script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 <script>
 function quickAddToCart(productId) {
     // Check if user is logged in
@@ -290,7 +277,7 @@ function quickAddToCart(productId) {
         })
         .catch(error => {
             console.error('Error:', error);
-            alert('Ralat semasa menambah ke troli');
+            alert(window.clientMessages.cart_add_error);
         });
     @else
         // User is not logged in, show login modal
@@ -319,10 +306,8 @@ function goToLogin() {
 function showSuccessMessage(message) {
     const successMessage = document.getElementById('success-message');
     const messageText = document.getElementById('success-message-text');
-    
     messageText.textContent = message;
     successMessage.classList.remove('hidden');
-    
     // Auto-hide after 5 seconds
     setTimeout(() => {
         hideSuccessMessage();

@@ -1,16 +1,15 @@
 @extends('layouts.admin')
 
-@section('title', 'Logs - MyGooners Admin')
+@section('title', __('Log Sistem - Pentadbir MyGooners'))
 
 @section('content')
 <div class="py-6">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <!-- Header -->
         <div class="mb-8">
             <div class="flex items-center justify-between">
                 <div>
-                    <h1 class="text-3xl font-bold text-gray-900">System Logs</h1>
-                    <p class="mt-2 text-sm text-gray-600">View and manage Laravel application logs</p>
+                    <h1 class="text-3xl font-bold text-gray-900">{{ __('Log Sistem') }}</h1>
+                    <p class="mt-2 text-sm text-gray-600">{{ __('Lihat dan urus log aplikasi Laravel') }}</p>
                 </div>
                 <div class="flex space-x-3">
                     <a href="{{ route('admin.logs.download') }}" 
@@ -18,7 +17,7 @@
                         <svg class="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                         </svg>
-                        Download Logs
+                        {{ __('Muat Turun Log') }}
                     </a>
                     <button type="button" 
                             onclick="showClearLogsModal()"
@@ -26,13 +25,11 @@
                         <svg class="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                         </svg>
-                        Clear Logs
+                        {{ __('Kosongkan Log') }}
                     </button>
                 </div>
             </div>
         </div>
-
-
 
         @if($error)
             <div class="mb-6 bg-red-50 border border-red-200 rounded-md p-4">
@@ -48,32 +45,31 @@
                 </div>
             </div>
         @else
-            <!-- Filters -->
             <div class="bg-white shadow rounded-lg mb-6">
                 <div class="px-6 py-4 border-b border-gray-200">
-                    <h3 class="text-lg font-medium text-gray-900">Filters</h3>
+                    <h3 class="text-lg font-medium text-gray-900">{{ __('Penapis') }}</h3>
                 </div>
                 <div class="px-6 py-4">
                     <form method="GET" action="{{ route('admin.logs.index') }}" class="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div>
-                            <label for="search" class="block text-sm font-medium text-gray-700 mb-1">Search</label>
+                            <label for="search" class="block text-sm font-medium text-gray-700 mb-1">{{ __('Cari') }}</label>
                             <input type="text" name="search" id="search" value="{{ request('search') }}" 
-                                   placeholder="Search in logs..." 
+                                   placeholder="{{ __('Cari dalam log...') }}" 
                                    class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-admin-500 focus:border-admin-500">
                         </div>
                         <div>
-                            <label for="level" class="block text-sm font-medium text-gray-700 mb-1">Log Level</label>
+                            <label for="level" class="block text-sm font-medium text-gray-700 mb-1">{{ __('Tahap Log') }}</label>
                             <select name="level" id="level" 
                                     class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-admin-500 focus:border-admin-500">
-                                <option value="all" {{ request('level') === 'all' || !request('level') ? 'selected' : '' }}>All Levels</option>
-                                <option value="EMERGENCY" {{ request('level') === 'EMERGENCY' ? 'selected' : '' }}>Emergency</option>
-                                <option value="ALERT" {{ request('level') === 'ALERT' ? 'selected' : '' }}>Alert</option>
-                                <option value="CRITICAL" {{ request('level') === 'CRITICAL' ? 'selected' : '' }}>Critical</option>
-                                <option value="ERROR" {{ request('level') === 'ERROR' ? 'selected' : '' }}>Error</option>
-                                <option value="WARNING" {{ request('level') === 'WARNING' ? 'selected' : '' }}>Warning</option>
-                                <option value="NOTICE" {{ request('level') === 'NOTICE' ? 'selected' : '' }}>Notice</option>
-                                <option value="INFO" {{ request('level') === 'INFO' ? 'selected' : '' }}>Info</option>
-                                <option value="DEBUG" {{ request('level') === 'DEBUG' ? 'selected' : '' }}>Debug</option>
+                                <option value="all" {{ request('level') === 'all' || !request('level') ? 'selected' : '' }}>{{ __('Semua Tahap') }}</option>
+                                <option value="EMERGENCY" {{ request('level') === 'EMERGENCY' ? 'selected' : '' }}>{{ __('Kecemasan') }}</option>
+                                <option value="ALERT" {{ request('level') === 'ALERT' ? 'selected' : '' }}>{{ __('Amaran Sistem') }}</option>
+                                <option value="CRITICAL" {{ request('level') === 'CRITICAL' ? 'selected' : '' }}>{{ __('Kritikal') }}</option>
+                                <option value="ERROR" {{ request('level') === 'ERROR' ? 'selected' : '' }}>{{ __('Ralat') }}</option>
+                                <option value="WARNING" {{ request('level') === 'WARNING' ? 'selected' : '' }}>{{ __('Amaran') }}</option>
+                                <option value="NOTICE" {{ request('level') === 'NOTICE' ? 'selected' : '' }}>{{ __('Notis') }}</option>
+                                <option value="INFO" {{ request('level') === 'INFO' ? 'selected' : '' }}>{{ __('Maklumat') }}</option>
+                                <option value="DEBUG" {{ request('level') === 'DEBUG' ? 'selected' : '' }}>{{ __('Nyahpepijat') }}</option>
                             </select>
                         </div>
                         <div class="flex items-end">
@@ -82,32 +78,31 @@
                                 <svg class="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                                 </svg>
-                                Filter Logs
+                                {{ __('Tapis Log') }}
                             </button>
                         </div>
                     </form>
                 </div>
             </div>
 
-            <!-- Logs Table -->
             <div class="bg-white shadow rounded-lg">
                 <div class="px-6 py-4 border-b border-gray-200">
                     <div class="flex items-center justify-between">
-                        <h3 class="text-lg font-medium text-gray-900">Log Entries</h3>
-                        <span class="text-sm text-gray-500">{{ count($logs) }} entries found</span>
+                        <h3 class="text-lg font-medium text-gray-900">{{ __('Entri Log') }}</h3>
+                        <span class="text-sm text-gray-500">{{ $logs->total() }} entri dijumpai</span>
                     </div>
                 </div>
                 
-                @if(count($logs) > 0)
+                @if($logs->total() > 0)
                     <div class="overflow-x-auto">
                         <table class="min-w-full divide-y divide-gray-200">
                             <thead class="bg-gray-50">
                                 <tr>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Timestamp</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Level</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Context</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Message</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Cap Masa') }}</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Tahap') }}</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Konteks') }}</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Mesej') }}</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Tindakan') }}</th>
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
@@ -136,22 +131,21 @@
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                             <button type="button" 
                                                     onclick="showLogDetails('{{ addslashes($log['timestamp']) }}', '{{ addslashes($log['level']) }}', '{{ addslashes($log['context']) }}', '{{ addslashes($log['message']) }}', '{{ addslashes($log['full_message']) }}')"
-                                                    class="text-admin-600 hover:text-admin-900">
-                                                View Details
-                                            </button>
+                                                    class="text-admin-600 hover:text-admin-900">{{ __('Lihat Butiran') }}</button>
                                         </td>
                                     </tr>
                                 @endforeach
                             </tbody>
                         </table>
                     </div>
+                    @include('admin.partials.pagination', ['paginator' => $logs, 'label' => 'entri'])
                 @else
                     <div class="px-6 py-12 text-center">
                         <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                         </svg>
-                        <h3 class="mt-2 text-sm font-medium text-gray-900">No logs found</h3>
-                        <p class="mt-1 text-sm text-gray-500">No log entries match your current filters.</p>
+                        <h3 class="mt-2 text-sm font-medium text-gray-900">{{ __('Tiada log dijumpai') }}</h3>
+                        <p class="mt-1 text-sm text-gray-500">{{ __('Tiada entri log sepadan dengan penapis semasa.') }}</p>
                     </div>
                 @endif
             </div>
@@ -159,7 +153,6 @@
     </div>
 </div>
 
-<!-- Log Details Modal -->
 <div id="logDetailsModal" class="fixed inset-0 z-50 overflow-y-auto hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
     <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
         <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
@@ -173,30 +166,28 @@
                         </svg>
                     </div>
                     <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
-                        <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
-                            Log Entry Details
-                        </h3>
+                        <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">{{ __('Butiran Entri Log') }}</h3>
                         <div class="mt-4 space-y-4">
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700">Timestamp</label>
+                                    <label class="block text-sm font-medium text-gray-700">{{ __('Cap Masa') }}</label>
                                     <p id="modal-timestamp" class="mt-1 text-sm text-gray-900"></p>
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700">Level</label>
+                                    <label class="block text-sm font-medium text-gray-700">{{ __('Tahap') }}</label>
                                     <p id="modal-level" class="mt-1 text-sm text-gray-900"></p>
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700">Context</label>
+                                    <label class="block text-sm font-medium text-gray-700">{{ __('Konteks') }}</label>
                                     <p id="modal-context" class="mt-1 text-sm text-gray-900"></p>
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700">Message</label>
+                                    <label class="block text-sm font-medium text-gray-700">{{ __('Mesej') }}</label>
                                     <p id="modal-message" class="mt-1 text-sm text-gray-900"></p>
                                 </div>
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">Full Details</label>
+                                <label class="block text-sm font-medium text-gray-700">{{ __('Butiran Penuh') }}</label>
                                 <pre id="modal-full-message" class="mt-1 text-sm text-gray-900 bg-gray-50 p-3 rounded-md overflow-x-auto whitespace-pre-wrap"></pre>
                             </div>
                         </div>
@@ -206,15 +197,12 @@
             <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
                 <button type="button" 
                         onclick="hideLogDetails()"
-                        class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-admin-600 text-base font-medium text-white hover:bg-admin-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-admin-500 sm:ml-3 sm:w-auto sm:text-sm">
-                    Close
-                </button>
+                        class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-admin-600 text-base font-medium text-white hover:bg-admin-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-admin-500 sm:ml-3 sm:w-auto sm:text-sm">{{ __('Tutup') }}</button>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Clear Logs Modal -->
 <div id="clearLogsModal" class="fixed inset-0 z-50 overflow-y-auto hidden" aria-labelledby="clear-logs-modal-title" role="dialog" aria-modal="true">
     <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
         <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
@@ -228,13 +216,9 @@
                         </svg>
                     </div>
                     <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
-                        <h3 class="text-lg leading-6 font-medium text-gray-900" id="clear-logs-modal-title">
-                            Clear All Logs
-                        </h3>
+                        <h3 class="text-lg leading-6 font-medium text-gray-900" id="clear-logs-modal-title">{{ __('Kosongkan Semua Log') }}</h3>
                         <div class="mt-2">
-                            <p class="text-sm text-gray-500">
-                                Are you sure you want to clear all log entries? This action cannot be undone and will permanently remove all log data from the system.
-                            </p>
+                            <p class="text-sm text-gray-500">{{ __('Adakah anda pasti mahu kosongkan semua entri log? Tindakan ini tidak boleh diundur dan akan memadam semua data log daripada sistem secara kekal.') }}</p>
                         </div>
                         <div class="mt-4 bg-yellow-50 border border-yellow-200 rounded-md p-3">
                             <div class="flex">
@@ -244,15 +228,13 @@
                                     </svg>
                                 </div>
                                 <div class="ml-3">
-                                    <h3 class="text-sm font-medium text-yellow-800">
-                                        Warning
-                                    </h3>
+                                    <h3 class="text-sm font-medium text-yellow-800">{{ __('Amaran') }}</h3>
                                     <div class="mt-2 text-sm text-yellow-700">
-                                        <p>This will affect:</p>
+                                        <p>{{ __('Ini akan menjejaskan:') }}</p>
                                         <ul class="list-disc pl-5 mt-1 space-y-1">
-                                            <li>All log entries will be permanently deleted</li>
-                                            <li>No backup will be created automatically</li>
-                                            <li>This action cannot be reversed</li>
+                                            <li>{{ __('Semua entri log akan dipadam secara kekal') }}</li>
+                                            <li>{{ __('Tiada sandaran automatik akan dicipta') }}</li>
+                                            <li>{{ __('Tindakan ini tidak boleh dibatalkan') }}</li>
                                         </ul>
                                     </div>
                                 </div>
@@ -269,14 +251,12 @@
                         <svg class="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                         </svg>
-                        Yes, Clear All Logs
+                        {{ __('Ya, Kosongkan Semua Log') }}
                     </button>
                 </form>
                 <button type="button" 
                         onclick="hideClearLogsModal()"
-                        class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-admin-500 sm:mt-0 sm:w-auto sm:text-sm">
-                    Cancel
-                </button>
+                        class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-admin-500 sm:mt-0 sm:w-auto sm:text-sm">{{ __('Batal') }}</button>
             </div>
         </div>
     </div>
@@ -304,7 +284,6 @@ function hideClearLogsModal() {
     document.getElementById('clearLogsModal').classList.add('hidden');
 }
 
-// Close modals when clicking outside
 document.getElementById('logDetailsModal').addEventListener('click', function(e) {
     if (e.target === this) {
         hideLogDetails();
@@ -317,7 +296,6 @@ document.getElementById('clearLogsModal').addEventListener('click', function(e) 
     }
 });
 
-// Close modals with Escape key
 document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') {
         hideLogDetails();
@@ -325,4 +303,4 @@ document.addEventListener('keydown', function(e) {
     }
 });
 </script>
-@endsection 
+@endsection

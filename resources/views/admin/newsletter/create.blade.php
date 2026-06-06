@@ -1,16 +1,14 @@
 @extends('layouts.admin')
 
-@section('title', 'Hantar Newsletter')
+@section('title', __('Hantar Surat Berita'))
 
 @section('content')
 <div class="container mx-auto px-4 py-8">
     <div class="max-w-4xl mx-auto">
         <div class="flex justify-between items-center mb-6">
-            <h1 class="text-3xl font-bold text-gray-900">Hantar Newsletter</h1>
+            <h1 class="text-3xl font-bold text-gray-900">{{ __('Hantar Surat Berita') }}</h1>
             <a href="{{ route('admin.newsletter.index') }}" 
-               class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg transition-colors">
-                Kembali
-            </a>
+               class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg transition-colors">{{ __('Kembali') }}</a>
         </div>
 
         <!-- Statistics Card -->
@@ -22,8 +20,8 @@
                     </svg>
                 </div>
                 <div class="ml-4">
-                    <p class="text-sm font-medium text-blue-800">Newsletter akan dihantar kepada</p>
-                    <p class="text-2xl font-semibold text-blue-900">{{ number_format($activeSubscribers) }} pelanggan aktif</p>
+                    <p class="text-sm font-medium text-blue-800">{{ __('Surat berita akan dihantar kepada') }}</p>
+                    <p class="text-2xl font-semibold text-blue-900">{{ trans('admin_page.active_subscribers', ['count' => number_format($activeSubscribers)]) }}</p>
                 </div>
             </div>
         </div>
@@ -31,7 +29,7 @@
         <!-- Newsletter Form -->
         <div class="bg-white rounded-lg shadow">
             <div class="px-6 py-4 border-b border-gray-200">
-                <h2 class="text-lg font-semibold text-gray-900">Komposisi Newsletter</h2>
+                <h2 class="text-lg font-semibold text-gray-900">{{ __('Komposisi Surat Berita') }}</h2>
             </div>
             
             <form id="newsletterForm" action="{{ route('admin.newsletter.store') }}" method="POST" class="p-6">
@@ -41,7 +39,7 @@
                     <!-- Subject -->
                     <div>
                         <label for="subject" class="block text-sm font-medium text-gray-700 mb-2">
-                            Subjek Email <span class="text-red-500">*</span>
+                            {{ trans('admin_page.email_subject') }} <span class="text-red-500">*</span>
                         </label>
                         <input type="text" 
                                id="subject" 
@@ -50,7 +48,7 @@
                                required
                                maxlength="255"
                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent @error('subject') border-red-500 @enderror"
-                               placeholder="Contoh: Berita Arsenal Terkini - Minggu Ini">
+                               placeholder="{{ __('Contoh: Berita Arsenal Terkini - Minggu Ini') }}">
                         @error('subject')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                         @enderror
@@ -59,7 +57,7 @@
                     <!-- Content -->
                     <div>
                         <label for="content" class="block text-sm font-medium text-gray-700 mb-2">
-                            Kandungan Newsletter <span class="text-red-500">*</span>
+                            {{ trans('admin_page.newsletter_content') }} <span class="text-red-500">*</span>
                         </label>
                         <textarea id="content" 
                                   name="content" 
@@ -67,19 +65,19 @@
                                   required
                                   minlength="10"
                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent @error('content') border-red-500 @enderror"
-                                  placeholder="Tulis kandungan newsletter anda di sini...">{{ old('content') }}</textarea>
+                                  placeholder="{{ __('Tulis kandungan newsletter anda di sini...') }}">{{ old('content') }}</textarea>
                         @error('content')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                         @enderror
                         
                         <div class="mt-2 text-sm text-gray-500">
-                            <p>💡 Tips untuk newsletter yang berkesan:</p>
+                            <p>{{ __('💡 Tips untuk newsletter yang berkesan:') }}</p>
                             <ul class="list-disc list-inside mt-1 space-y-1">
-                                <li>Mulakan dengan salam yang mesra</li>
-                                <li>Kongsi berita Arsenal terkini</li>
-                                <li>Sertakan pautan ke artikel atau video</li>
-                                <li>Berikan maklumat tentang kemas kini komuniti</li>
-                                <li>Akhiri dengan seruan untuk tindakan</li>
+                                <li>{{ __('Mulakan dengan salam yang mesra') }}</li>
+                                <li>{{ __('Kongsi berita Arsenal terkini') }}</li>
+                                <li>{{ __('Sertakan pautan ke artikel atau video') }}</li>
+                                <li>{{ __('Berikan maklumat tentang kemas kini komuniti') }}</li>
+                                <li>{{ __('Akhiri dengan seruan untuk tindakan') }}</li>
                             </ul>
                         </div>
                     </div>
@@ -88,22 +86,16 @@
                     <div>
                         <button type="button" 
                                 onclick="openPreviewModal()"
-                                class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg transition-colors">
-                            Lihat Preview
-                        </button>
+                                class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg transition-colors">{{ __('Lihat Preview') }}</button>
                     </div>
 
                     <!-- Submit Button -->
                     <div class="flex justify-end space-x-3 pt-6 border-t border-gray-200">
                         <a href="{{ route('admin.newsletter.index') }}" 
-                           class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded-lg transition-colors">
-                            Batal
-                        </a>
+                           class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded-lg transition-colors">{{ __('Batal') }}</a>
                         <button type="button" 
                                 onclick="openSendModal()"
-                                class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition-colors">
-                            Hantar Newsletter
-                        </button>
+                                class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition-colors">{{ __('Hantar Surat Berita') }}</button>
                     </div>
                 </div>
             </form>
@@ -116,7 +108,7 @@
     <div class="relative top-10 mx-auto p-5 border w-11/12 max-w-4xl shadow-lg rounded-md bg-white">
         <div class="mt-3">
             <div class="flex justify-between items-center mb-4">
-                <h3 class="text-xl font-bold text-gray-900">Preview Newsletter</h3>
+                <h3 class="text-xl font-bold text-gray-900">{{ __('Pratonton Surat Berita') }}</h3>
                 <button onclick="closePreviewModal()" class="text-gray-400 hover:text-gray-600 transition-colors">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
@@ -128,9 +120,7 @@
             </div>
             <div class="flex justify-end mt-4">
                 <button onclick="closePreviewModal()" 
-                        class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg transition-colors">
-                    Tutup
-                </button>
+                        class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg transition-colors">{{ __('Tutup') }}</button>
             </div>
         </div>
     </div>
@@ -146,7 +136,7 @@
                 </svg>
             </div>
             <div class="mt-4 text-center">
-                <h3 class="text-lg font-medium text-gray-900">Perhatian</h3>
+                <h3 class="text-lg font-medium text-gray-900">{{ __('Perhatian') }}</h3>
                 <div class="mt-2 px-7 py-3">
                     <p id="validationMessage" class="text-sm text-gray-500">
                         <!-- Validation message will be inserted here -->
@@ -155,9 +145,7 @@
             </div>
             <div class="flex justify-center px-4 py-3">
                 <button onclick="closeValidationModal()" 
-                        class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-                    OK
-                </button>
+                        class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">{{ __('OK') }}</button>
             </div>
         </div>
     </div>
@@ -173,10 +161,10 @@
                 </svg>
             </div>
             <div class="mt-4 text-center">
-                <h3 class="text-lg font-medium text-gray-900">Hantar Newsletter</h3>
+                <h3 class="text-lg font-medium text-gray-900">{{ __('Hantar Surat Berita') }}</h3>
                 <div class="mt-2 px-7 py-3">
                     <p class="text-sm text-gray-500">
-                        Adakah anda pasti untuk menghantar newsletter kepada <strong>{{ number_format($activeSubscribers) }} pelanggan aktif</strong>?
+                        {{ trans('admin_page.newsletter_confirm_send', ['count' => number_format($activeSubscribers)]) }}
                     </p>
                     <div class="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
                         <div class="flex items-start">
@@ -184,11 +172,11 @@
                                 <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
                             </svg>
                             <div class="text-sm text-yellow-800">
-                                <p class="font-medium">Perhatian:</p>
+                                <p class="font-medium">{{ __('Perhatian:') }}</p>
                                 <ul class="mt-1 list-disc list-inside space-y-1">
-                                    <li>Newsletter akan dihantar kepada semua pelanggan aktif</li>
-                                    <li>Proses ini mungkin mengambil masa beberapa minit</li>
-                                    <li>Pastikan kandungan adalah tepat sebelum dihantar</li>
+                                    <li>{{ __('Surat berita akan dihantar kepada semua pelanggan aktif') }}</li>
+                                    <li>{{ __('Proses ini mungkin mengambil masa beberapa minit') }}</li>
+                                    <li>{{ __('Pastikan kandungan adalah tepat sebelum dihantar') }}</li>
                                 </ul>
                             </div>
                         </div>
@@ -197,13 +185,9 @@
             </div>
             <div class="flex justify-end space-x-3 px-4 py-3">
                 <button onclick="closeSendModal()" 
-                        class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-                    Batal
-                </button>
+                        class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">{{ __('Batal') }}</button>
                 <button onclick="submitNewsletter()" 
-                        class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-                    Hantar Newsletter
-                </button>
+                        class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">{{ __('Hantar Surat Berita') }}</button>
             </div>
         </div>
     </div>
@@ -215,7 +199,7 @@ function openPreviewModal() {
     const content = document.getElementById('content').value;
     
     if (!subject || !content) {
-        showValidationModal('Sila isi subjek dan kandungan terlebih dahulu.');
+        showValidationModal(window.adminMessages.fill_subject_content);
         return;
     }
     
@@ -223,11 +207,11 @@ function openPreviewModal() {
     previewContent.innerHTML = `
         <div class="space-y-6">
             <div class="border-b border-gray-200 pb-4">
-                <h4 class="font-semibold text-gray-900 text-lg mb-2">Subjek:</h4>
+                <h4 class="font-semibold text-gray-900 text-lg mb-2">{{ __('Subjek:') }}</h4>
                 <p class="text-gray-700 text-lg">${subject}</p>
             </div>
             <div>
-                <h4 class="font-semibold text-gray-900 text-lg mb-2">Kandungan:</h4>
+                <h4 class="font-semibold text-gray-900 text-lg mb-2">{{ __('Kandungan:') }}</h4>
                 <div class="bg-white p-4 rounded-lg border">
                     <div class="text-gray-700 whitespace-pre-wrap leading-relaxed">${content}</div>
                 </div>
@@ -238,7 +222,7 @@ function openPreviewModal() {
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                     </svg>
                     <p class="text-sm text-blue-800">
-                        <strong>Preview:</strong> Ini adalah bagaimana newsletter anda akan kelihatan kepada pelanggan.
+                        <strong>${@json(__('Pratonton:'))}</strong> ${@json(__('Ini adalah bagaimana newsletter anda akan kelihatan kepada pelanggan.'))}
                     </p>
                 </div>
             </div>
@@ -257,7 +241,7 @@ function openSendModal() {
     const content = document.getElementById('content').value;
     
     if (!subject || !content) {
-        showValidationModal('Sila isi subjek dan kandungan terlebih dahulu.');
+        showValidationModal(window.adminMessages.fill_subject_content);
         return;
     }
     

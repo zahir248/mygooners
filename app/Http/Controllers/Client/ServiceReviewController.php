@@ -25,7 +25,7 @@ class ServiceReviewController extends Controller
         
         if ($existingReview) {
             return redirect()->route('services.show', $service->slug)
-                ->with('error', 'Anda telah memberikan ulasan untuk perkhidmatan ini.');
+                ->with('error', __('client_messages.msg_3c6f4a9af4c7'));
         }
 
         return view('client.service-reviews.create', compact('service'));
@@ -42,7 +42,7 @@ class ServiceReviewController extends Controller
             
             if ($existingReview) {
                 return redirect()->route('services.show', $service->slug)
-                    ->with('error', 'Anda telah memberikan ulasan untuk perkhidmatan ini.');
+                    ->with('error', __('client_messages.msg_3c6f4a9af4c7'));
             }
         }
 
@@ -72,7 +72,7 @@ class ServiceReviewController extends Controller
         $service->updateTrustScore();
 
         return redirect()->route('services.show', $service->slug)
-            ->with('success', 'Ulasan anda telah berjaya dihantar dan dipaparkan! Terima kasih atas maklum balas anda.');
+            ->with('success', __('client_messages.msg_8379278a3ed5'));
     }
 
     /**
@@ -121,7 +121,7 @@ class ServiceReviewController extends Controller
         $service->updateTrustScore();
 
         return redirect()->route('services.show', $service->slug)
-            ->with('success', 'Ulasan anda telah berjaya dikemas kini!');
+            ->with('success', __('client_messages.msg_401aa59a9472'));
     }
 
     /**
@@ -145,6 +145,6 @@ class ServiceReviewController extends Controller
 
         // Redirect back to the service detail page
         return redirect()->route('services.show', $serviceSlug)
-            ->with('success', 'Ulasan anda telah berjaya dipadam.');
+            ->with('success', __('client_messages.msg_93cc0b75e48d'));
     }
 }

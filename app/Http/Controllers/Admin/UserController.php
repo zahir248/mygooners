@@ -41,7 +41,7 @@ class UserController extends Controller
         $query->orderBy('created_at', 'desc');
 
         // Get paginated results
-        $users = $query->paginate(15);
+        $users = $query->paginate(15)->withQueryString();
 
         return view('admin.users.index', compact('users'));
     }
@@ -60,7 +60,7 @@ class UserController extends Controller
         $user->update(['is_verified' => true]);
 
         return redirect()->route('admin.users.index')
-            ->with('success', 'Pengguna berjaya disahkan!');
+            ->with('success', __('flash.user_verified'));
     }
 
     public function suspend($id)
@@ -69,7 +69,7 @@ class UserController extends Controller
         $user->update(['status' => 'suspended']);
 
         return redirect()->route('admin.users.index')
-            ->with('success', 'Pengguna berjaya digantung!');
+            ->with('success', __('flash.user_suspended'));
     }
 
     public function activate($id)
@@ -78,7 +78,7 @@ class UserController extends Controller
         $user->update(['status' => 'active']);
 
         return redirect()->route('admin.users.index')
-            ->with('success', 'Pengguna berjaya diaktifkan!');
+            ->with('success', __('flash.user_activated'));
     }
 
     public function destroy($id)
@@ -88,19 +88,19 @@ class UserController extends Controller
         // Prevent deletion of super admin or current user
         if ($user->role === 'super_admin' || $user->id === auth()->id()) {
             return redirect()->route('admin.users.index')
-                ->with('error', 'Cannot delete this user.');
+                ->with('error', __('flash.user_delete_forbidden'));
         }
 
         $user->delete();
 
         return redirect()->route('admin.users.index')
-            ->with('success', 'Pengguna berjaya dipadam!');
+            ->with('success', __('flash.user_deleted'));
     }
 
     public function create()
     {
         if (auth()->user()->role !== 'super_admin') {
-            return redirect()->route('admin.users.index')->with('error', 'Only super admin can create users.');
+            return redirect()->route('admin.users.index')->with('error', __('flash.user_create_forbidden'));
         }
         return view('admin.users.create');
     }
@@ -108,7 +108,7 @@ class UserController extends Controller
     public function store(Request $request)
     {
         if (auth()->user()->role !== 'super_admin') {
-            return redirect()->route('admin.users.index')->with('error', 'Only super admin can create users.');
+            return redirect()->route('admin.users.index')->with('error', __('flash.user_create_forbidden'));
         }
 
         $validated = $request->validate([
@@ -128,6 +128,6 @@ class UserController extends Controller
         $user->status = 'active'; // Automatically set to active
         $user->save();
 
-        return redirect()->route('admin.users.index')->with('success', 'Pengguna berjaya dicipta!');
+        return redirect()->route('admin.users.index')->with('success', __('flash.user_created'));
     }
 } 

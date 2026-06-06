@@ -1,14 +1,14 @@
 @extends('layouts.admin')
 
-@section('title', 'Pengurusan Pesanan')
+@section('title', __('Pengurusan Pesanan'))
 
 @section('content')
 <div class="container mx-auto px-4 py-8">
     <!-- Header -->
     <div class="flex justify-between items-center mb-8">
         <div>
-            <h1 class="text-3xl font-bold text-gray-900">Pengurusan Pesanan</h1>
-            <p class="text-gray-600 mt-2">Urus dan pantau semua pesanan pelanggan</p>
+            <h1 class="text-3xl font-bold text-gray-900">{{ __('Pengurusan Pesanan') }}</h1>
+            <p class="text-gray-600 mt-2">{{ __('Urus dan pantau semua pesanan pelanggan') }}</p>
         </div>
         
         <div class="flex space-x-3">
@@ -17,7 +17,7 @@
                 <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                 </svg>
-                Export CSV
+                {{ __('Eksport CSV') }}
             </a>
         </div>
     </div>
@@ -32,7 +32,7 @@
                     </svg>
                 </div>
                 <div class="ml-4">
-                    <p class="text-sm font-medium text-gray-600">Jumlah Pesanan</p>
+                    <p class="text-sm font-medium text-gray-600">{{ __('Jumlah Pesanan') }}</p>
                     <p class="text-2xl font-bold text-gray-900">{{ number_format($stats['total_orders']) }}</p>
                 </div>
             </div>
@@ -46,7 +46,7 @@
                     </svg>
                 </div>
                 <div class="ml-4">
-                    <p class="text-sm font-medium text-gray-600">Pesanan Tertunggak</p>
+                    <p class="text-sm font-medium text-gray-600">{{ __('Pesanan Tertunggak') }}</p>
                     <p class="text-2xl font-bold text-gray-900">{{ number_format($stats['pending_orders']) }}</p>
                 </div>
             </div>
@@ -60,7 +60,7 @@
                     </svg>
                 </div>
                 <div class="ml-4">
-                    <p class="text-sm font-medium text-gray-600">Jumlah Pendapatan</p>
+                    <p class="text-sm font-medium text-gray-600">{{ __('Jumlah Pendapatan') }}</p>
                     <p class="text-2xl font-bold text-gray-900">RM{{ number_format($stats['total_revenue'], 2) }}</p>
                 </div>
             </div>
@@ -74,7 +74,7 @@
                     </svg>
                 </div>
                 <div class="ml-4">
-                    <p class="text-sm font-medium text-gray-600">Pesanan Hari Ini</p>
+                    <p class="text-sm font-medium text-gray-600">{{ __('Pesanan Hari Ini') }}</p>
                     <p class="text-2xl font-bold text-gray-900">{{ number_format($stats['today_orders']) }}</p>
                 </div>
             </div>
@@ -85,41 +85,41 @@
     <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
         <form method="GET" action="{{ route('admin.orders.index') }}" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Cari</label>
+                <label class="block text-sm font-medium text-gray-700 mb-2">{{ __('Cari') }}</label>
                 <input type="text" name="search" value="{{ request('search') }}" 
-                       placeholder="Nombor pesanan, nama pelanggan..." 
+                       placeholder="{{ __('Nombor pesanan, nama pelanggan...') }}" 
                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
             </div>
             
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Status Pesanan</label>
+                <label class="block text-sm font-medium text-gray-700 mb-2">{{ __('Status Pesanan') }}</label>
                 <select name="status" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                    <option value="">Semua Status</option>
-                    <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Tertunggak</option>
-                    <option value="processing" {{ request('status') == 'processing' ? 'selected' : '' }}>Sedang Diproses</option>
-                    <option value="shipped" {{ request('status') == 'shipped' ? 'selected' : '' }}>Telah Dihantar</option>
-                    <option value="delivered" {{ request('status') == 'delivered' ? 'selected' : '' }}>Telah Diterima</option>
-                    <option value="cancelled" {{ request('status') == 'cancelled' ? 'selected' : '' }}>Dibatalkan</option>
+                    <option value="">{{ __('Semua Status') }}</option>
+                    <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>{{ __('Tertunggak') }}</option>
+                    <option value="processing" {{ request('status') == 'processing' ? 'selected' : '' }}>{{ __('Sedang Diproses') }}</option>
+                    <option value="shipped" {{ request('status') == 'shipped' ? 'selected' : '' }}>{{ __('Telah Dihantar') }}</option>
+                    <option value="delivered" {{ request('status') == 'delivered' ? 'selected' : '' }}>{{ __('Telah Diterima') }}</option>
+                    <option value="cancelled" {{ request('status') == 'cancelled' ? 'selected' : '' }}>{{ __('Dibatalkan') }}</option>
                 </select>
             </div>
             
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Status Pembayaran</label>
+                <label class="block text-sm font-medium text-gray-700 mb-2">{{ __('Status Pembayaran') }}</label>
                 <select name="payment_status" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                    <option value="">Semua Status</option>
-                    <option value="pending" {{ request('payment_status') == 'pending' ? 'selected' : '' }}>Tertunggak</option>
-                    <option value="paid" {{ request('payment_status') == 'paid' ? 'selected' : '' }}>Telah Dibayar</option>
-                    <option value="failed" {{ request('payment_status') == 'failed' ? 'selected' : '' }}>Gagal</option>
-                    <option value="refunded" {{ request('payment_status') == 'refunded' ? 'selected' : '' }}>Dikembalikan</option>
+                    <option value="">{{ __('Semua Status') }}</option>
+                    <option value="pending" {{ request('payment_status') == 'pending' ? 'selected' : '' }}>{{ __('Tertunggak') }}</option>
+                    <option value="paid" {{ request('payment_status') == 'paid' ? 'selected' : '' }}>{{ __('Telah Dibayar') }}</option>
+                    <option value="failed" {{ request('payment_status') == 'failed' ? 'selected' : '' }}>{{ __('Gagal') }}</option>
+                    <option value="refunded" {{ request('payment_status') == 'refunded' ? 'selected' : '' }}>{{ __('Dikembalikan') }}</option>
                 </select>
             </div>
             
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Kaedah Pembayaran</label>
+                <label class="block text-sm font-medium text-gray-700 mb-2">{{ __('Kaedah Pembayaran') }}</label>
                 <select name="payment_method" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                    <option value="">Semua Kaedah</option>
-                    <option value="toyyibpay" {{ request('payment_method') == 'toyyibpay' ? 'selected' : '' }}>ToyyibPay</option>
-                    <option value="stripe" {{ request('payment_method') == 'stripe' ? 'selected' : '' }}>Stripe</option>
+                    <option value="">{{ __('Semua Kaedah') }}</option>
+                    <option value="toyyibpay" {{ request('payment_method') == 'toyyibpay' ? 'selected' : '' }}>{{ __('ToyyibPay') }}</option>
+                    <option value="stripe" {{ request('payment_method') == 'stripe' ? 'selected' : '' }}>{{ __('Stripe') }}</option>
                 </select>
             </div>
             
@@ -128,11 +128,11 @@
                     <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                     </svg>
-                    Cari
+                    {{ __('Cari') }}
                 </button>
                 
                 <a href="{{ route('admin.orders.index') }}" class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded-lg font-medium transition-colors">
-                    Reset
+                    {{ __('Set Semula') }}
                 </a>
             </div>
         </form>
@@ -141,7 +141,7 @@
     <!-- Orders Table -->
     <div class="bg-white rounded-xl shadow-lg overflow-hidden">
         <div class="px-6 py-4 border-b border-gray-200">
-            <h2 class="text-xl font-bold text-gray-900">Senarai Pesanan</h2>
+            <h2 class="text-xl font-bold text-gray-900">{{ __('Senarai Pesanan') }}</h2>
         </div>
         
         @if($orders->count() > 0)
@@ -149,13 +149,13 @@
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-gray-50">
                         <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Pesanan</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Pelanggan</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Pembayaran</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jumlah</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tarikh</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tindakan</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Pesanan') }}</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Pelanggan') }}</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Status') }}</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Pembayaran') }}</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Jumlah') }}</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Tarikh') }}</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ __('Tindakan') }}</th>
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
@@ -229,7 +229,7 @@
                                     <div class="flex items-center space-x-2">
                                         <a href="{{ route('admin.orders.show', $order->id) }}" 
                                            class="text-blue-600 hover:text-blue-900 transition-colors duration-200" 
-                                           title="Lihat Butiran Pesanan">
+                                           title="{{ __('Lihat Butiran Pesanan') }}">
                                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
@@ -240,14 +240,14 @@
                                             <a href="{{ route('admin.orders.invoice', $order->id) }}" 
                                                target="_blank"
                                                class="text-green-600 hover:text-green-900 transition-colors duration-200" 
-                                               title="Lihat Invois">
+                                               title="{{ __('Lihat Invois') }}">
                                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                                                 </svg>
                                             </a>
                                             <a href="{{ route('admin.orders.invoice.download', $order->id) }}" 
                                                class="text-purple-600 hover:text-purple-900 transition-colors duration-200" 
-                                               title="Muat Turun Invois">
+                                               title="{{ __('Muat Turun Invois') }}">
                                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                                                 </svg>
@@ -261,17 +261,14 @@
                 </table>
             </div>
             
-            <!-- Pagination -->
-            <div class="px-6 py-4 border-t border-gray-200">
-                {{ $orders->links() }}
-            </div>
+            @include('admin.partials.pagination', ['paginator' => $orders])
         @else
             <div class="text-center py-12">
                 <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
                 </svg>
-                <h3 class="mt-2 text-sm font-medium text-gray-900">Tiada pesanan</h3>
-                <p class="mt-1 text-sm text-gray-500">Tiada pesanan ditemui dengan kriteria carian anda.</p>
+                <h3 class="mt-2 text-sm font-medium text-gray-900">{{ __('Tiada pesanan') }}</h3>
+                <p class="mt-1 text-sm text-gray-500">{{ __('Tiada pesanan ditemui dengan kriteria carian anda.') }}</p>
             </div>
         @endif
     </div>

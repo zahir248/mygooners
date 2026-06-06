@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>Reset Kata Laluan Admin - MyGooners</title>
-    <meta name="description" content="Reset kata laluan admin MyGooners">
+    <title>Set Semula Kata Laluan Pentadbir - MyGooners</title>
+    <meta name="description" content="Set semula kata laluan pentadbir MyGooners">
     
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
@@ -55,15 +55,11 @@
             <div class="flex justify-center">
                 <div class="flex items-center">
                     <img src="{{ asset('images/official-logo.png') }}" alt="MyGooners Logo" class="h-12 w-auto rounded-lg">
-                    <span class="ml-3 text-2xl font-bold text-admin-900">Admin</span>
+                    <span class="ml-3 text-2xl font-bold text-admin-900">{{ __('Pentadbir') }}</span>
                 </div>
             </div>
-            <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
-                Reset Kata Laluan
-            </h2>
-            <p class="mt-2 text-center text-sm text-gray-600">
-                Masukkan kata laluan baharu untuk akaun admin anda.
-            </p>
+            <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">{{ __('Reset Kata Laluan') }}</h2>
+            <p class="mt-2 text-center text-sm text-gray-600">{{ __('Masukkan kata laluan baharu untuk akaun pentadbir anda.') }}</p>
         </div>
 
         <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
@@ -108,9 +104,7 @@
 
                     <div class="space-y-4">
                         <div>
-                            <label for="email" class="block text-sm font-medium text-gray-700 mb-1">
-                                Alamat Emel
-                            </label>
+                            <label for="email" class="block text-sm font-medium text-gray-700 mb-1">{{ __('Alamat Emel') }}</label>
                             <input id="email" 
                                    type="email" 
                                    value="{{ $email }}" 
@@ -119,30 +113,26 @@
                         </div>
 
                         <div>
-                            <label for="password" class="block text-sm font-medium text-gray-700 mb-1">
-                                Kata Laluan Baharu
-                            </label>
+                            <label for="password" class="block text-sm font-medium text-gray-700 mb-1">{{ __('Kata Laluan Baharu') }}</label>
                             <input id="password" 
                                    name="password" 
                                    type="password" 
                                    required 
                                    class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-400 text-gray-900 rounded-md focus:outline-none focus:ring-admin-500 focus:border-admin-500 sm:text-sm transition-all @error('password') border-red-500 @enderror" 
-                                   placeholder="Kata laluan baharu (minimum 8 aksara)">
+                                   placeholder="{{ __('Kata laluan baharu (minimum 8 aksara)') }}">
                             @error('password')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
                         </div>
 
                         <div>
-                            <label for="password_confirmation" class="block text-sm font-medium text-gray-700 mb-1">
-                                Sahkan Kata Laluan
-                            </label>
+                            <label for="password_confirmation" class="block text-sm font-medium text-gray-700 mb-1">{{ __('Sahkan Kata Laluan') }}</label>
                             <input id="password_confirmation" 
                                    name="password_confirmation" 
                                    type="password" 
                                    required 
                                    class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-400 text-gray-900 rounded-md focus:outline-none focus:ring-admin-500 focus:border-admin-500 sm:text-sm transition-all @error('password_confirmation') border-red-500 @enderror" 
-                                   placeholder="Sahkan kata laluan baharu">
+                                   placeholder="{{ __('Sahkan kata laluan baharu') }}">
                             @error('password_confirmation')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
@@ -166,17 +156,13 @@
                 <div class="mt-6 text-center">
                     <p class="text-sm text-gray-600">
                         Ingat kata laluan anda? 
-                        <a href="{{ route('admin.login') }}" class="font-medium text-admin-600 hover:text-admin-500 transition-colors">
-                            Log masuk di sini
-                        </a>
+                        <a href="{{ route('admin.login') }}" class="font-medium text-admin-600 hover:text-admin-500 transition-colors">{{ __('Log masuk di sini') }}</a>
                     </p>
                 </div>
 
                 <!-- Back to Site -->
                 <div class="mt-4 text-center">
-                    <a href="{{ route('home') }}" class="text-sm text-gray-500 hover:text-gray-700 transition-colors">
-                        ← Kembali ke MyGooners
-                    </a>
+                    <a href="{{ route('home') }}" class="text-sm text-gray-500 hover:text-gray-700 transition-colors">{{ __('← Kembali ke MyGooners') }}</a>
                 </div>
             </div>
         </div>
@@ -184,7 +170,7 @@
         <!-- Footer -->
         <div class="mt-8 text-center">
             <p class="text-xs text-gray-500">
-                MyGooners Panel Admin &copy; {{ date('Y') }} - Akses Selamat Sahaja
+                MyGooners Panel Pentadbir &copy; {{ date('Y') }} - Akses Selamat Sahaja
             </p>
         </div>
     </div>

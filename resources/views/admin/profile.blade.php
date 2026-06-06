@@ -1,10 +1,10 @@
 @extends('layouts.admin')
 
-@section('title', 'Profil Saya - Panel Admin')
+@section('title', __('Profil Saya - Panel Pentadbir'))
 
 @push('breadcrumbs')
     <span class="text-gray-400">/</span>
-    <span class="text-gray-600">Profil Saya</span>
+    <span class="text-gray-600">{{ __('Profil Saya') }}</span>
 @endpush
 
 @section('content')
@@ -12,8 +12,8 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <!-- Page Header -->
         <div class="mb-8">
-            <h1 class="text-3xl font-bold text-gray-900">Profil Saya</h1>
-            <p class="mt-2 text-gray-600">Maklumat peribadi dan statistik pentadbir</p>
+            <h1 class="text-3xl font-bold text-gray-900">{{ __('Profil Saya') }}</h1>
+            <p class="mt-2 text-gray-600">{{ __('Maklumat peribadi dan statistik pentadbir') }}</p>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -27,14 +27,14 @@
                         </div>
                         
                         <h2 class="text-xl font-semibold text-gray-900 mb-1">{{ $admin->name }}</h2>
-                        <p class="text-sm text-gray-500 mb-4">Pentadbir Sistem</p>
+                        <p class="text-sm text-gray-500 mb-4">{{ __('Pentadbir Sistem') }}</p>
                         
                         <!-- Status Badge -->
                         <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
                             <svg class="w-2 h-2 mr-1.5" fill="currentColor" viewBox="0 0 8 8">
                                 <circle cx="4" cy="4" r="3"/>
                             </svg>
-                            Aktif
+                            {{ __('Aktif') }}
                         </span>
                     </div>
 
@@ -64,9 +64,7 @@
 
                                          <!-- Quick Actions -->
                      <div class="mt-6 pt-6 border-t border-gray-200">
-                         <button @click="$dispatch('open-modal', 'update-profile')" class="w-full bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition-colors text-sm font-medium">
-                             Kemas Kini Profil
-                         </button>
+                         <button @click="$dispatch('open-modal', 'update-profile')" class="w-full bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition-colors text-sm font-medium">{{ __('Kemas Kini Profil') }}</button>
                      </div>
                 </div>
             </div>
@@ -85,7 +83,7 @@
                                  </div>
                              </div>
                              <div class="ml-4">
-                                 <p class="text-sm font-medium text-gray-500">Artikel Diurus</p>
+                                 <p class="text-sm font-medium text-gray-500">{{ __('Artikel Diurus') }}</p>
                                  <p class="text-2xl font-semibold text-gray-900">{{ $stats['total_articles_managed'] }}</p>
                              </div>
                          </div>
@@ -101,7 +99,7 @@
                                  </div>
                              </div>
                              <div class="ml-4">
-                                 <p class="text-sm font-medium text-gray-500">Artikel Diterbitkan</p>
+                                 <p class="text-sm font-medium text-gray-500">{{ __('Artikel Diterbitkan') }}</p>
                                  <p class="text-2xl font-semibold text-gray-900">{{ $stats['total_published_articles'] }}</p>
                              </div>
                          </div>
@@ -117,7 +115,7 @@
                                 </div>
                             </div>
                             <div class="ml-4">
-                                <p class="text-sm font-medium text-gray-500">Perkhidmatan Diurus</p>
+                                <p class="text-sm font-medium text-gray-500">{{ __('Perkhidmatan Diurus') }}</p>
                                 <p class="text-2xl font-semibold text-gray-900">{{ $stats['total_services_managed'] }}</p>
                             </div>
                         </div>
@@ -133,7 +131,7 @@
                                 </div>
                             </div>
                             <div class="ml-4">
-                                <p class="text-sm font-medium text-gray-500">Produk Diurus</p>
+                                <p class="text-sm font-medium text-gray-500">{{ __('Produk Diurus') }}</p>
                                 <p class="text-2xl font-semibold text-gray-900">{{ $stats['total_products_managed'] }}</p>
                             </div>
                         </div>
@@ -149,7 +147,7 @@
                                 </div>
                             </div>
                             <div class="ml-4">
-                                <p class="text-sm font-medium text-gray-500">Pengguna Diurus</p>
+                                <p class="text-sm font-medium text-gray-500">{{ __('Pengguna Diurus') }}</p>
                                 <p class="text-2xl font-semibold text-gray-900">{{ $stats['total_users_managed'] }}</p>
                             </div>
                         </div>
@@ -159,29 +157,29 @@
                 <!-- Recent Activity -->
                 <div class="bg-white rounded-lg shadow-sm border border-gray-200">
                     <div class="px-6 py-4 border-b border-gray-200">
-                        <h3 class="text-lg font-medium text-gray-900">Aktiviti Terkini</h3>
+                        <h3 class="text-lg font-medium text-gray-900">{{ __('Aktiviti Terkini') }}</h3>
                     </div>
                     <div class="p-6">
                         <div class="space-y-4">
                                                          <div class="flex items-center text-sm">
                                  <div class="w-2 h-2 bg-blue-400 rounded-full mr-3"></div>
                                  <span class="text-gray-600">Menguruskan {{ $stats['total_articles_managed'] }} artikel</span>
-                                 <span class="ml-auto text-gray-400">Hari ini</span>
+                                 <span class="ml-auto text-gray-400">{{ __('Hari ini') }}</span>
                              </div>
                             <div class="flex items-center text-sm">
                                 <div class="w-2 h-2 bg-indigo-400 rounded-full mr-3"></div>
                                 <span class="text-gray-600">{{ $stats['total_published_articles'] }} artikel diterbitkan</span>
-                                <span class="ml-auto text-gray-400">Hari ini</span>
+                                <span class="ml-auto text-gray-400">{{ __('Hari ini') }}</span>
                             </div>
                             <div class="flex items-center text-sm">
                                 <div class="w-2 h-2 bg-green-400 rounded-full mr-3"></div>
                                 <span class="text-gray-600">Menguruskan {{ $stats['total_products_managed'] }} produk</span>
-                                <span class="ml-auto text-gray-400">Hari ini</span>
+                                <span class="ml-auto text-gray-400">{{ __('Hari ini') }}</span>
                             </div>
                             <div class="flex items-center text-sm">
                                 <div class="w-2 h-2 bg-purple-400 rounded-full mr-3"></div>
                                 <span class="text-gray-600">Menguruskan {{ $stats['total_users_managed'] }} pengguna</span>
-                                <span class="ml-auto text-gray-400">Hari ini</span>
+                                <span class="ml-auto text-gray-400">{{ __('Hari ini') }}</span>
                             </div>
                             <div class="flex items-center text-sm">
                                 <div class="w-2 h-2 bg-orange-400 rounded-full mr-3"></div>
@@ -195,24 +193,24 @@
                 <!-- System Information -->
                 <div class="bg-white rounded-lg shadow-sm border border-gray-200">
                     <div class="px-6 py-4 border-b border-gray-200">
-                        <h3 class="text-lg font-medium text-gray-900">Maklumat Sistem</h3>
+                        <h3 class="text-lg font-medium text-gray-900">{{ __('Maklumat Sistem') }}</h3>
                     </div>
                     <div class="p-6">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                             <div>
-                                <span class="text-gray-500">Versi Sistem:</span>
+                                <span class="text-gray-500">{{ __('Versi Sistem:') }}</span>
                                 <span class="ml-2 text-gray-900 font-medium">1.0</span>
                             </div>
                             <div>
-                                <span class="text-gray-500">Status:</span>
-                                <span class="ml-2 text-green-600 font-medium">Operasi Normal</span>
+                                <span class="text-gray-500">{{ __('Status:') }}</span>
+                                <span class="ml-2 text-green-600 font-medium">{{ __('Operasi Normal') }}</span>
                             </div>
                             <div>
-                                <span class="text-gray-500">Kemaskini Terakhir:</span>
-                                <span class="ml-2 text-gray-900 font-medium">Hari ini</span>
+                                <span class="text-gray-500">{{ __('Kemaskini Terakhir:') }}</span>
+                                <span class="ml-2 text-gray-900 font-medium">{{ __('Hari ini') }}</span>
                             </div>
                             <div>
-                                <span class="text-gray-500">Masa Sistem:</span>
+                                <span class="text-gray-500">{{ __('Masa Sistem:') }}</span>
                                 <span class="ml-2 text-gray-900 font-medium">{{ now()->format('d/m/Y H:i:s') }}</span>
                             </div>
                         </div>
@@ -250,13 +248,11 @@
                              </svg>
                          </div>
                          <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
-                             <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">
-                                 Kemas Kini Profil
-                             </h3>
+                             <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">{{ __('Kemas Kini Profil') }}</h3>
                              
                              <!-- Name Field -->
                              <div class="mb-4">
-                                 <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Nama</label>
+                                 <label for="name" class="block text-sm font-medium text-gray-700 mb-1">{{ __('Nama') }}</label>
                                  <input type="text" 
                                         name="name" 
                                         id="name" 
@@ -270,7 +266,7 @@
                              
                              <!-- Email Field -->
                              <div class="mb-4">
-                                 <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Emel</label>
+                                 <label for="email" class="block text-sm font-medium text-gray-700 mb-1">{{ __('Emel') }}</label>
                                  <input type="email" 
                                         name="email" 
                                         id="email" 
@@ -284,12 +280,12 @@
                              
                              <!-- Current Password Field -->
                              <div class="mb-4">
-                                 <label for="current_password" class="block text-sm font-medium text-gray-700 mb-1">Kata Laluan Semasa</label>
+                                 <label for="current_password" class="block text-sm font-medium text-gray-700 mb-1">{{ __('Kata Laluan Semasa') }}</label>
                                  <input type="password" 
                                         name="current_password" 
                                         id="current_password" 
                                         class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500"
-                                        placeholder="Kosongkan jika tidak mahu tukar kata laluan">
+                                        placeholder="{{ __('Kosongkan jika tidak mahu tukar kata laluan') }}">
                                  @error('current_password')
                                      <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                                  @enderror
@@ -297,12 +293,12 @@
                              
                              <!-- New Password Field -->
                              <div class="mb-4">
-                                 <label for="new_password" class="block text-sm font-medium text-gray-700 mb-1">Kata Laluan Baru</label>
+                                 <label for="new_password" class="block text-sm font-medium text-gray-700 mb-1">{{ __('Kata Laluan Baru') }}</label>
                                  <input type="password" 
                                         name="new_password" 
                                         id="new_password" 
                                         class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500"
-                                        placeholder="Kosongkan jika tidak mahu tukar kata laluan">
+                                        placeholder="{{ __('Kosongkan jika tidak mahu tukar kata laluan') }}">
                                  @error('new_password')
                                      <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                                  @enderror
@@ -310,12 +306,12 @@
                              
                              <!-- Confirm New Password Field -->
                              <div class="mb-4">
-                                 <label for="new_password_confirmation" class="block text-sm font-medium text-gray-700 mb-1">Sahkan Kata Laluan Baru</label>
+                                 <label for="new_password_confirmation" class="block text-sm font-medium text-gray-700 mb-1">{{ __('Sahkan Kata Laluan Baru') }}</label>
                                  <input type="password" 
                                         name="new_password_confirmation" 
                                         id="new_password_confirmation" 
                                         class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500"
-                                        placeholder="Kosongkan jika tidak mahu tukar kata laluan">
+                                        placeholder="{{ __('Kosongkan jika tidak mahu tukar kata laluan') }}">
                              </div>
                          </div>
                      </div>
@@ -323,14 +319,10 @@
                  
                  <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
                      <button type="submit" 
-                             class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm">
-                         Kemas Kini
-                     </button>
+                             class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm">{{ __('Kemas Kini') }}</button>
                      <button type="button" 
                              @click="show = false"
-                             class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
-                         Batal
-                     </button>
+                             class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">{{ __('Batal') }}</button>
                  </div>
              </form>
          </div>

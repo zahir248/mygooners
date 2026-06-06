@@ -54,7 +54,7 @@ class OrderController extends Controller
             });
         }
 
-        $orders = $query->orderBy('created_at', 'desc')->paginate(20);
+        $orders = $query->orderBy('created_at', 'desc')->paginate(20)->withQueryString();
 
         // Get statistics
         $stats = [
@@ -121,7 +121,7 @@ class OrderController extends Controller
             $order->update(['delivered_at' => now()]);
         }
 
-        return back()->with('success', 'Status pesanan berjaya dikemas kini.');
+        return back()->with('success', __('flash.order_status_updated'));
     }
 
     /**
@@ -136,7 +136,7 @@ class OrderController extends Controller
         $order = Order::findOrFail($id);
         $order->update(['payment_status' => $request->payment_status]);
 
-        return back()->with('success', 'Status pembayaran berjaya dikemas kini.');
+        return back()->with('success', __('flash.order_payment_updated'));
     }
 
     /**
@@ -148,7 +148,7 @@ class OrderController extends Controller
         
         // Only allow deletion of pending or cancelled orders
         if (!in_array($order->status, ['pending', 'cancelled'])) {
-            return back()->with('error', 'Pesanan yang telah diproses tidak boleh dipadamkan.');
+            return back()->with('error', __('flash.order_delete_forbidden'));
         }
 
         DB::transaction(function() use ($order) {
@@ -158,7 +158,7 @@ class OrderController extends Controller
             $order->delete();
         });
 
-        return redirect()->route('admin.orders.index')->with('success', 'Pesanan berjaya dipadamkan.');
+        return redirect()->route('admin.orders.index')->with('success', __('flash.order_deleted'));
     }
 
     /**
@@ -370,12 +370,12 @@ class OrderController extends Controller
 
         // Check if order is eligible for invoice viewing
         if (($order->status === 'pending' && $order->payment_status === 'pending') || $order->payment_status === 'failed') {
-            return back()->with('error', 'Invois tidak tersedia untuk pesanan yang belum dibayar atau pembayaran gagal.');
+            return back()->with('error', __('flash.invoice_unpaid'));
         }
 
         // Check if order is cancelled
         if ($order->status === 'cancelled') {
-            return back()->with('error', 'Invois tidak tersedia untuk pesanan yang telah dibatalkan.');
+            return back()->with('error', __('flash.invoice_cancelled'));
         }
 
         try {
@@ -388,7 +388,7 @@ class OrderController extends Controller
                     'order_id' => $id,
                     'admin_id' => auth()->id()
                 ]);
-                return back()->with('error', 'Gagal menjana invois. Sila cuba lagi.');
+                return back()->with('error', __('flash.invoice_generate_failed'));
             }
             
             // Check if file exists
@@ -398,7 +398,7 @@ class OrderController extends Controller
                     'admin_id' => auth()->id(),
                     'filepath' => $pdfPath
                 ]);
-                return back()->with('error', 'Fail invois tidak dijumpai. Sila cuba lagi.');
+                return back()->with('error', __('flash.invoice_file_missing'));
             }
             
             // Get the filename and determine content type
@@ -421,7 +421,7 @@ class OrderController extends Controller
                 'trace' => $e->getTraceAsString()
             ]);
             
-            return back()->with('error', 'Gagal memaparkan invois. Sila cuba lagi.');
+            return back()->with('error', __('flash.invoice_view_failed'));
         }
     }
 
@@ -435,12 +435,12 @@ class OrderController extends Controller
 
         // Check if order is eligible for invoice download
         if (($order->status === 'pending' && $order->payment_status === 'pending') || $order->payment_status === 'failed') {
-            return back()->with('error', 'Invois tidak tersedia untuk pesanan yang belum dibayar atau pembayaran gagal.');
+            return back()->with('error', __('flash.invoice_unpaid'));
         }
 
         // Check if order is cancelled
         if ($order->status === 'cancelled') {
-            return back()->with('error', 'Invois tidak tersedia untuk pesanan yang telah dibatalkan.');
+            return back()->with('error', __('flash.invoice_cancelled'));
         }
 
         try {
@@ -453,7 +453,7 @@ class OrderController extends Controller
                     'order_id' => $id,
                     'admin_id' => auth()->id()
                 ]);
-                return back()->with('error', 'Gagal menjana invois. Sila cuba lagi.');
+                return back()->with('error', __('flash.invoice_generate_failed'));
             }
             
             // Check if file exists
@@ -463,7 +463,7 @@ class OrderController extends Controller
                     'admin_id' => auth()->id(),
                     'filepath' => $pdfPath
                 ]);
-                return back()->with('error', 'Fail invois tidak dijumpai. Sila cuba lagi.');
+                return back()->with('error', __('flash.invoice_file_missing'));
             }
             
             // Get the filename and determine content type
@@ -484,7 +484,7 @@ class OrderController extends Controller
                 'trace' => $e->getTraceAsString()
             ]);
             
-            return back()->with('error', 'Gagal memuat turun invois. Sila cuba lagi.');
+            return back()->with('error', __('flash.invoice_download_failed'));
         }
     }
 

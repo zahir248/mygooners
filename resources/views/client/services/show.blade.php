@@ -1,11 +1,11 @@
 @extends('layouts.app')
 
-@section('title', $service->title . ' - Arsenal Services Marketplace - MyGooners')
+@section('title', $service->title . __('community.title_suffix'))
 @section('meta_description', $service->description)
 
 @section('meta_tags')
 <!-- Open Graph Meta Tags -->
-<meta property="og:title" content="{{ $service->title }} - Arsenal Services Marketplace">
+<meta property="og:title" content="{{ $service->title . __('community.og_title_suffix') }}">
 <meta property="og:description" content="{{ $service->description }}">
         <meta property="og:image" content="{{ route('service.image', basename($service->images[0])) }}">
 <meta property="og:type" content="website">
@@ -14,12 +14,12 @@
 
 <!-- Twitter Meta Tags -->
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="{{ $service->title }} - Arsenal Services Marketplace">
+<meta name="twitter:title" content="{{ $service->title . __('community.og_title_suffix') }}">
 <meta name="twitter:description" content="{{ $service->description }}">
         <meta name="twitter:image" content="{{ route('service.image', basename($service->images[0])) }}">
 
 <!-- Additional Meta Tags -->
-<meta name="keywords" content="Arsenal, {{ implode(', ', $service->tags) }}, services, community">
+<meta name="keywords" content="{{ __('community.meta_keywords', ['tags' => implode(', ', $service->tags ?? [])]) }}">
 <meta name="author" content="{{ $service->user->name }}">
 @endsection
 
@@ -28,11 +28,11 @@
 <div class="bg-gray-50 border-b border-gray-200">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
         <nav class="flex items-center space-x-2 text-sm text-gray-600">
-            <a href="{{ route('home') }}" class="hover:text-red-600 transition-colors">Utama</a>
+            <a href="{{ route('home') }}" class="hover:text-red-600 transition-colors">{{ __('Utama') }}</a>
             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
             </svg>
-            <a href="{{ route('services.index') }}" class="hover:text-red-600 transition-colors">Perkhidmatan</a>
+            <a href="{{ route('services.index') }}" class="hover:text-red-600 transition-colors">{{ __('Perkhidmatan') }}</a>
             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
             </svg>
@@ -65,7 +65,7 @@
                                 <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
                                 </svg>
-                                PENYEDIA DISAHKAN
+                                {{ __('PENYEDIA DISAHKAN') }}
                             </span>
                         </div>
                     @endif
@@ -95,7 +95,7 @@
                             <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path>
                             <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"></path>
                         </svg>
-                        {{ number_format($service->views_count) }} tontonan
+                        {{ number_format($service->views_count) }} {{ __('tontonan') }}
                     </div>
                 </div>
                 <h1 class="text-4xl font-bold text-gray-900 mb-4">{{ $service->title }}</h1>
@@ -111,24 +111,24 @@
                             <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
                         </svg>
                         <span class="font-medium text-gray-900">{{ number_format($service->trust_score, 1) }}</span>
-                        <span class="text-gray-500 ml-1">({{ $reviews->count() }} ulasan)</span>
+                        <span class="text-gray-500 ml-1">({{ __('community.reviews_count', ['count' => $reviews->count()]) }})</span>
                     </div>
                     <div class="text-sm text-gray-500">
-                        Disenarai {{ $service->created_at->diffForHumans() }}
+                        {{ __('Disenarai') }} {{ $service->created_at->diffForHumans() }}
                     </div>
                 </div>
             </div>
 
             <!-- Service Description -->
             <div class="bg-white rounded-xl shadow-lg p-8 mb-8">
-                <h2 class="text-2xl font-bold text-gray-900 mb-4">Mengenai Perkhidmatan Ini</h2>
+                <h2 class="text-2xl font-bold text-gray-900 mb-4">{{ __('Mengenai Perkhidmatan Ini') }}</h2>
                 <div class="prose max-w-none text-gray-700 leading-relaxed">
                     <p class="whitespace-pre-line">{{ $service->description }}</p>
                 </div>
                 
                 @if($service->tags)
                     <div class="mt-6">
-                        <h3 class="text-lg font-semibold text-gray-900 mb-3">Tags</h3>
+                        <h3 class="text-lg font-semibold text-gray-900 mb-3">{{ __('Tags') }}</h3>
                         <div class="flex flex-wrap gap-2">
                             @foreach($service->tags as $tag)
                                 <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm">
@@ -143,7 +143,7 @@
             <!-- Reviews Section -->
             <div class="bg-white rounded-xl shadow-lg p-4 sm:p-6 lg:p-8 mb-8">
                 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 sm:gap-0 mb-6 sm:mb-8">
-                    <h2 class="text-2xl sm:text-3xl font-bold text-gray-900">Ulasan Pelanggan</h2>
+                    <h2 class="text-2xl sm:text-3xl font-bold text-gray-900">{{ __('Ulasan Pelanggan') }}</h2>
                     <div class="flex items-center space-x-2">
                         <div class="flex items-center">
                             @for($i = 1; $i <= 5; $i++)
@@ -153,7 +153,7 @@
                             @endfor
                         </div>
                         <span class="text-xl sm:text-2xl font-bold text-gray-900">{{ number_format($service->trust_score, 1) }}</span>
-                        <span class="text-sm sm:text-base text-gray-500">({{ $reviews->count() }} ulasan)</span>
+                        <span class="text-sm sm:text-base text-gray-500">({{ __('community.reviews_count', ['count' => $reviews->count()]) }})</span>
                     </div>
                 </div>
 
@@ -222,8 +222,8 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
                                 </svg>
                             </div>
-                            <h3 class="text-lg font-medium text-gray-900 mb-2">Tiada ulasan lagi</h3>
-                            <p class="text-gray-600 text-sm sm:text-base">Jadilah yang pertama untuk berkongsi pengalaman anda dengan perkhidmatan ini!</p>
+                            <h3 class="text-lg font-medium text-gray-900 mb-2">{{ __('Tiada ulasan lagi') }}</h3>
+                            <p class="text-gray-600 text-sm sm:text-base">{{ __('Jadilah yang pertama untuk berkongsi pengalaman anda dengan perkhidmatan ini!') }}</p>
                         </div>
                     @endif
                     
@@ -236,7 +236,7 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
                                 </svg>
-                                Lihat Semua Ulasan ({{ $reviews->count() }})
+                                {{ __('community.view_all_reviews', ['count' => $reviews->count()]) }}
                             </button>
                         </div>
                     @endif
@@ -259,14 +259,14 @@
                                         @php $profileImg = trim(auth()->user()->profile_image ?? ''); @endphp
                                         @if($profileImg !== '')
                                             @if(Str::startsWith($profileImg, 'http'))
-                                                <img src="{{ $profileImg }}" alt="Anda" 
+                                                <img src="{{ $profileImg }}" alt="{{ __('Anda') }}" 
                                                      class="w-12 h-12 sm:w-14 sm:h-14 rounded-full border-2 border-blue-200 shadow-sm object-cover object-center">
                                             @else
-                                                <img src="{{ asset('storage/' . $profileImg) }}" alt="Anda" 
+                                                <img src="{{ asset('storage/' . $profileImg) }}" alt="{{ __('Anda') }}" 
                                                      class="w-12 h-12 sm:w-14 sm:h-14 rounded-full border-2 border-blue-200 shadow-sm object-cover object-center">
                                             @endif
                                         @else
-                                            <img src="{{ asset('images/profile-image-default.png') }}" alt="Anda" 
+                                            <img src="{{ asset('images/profile-image-default.png') }}" alt="{{ __('Anda') }}" 
                                                  class="w-12 h-12 sm:w-14 sm:h-14 rounded-full border-2 border-blue-200 shadow-sm object-cover object-center">
                                         @endif
                                     </div>
@@ -275,8 +275,8 @@
                                     <div class="flex-1 min-w-0">
                                         <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-3">
                                             <div class="flex-1">
-                                                <h4 class="font-semibold text-blue-900 text-base sm:text-lg mb-1">Anda</h4>
-                                                <p class="text-blue-700 text-sm mb-2">Ulasan anda untuk perkhidmatan ini</p>
+                                                <h4 class="font-semibold text-blue-900 text-base sm:text-lg mb-1">{{ __('Anda') }}</h4>
+                                                <p class="text-blue-700 text-sm mb-2">{{ __('Ulasan anda untuk perkhidmatan ini') }}</p>
                                                 <div class="flex items-center space-x-3 mb-2">
                                                     <!-- Rating Stars -->
                                                     <div class="flex items-center">
@@ -301,7 +301,7 @@
                                                     <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                                                     </svg>
-                                                    Sunting
+                                                    {{ __('Sunting') }}
                                                 </a>
                                                 <button type="button" 
                                                         onclick="openDeleteReviewModal({{ $userReview->id }})" 
@@ -309,7 +309,7 @@
                                                     <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                                                     </svg>
-                                                    Padam
+                                                    {{ __('Padam') }}
                     </button>
                                             </div>
                                         </div>
@@ -323,24 +323,20 @@
                             </div>
                             @else
                                 <a href="{{ route('service.reviews.create', $service) }}" 
-                                   class="inline-block bg-arsenal hover:bg-red-700 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-medium transition-colors text-sm sm:text-base">
-                                    Tulis Ulasan
-                                </a>
+                                   class="inline-block bg-arsenal hover:bg-red-700 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-medium transition-colors text-sm sm:text-base">{{ __('Tulis Ulasan') }}</a>
                             @endif
                         @else
                             <div class="text-center py-4">
-                                <p class="text-gray-600 mb-2">Anda tidak boleh mengulas perkhidmatan anda sendiri</p>
-                                <p class="text-sm text-gray-500">Hanya pengguna lain yang boleh memberikan ulasan</p>
+                                <p class="text-gray-600 mb-2">{{ __('Anda tidak boleh mengulas perkhidmatan anda sendiri') }}</p>
+                                <p class="text-sm text-gray-500">{{ __('Hanya pengguna lain yang boleh memberikan ulasan') }}</p>
                             </div>
                         @endif
                     @else
                         <div class="text-center">
-                            <p class="text-gray-600 mb-3">Log masuk untuk menulis ulasan</p>
+                            <p class="text-gray-600 mb-3">{{ __('Log masuk untuk menulis ulasan') }}</p>
                             <a href="{{ route('login') }}" 
-                               class="inline-block bg-arsenal hover:bg-red-700 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-medium transition-colors text-sm sm:text-base">
-                                Log Masuk
-                            </a>
-                            <p class="text-sm text-gray-500 mt-2">Atau <a href="{{ route('register') }}" class="text-arsenal hover:text-red-700 underline">daftar akaun baru</a></p>
+                               class="inline-block bg-arsenal hover:bg-red-700 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-medium transition-colors text-sm sm:text-base">{{ __('Log Masuk') }}</a>
+                            <p class="text-sm text-gray-500 mt-2">{{ __('Atau') }} <a href="{{ route('register') }}" class="text-arsenal hover:text-red-700 underline">{{ __('daftar akaun baru') }}</a></p>
                         </div>
                     @endauth
                 </div>
@@ -353,7 +349,7 @@
             <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
                 <div class="text-center mb-6">
                     <div class="text-3xl font-bold text-red-600 mb-2">{{ $service->pricing }}</div>
-                    <p class="text-gray-600">Harga permulaan</p>
+                    <p class="text-gray-600">{{ __('Harga permulaan') }}</p>
                 </div>
 
                 <!-- Provider Info -->
@@ -380,7 +376,7 @@
                                 <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
                                 </svg>
-                                Penyedia Disahkan
+                                {{ __('Penyedia Disahkan') }}
                             </div>
                         @endif
 
@@ -389,20 +385,28 @@
                 </div>
 
                 <div class="space-y-3 mb-6">
-                    <a href="https://wa.me/60{{ preg_replace('/[^0-9]/', '', $service->user->phone) }}?text=Hi {{ $service->user->name }}!%0A%0ASaya berminat dengan perkhidmatan anda:%0A- {{ $service->title }}%0A- Harga: {{ $service->pricing }}%0A- Lokasi: {{ $service->location }}%0A%0ATerima kasih!" 
-                       target="_blank" 
+                    @php
+                        $waText = __('community.whatsapp_hi', ['name' => $service->user->name]) . "\n\n"
+                            . __('community.whatsapp_interest') . "\n"
+                            . '- ' . $service->title . "\n"
+                            . '- ' . __('community.whatsapp_price') . ' ' . $service->pricing . "\n"
+                            . '- ' . __('community.whatsapp_location') . ' ' . $service->location . "\n\n"
+                            . __('community.whatsapp_thanks');
+                    @endphp
+                    <a href="https://wa.me/60{{ preg_replace('/[^0-9]/', '', $service->user->phone) }}?text={{ rawurlencode($waText) }}"
+                       target="_blank" rel="noopener noreferrer"
                        class="w-full bg-arsenal hover:bg-arsenal text-white py-3 px-4 rounded-lg font-medium transition-colors flex items-center justify-center">
                         <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
                             <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.488"/>
                         </svg>
-                        Hubungi Penyedia
+                        {{ __('Hubungi Penyedia') }}
                     </a>
                 </div>
 
                 <!-- Provider Bio -->
                 @if($service->user->bio)
                     <div class="pt-6 border-t border-gray-200">
-                        <h4 class="font-semibold text-gray-900 mb-2">Mengenai Penyedia</h4>
+                        <h4 class="font-semibold text-gray-900 mb-2">{{ __('Mengenai Penyedia') }}</h4>
                         <p class="text-sm text-gray-600 leading-relaxed">{{ $service->user->bio }}</p>
                     </div>
                 @endif
@@ -410,17 +414,11 @@
 
             <!-- Share Options -->
             <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
-                <h3 class="font-semibold text-gray-900 mb-4">Kongsi Perkhidmatan Ini</h3>
+                <h3 class="font-semibold text-gray-900 mb-4">{{ __('Kongsi Perkhidmatan Ini') }}</h3>
                 <div class="flex flex-wrap gap-3">
-                    <button onclick="shareOnFacebook()" class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors flex-1 min-w-[120px]">
-                        Facebook
-                    </button>
-                    <button onclick="shareOnTwitter()" class="!bg-sky-500 !hover:bg-sky-600 !text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors flex-1 min-w-[120px] border-0" style="background-color: #0ea5e9 !important; color: white !important;">
-                        Twitter
-                    </button>
-                    <button onclick="copyToClipboard()" class="border border-gray-300 text-gray-700 py-2 px-4 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors flex-1 min-w-[120px]">
-                        Salin Pautan
-                    </button>
+                    <button onclick="shareOnFacebook()" class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors flex-1 min-w-[120px]">{{ __('Facebook') }}</button>
+                    <button onclick="shareOnTwitter()" class="!bg-sky-500 !hover:bg-sky-600 !text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors flex-1 min-w-[120px] border-0" style="background-color: #0ea5e9 !important; color: white !important;">{{ __('Twitter') }}</button>
+                    <button onclick="copyToClipboard()" class="border border-gray-300 text-gray-700 py-2 px-4 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors flex-1 min-w-[120px]">{{ __('Salin Pautan') }}</button>
                 </div>
             </div>
 
@@ -429,7 +427,7 @@
                 <div class="bg-white rounded-xl shadow-2xl w-full max-w-md mx-2">
                     <!-- Modal Header -->
                     <div class="flex items-center justify-between p-4 sm:p-6 border-b border-gray-200">
-                        <h3 class="text-lg sm:text-xl font-bold text-gray-900">Salin Pautan</h3>
+                        <h3 class="text-lg sm:text-xl font-bold text-gray-900">{{ __('Salin Pautan') }}</h3>
                         <button onclick="closeCopyLinkModal()" class="text-gray-400 hover:text-gray-600 transition-colors p-1">
                             <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
@@ -440,15 +438,13 @@
                     <!-- Modal Body -->
                     <div class="p-4 sm:p-6">
                         <div class="mb-4">
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Pautan Perkhidmatan:</label>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">{{ __('Pautan Perkhidmatan:') }}</label>
                             <div class="flex items-center space-x-2">
                                 <input type="text" id="service-link-input" value="{{ request()->url() }}" 
                                        class="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900 bg-gray-50" 
                                        readonly>
                                 <button onclick="copyLinkToClipboard()" 
-                                        class="bg-arsenal hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-                                    Salin
-                                </button>
+                                        class="bg-arsenal hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">{{ __('Salin') }}</button>
                             </div>
                         </div>
                         
@@ -456,28 +452,26 @@
                             <svg class="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
                             </svg>
-                            <span>Pautan telah disalin ke papan klip</span>
+                            <span>{{ __('Pautan telah disalin ke papan klip') }}</span>
                         </div>
                     </div>
 
                     <!-- Modal Footer -->
                     <div class="flex justify-end p-4 sm:p-6 pt-0 border-t border-gray-200">
                         <button onclick="closeCopyLinkModal()" 
-                                class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-                            Tutup
-                </button>
+                                class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">{{ __('Tutup') }}</button>
                     </div>
                 </div>
             </div>
 
             <!-- Report/Safety -->
             <div class="bg-white rounded-xl shadow-lg p-6">
-                <h3 class="font-bold text-gray-900 mb-4">Keselamatan Dahulu</h3>
+                <h3 class="font-bold text-gray-900 mb-4">{{ __('Keselamatan Dahulu') }}</h3>
                 <div class="space-y-3 text-sm text-gray-600">
-                    <p>• Sentiasa bertemu di tempat awam</p>
-                    <p>• Sahkan kelayakan penyedia</p>
-                    <p>• Gunakan sistem mesej platform dahulu</p>
-                    <p>• Laporkan aktiviti yang mencurigakan</p>
+                    <p>{{ __('• Sentiasa bertemu di tempat awam') }}</p>
+                    <p>{{ __('• Sahkan kelayakan penyedia') }}</p>
+                    <p>{{ __('• Gunakan sistem mesej platform dahulu') }}</p>
+                    <p>{{ __('• Laporkan aktiviti yang mencurigakan') }}</p>
                 </div>
             </div>
         </div>
@@ -486,8 +480,8 @@
     <!-- Related Services -->
     <div class="mt-16">
         <div class="mb-8">
-            <h2 class="text-3xl font-bold text-gray-900 mb-2">Perkhidmatan Serupa</h2>
-            <p class="text-gray-600">Perkhidmatan lain yang mungkin anda minati</p>
+            <h2 class="text-3xl font-bold text-gray-900 mb-2">{{ __('Perkhidmatan Serupa') }}</h2>
+            <p class="text-gray-600">{{ __('Perkhidmatan lain yang mungkin anda minati') }}</p>
         </div>
         
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -511,9 +505,7 @@
                         </div>
                         @if($relatedService->is_verified)
                             <div class="absolute top-4 right-4">
-                                <span class="bg-green-100 text-green-600 px-2 py-1 rounded-full text-xs font-bold">
-                                    DISAHKAN
-                                </span>
+                                <span class="bg-green-100 text-green-600 px-2 py-1 rounded-full text-xs font-bold">{{ __('DISAHKAN') }}</span>
                             </div>
                         @endif
                     </div>
@@ -545,13 +537,13 @@
 <script>
 function shareOnFacebook() {
     const url = encodeURIComponent(window.location.href);
-    const title = encodeURIComponent('{{ $service->title }} - Arsenal Services Marketplace');
+    const title = encodeURIComponent(@json(__('community.share_title', ['title' => $service->title])));
     window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`, '_blank', 'width=600,height=400');
 }
 
 function shareOnTwitter() {
     const url = encodeURIComponent(window.location.href);
-    const text = encodeURIComponent('Check out this Arsenal service: {{ $service->title }}');
+    const text = encodeURIComponent(@json(__('community.share_text', ['title' => $service->title])));
     window.open(`https://twitter.com/intent/tweet?url=${url}&text=${text}`, '_blank', 'width=600,height=400');
 }
 
@@ -571,7 +563,6 @@ function copyLinkToClipboard() {
     const linkInput = document.getElementById('service-link-input');
     linkInput.select();
     linkInput.setSelectionRange(0, 99999); // For mobile devices
-    
     navigator.clipboard.writeText(linkInput.value).then(function() {
         // Show success message
         const successMessage = document.querySelector('#copy-link-modal .text-gray-600');
@@ -579,7 +570,7 @@ function copyLinkToClipboard() {
             <svg class="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
             </svg>
-            <span class="text-green-600 font-medium">Pautan berjaya disalin!</span>
+            <span class="text-green-600 font-medium">{{ __('Pautan berjaya disalin!') }}</span>
         `;
         
         // Reset message after 3 seconds
@@ -588,12 +579,12 @@ function copyLinkToClipboard() {
                 <svg class="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
                     <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
                 </svg>
-                <span>Pautan telah disalin ke papan klip</span>
+                <span>{{ __('Pautan telah disalin ke papan klip') }}</span>
             `;
         }, 3000);
     }).catch(function(err) {
         console.error('Could not copy text: ', err);
-        alert('Gagal menyalin pautan. Sila cuba lagi.');
+        alert(window.clientMessages.copy_link_failed);
     });
 }
 
@@ -629,7 +620,6 @@ function filterServiceReviews(rating) {
     const filterButtons = document.querySelectorAll('.service-filter-btn');
     const noReviewsMessage = document.getElementById('service-no-reviews-message');
     let visibleCount = 0;
-
     // Update filter button styles
     filterButtons.forEach(btn => {
         btn.classList.remove('active', 'bg-red-600', 'text-white');
@@ -640,7 +630,6 @@ function filterServiceReviews(rating) {
     const clickedButton = event.target;
     clickedButton.classList.remove('bg-gray-100', 'text-gray-700');
     clickedButton.classList.add('active', 'bg-red-600', 'text-white');
-
     // Filter reviews
     reviewItems.forEach(item => {
         if (rating === 'all' || parseInt(item.dataset.rating) === rating) {
@@ -709,7 +698,7 @@ document.addEventListener('DOMContentLoaded', function() {
         <!-- Modal Header -->
         <div class="flex items-center justify-between p-4 sm:p-6 border-b border-gray-200 flex-shrink-0">
             <div class="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-4">
-                <h3 class="text-xl sm:text-2xl font-bold text-gray-900">Ulasan Perkhidmatan</h3>
+                <h3 class="text-xl sm:text-2xl font-bold text-gray-900">{{ __('Ulasan Perkhidmatan') }}</h3>
                 <div class="flex items-center space-x-2">
                     <div class="flex items-center">
                         @for($i = 1; $i <= 5; $i++)
@@ -718,7 +707,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             </svg>
                         @endfor
                         <span class="ml-2 text-base sm:text-lg font-bold text-gray-900">{{ number_format($service->trust_score, 1) }}</span>
-                        <span class="text-xs sm:text-sm text-gray-500">({{ $reviews->count() }} ulasan)</span>
+                        <span class="text-xs sm:text-sm text-gray-500">({{ __('community.reviews_count', ['count' => $reviews->count()]) }})</span>
                     </div>
                 </div>
             </div>
@@ -734,10 +723,10 @@ document.addEventListener('DOMContentLoaded', function() {
             <!-- Rating Filter - Fixed at top -->
             <div class="p-4 sm:p-6 pb-3 sm:pb-4 border-b border-gray-200 flex-shrink-0">
                 <div class="flex flex-wrap items-center gap-2 sm:gap-3">
-                    <span class="text-xs sm:text-sm font-medium text-gray-700 w-full sm:w-auto mb-2 sm:mb-0">Tapis mengikut rating:</span>
+                    <span class="text-xs sm:text-sm font-medium text-gray-700 w-full sm:w-auto mb-2 sm:mb-0">{{ __('Tapis mengikut rating:') }}</span>
                     <button onclick="filterServiceReviews('all')" 
                             class="service-filter-btn active px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-colors bg-red-600 text-white">
-                        Semua ({{ $reviews->count() }})
+                        {{ __('community.filter_all_reviews', ['count' => $reviews->count()]) }}
                     </button>
                     <button onclick="filterServiceReviews(5)" 
                             class="service-filter-btn px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200">
@@ -830,8 +819,8 @@ document.addEventListener('DOMContentLoaded', function() {
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
                         </svg>
                     </div>
-                    <h3 class="text-base sm:text-lg font-medium text-gray-900 mb-2">Tiada ulasan dijumpai</h3>
-                    <p class="text-gray-600 text-xs sm:text-sm">Tiada ulasan yang sepadan dengan penapis yang dipilih.</p>
+                    <h3 class="text-base sm:text-lg font-medium text-gray-900 mb-2">{{ __('Tiada ulasan dijumpai') }}</h3>
+                    <p class="text-gray-600 text-xs sm:text-sm">{{ __('Tiada ulasan yang sepadan dengan penapis yang dipilih.') }}</p>
                 </div>
             </div>
         </div>
@@ -843,7 +832,7 @@ document.addEventListener('DOMContentLoaded', function() {
     <div class="bg-white rounded-xl shadow-2xl max-w-md w-full">
         <!-- Modal Header -->
         <div class="flex items-center justify-between p-6 border-b border-gray-200">
-            <h3 class="text-lg font-semibold text-gray-900">Padam Ulasan</h3>
+            <h3 class="text-lg font-semibold text-gray-900">{{ __('Padam Ulasan') }}</h3>
             <button onclick="closeDeleteReviewModal()" class="text-gray-400 hover:text-gray-600 transition-colors">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
@@ -862,10 +851,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     </div>
                 </div>
                 <div class="flex-1">
-                    <h4 class="text-base font-medium text-gray-900 mb-2">Adakah anda pasti?</h4>
-                    <p class="text-sm text-gray-600">
-                        Tindakan ini tidak boleh dibatalkan. Ulasan anda akan dipadamkan secara kekal dan tidak dapat dipulihkan.
-                    </p>
+                    <h4 class="text-base font-medium text-gray-900 mb-2">{{ __('Adakah anda pasti?') }}</h4>
+                    <p class="text-sm text-gray-600">{{ __('Tindakan ini tidak boleh dibatalkan. Ulasan anda akan dipadamkan secara kekal dan tidak dapat dipulihkan.') }}</p>
                 </div>
             </div>
         </div>
@@ -873,16 +860,12 @@ document.addEventListener('DOMContentLoaded', function() {
         <!-- Modal Footer -->
         <div class="flex items-center justify-end space-x-3 p-6 border-t border-gray-200">
             <button onclick="closeDeleteReviewModal()" 
-                    class="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
-                Batal
-            </button>
+                    class="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">{{ __('Batal') }}</button>
             <form id="delete-review-form" method="POST" class="inline">
                 @csrf
                 @method('DELETE')
                 <button type="submit" 
-                        class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors">
-                    Padam Ulasan
-                </button>
+                        class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors">{{ __('Padam Ulasan') }}</button>
             </form>
         </div>
     </div>

@@ -58,7 +58,7 @@ class BillingDetailController extends Controller
         }
 
         return redirect()->route('addresses.index')
-                        ->with('success', 'Alamat bil berjaya ditambah!');
+                        ->with('success', __('client_messages.msg_90ab3870e1be'));
     }
 
     public function edit(BillingDetail $billingDetail)
@@ -112,7 +112,7 @@ class BillingDetailController extends Controller
         }
 
         return redirect()->route('addresses.index')
-                        ->with('success', 'Alamat bil berjaya dikemas kini!');
+                        ->with('success', __('client_messages.msg_f0a4b843044e'));
     }
 
     public function destroy(BillingDetail $billingDetail)
@@ -125,7 +125,7 @@ class BillingDetailController extends Controller
         $billingDetail->delete();
 
         return redirect()->route('addresses.index')
-                        ->with('success', 'Alamat bil berjaya dipadam!');
+                        ->with('success', __('client_messages.msg_3b2058cb0fcd'));
     }
 
     public function setDefault(BillingDetail $billingDetail)
@@ -138,6 +138,6 @@ class BillingDetailController extends Controller
         $billingDetail->setAsDefault();
 
         return redirect()->route('addresses.index')
-                        ->with('success', 'Alamat bil telah ditetapkan sebagai lalai!');
+                        ->with('success', __('client_messages.msg_be5ed5c1eef0'));
     }
 }

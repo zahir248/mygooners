@@ -1,13 +1,13 @@
 @extends('layouts.admin')
 
-@section('title', 'Cipta Produk')
+@section('title', __('Cipta Produk'))
 
 @section('content')
 <div class="px-4 sm:px-6 lg:px-8 py-6">
     <div class="sm:flex sm:items-center sm:justify-between">
                             <div>
-            <h1 class="text-2xl font-bold text-gray-900">Cipta Produk Baharu</h1>
-            <p class="mt-2 text-sm text-gray-700">Isi maklumat untuk produk baharu</p>
+            <h1 class="text-2xl font-bold text-gray-900">{{ __('Cipta Produk Baharu') }}</h1>
+            <p class="mt-2 text-sm text-gray-700">{{ __('Isi maklumat untuk produk baharu') }}</p>
         </div>
         <div class="mt-4 sm:mt-0">
             <a href="{{ route('admin.products.index') }}"
@@ -15,7 +15,7 @@
                 <svg class="-ml-1 mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
                 </svg>
-                Kembali ke Produk
+                {{ __('Kembali ke Produk') }}
                                 </a>
                             </div>
                             </div>
@@ -25,18 +25,18 @@
                 @csrf
     <div class="bg-white shadow rounded-lg">
                     <div class="px-6 py-4 border-b border-gray-200">
-                        <h3 class="text-lg font-medium text-gray-900">Maklumat Produk</h3>
+                        <h3 class="text-lg font-medium text-gray-900">{{ __('Maklumat Produk') }}</h3>
                     </div>
         <div class="px-6 py-4 space-y-6">
                         <div>
-                <label for="title" class="block text-sm font-medium text-gray-700 mb-2">Tajuk Produk <span class="text-red-500">*</span></label>
+                <label for="title" class="block text-sm font-medium text-gray-700 mb-2">{{ __('Tajuk Produk') }}<span class="text-red-500">*</span></label>
                 <input type="text" name="title" id="title" value="{{ old('title') }}" required class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-red-500 focus:border-red-500 @error('title') border-red-500 @enderror">
                             @error('title')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
                         </div>
                         <div>
-                <label for="description" class="block text-sm font-medium text-gray-700 mb-2">Deskripsi <span class="text-red-500">*</span></label>
+                <label for="description" class="block text-sm font-medium text-gray-700 mb-2">{{ __('Deskripsi') }}<span class="text-red-500">*</span></label>
                 <textarea name="description" id="description" rows="6" required class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-red-500 focus:border-red-500 @error('description') border-red-500 @enderror">{{ old('description') }}</textarea>
                             @error('description')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -44,9 +44,9 @@
                         </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
-                    <label for="category" class="block text-sm font-medium text-gray-700 mb-2">Kategori <span class="text-red-500">*</span></label>
+                    <label for="category" class="block text-sm font-medium text-gray-700 mb-2">{{ __('Kategori') }}<span class="text-red-500">*</span></label>
                     <select name="category" id="category" required class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-red-500 focus:border-red-500 @error('category') border-red-500 @enderror">
-                                <option value="">Pilih kategori</option>
+                                <option value="">{{ __('Pilih kategori') }}</option>
                         @foreach($categories as $key => $label)
                             <option value="{{ $key }}" {{ old('category') == $key ? 'selected' : '' }}>{{ $label }}</option>
                                 @endforeach
@@ -56,7 +56,7 @@
                             @enderror
                         </div>
                 <div id="main-stock-field-wrapper">
-                    <label for="stock_quantity" class="block text-sm font-medium text-gray-700 mb-2">Kuantiti Stok <span class="text-red-500">*</span></label>
+                    <label for="stock_quantity" class="block text-sm font-medium text-gray-700 mb-2">{{ __('Kuantiti Stok') }}<span class="text-red-500">*</span></label>
                     <input type="number" name="stock_quantity" id="stock_quantity" value="{{ old('stock_quantity', 0) }}" min="0" required class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-red-500 focus:border-red-500 @error('stock_quantity') border-red-500 @enderror">
                     @error('stock_quantity')
                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -65,7 +65,7 @@
             </div>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
-                    <label for="price" class="block text-sm font-medium text-gray-700 mb-2">Harga Asal <span class="text-red-500">*</span></label>
+                    <label for="price" class="block text-sm font-medium text-gray-700 mb-2">{{ __('Harga Asal') }}<span class="text-red-500">*</span></label>
                     <div class="relative">
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                             <span class="text-gray-500 sm:text-sm">RM</span>
@@ -84,7 +84,7 @@
                                 @enderror
                             </div>
                             <div>
-                    <label for="sale_price" class="block text-sm font-medium text-gray-700 mb-2">Harga Jualan</label>
+                    <label for="sale_price" class="block text-sm font-medium text-gray-700 mb-2">{{ __('Harga Jualan') }}</label>
                     <div class="relative">
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                             <span class="text-gray-500 sm:text-sm">RM</span>
@@ -98,15 +98,15 @@
                                class="w-full pl-8 border border-gray-300 rounded-md px-3 py-2 focus:ring-red-500 focus:border-red-500 @error('sale_price') border-red-500 @enderror"
                                oninput="validateSalePrice(this)">
                     </div>
-                    <p id="sale_price_help" class="mt-1 text-sm text-gray-500">Kosongkan jika tiada jualan</p>
+                    <p id="sale_price_help" class="mt-1 text-sm text-gray-500">{{ __('Kosongkan jika tiada jualan') }}</p>
                                 @error('sale_price')
                                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                                 @enderror
                             </div>
                         </div>
                         <div>
-                <label for="tags" class="block text-sm font-medium text-gray-700 mb-2">Tag (pisahkan dengan koma)</label>
-                <input type="text" name="tags" id="tags" value="{{ old('tags') }}" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-red-500 focus:border-red-500 @error('tags') border-red-500 @enderror" placeholder="arsenal, jersey, home, 2024/25">
+                <label for="tags" class="block text-sm font-medium text-gray-700 mb-2">{{ __('Tag (pisahkan dengan koma)') }}</label>
+                <input type="text" name="tags" id="tags" value="{{ old('tags') }}" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-red-500 focus:border-red-500 @error('tags') border-red-500 @enderror" placeholder="{{ __('arsenal, jersey, home, 2024/25') }}">
                 @error('tags')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
@@ -115,17 +115,17 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
-                    <label for="meta_title" class="block text-sm font-medium text-gray-700 mb-2">Meta Title</label>
+                    <label for="meta_title" class="block text-sm font-medium text-gray-700 mb-2">{{ __('Tajuk Meta') }}</label>
                     <input type="text" name="meta_title" id="meta_title" value="{{ old('meta_title') }}" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-red-500 focus:border-red-500 @error('meta_title') border-red-500 @enderror">
                     @error('meta_title')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
                 </div>
                         <div>
-                    <label for="status" class="block text-sm font-medium text-gray-700 mb-2">Status <span class="text-red-500">*</span></label>
+                    <label for="status" class="block text-sm font-medium text-gray-700 mb-2">{{ __('Status') }}<span class="text-red-500">*</span></label>
                     <select name="status" id="status" required class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-red-500 focus:border-red-500 @error('status') border-red-500 @enderror">
-                        <option value="active" {{ old('status') == 'active' ? 'selected' : '' }}>Aktif</option>
-                                <option value="inactive" {{ old('status') == 'inactive' ? 'selected' : '' }}>Tidak Aktif</option>
+                        <option value="active" {{ old('status') == 'active' ? 'selected' : '' }}>{{ __('Aktif') }}</option>
+                                <option value="inactive" {{ old('status') == 'inactive' ? 'selected' : '' }}>{{ __('Tidak Aktif') }}</option>
                             </select>
                             @error('status')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -134,7 +134,7 @@
             </div>
 
             <div>
-                <label for="meta_description" class="block text-sm font-medium text-gray-700 mb-2">Meta Description</label>
+                <label for="meta_description" class="block text-sm font-medium text-gray-700 mb-2">{{ __('Huraian Meta') }}</label>
                 <textarea name="meta_description" id="meta_description" rows="3" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-red-500 focus:border-red-500 @error('meta_description') border-red-500 @enderror">{{ old('meta_description') }}</textarea>
                 @error('meta_description')
                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -142,12 +142,12 @@
             </div>
                         <div class="flex items-center">
                 <input type="checkbox" name="is_featured" id="is_featured" value="1" {{ old('is_featured') ? 'checked' : '' }} class="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300 rounded">
-                <label for="is_featured" class="ml-2 block text-sm text-gray-900">Tandakan sebagai produk ditampilkan</label>
+                <label for="is_featured" class="ml-2 block text-sm text-gray-900">{{ __('Tandakan sebagai produk ditampilkan') }}</label>
                     </div>
                         <div>
-                <label for="images" class="block text-sm font-medium text-gray-700 mb-2">Gambar Produk</label>
+                <label for="images" class="block text-sm font-medium text-gray-700 mb-2">{{ __('Gambar Produk') }}</label>
                 <input type="file" name="images[]" id="images" multiple accept="image/*" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-red-500 focus:border-red-500">
-                <p class="mt-1 text-sm text-gray-500">Boleh muat naik lebih dari satu gambar. PNG, JPG, GIF sehingga 10MB setiap satu.</p>
+                <p class="mt-1 text-sm text-gray-500">{{ __('Boleh muat naik lebih dari satu gambar. PNG, JPG, GIF sehingga 10MB setiap satu.') }}</p>
                 @error('images')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
@@ -162,20 +162,20 @@
     <div class="bg-white shadow rounded-lg">
         <div class="px-6 py-4 border-b border-gray-200">
             <div class="flex items-center justify-between">
-                <h3 class="text-lg font-medium text-gray-900">Varian Produk</h3>
+                <h3 class="text-lg font-medium text-gray-900">{{ __('Varian Produk') }}</h3>
                 <button type="button" onclick="toggleVariations()" class="text-sm text-red-600 hover:text-red-700 font-medium">
-                    <span id="variations-toggle-text">Tambah Varian</span>
+                    <span id="variations-toggle-text">{{ __('Tambah Varian') }}</span>
                         </button>
             </div>
-            <p class="mt-1 text-sm text-gray-600">Tambah varian secara manual untuk produk dengan pilihan saiz, warna, atau ciri lain</p>
+            <p class="mt-1 text-sm text-gray-600">{{ __('Tambah varian secara manual untuk produk dengan pilihan saiz, warna, atau ciri lain') }}</p>
         </div>
         
         <div id="variations-section" class="px-6 py-4 space-y-6" style="display: none;">
             <!-- Variation Label Field -->
             <div>
-                <label for="variation_label" class="block text-sm font-medium text-gray-700 mb-2">Label Varian</label>
-                <input type="text" name="variation_label" id="variation_label" value="{{ old('variation_label', 'Pilihan Varian') }}" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-red-500 focus:border-red-500 @error('variation_label') border-red-500 @enderror" placeholder="Contoh: Saiz, Warna, Jenis, dll">
-                <p class="mt-1 text-sm text-gray-500">Label yang akan dipaparkan untuk bahagian pilihan varian (contoh: "Saiz", "Warna", "Jenis")</p>
+                <label for="variation_label" class="block text-sm font-medium text-gray-700 mb-2">{{ __('Label Varian') }}</label>
+                <input type="text" name="variation_label" id="variation_label" value="{{ old('variation_label', 'Pilihan Varian') }}" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-red-500 focus:border-red-500 @error('variation_label') border-red-500 @enderror" placeholder="{{ __('Contoh: Saiz, Warna, Jenis, dll') }}">
+                <p class="mt-1 text-sm text-gray-500">{{ __('Label yang akan dipaparkan untuk bahagian pilihan varian (contoh: "Saiz", "Warna", "Jenis")') }}</p>
                 @error('variation_label')
                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                 @enderror
@@ -183,12 +183,12 @@
             
             <!-- Add Variation Button -->
             <div class="flex justify-between items-center">
-                <h4 class="text-md font-medium text-gray-900">Senarai Varian</h4>
+                <h4 class="text-md font-medium text-gray-900">{{ __('Senarai Varian') }}</h4>
                 <button type="button" onclick="addVariation()" class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 text-sm font-medium">
                     <svg class="w-4 h-4 mr-2 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                     </svg>
-                    Tambah Varian
+                    {{ __('Tambah Varian') }}
                         </button>
                     </div>
 
@@ -202,14 +202,14 @@
                 <svg class="w-12 h-12 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
                 </svg>
-                <p class="text-lg font-medium">Tiada varian ditambah</p>
-                <p class="text-sm">Klik "Tambah Varian" untuk mula menambah varian produk</p>
+                <p class="text-lg font-medium">{{ __('Tiada varian ditambah') }}</p>
+                <p class="text-sm">{{ __('Klik "Tambah Varian" untuk mula menambah varian produk') }}</p>
                 </div>
         </div>
     </div>
 
     <div class="flex justify-end">
-        <button type="submit" class="px-6 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 text-sm font-medium">Cipta Produk</button>
+        <button type="submit" class="px-6 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 text-sm font-medium">{{ __('Cipta Produk') }}</button>
     </div>
 </form>
 
@@ -231,7 +231,7 @@ function validateForm() {
     const status = document.getElementById('status').value;
     
     if (!title || !description || !category || !price || !stockQuantity || !status) {
-        alert('Sila isi semua medan yang diperlukan');
+        alert(window.adminMessages.fill_required_fields);
         return false;
     }
     
@@ -248,7 +248,7 @@ function validateForm() {
         });
         
         if (variations.length > 0 && !hasValidVariation) {
-            alert('Sila isi nama varian untuk sekurang-kurangnya satu varian');
+            alert(window.adminMessages.fill_variant_name);
             return false;
         }
     }
@@ -265,10 +265,10 @@ function toggleVariations() {
     
     if (section.style.display === 'none') {
         section.style.display = 'block';
-        toggleText.textContent = 'Sembunyikan Varian';
+        toggleText.textContent = @json(__('Sembunyikan Varian'));
     } else {
         section.style.display = 'none';
-        toggleText.textContent = 'Tambah Varian';
+        toggleText.textContent = @json(__('Tambah Varian'));
     }
 
     updateMainStockFieldState();
@@ -299,30 +299,30 @@ function addVariation() {
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <!-- Variation Name -->
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Nama Varian <span class="text-red-500">*</span></label>
+                <label class="block text-sm font-medium text-gray-700 mb-2">{{ __('Nama Varian') }}<span class="text-red-500">*</span></label>
                 <input type="text" 
                        name="variations[${variationCounter}][name]" 
-                       placeholder="Contoh: Merah Saiz L, Putih Saiz M" 
+                       placeholder="{{ __('Contoh: Merah Saiz L, Putih Saiz M') }}" 
                        required 
                        class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-red-500 focus:border-red-500">
-                <p class="mt-1 text-sm text-gray-500">Nama yang akan dipaparkan kepada pelanggan</p>
+                <p class="mt-1 text-sm text-gray-500">{{ __('Nama yang akan dipaparkan kepada pelanggan') }}</p>
             </div>
             
             <!-- SKU -->
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">SKU</label>
+                <label class="block text-sm font-medium text-gray-700 mb-2">{{ __('SKU') }}</label>
                 <input type="text" 
                        name="variations[${variationCounter}][sku]" 
-                       placeholder="Contoh: ARS-HOME-RED-L" 
+                       placeholder="{{ __('Contoh: ARS-HOME-RED-L') }}" 
                        class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-red-500 focus:border-red-500">
-                <p class="mt-1 text-sm text-gray-500">Kod stok unik (optional)</p>
+                <p class="mt-1 text-sm text-gray-500">{{ __('Kod stok unik (optional)') }}</p>
             </div>
         </div>
         
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
             <!-- Price -->
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Harga <span class="text-red-500">*</span></label>
+                <label class="block text-sm font-medium text-gray-700 mb-2">{{ __('Harga') }}<span class="text-red-500">*</span></label>
                 <div class="relative">
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                         <span class="text-gray-500 sm:text-sm">RM</span>
@@ -338,7 +338,7 @@ function addVariation() {
             
             <!-- Sale Price -->
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Harga Jualan</label>
+                <label class="block text-sm font-medium text-gray-700 mb-2">{{ __('Harga Jualan') }}</label>
                 <div class="relative">
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                         <span class="text-gray-500 sm:text-sm">RM</span>
@@ -350,12 +350,12 @@ function addVariation() {
                            class="w-full pl-8 border border-gray-300 rounded-md px-3 py-2 focus:ring-red-500 focus:border-red-500"
                            oninput="validateVariationSalePrice(this, ${variationCounter})">
                 </div>
-                <p class="mt-1 text-sm text-gray-500">Kosongkan jika tiada jualan</p>
+                <p class="mt-1 text-sm text-gray-500">{{ __('Kosongkan jika tiada jualan') }}</p>
             </div>
             
             <!-- Stock Quantity -->
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Kuantiti Stok <span class="text-red-500">*</span></label>
+                <label class="block text-sm font-medium text-gray-700 mb-2">{{ __('Kuantiti Stok') }}<span class="text-red-500">*</span></label>
                 <input type="number" 
                        min="0" 
                        name="variations[${variationCounter}][stock_quantity]" 
@@ -369,22 +369,22 @@ function addVariation() {
         
         <!-- Status -->
         <div class="mt-6">
-            <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
+            <label class="block text-sm font-medium text-gray-700 mb-2">{{ __('Status') }}</label>
             <select name="variations[${variationCounter}][is_active]" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-red-500 focus:border-red-500">
-                <option value="1">Aktif</option>
-                <option value="0">Tidak Aktif</option>
+                <option value="1">{{ __('Aktif') }}</option>
+                <option value="0">{{ __('Tidak Aktif') }}</option>
             </select>
         </div>
         
         <!-- Images Upload -->
         <div class="mt-6">
-            <label class="block text-sm font-medium text-gray-700 mb-2">Gambar Varian</label>
+            <label class="block text-sm font-medium text-gray-700 mb-2">{{ __('Gambar Varian') }}</label>
             <input type="file" 
                    name="variations[${variationCounter}][images][]" 
                    multiple 
                    accept="image/*" 
                    class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-red-500 focus:border-red-500">
-            <p class="mt-1 text-sm text-gray-500">Boleh muat naik lebih dari satu gambar. PNG, JPG, GIF sehingga 10MB setiap satu.</p>
+            <p class="mt-1 text-sm text-gray-500">{{ __('Boleh muat naik lebih dari satu gambar. PNG, JPG, GIF sehingga 10MB setiap satu.') }}</p>
         </div>
     `;
     
@@ -452,23 +452,23 @@ function validateSalePrice(input) {
     const helpText = document.getElementById('sale_price_help');
     
     if (isNaN(salePrice)) {
-        helpText.textContent = 'Sila masukkan nombor yang sah';
+        helpText.textContent = @json(__('Sila masukkan nombor yang sah'));
         helpText.className = 'mt-1 text-sm text-red-600';
         input.classList.add('border-red-500');
         input.classList.remove('border-green-500');
     } else if (salePrice < 0) {
-        helpText.textContent = 'Harga jualan tidak boleh negatif';
+        helpText.textContent = @json(__('Harga jualan tidak boleh negatif'));
         helpText.className = 'mt-1 text-sm text-red-600';
         input.classList.add('border-red-500');
         input.classList.remove('border-green-500');
         input.value = 0;
     } else if (salePrice >= regularPrice) {
-        helpText.textContent = 'Harga jualan mesti lebih rendah daripada harga asal';
+        helpText.textContent = @json(__('Harga jualan mesti lebih rendah daripada harga asal'));
         helpText.className = 'mt-1 text-sm text-red-600';
         input.classList.add('border-red-500');
         input.classList.remove('border-green-500');
     } else {
-        helpText.textContent = 'Harga jualan sah';
+        helpText.textContent = @json(__('Harga jualan sah'));
         helpText.className = 'mt-1 text-sm text-green-600';
         input.classList.remove('border-red-500');
         input.classList.add('border-green-500');

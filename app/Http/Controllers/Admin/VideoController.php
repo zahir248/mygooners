@@ -64,7 +64,7 @@ class VideoController extends Controller
             $query->where('is_featured', filter_var($request->featured, FILTER_VALIDATE_BOOLEAN));
         }
 
-        $videos = $query->orderBy('created_at', 'desc')->paginate(15);
+        $videos = $query->orderBy('created_at', 'desc')->paginate(15)->withQueryString();
 
         $categories = VideoCategory::namesForSelect();
 
@@ -122,7 +122,7 @@ class VideoController extends Controller
                     'error' => $thumbnail->getError(),
                     'error_message' => $thumbnail->getErrorMessage()
                 ]);
-                return back()->withErrors(['thumbnail' => 'Thumbnail upload failed: ' . $thumbnail->getErrorMessage()]);
+                return back()->withErrors(['thumbnail' => __('flash.thumbnail_upload_failed', ['message' => $thumbnail->getErrorMessage()])]);
             }
             
             $filename = 'videos/' . time() . '_' . Str::slug($request->title) . '.' . $thumbnail->getClientOriginalExtension();
@@ -152,18 +152,18 @@ class VideoController extends Controller
                             'filename' => $filename,
                             'stored_path' => $stored
                         ]);
-                        return back()->withErrors(['thumbnail' => 'File was not created properly']);
+                        return back()->withErrors(['thumbnail' => __('flash.image_file_invalid')]);
                     }
                 } else {
                     \Log::error('Failed to store thumbnail file');
-                    return back()->withErrors(['thumbnail' => 'Failed to store thumbnail file']);
+                    return back()->withErrors(['thumbnail' => __('flash.image_store_failed')]);
                 }
             } catch (Exception $e) {
                 \Log::error('Exception during thumbnail storage', [
                     'error' => $e->getMessage(),
                     'trace' => $e->getTraceAsString()
                 ]);
-                return back()->withErrors(['thumbnail' => 'Error storing thumbnail: ' . $e->getMessage()]);
+                return back()->withErrors(['thumbnail' => __('flash.thumbnail_save_error', ['message' => $e->getMessage()])]);
             }
         } else {
             \Log::info('No thumbnail file detected in request', [
@@ -175,10 +175,10 @@ class VideoController extends Controller
         try {
             Video::create($data);
             return redirect()->route('admin.videos.index')
-                           ->with('success', 'Video berjaya dicipta!');
+                           ->with('success', __('flash.video_created'));
         } catch (\Exception $e) {
             Log::error('Error creating video: ' . $e->getMessage());
-            return back()->withInput()->with('error', 'Ralat semasa mencipta video. Sila cuba lagi.');
+            return back()->withInput()->with('error', __('flash.video_create_error'));
         }
     }
 
@@ -275,18 +275,18 @@ class VideoController extends Controller
                             'filename' => $filename,
                             'stored_path' => $stored
                         ]);
-                        return back()->withErrors(['thumbnail' => 'File was not created properly']);
+                        return back()->withErrors(['thumbnail' => __('flash.image_file_invalid')]);
                     }
                 } else {
                     \Log::error('Failed to store thumbnail file in update');
-                    return back()->withErrors(['thumbnail' => 'Failed to store thumbnail file']);
+                    return back()->withErrors(['thumbnail' => __('flash.image_store_failed')]);
                 }
             } catch (Exception $e) {
                 \Log::error('Exception during thumbnail storage in update', [
                     'error' => $e->getMessage(),
                     'trace' => $e->getTraceAsString()
                 ]);
-                return back()->withErrors(['thumbnail' => 'Error storing thumbnail: ' . $e->getMessage()]);
+                return back()->withErrors(['thumbnail' => __('flash.thumbnail_save_error', ['message' => $e->getMessage()])]);
             }
         }
 
@@ -294,16 +294,16 @@ class VideoController extends Controller
             $video->update($data);
             
             // Custom success message based on what was updated
-            $successMessage = 'Video berjaya dikemas kini!';
+            $successMessage = __('flash.video_updated');
             if ($request->has('remove_thumbnail') && $request->remove_thumbnail == '1') {
-                $successMessage = 'Video berjaya dikemas kini! Thumbnail telah dibuang dan thumbnail YouTube akan digunakan.';
+                $successMessage = __('flash.video_updated_thumbnail_youtube');
             }
-            
+
             return redirect()->route('admin.videos.index')
                            ->with('success', $successMessage);
         } catch (\Exception $e) {
             Log::error('Error updating video: ' . $e->getMessage());
-            return back()->withInput()->with('error', 'Ralat semasa mengemas kini video. Sila cuba lagi.');
+            return back()->withInput()->with('error', __('flash.video_update_error'));
         }
     }
 
@@ -319,10 +319,10 @@ class VideoController extends Controller
 
             $video->delete();
             return redirect()->route('admin.videos.index')
-                           ->with('success', 'Video berjaya dipadam!');
+                           ->with('success', __('flash.video_deleted'));
         } catch (\Exception $e) {
             Log::error('Error deleting video: ' . $e->getMessage());
-            return back()->with('error', 'Ralat semasa memadam video. Sila cuba lagi.');
+            return back()->with('error', __('flash.video_delete_error'));
         }
     }
 } 

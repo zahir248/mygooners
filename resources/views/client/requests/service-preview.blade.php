@@ -1,11 +1,11 @@
 @extends('layouts.app')
 
-@section('title', 'Pratonton Perkhidmatan - MyGooners')
+@section('title', __('Pratonton Perkhidmatan - MyGooners'))
 
 @section('content')
 <div class="max-w-3xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
     <div class="mb-8 flex items-center gap-4">
-        <h1 class="text-2xl font-bold text-gray-900">Pratonton Perkhidmatan</h1>
+        <h1 class="text-2xl font-bold text-gray-900">{{ __('Pratonton Perkhidmatan') }}</h1>
         <span class="px-3 py-1 rounded-full text-xs font-semibold
             @if($service->status == 'active') bg-green-100 text-green-700
             @elseif($service->status == 'inactive') bg-red-100 text-red-700
@@ -52,26 +52,26 @@
                 </div>
                 <div class="text-right">
                     <div class="text-2xl font-bold text-gray-900">{{ $service->pricing }}</div>
-                    <div class="text-sm text-gray-500">Harga Perkhidmatan</div>
+                    <div class="text-sm text-gray-500">{{ __('Harga Perkhidmatan') }}</div>
                 </div>
             </div>
             <div class="mb-6">
-                <h3 class="text-lg font-semibold text-gray-900 mb-2">Penerangan Perkhidmatan</h3>
+                <h3 class="text-lg font-semibold text-gray-900 mb-2">{{ __('Penerangan Perkhidmatan') }}</h3>
                 <p class="text-gray-700 leading-relaxed">{{ $service->description }}</p>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                 <div>
-                    <h4 class="font-semibold text-gray-900 mb-2">Maklumat Hubungan</h4>
+                    <h4 class="font-semibold text-gray-900 mb-2">{{ __('Maklumat Hubungan') }}</h4>
                     <p class="text-gray-700">{{ $service->contact_info }}</p>
                 </div>
                 <div>
-                    <h4 class="font-semibold text-gray-900 mb-2">Lokasi</h4>
+                    <h4 class="font-semibold text-gray-900 mb-2">{{ __('Lokasi') }}</h4>
                     <p class="text-gray-700">{{ $service->location }}</p>
                 </div>
             </div>
             @if($service->tags && is_array($service->tags) && count($service->tags) > 0)
             <div class="mb-6">
-                <h4 class="font-semibold text-gray-900 mb-2">Tag</h4>
+                <h4 class="font-semibold text-gray-900 mb-2">{{ __('Tag') }}</h4>
                 <div class="flex flex-wrap gap-2">
                     @foreach($service->tags as $tag)
                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
@@ -83,16 +83,14 @@
             @endif
             <div class="border-t border-gray-200 pt-4">
                 <div class="text-sm text-gray-500">
-                    <p><strong>Tarikh Permohonan:</strong> {{ $service->created_at->format('d F Y, H:i') }}</p>
-                    <p><strong>ID Perkhidmatan:</strong> #{{ $service->id }}</p>
+                    <p><strong>{{ __('Tarikh Permohonan:') }}</strong> {{ $service->created_at->format('d F Y, H:i') }}</p>
+                    <p><strong>{{ __('ID Perkhidmatan:') }}</strong> #{{ $service->id }}</p>
                 </div>
             </div>
         </div>
     </div>
     <div class="mt-6">
-        <a href="{{ route('dashboard') }}" class="inline-block bg-gray-600 hover:bg-gray-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors text-center">
-            Kembali ke Dashboard
-        </a>
+        <a href="{{ route('dashboard') }}" class="inline-block bg-gray-600 hover:bg-gray-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors text-center">{{ __('Kembali ke Dashboard') }}</a>
     </div>
 </div>
 @endsection 

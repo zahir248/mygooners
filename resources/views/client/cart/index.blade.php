@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Troli Beli-Belah - MyGooners')
-@section('meta_description', 'Troli beli-belah anda di MyGooners. Semak dan kemas kini item anda sebelum membuat pembelian.')
+@section('title', __('Troli Beli-Belah - MyGooners'))
+@section('meta_description', __('Troli beli-belah anda di MyGooners. Semak dan kemas kini item anda sebelum membuat pembelian.'))
 
 @push('styles')
 <style>
@@ -45,17 +45,11 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                 </svg>
             </div>
-            <h3 class="text-lg font-bold text-gray-900 text-center mb-2">Keluarkan Item</h3>
-            <p class="text-gray-600 text-center mb-6" id="remove-modal-text">
-                Adakah anda pasti mahu mengeluarkan item ini dari troli?
-            </p>
+            <h3 class="text-lg font-bold text-gray-900 text-center mb-2">{{ __('Keluarkan Item') }}</h3>
+            <p class="text-gray-600 text-center mb-6" id="remove-modal-text">{{ __('Adakah anda pasti mahu mengeluarkan item ini dari troli?') }}</p>
             <div class="flex space-x-3">
-                <button onclick="hideRemoveModal()" class="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-colors">
-                    Batal
-                </button>
-                <button onclick="confirmRemoveItem()" class="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg font-medium hover:bg-red-700 transition-colors">
-                    Keluarkan
-                </button>
+                <button onclick="hideRemoveModal()" class="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-colors">{{ __('Batal') }}</button>
+                <button onclick="confirmRemoveItem()" class="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg font-medium hover:bg-red-700 transition-colors">{{ __('Keluarkan') }}</button>
             </div>
         </div>
     </div>
@@ -70,17 +64,11 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                 </svg>
             </div>
-            <h3 class="text-lg font-bold text-gray-900 text-center mb-2">Kosongkan Troli</h3>
-            <p class="text-gray-600 text-center mb-6">
-                Adakah anda pasti mahu mengosongkan semua item dalam troli? Tindakan ini tidak dapat dibatalkan.
-            </p>
+            <h3 class="text-lg font-bold text-gray-900 text-center mb-2">{{ __('Kosongkan Troli') }}</h3>
+            <p class="text-gray-600 text-center mb-6">{{ __('Adakah anda pasti mahu mengosongkan semua item dalam troli? Tindakan ini tidak dapat dibatalkan.') }}</p>
             <div class="flex space-x-3">
-                <button onclick="hideClearModal()" class="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-colors">
-                    Batal
-                </button>
-                <button onclick="confirmClearCart()" class="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg font-medium hover:bg-red-700 transition-colors">
-                    Kosongkan
-                </button>
+                <button onclick="hideClearModal()" class="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-colors">{{ __('Batal') }}</button>
+                <button onclick="confirmClearCart()" class="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg font-medium hover:bg-red-700 transition-colors">{{ __('Kosongkan') }}</button>
             </div>
         </div>
     </div>
@@ -90,15 +78,15 @@
 <div class="bg-gray-50 border-b border-gray-200">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
         <nav class="flex items-center space-x-2 text-sm text-gray-600">
-            <a href="{{ route('home') }}" class="hover:text-red-600 transition-colors">Utama</a>
+            <a href="{{ route('home') }}" class="hover:text-red-600 transition-colors">{{ __('Utama') }}</a>
             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
             </svg>
-            <a href="{{ route('shop.index') }}" class="hover:text-red-600 transition-colors">Kedai</a>
+            <a href="{{ route('shop.index') }}" class="hover:text-red-600 transition-colors">{{ __('Kedai') }}</a>
             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
             </svg>
-            <span class="text-gray-900 font-medium">Troli Beli-Belah</span>
+            <span class="text-gray-900 font-medium">{{ __('Troli Beli-Belah') }}</span>
         </nav>
     </div>
 </div>
@@ -111,8 +99,8 @@
             <div class="lg:col-span-2">
                 <div class="bg-white rounded-xl shadow-lg overflow-hidden">
                     <div class="px-6 py-4 border-b border-gray-200">
-                        <h1 class="text-2xl font-bold text-gray-900">Troli Beli-Belah</h1>
-                        <p class="text-gray-600 mt-1">{{ $cart->item_count }} item dalam troli</p>
+                        <h1 class="text-2xl font-bold text-gray-900">{{ __('Troli Beli-Belah') }}</h1>
+                        <p class="text-gray-600 mt-1">{{ trans('account_page.items_in_cart', ['count' => $cart->item_count]) }}</p>
                     </div>
                     
                     <div class="divide-y divide-gray-200">
@@ -180,14 +168,14 @@
                                             </div>
                                             <div class="text-right">
                                                 <p class="text-lg font-bold text-gray-900">RM{{ number_format($item->price, 2) }}</p>
-                                                <p class="text-sm text-gray-500">seunit</p>
+                                                <p class="text-sm text-gray-500">{{ __('seunit') }}</p>
                                             </div>
                                         </div>
                                         
                                         <!-- Quantity Controls -->
                                         <div class="flex items-center justify-between mt-4">
                                             <div class="flex items-center space-x-3">
-                                                <label class="text-sm font-medium text-gray-700">Kuantiti:</label>
+                                                <label class="text-sm font-medium text-gray-700">{{ __('Kuantiti:') }}</label>
                                                 <div class="flex items-center border border-gray-300 rounded-lg">
                                                     <button onclick="updateQuantity({{ $item->id }}, -1)" 
                                                             class="px-3 py-1 text-gray-600 hover:text-red-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
@@ -208,7 +196,7 @@
                                             <div class="flex items-center space-x-4">
                                                 <div class="text-right">
                                                     <p class="text-lg font-bold text-red-600 item-subtotal">RM{{ number_format($item->subtotal, 2) }}</p>
-                                                    <p class="text-sm text-gray-500">Jumlah</p>
+                                                    <p class="text-sm text-gray-500">{{ __('Jumlah') }}</p>
                                                 </div>
                                                 <button onclick="removeItem({{ $item->id }})" 
                                                         class="text-red-600 hover:text-red-800 transition-colors">
@@ -229,20 +217,14 @@
                         <div class="flex items-center justify-between">
                             <div class="flex items-center space-x-4">
                                 <button onclick="clearCart()" 
-                                        class="text-red-600 hover:text-red-800 font-medium transition-colors">
-                                    Kosongkan Troli
-                                </button>
+                                        class="text-red-600 hover:text-red-800 font-medium transition-colors">{{ __('Kosongkan Troli') }}</button>
                                 @auth
                                     <a href="{{ route('checkout.orders') }}" 
-                                       class="text-gray-600 hover:text-red-600 font-medium transition-colors">
-                                        Pesanan Saya
-                                    </a>
+                                       class="text-gray-600 hover:text-red-600 font-medium transition-colors">{{ __('Pesanan Saya') }}</a>
                                 @endauth
                             </div>
                             <a href="{{ route('shop.index') }}" 
-                               class="text-gray-600 hover:text-red-600 font-medium transition-colors">
-                                Teruskan Membeli
-                            </a>
+                               class="text-gray-600 hover:text-red-600 font-medium transition-colors">{{ __('Teruskan Membeli') }}</a>
                         </div>
                     </div>
                 </div>
@@ -252,35 +234,33 @@
             <div class="lg:col-span-1">
                 <div class="bg-white rounded-xl shadow-lg overflow-hidden sticky top-24">
                     <div class="px-6 py-4 border-b border-gray-200">
-                        <h2 class="text-xl font-bold text-gray-900">Ringkasan Pesanan</h2>
+                        <h2 class="text-xl font-bold text-gray-900">{{ __('Ringkasan Pesanan') }}</h2>
                     </div>
                     
                     <div class="p-6 space-y-4">
                         <div class="flex justify-between text-sm">
-                            <span class="text-gray-600">Jumlah Item:</span>
+                            <span class="text-gray-600">{{ __('Jumlah Item:') }}</span>
                             <span class="font-medium" id="order-summary-item-count">{{ $cart->item_count }}</span>
                         </div>
                         <div class="flex justify-between text-sm">
-                            <span class="text-gray-600">Jumlah Harga:</span>
+                            <span class="text-gray-600">{{ __('Jumlah Harga:') }}</span>
                             <span class="font-medium" id="order-summary-subtotal">RM{{ number_format($cart->total, 2) }}</span>
                         </div>
                         <div class="flex justify-between text-sm">
-                            <span class="text-gray-600">Penghantaran:</span>
-                            <span class="font-medium text-green-600">Percuma</span>
+                            <span class="text-gray-600">{{ __('Penghantaran:') }}</span>
+                            <span class="font-medium text-green-600">{{ __('Percuma') }}</span>
                         </div>
                         
                         <div class="border-t border-gray-200 pt-4">
                             <div class="flex justify-between text-lg font-bold">
-                                <span>Jumlah Keseluruhan:</span>
+                                <span>{{ __('Jumlah Keseluruhan:') }}</span>
                                 <span class="text-red-600" id="order-summary-total">RM{{ number_format($cart->total, 2) }}</span>
                             </div>
                         </div>
                         
                         <div class="space-y-3 pt-4">
                             <a href="{{ route('checkout.index') }}" 
-                               class="w-full bg-red-600 hover:bg-red-700 text-white py-3 px-6 rounded-lg font-bold transition-colors inline-block text-center">
-                                Teruskan ke Pembayaran
-                            </a>
+                               class="w-full bg-red-600 hover:bg-red-700 text-white py-3 px-6 rounded-lg font-bold transition-colors inline-block text-center">{{ __('Teruskan ke Pembayaran') }}</a>
                         </div>
                         
                         <!-- Security Badge -->
@@ -289,9 +269,9 @@
                                 <svg class="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"></path>
                                 </svg>
-                                <span class="text-sm text-green-700 font-medium">Pembayaran Selamat</span>
+                                <span class="text-sm text-green-700 font-medium">{{ __('Pembayaran Selamat') }}</span>
                             </div>
-                            <p class="text-xs text-green-600 mt-1">Data anda dilindungi dengan enkripsi SSL</p>
+                            <p class="text-xs text-green-600 mt-1">{{ __('Data anda dilindungi dengan enkripsi SSL') }}</p>
                         </div>
                     </div>
                 </div>
@@ -305,17 +285,13 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m6-5v6a2 2 0 01-2 2H9a2 2 0 01-2-2v-6m6 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4.01"></path>
                 </svg>
             </div>
-            <h2 class="text-2xl font-bold text-gray-900 mb-4">Troli Anda Kosong</h2>
-            <p class="text-gray-600 mb-8">Nampaknya anda belum menambah sebarang item ke troli anda.</p>
+            <h2 class="text-2xl font-bold text-gray-900 mb-4">{{ __('Troli Anda Kosong') }}</h2>
+            <p class="text-gray-600 mb-8">{{ __('Nampaknya anda belum menambah sebarang item ke troli anda.') }}</p>
             <div class="space-x-4">
                 <a href="{{ route('shop.index') }}" 
-                   class="inline-block bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded-lg font-bold transition-colors">
-                    Mulakan Membeli
-                </a>
+                   class="inline-block bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded-lg font-bold transition-colors">{{ __('Mulakan Membeli') }}</a>
                 <a href="{{ route('home') }}" 
-                   class="inline-block border-2 border-gray-300 text-gray-700 hover:bg-gray-50 px-8 py-3 rounded-lg font-bold transition-colors">
-                    Kembali ke Utama
-                </a>
+                   class="inline-block border-2 border-gray-300 text-gray-700 hover:bg-gray-50 px-8 py-3 rounded-lg font-bold transition-colors">{{ __('Kembali ke Utama') }}</a>
             </div>
         </div>
     @endif
@@ -329,7 +305,6 @@ function updateQuantity(itemId, change) {
     const quantityDisplay = itemElement.querySelector('.quantity-display');
     const currentQuantity = parseInt(quantityDisplay.textContent);
     const newQuantity = currentQuantity + change;
-    
     if (newQuantity < 1 || newQuantity > 10) {
         return;
     }
@@ -362,7 +337,7 @@ function updateQuantity(itemId, change) {
     })
     .catch(error => {
         console.error('Error:', error);
-        alert('Ralat semasa mengemas kini kuantiti');
+        alert(window.clientMessages.cart_update_error);
     })
     .finally(() => {
         // Re-enable quantity buttons
@@ -392,7 +367,6 @@ function hideRemoveModal() {
 
 function confirmRemoveItem() {
     if (!currentRemoveItemId) return;
-    
     fetch(`{{ url('cart/remove') }}/${currentRemoveItemId}`, {
         method: 'DELETE',
         headers: {
@@ -412,7 +386,6 @@ function confirmRemoveItem() {
             updateCartCount(data.cart_count);
             updateCartTotal(data.cart_total);
             updateOrderSummary(data.cart_count, data.cart_total);
-            
             // Check if cart is empty
             const remainingItems = document.querySelectorAll('[data-item-id]');
             if (remainingItems.length === 0) {
@@ -430,7 +403,7 @@ function confirmRemoveItem() {
     })
     .catch(error => {
         console.error('Error:', error);
-        alert('Ralat semasa mengeluarkan item');
+        alert(window.clientMessages.cart_remove_error);
     });
 }
 
@@ -464,7 +437,6 @@ function confirmClearCart() {
             updateCartCount(data.cart_count);
             updateCartTotal(data.cart_total);
             updateOrderSummary(data.cart_count, data.cart_total);
-            
             // Reload page to show empty cart message
             window.location.reload();
         } else {
@@ -473,7 +445,7 @@ function confirmClearCart() {
     })
     .catch(error => {
         console.error('Error:', error);
-        alert('Ralat semasa mengosongkan troli');
+        alert(window.clientMessages.cart_clear_error);
     });
 }
 
@@ -481,7 +453,6 @@ function updateCartCount(count) {
     const cartCountElements = document.querySelectorAll('.cart-count');
     cartCountElements.forEach(element => {
         element.textContent = count;
-        
         // Show/hide the badge based on count
         if (count > 0) {
             element.classList.remove('hidden');
@@ -530,10 +501,8 @@ function updateOrderSummary(itemCount, total) {
 function showSuccessMessage(message) {
     const successMessage = document.getElementById('success-message');
     const messageText = document.getElementById('success-message-text');
-    
     messageText.textContent = message;
     successMessage.classList.remove('hidden');
-    
     // Auto-hide after 5 seconds
     setTimeout(() => {
         hideSuccessMessage();
@@ -556,7 +525,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // Add click outside functionality for modals
     const removeModal = document.getElementById('remove-modal');
     const clearModal = document.getElementById('clear-modal');
-    
     removeModal.addEventListener('click', function(e) {
         if (e.target === removeModal) {
             hideRemoveModal();

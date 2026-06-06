@@ -1,14 +1,14 @@
 @extends('layouts.admin')
 
-@section('title', 'Edit Artikel')
+@section('title', __('Sunting Artikel'))
 
 @section('content')
 <!-- Header Section -->
 <div class="px-4 sm:px-6 lg:px-8 py-6">
     <div class="sm:flex sm:items-center sm:justify-between">
         <div>
-            <h1 class="text-2xl font-bold text-gray-900">Edit Artikel</h1>
-            <p class="mt-2 text-sm text-gray-700">Kemaskini artikel: {{ $article->title }}</p>
+            <h1 class="text-2xl font-bold text-gray-900">{{ __('Sunting Artikel') }}</h1>
+            <p class="mt-2 text-sm text-gray-700">{{ trans('admin_page.update_article', ['title' => $article->title]) }}</p>
         </div>
         <div class="mt-4 sm:mt-0 flex space-x-3">
             <a href="{{ route('admin.articles.index') }}" 
@@ -16,7 +16,7 @@
                 <svg class="-ml-1 mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
                 </svg>
-                Kembali ke Artikel
+                {{ __('Kembali ke Artikel') }}
             </a>
         </div>
     </div>
@@ -29,13 +29,13 @@
     <!-- Article Content -->
     <div class="bg-white shadow rounded-lg">
         <div class="px-6 py-4 border-b border-gray-200">
-            <h3 class="text-lg font-medium text-gray-900">Kandungan Artikel</h3>
+            <h3 class="text-lg font-medium text-gray-900">{{ __('Kandungan Artikel') }}</h3>
         </div>
         <div class="px-6 py-4 space-y-6">
             <!-- Title -->
             <div>
                 <label for="title" class="block text-sm font-medium text-gray-700 mb-2">
-                    Tajuk Artikel <span class="text-red-500">*</span>
+                    {{ trans('admin_page.article_title') }} <span class="text-red-500">*</span>
                 </label>
                 <input type="text" 
                        name="title" 
@@ -51,7 +51,7 @@
             <!-- Excerpt -->
             <div>
                 <label for="excerpt" class="block text-sm font-medium text-gray-700 mb-2">
-                    Ringkasan Artikel <span class="text-red-500">*</span>
+                    {{ trans('admin_page.article_excerpt') }} <span class="text-red-500">*</span>
                 </label>
                 <textarea name="excerpt" 
                           id="excerpt" 
@@ -59,8 +59,8 @@
                           required
                           maxlength="500"
                           class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-red-500 focus:border-red-500 @error('excerpt') border-red-500 @enderror"
-                          placeholder="Ringkasan ringkas artikel (maksimum 500 aksara)">{{ old('excerpt', $article->excerpt) }}</textarea>
-                <p class="mt-1 text-sm text-gray-500">Maksimum 500 aksara</p>
+                          placeholder="{{ __('Ringkasan ringkas artikel (maksimum 500 aksara)') }}">{{ old('excerpt', $article->excerpt) }}</textarea>
+                <p class="mt-1 text-sm text-gray-500">{{ __('Maksimum 500 aksara') }}</p>
                 @error('excerpt')
                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                 @enderror
@@ -69,14 +69,14 @@
             <!-- Content -->
             <div>
                 <label for="content" class="block text-sm font-medium text-gray-700 mb-2">
-                    Kandungan Artikel <span class="text-red-500">*</span>
+                    {{ trans('admin_page.article_content') }} <span class="text-red-500">*</span>
                 </label>
                 <textarea name="content" 
                           id="content" 
                           rows="15" 
                           required
                           class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-red-500 focus:border-red-500 @error('content') border-red-500 @enderror"
-                          placeholder="Tulis kandungan artikel anda di sini...">{{ old('content', $article->content) }}</textarea>
+                          placeholder="{{ __('Tulis kandungan artikel anda di sini...') }}">{{ old('content', $article->content) }}</textarea>
                 @error('content')
                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                 @enderror
@@ -85,12 +85,12 @@
             <!-- Cover Image Upload -->
             <div>
                 <label for="cover_image" class="block text-sm font-medium text-gray-700 mb-2">
-                    Imej Muka Hadapan
+                    {{ __('Imej Muka Hadapan') }}
                 </label>
                 
                 @if($article->cover_image)
                     <div class="mb-4">
-                        <p class="text-sm font-medium text-gray-700 mb-2">Imej Muka Hadapan Semasa:</p>
+                        <p class="text-sm font-medium text-gray-700 mb-2">{{ __('Imej Muka Hadapan Semasa:') }}</p>
                         <img src="{{ route('article.image', ['filename' => basename($article->cover_image)]) }}" alt="Pratonton Imej Muka Hadapan" class="h-32 w-48 object-cover rounded-lg border border-gray-300">
                     </div>
                 @endif
@@ -102,20 +102,20 @@
                         </svg>
                         <div class="flex text-sm text-gray-600">
                             <label for="cover_image" class="relative cursor-pointer bg-white rounded-md font-medium text-red-600 hover:text-red-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-red-500">
-                                <span>Muat naik fail baru</span>
+                                <span>{{ __('Muat naik fail baru') }}</span>
                                 <input id="cover_image" name="cover_image" type="file" class="sr-only" accept="image/*">
                             </label>
-                            <p class="pl-1">atau seret dan lepaskan</p>
+                            <p class="pl-1">{{ __('atau seret dan lepaskan') }}</p>
                         </div>
-                        <p class="text-xs text-gray-500">PNG, JPG, GIF sehingga 10MB</p>
+                        <p class="text-xs text-gray-500">{{ __('PNG, JPG, GIF sehingga 10MB') }}</p>
                     </div>
                 </div>
                 <div id="image-preview" class="mt-4 hidden">
-                    <p class="text-sm font-medium text-gray-700 mb-2">Pratonton Imej Baharu:</p>
+                    <p class="text-sm font-medium text-gray-700 mb-2">{{ __('Pratonton Imej Baharu:') }}</p>
                     <img id="preview-img" src="" alt="Pratonton Imej" class="h-32 w-48 object-cover rounded-lg border border-gray-300">
-                    <button type="button" id="remove-image" class="mt-2 text-sm text-red-600 hover:text-red-500">Buang Imej</button>
+                    <button type="button" id="remove-image" class="mt-2 text-sm text-red-600 hover:text-red-500">{{ __('Buang Imej') }}</button>
                 </div>
-                <p class="mt-1 text-sm text-gray-500">Pilihan: Tambah imej muka hadapan untuk artikel</p>
+                <p class="mt-1 text-sm text-gray-500">{{ __('Pilihan: Tambah imej muka hadapan untuk artikel') }}</p>
                 @error('cover_image')
                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                 @enderror
@@ -124,15 +124,15 @@
             <!-- YouTube Video URL -->
             <div>
                 <label for="youtube_video_id" class="block text-sm font-medium text-gray-700 mb-2">
-                    URL Video YouTube
+                    {{ __('URL Video YouTube') }}
                 </label>
                 <input type="text" 
                        name="youtube_video_id" 
                        id="youtube_video_id" 
                        value="{{ old('youtube_video_id', $article->youtube_video_id) }}"
                        class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-red-500 focus:border-red-500 @error('youtube_video_id') border-red-500 @enderror"
-                       placeholder="https://youtu.be/MG5enaRS-vM">
-                <p class="mt-1 text-sm text-gray-500">Pilihan: Masukkan URL penuh video YouTube (youtu.be, youtube.com, dll.)</p>
+                       placeholder="{{ __('https://youtu.be/MG5enaRS-vM') }}">
+                <p class="mt-1 text-sm text-gray-500">{{ __('Pilihan: Masukkan URL penuh video YouTube (youtu.be, youtube.com, dll.)') }}</p>
                 @error('youtube_video_id')
                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                 @enderror
@@ -140,19 +140,19 @@
 
             <!-- Social Media Embeds -->
             <div class="space-y-4">
-                <h4 class="text-lg font-medium text-gray-900">Social Media Embeds</h4>
+                <h4 class="text-lg font-medium text-gray-900">{{ __('Social Media Embeds') }}</h4>
                 
                 <!-- Twitter Embed -->
                 <div>
                     <label for="twitter_embed" class="block text-sm font-medium text-gray-700 mb-2">
-                        Twitter/X Embed Code
+                        {{ __('Twitter/X Embed Code') }}
                     </label>
                     <textarea name="twitter_embed" 
                               id="twitter_embed" 
                               rows="3"
                               class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-red-500 focus:border-red-500 @error('twitter_embed') border-red-500 @enderror"
-                              placeholder="Paste Twitter embed code here...">{{ old('twitter_embed', $article->twitter_embed) }}</textarea>
-                    <p class="mt-1 text-sm text-gray-500">Pilihan: Embed code dari Twitter/X</p>
+                              placeholder="{{ __('Paste Twitter embed code here...') }}">{{ old('twitter_embed', $article->twitter_embed) }}</textarea>
+                    <p class="mt-1 text-sm text-gray-500">{{ __('Pilihan: Embed code dari Twitter/X') }}</p>
                     @error('twitter_embed')
                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                     @enderror
@@ -161,14 +161,14 @@
                 <!-- Facebook Embed -->
                 <div>
                     <label for="facebook_embed" class="block text-sm font-medium text-gray-700 mb-2">
-                        Facebook Embed Code
+                        {{ __('Facebook Embed Code') }}
                     </label>
                     <textarea name="facebook_embed" 
                               id="facebook_embed" 
                               rows="3"
                               class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-red-500 focus:border-red-500 @error('facebook_embed') border-red-500 @enderror"
-                              placeholder="Paste Facebook embed code here...">{{ old('facebook_embed', $article->facebook_embed) }}</textarea>
-                    <p class="mt-1 text-sm text-gray-500">Pilihan: Embed code dari Facebook</p>
+                              placeholder="{{ __('Paste Facebook embed code here...') }}">{{ old('facebook_embed', $article->facebook_embed) }}</textarea>
+                    <p class="mt-1 text-sm text-gray-500">{{ __('Pilihan: Embed code dari Facebook') }}</p>
                     @error('facebook_embed')
                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                     @enderror
@@ -177,14 +177,14 @@
                 <!-- Instagram Embed -->
                 <div>
                     <label for="instagram_embed" class="block text-sm font-medium text-gray-700 mb-2">
-                        Instagram Embed Code
+                        {{ __('Instagram Embed Code') }}
                     </label>
                     <textarea name="instagram_embed" 
                               id="instagram_embed" 
                               rows="3"
                               class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-red-500 focus:border-red-500 @error('instagram_embed') border-red-500 @enderror"
-                              placeholder="Paste Instagram embed code here...">{{ old('instagram_embed', $article->instagram_embed) }}</textarea>
-                    <p class="mt-1 text-sm text-gray-500">Pilihan: Embed code dari Instagram</p>
+                              placeholder="{{ __('Paste Instagram embed code here...') }}">{{ old('instagram_embed', $article->instagram_embed) }}</textarea>
+                    <p class="mt-1 text-sm text-gray-500">{{ __('Pilihan: Embed code dari Instagram') }}</p>
                     @error('instagram_embed')
                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                     @enderror
@@ -193,14 +193,14 @@
                 <!-- TikTok Embed -->
                 <div>
                     <label for="tiktok_embed" class="block text-sm font-medium text-gray-700 mb-2">
-                        TikTok Embed Code
+                        {{ __('TikTok Embed Code') }}
                     </label>
                     <textarea name="tiktok_embed" 
                               id="tiktok_embed" 
                               rows="3"
                               class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-red-500 focus:border-red-500 @error('tiktok_embed') border-red-500 @enderror"
-                              placeholder="Paste TikTok embed code here...">{{ old('tiktok_embed', $article->tiktok_embed) }}</textarea>
-                    <p class="mt-1 text-sm text-gray-500">Pilihan: Embed code dari TikTok</p>
+                              placeholder="{{ __('Paste TikTok embed code here...') }}">{{ old('tiktok_embed', $article->tiktok_embed) }}</textarea>
+                    <p class="mt-1 text-sm text-gray-500">{{ __('Pilihan: Embed code dari TikTok') }}</p>
                     @error('tiktok_embed')
                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                     @enderror
@@ -209,14 +209,14 @@
                 <!-- Custom Embed -->
                 <div>
                     <label for="custom_embed" class="block text-sm font-medium text-gray-700 mb-2">
-                        Custom Embed Code
+                        {{ __('Custom Embed Code') }}
                     </label>
                     <textarea name="custom_embed" 
                               id="custom_embed" 
                               rows="3"
                               class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-red-500 focus:border-red-500 @error('custom_embed') border-red-500 @enderror"
-                              placeholder="Paste any custom embed code here...">{{ old('custom_embed', $article->custom_embed) }}</textarea>
-                    <p class="mt-1 text-sm text-gray-500">Pilihan: Custom embed code untuk platform lain</p>
+                              placeholder="{{ __('Paste any custom embed code here...') }}">{{ old('custom_embed', $article->custom_embed) }}</textarea>
+                    <p class="mt-1 text-sm text-gray-500">{{ __('Pilihan: Custom embed code untuk platform lain') }}</p>
                     @error('custom_embed')
                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                     @enderror
@@ -228,20 +228,20 @@
     <!-- Article Settings -->
     <div class="bg-white shadow rounded-lg">
         <div class="px-6 py-4 border-b border-gray-200">
-            <h3 class="text-lg font-medium text-gray-900">Tetapan Artikel</h3>
+            <h3 class="text-lg font-medium text-gray-900">{{ __('Tetapan Artikel') }}</h3>
         </div>
         <div class="px-6 py-4 space-y-6">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <!-- Category -->
                 <div>
                     <label for="category" class="block text-sm font-medium text-gray-700 mb-2">
-                        Kategori <span class="text-red-500">*</span>
+                        {{ trans('admin_page.category') }} <span class="text-red-500">*</span>
                     </label>
                     <select name="category" 
                             id="category" 
                             required
                             class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-red-500 focus:border-red-500 @error('category') border-red-500 @enderror">
-                        <option value="">Pilih kategori</option>
+                        <option value="">{{ __('Pilih kategori') }}</option>
                         @foreach($categories as $category)
                             <option value="{{ $category }}" {{ old('category', $article->category) === $category ? 'selected' : '' }}>
                                 {{ $category }}
@@ -256,14 +256,14 @@
                 <!-- Status -->
                 <div>
                     <label for="status" class="block text-sm font-medium text-gray-700 mb-2">
-                        Status Penerbitan <span class="text-red-500">*</span>
+                        {{ trans('admin_page.publication_status') }} <span class="text-red-500">*</span>
                     </label>
                     <select name="status" 
                             id="status" 
                             required
                             class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-red-500 focus:border-red-500 @error('status') border-red-500 @enderror">
-                        <option value="draft" {{ old('status', $article->status) === 'draft' ? 'selected' : '' }}>Simpan sebagai Draf</option>
-                        <option value="published" {{ old('status', $article->status) === 'published' ? 'selected' : '' }}>Diterbitkan</option>
+                        <option value="draft" {{ old('status', $article->status) === 'draft' ? 'selected' : '' }}>{{ trans('admin_page.save_as_draft') }}</option>
+                        <option value="published" {{ old('status', $article->status) === 'published' ? 'selected' : '' }}>{{ trans('admin_page.published') }}</option>
                     </select>
                     @error('status')
                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -280,7 +280,7 @@
                        {{ old('is_featured', $article->is_featured) ? 'checked' : '' }}
                        class="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300 rounded">
                 <label for="is_featured" class="ml-2 block text-sm text-gray-900">
-                    Tandakan sebagai artikel pilihan
+                    {{ __('Tandakan sebagai artikel pilihan') }}
                 </label>
             </div>
         </div>
@@ -289,14 +289,14 @@
     <!-- SEO Settings -->
     <div class="bg-white shadow rounded-lg">
         <div class="px-6 py-4 border-b border-gray-200">
-            <h3 class="text-lg font-medium text-gray-900">Tetapan SEO</h3>
-            <p class="text-sm text-gray-500">Pilihan: Kustomkan maklumat meta SEO</p>
+            <h3 class="text-lg font-medium text-gray-900">{{ __('Tetapan SEO') }}</h3>
+            <p class="text-sm text-gray-500">{{ __('Pilihan: Kustomkan maklumat meta SEO') }}</p>
         </div>
         <div class="px-6 py-4 space-y-6">
-            <!-- Meta Title -->
+            <!-- Tajuk Meta -->
             <div>
                 <label for="meta_title" class="block text-sm font-medium text-gray-700 mb-2">
-                    Tajuk Meta
+                    {{ __('Tajuk Meta') }}
                 </label>
                 <input type="text" 
                        name="meta_title" 
@@ -304,25 +304,25 @@
                        value="{{ old('meta_title', $article->meta_title) }}"
                        maxlength="60"
                        class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-red-500 focus:border-red-500 @error('meta_title') border-red-500 @enderror"
-                       placeholder="Tajuk SEO tersuai (lalai kepada tajuk artikel)">
-                <p class="mt-1 text-sm text-gray-500">Disyorkan: 50-60 aksara</p>
+                       placeholder="{{ __('Tajuk SEO tersuai (lalai kepada tajuk artikel)') }}">
+                <p class="mt-1 text-sm text-gray-500">{{ __('Disyorkan: 50-60 aksara') }}</p>
                 @error('meta_title')
                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                 @enderror
             </div>
 
-            <!-- Meta Description -->
+            <!-- Huraian Meta -->
             <div>
                 <label for="meta_description" class="block text-sm font-medium text-gray-700 mb-2">
-                    Deskripsi Meta
+                    {{ __('Deskripsi Meta') }}
                 </label>
                 <textarea name="meta_description" 
                           id="meta_description" 
                           rows="3" 
                           maxlength="160"
                           class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-red-500 focus:border-red-500 @error('meta_description') border-red-500 @enderror"
-                          placeholder="Deskripsi SEO tersuai (lalai kepada ringkasan artikel)">{{ old('meta_description', $article->meta_description) }}</textarea>
-                <p class="mt-1 text-sm text-gray-500">Disyorkan: 150-160 aksara</p>
+                          placeholder="{{ __('Deskripsi SEO tersuai (lalai kepada ringkasan artikel)') }}">{{ old('meta_description', $article->meta_description) }}</textarea>
+                <p class="mt-1 text-sm text-gray-500">{{ __('Disyorkan: 150-160 aksara') }}</p>
                 @error('meta_description')
                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                 @enderror
@@ -331,15 +331,15 @@
             <!-- Keywords -->
             <div>
                 <label for="keywords" class="block text-sm font-medium text-gray-700 mb-2">
-                    Kata Kunci
+                    {{ __('Kata Kunci') }}
                 </label>
                 <input type="text" 
                        name="keywords" 
                        id="keywords" 
                        value="{{ old('keywords', $article->keywords) }}"
                        class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-red-500 focus:border-red-500 @error('keywords') border-red-500 @enderror"
-                       placeholder="arsenal, berita, pemindahan, perlawanan">
-                <p class="mt-1 text-sm text-gray-500">Pilihan: Masukkan kata kunci yang berkaitan dipisahkan dengan koma</p>
+                       placeholder="{{ __('arsenal, berita, pemindahan, perlawanan') }}">
+                <p class="mt-1 text-sm text-gray-500">{{ __('Pilihan: Masukkan kata kunci yang berkaitan dipisahkan dengan koma') }}</p>
                 @error('keywords')
                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                 @enderror
@@ -350,32 +350,32 @@
     <!-- Article Stats -->
     <div class="bg-white shadow rounded-lg">
         <div class="px-6 py-4 border-b border-gray-200">
-            <h3 class="text-lg font-medium text-gray-900">Statistik Artikel</h3>
+            <h3 class="text-lg font-medium text-gray-900">{{ __('Statistik Artikel') }}</h3>
         </div>
         <div class="px-6 py-4">
             <dl class="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2">
                 <div>
-                    <dt class="text-sm font-medium text-gray-500">Jumlah Tontonan</dt>
+                    <dt class="text-sm font-medium text-gray-500">{{ __('Jumlah Tontonan') }}</dt>
                     <dd class="mt-1 text-sm text-gray-900">{{ number_format($article->views_count ?? 0) }}</dd>
                 </div>
                 <div>
-                    <dt class="text-sm font-medium text-gray-500">Dicipta Pada</dt>
+                    <dt class="text-sm font-medium text-gray-500">{{ __('Dicipta Pada') }}</dt>
                     <dd class="mt-1 text-sm text-gray-900">{{ $article->formatted_date }}, {{ $article->formatted_time }}</dd>
                 </div>
                 <div>
-                    <dt class="text-sm font-medium text-gray-500">Kemaskini Terakhir</dt>
+                    <dt class="text-sm font-medium text-gray-500">{{ __('Kemaskini Terakhir') }}</dt>
                     <dd class="mt-1 text-sm text-gray-900">{{ $article->updated_at?->format('j M Y, H:i') ?? 'Tidak Pernah' }}</dd>
                 </div>
                 <div>
-                    <dt class="text-sm font-medium text-gray-500">Status</dt>
+                    <dt class="text-sm font-medium text-gray-500">{{ __('Status') }}</dt>
                     <dd class="mt-1">
                         @if($article->status === 'published')
                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                Diterbitkan
+                                {{ __('Diterbitkan') }}
                             </span>
                         @elseif($article->status === 'draft')
                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                                Draf
+                                {{ __('Draf') }}
                             </span>
                         @endif
                     </dd>
@@ -388,7 +388,7 @@
     <div class="flex justify-end space-x-3">
         <a href="{{ route('admin.articles.index') }}" 
            class="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
-            Batal
+            {{ __('Batal') }}
         </a>
         <a href="{{ route('admin.articles.preview-existing', $article->id) }}" 
            target="_blank"
@@ -397,11 +397,11 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
             </svg>
-            Pratonton
+            {{ __('Pratonton') }}
         </a>
         <button type="submit" 
                 class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
-            Kemaskini Artikel
+            {{ __('Kemaskini Artikel') }}
         </button>
     </div>
 </form>
@@ -474,19 +474,18 @@ document.addEventListener('DOMContentLoaded', function() {
                                             title: file.name
                                         });
                                     } else {
-                                        alert('Upload failed: Invalid response');
+                                        alert(window.adminMessages.upload_invalid_response);
                                     }
                                 } catch (e) {
                                     console.error('JSON parse error:', e);
-                                    alert('Upload failed: Invalid response format');
                                 }
                             } else {
-                                alert('Upload failed with status: ' + xhr.status);
+                                alert(window.adminMessages.upload_failed_status.replace(':status', String(xhr.status)));
                             }
                         };
                         
                         xhr.onerror = function () {
-                            alert('Network error during upload');
+                            alert(window.adminMessages.upload_network_error);
                         };
                         
                         xhr.send(formData);
@@ -506,7 +505,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 text: 'Twitter',
                 tooltip: 'Insert Twitter Embed',
                 onAction: function () {
-                    editor.insertContent('<p>[TWITTER_EMBED]</p>');
+                    editor.insertContent('<p>{{ __('[TWITTER_EMBED]') }}</p>');
                 }
             });
             
@@ -514,7 +513,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 text: 'Facebook',
                 tooltip: 'Insert Facebook Embed',
                 onAction: function () {
-                    editor.insertContent('<p>[FACEBOOK_EMBED]</p>');
+                    editor.insertContent('<p>{{ __('[FACEBOOK_EMBED]') }}</p>');
                 }
             });
             
@@ -522,7 +521,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 text: 'Instagram',
                 tooltip: 'Insert Instagram Embed',
                 onAction: function () {
-                    editor.insertContent('<p>[INSTAGRAM_EMBED]</p>');
+                    editor.insertContent('<p>{{ __('[INSTAGRAM_EMBED]') }}</p>');
                 }
             });
             
@@ -530,7 +529,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 text: 'TikTok',
                 tooltip: 'Insert TikTok Embed',
                 onAction: function () {
-                    editor.insertContent('<p>[TIKTOK_EMBED]</p>');
+                    editor.insertContent('<p>{{ __('[TIKTOK_EMBED]') }}</p>');
                 }
             });
             
@@ -538,7 +537,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 text: 'Custom',
                 tooltip: 'Insert Custom Embed',
                 onAction: function () {
-                    editor.insertContent('<p>[CUSTOM_EMBED]</p>');
+                    editor.insertContent('<p>{{ __('[CUSTOM_EMBED]') }}</p>');
                 }
             });
         }

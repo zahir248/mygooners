@@ -30,6 +30,8 @@ class User extends Authenticatable
         'location',
         'phone',
         'role',
+        'admin_locale',
+        'client_locale',
         'trust_score',
         'is_verified',
         'status',
@@ -82,6 +84,26 @@ class User extends Authenticatable
             'is_verified' => 'boolean',
             'admin_request_data' => 'array'
         ];
+    }
+
+    /**
+     * Admin panel language preference. Null means default Malay.
+     */
+    public function preferredAdminLocale(): string
+    {
+        $locale = $this->admin_locale;
+
+        return in_array($locale, ['ms', 'en'], true) ? $locale : 'ms';
+    }
+
+    /**
+     * Client site language preference. Null means default Malay.
+     */
+    public function preferredClientLocale(): string
+    {
+        $locale = $this->client_locale;
+
+        return in_array($locale, ['ms', 'en'], true) ? $locale : 'ms';
     }
 
     public function services()

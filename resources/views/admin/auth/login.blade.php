@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>Log Masuk Admin - MyGooners</title>
-    <meta name="description" content="Akses panel admin MyGooners">
+    <title>{{ __('Log Masuk Pentadbir - MyGooners') }}</title>
+    <meta name="description" content="{{ __('Akses panel pentadbir MyGooners') }}">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -50,15 +50,11 @@
             <div class="flex justify-center">
                 <div class="flex items-center">
                     <img src="{{ asset('images/official-logo.png') }}" alt="MyGooners Logo" class="h-12 w-auto rounded-lg">
-                    <span class="ml-3 text-2xl font-bold text-admin-900">Admin</span>
+                    <span class="ml-3 text-2xl font-bold text-admin-900">{{ __('Pentadbir') }}</span>
                 </div>
             </div>
-            <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
-                Log masuk ke panel admin
-            </h2>
-            <p class="mt-2 text-center text-sm text-gray-600">
-                Akses sistem pentadbiran MyGooners
-            </p>
+            <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">{{ __('Log masuk ke panel pentadbir') }}</h2>
+            <p class="mt-2 text-center text-sm text-gray-600">{{ __('Akses sistem pentadbiran MyGooners') }}</p>
         </div>
 
         <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
@@ -87,35 +83,30 @@
 
                     <!-- Email Address -->
                     <div>
-                        <label for="email" class="block text-sm font-medium text-gray-700">
-                            Alamat emel
-                        </label>
+                        <label for="email" class="block text-sm font-medium text-gray-700">{{ __('Alamat emel') }}</label>
                         <div class="mt-1">
                             <input id="email" 
                                    name="email" 
                                    type="email" 
                                    autocomplete="email" 
                                    required
-                                                                       value="{{ old('email', 'support@mygooners.my') }}"
+                                   value="{{ old('email') }}"
                                    class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-admin-500 focus:border-admin-500 sm:text-sm transition-all"
-                                   placeholder="admin@mygooners.com">
+                                   placeholder="support@mygooners.my">
                         </div>
                     </div>
 
                     <!-- Password -->
                     <div>
-                        <label for="password" class="block text-sm font-medium text-gray-700">
-                            Kata laluan
-                        </label>
+                        <label for="password" class="block text-sm font-medium text-gray-700">{{ __('Kata laluan') }}</label>
                         <div class="mt-1">
                             <input id="password" 
                                    name="password" 
                                    type="password" 
                                    autocomplete="current-password" 
                                    required
-                                   value="password"
                                    class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-admin-500 focus:border-admin-500 sm:text-sm transition-all"
-                                   placeholder="••••••••">
+                                   placeholder="{{ __('Masukkan kata laluan') }}">
                         </div>
                     </div>
 
@@ -126,15 +117,11 @@
                                    name="remember" 
                                    type="checkbox" 
                                    class="h-4 w-4 text-admin-600 focus:ring-admin-500 border-gray-300 rounded">
-                            <label for="remember" class="ml-2 block text-sm text-gray-900">
-                                Ingat saya
-                            </label>
+                            <label for="remember" class="ml-2 block text-sm text-gray-900">{{ __('Ingat saya') }}</label>
                         </div>
 
                         <div class="text-sm">
-                            <a href="{{ route('admin.password.request') }}" class="font-medium text-admin-600 hover:text-admin-500 transition-colors">
-                                Lupa kata laluan?
-                            </a>
+                            <a href="{{ route('admin.password.request') }}" class="font-medium text-admin-600 hover:text-admin-500 transition-colors">{{ __('Lupa kata laluan?') }}</a>
                         </div>
                     </div>
 
@@ -147,7 +134,7 @@
                                     <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"></path>
                                 </svg>
                             </span>
-                            Log masuk ke panel admin
+                            Log masuk ke panel pentadbir
                         </button>
                     </div>
                 </form>
@@ -156,9 +143,7 @@
 
                 <!-- Back to Site -->
                 <div class="mt-4 text-center">
-                    <a href="{{ route('home') }}" class="text-sm text-gray-500 hover:text-gray-700 transition-colors">
-                        ← Kembali ke MyGooners
-                    </a>
+                    <a href="{{ route('home') }}" class="text-sm text-gray-500 hover:text-gray-700 transition-colors">{{ __('← Kembali ke MyGooners') }}</a>
                 </div>
             </div>
         </div>
@@ -166,7 +151,7 @@
         <!-- Footer -->
         <div class="mt-8 text-center">
             <p class="text-xs text-gray-500">
-                MyGooners Panel Admin &copy; {{ date('Y') }} - Akses Selamat Sahaja
+                MyGooners Panel Pentadbir &copy; {{ date('Y') }} - Akses Selamat Sahaja
             </p>
         </div>
     </div>

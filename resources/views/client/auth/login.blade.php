@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Log Masuk - MyGooners</title>
+    <title>{{ __('Log Masuk - MyGooners') }}</title>
     <meta name="description" content="Log masuk ke MyGooners">
     
     <!-- Favicon -->
@@ -73,45 +73,41 @@
         <div class="max-w-md w-full relative z-10">
             <div class="bg-white rounded-xl shadow-lg p-8">
                 <div class="flex items-center space-x-2 mb-4 pl-1 pt-1">
-                    <a href="{{ route('home') }}" class="flex items-center text-gray-500 text-sm font-normal hover:text-gray-700 focus:outline-none" aria-label="Kembali ke Utama">
+                    <a href="{{ route('home') }}" class="flex items-center text-gray-500 text-sm font-normal hover:text-gray-700 focus:outline-none" aria-label="{{ __('Kembali ke Utama') }}">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                         </svg>
-                        <span>Back</span>
+                        <span>{{ __('Back') }}</span>
                     </a>
                 </div>
-                <h2 class="text-center text-3xl font-extrabold text-gray-900">
-                    Log masuk
-                </h2>
-                <p class="mt-2 text-center text-sm text-gray-600">
-                    Selamat kembali ke komuniti Arsenal
-                </p>
+                <h2 class="text-center text-3xl font-extrabold text-gray-900">{{ __('Log masuk') }}</h2>
+                <p class="mt-2 text-center text-sm text-gray-600">{{ __('Selamat kembali ke komuniti Arsenal') }}</p>
                 <form class="mt-8 space-y-6" method="POST" action="{{ route('login') }}">
                     @csrf
                     <div class="rounded-md shadow-sm -space-y-px">
                         <div>
-                            <label for="email" class="sr-only">Alamat emel</label>
+                            <label for="email" class="sr-only">{{ __('Alamat emel') }}</label>
                             <input id="email" 
-                                   name="email" 
-                                   type="email" 
-                                   autocomplete="email" 
-                                   required 
+                                   name="email"
+                                   type="email"
+                                   autocomplete="email"
+                                   required
                                    value="{{ old('email') }}"
                                    class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-red-500 focus:border-red-500 focus:z-10 sm:text-sm @error('email') border-red-500 @enderror" 
-                                   placeholder="Alamat emel">
+                                   placeholder="{{ __('Alamat emel') }}">
                             @error('email')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
                         </div>
                         <div>
-                            <label for="password" class="sr-only">Kata laluan</label>
+                            <label for="password" class="sr-only">{{ __('Kata laluan') }}</label>
                             <input id="password" 
-                                   name="password" 
-                                   type="password" 
-                                   autocomplete="current-password" 
-                                   required 
+                                   name="password"
+                                   type="password"
+                                   autocomplete="current-password"
+                                   required
                                    class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-red-500 focus:border-red-500 focus:z-10 sm:text-sm @error('password') border-red-500 @enderror" 
-                                   placeholder="Kata laluan">
+                                   placeholder="{{ __('Kata laluan') }}">
                             @error('password')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
@@ -120,17 +116,13 @@
                     <div class="flex items-center justify-between">
                         <div class="flex items-center">
                             <input id="remember" 
-                                   name="remember" 
-                                   type="checkbox" 
+                                   name="remember"
+                                   type="checkbox"
                                    class="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300 rounded">
-                            <label for="remember" class="ml-2 block text-sm text-gray-900">
-                                Ingat saya
-                            </label>
+                            <label for="remember" class="ml-2 block text-sm text-gray-900">{{ __('Ingat saya') }}</label>
                         </div>
                         <div class="text-sm">
-                            <a href="{{ route('password.request') }}" class="font-medium text-red-600 hover:text-red-500">
-                                Lupa kata laluan?
-                            </a>
+                            <a href="{{ route('password.request') }}" class="font-medium text-red-600 hover:text-red-500">{{ __('Lupa kata laluan?') }}</a>
                         </div>
                     </div>
                     <div>
@@ -141,13 +133,13 @@
                                     <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"></path>
                                 </svg>
                             </span>
-                            Log Masuk
+                            {{ __('Log Masuk') }}
                         </button>
                     </div>
                 </form>
                 <div class="flex items-center my-4">
                     <div class="flex-grow border-t border-gray-200"></div>
-                    <span class="mx-3 text-gray-400 text-sm">Atau teruskan dengan</span>
+                    <span class="mx-3 text-gray-400 text-sm">{{ __('Atau teruskan dengan') }}</span>
                     <div class="flex-grow border-t border-gray-200"></div>
                 </div>
                 <div class="flex justify-center">
@@ -158,10 +150,8 @@
                 </div>
                 <div class="text-center mt-8">
                     <p class="text-sm text-gray-600">
-                        Tidak mempunyai akaun? 
-                        <a href="{{ route('register') }}" class="font-medium text-red-600 hover:text-red-500">
-                            Sertai komuniti Gooners
-                        </a>
+                        {{ __('Tidak mempunyai akaun?') }}
+                        <a href="{{ route('register') }}" class="font-medium text-red-600 hover:text-red-500">{{ __('Sertai komuniti Gooners') }}</a>
                     </p>
                 </div>
             </div>

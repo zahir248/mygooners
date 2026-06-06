@@ -60,7 +60,7 @@ class CheckoutController extends Controller
         $cart->load(['items.product', 'items.variation']);
         
         if ($cart->items->count() === 0) {
-            return redirect()->route('cart.index')->with('error', 'Troli anda kosong. Sila tambah item sebelum meneruskan ke pembayaran.');
+            return redirect()->route('cart.index')->with('error', __('client_messages.msg_59653f23dbce'));
         }
 
         $user = auth()->user();
@@ -105,7 +105,7 @@ class CheckoutController extends Controller
         $cart->load(['items.product', 'items.variation']);
         
         if ($cart->items->count() === 0) {
-            return redirect()->route('cart.index')->with('error', 'Troli anda kosong.');
+            return redirect()->route('cart.index')->with('error', __('client_messages.msg_ae8f4918d907'));
         }
 
         foreach ($cart->items as $item) {
@@ -117,12 +117,14 @@ class CheckoutController extends Controller
             if ($availableStock <= 0) {
                 return redirect()->route('cart.index')->with(
                     'error',
-                    $isVariationItem ? 'Selected size is out of stock.' : 'This product is currently out of stock.'
+                    $isVariationItem
+                        ? __('client_messages.variation_out_of_stock')
+                        : __('client_messages.product_out_of_stock')
                 );
             }
 
             if ($availableStock < (int) $item->quantity) {
-                return redirect()->route('cart.index')->with('error', 'Requested quantity exceeds available stock.');
+                return redirect()->route('cart.index')->with('error', __('client_messages.msg_1858ef6f0305'));
             }
         }
 
@@ -357,7 +359,7 @@ class CheckoutController extends Controller
                     return redirect($paymentResult['payment_url']);
                 } else {
                     DB::rollBack();
-                    return back()->with('error', 'Gagal membuat bil pembayaran. Sila cuba lagi.')
+                    return back()->with('error', __('client_messages.msg_0da8ffd4c594'))
                                 ->withInput();
                 }
             } elseif ($request->payment_method === 'stripe') {
@@ -401,7 +403,7 @@ class CheckoutController extends Controller
                     ]);
                 } else {
                     DB::rollBack();
-                    return back()->with('error', 'Gagal membuat pembayaran Stripe. Sila cuba lagi.')
+                    return back()->with('error', __('client_messages.msg_71f926c2f106'))
                                 ->withInput();
                 }
             }
@@ -410,7 +412,7 @@ class CheckoutController extends Controller
             DB::rollBack();
             \Log::error('Checkout error: ' . $e->getMessage());
             
-            return back()->with('error', 'Ralat semasa memproses pesanan. Sila cuba lagi.')
+            return back()->with('error', __('client_messages.msg_5f21adf315f7'))
                         ->withInput();
         }
     }
@@ -481,14 +483,14 @@ class CheckoutController extends Controller
 
         // Check if order can be cancelled
         if (!in_array($order->status, ['pending', 'processing'])) {
-            return back()->with('error', 'Pesanan ini tidak boleh dibatalkan. Hanya pesanan yang tertunggak atau sedang diproses boleh dibatalkan.');
+            return back()->with('error', __('client_messages.msg_13f281fd979d'));
         }
 
         // Check if payment was made and if it's within cancellation window
         if ($order->payment_status === 'paid') {
             $hoursSinceOrder = $order->created_at->diffInHours(now());
             if ($hoursSinceOrder > 24) {
-                return back()->with('error', 'Pesanan ini tidak boleh dibatalkan kerana telah melebihi 24 jam dari masa pembelian. Sila hubungi admin untuk bantuan.');
+                return back()->with('error', __('client_messages.msg_5fb01c720eb8'));
             }
         }
 
@@ -578,7 +580,7 @@ class CheckoutController extends Controller
 
             DB::commit();
 
-            return redirect()->route('checkout.orders')->with('success', 'Pesanan anda telah berjaya dibatalkan.');
+            return redirect()->route('checkout.orders')->with('success', __('client_messages.msg_cdab9af934cc'));
 
         } catch (\Exception $e) {
             DB::rollBack();
@@ -588,7 +590,7 @@ class CheckoutController extends Controller
                 'error' => $e->getMessage()
             ]);
 
-            return back()->with('error', 'Ralat semasa membatalkan pesanan. Sila cuba lagi atau hubungi admin.');
+            return back()->with('error', __('client_messages.msg_7d3402f1c39f'));
         }
     }
 
@@ -638,7 +640,7 @@ class CheckoutController extends Controller
                     return redirect($paymentResult['payment_url']);
                 } else {
                     DB::rollBack();
-                    return back()->with('error', 'Gagal membuat bil pembayaran. Sila cuba lagi.');
+                    return back()->with('error', __('client_messages.msg_0da8ffd4c594'));
                 }
             } elseif ($order->payment_method === 'stripe') {
                 // Try to reuse existing payment intent first, then create new one if needed
@@ -670,12 +672,12 @@ class CheckoutController extends Controller
                     ]);
                 } else {
                     DB::rollBack();
-                    return back()->with('error', 'Gagal membuat pembayaran Stripe. Sila cuba lagi.');
+                    return back()->with('error', __('client_messages.msg_71f926c2f106'));
                 }
             }
 
             DB::rollBack();
-            return back()->with('error', 'Kaedah pembayaran tidak sah.');
+            return back()->with('error', __('client_messages.msg_c638d4644643'));
 
         } catch (\Exception $e) {
             DB::rollBack();
@@ -685,7 +687,7 @@ class CheckoutController extends Controller
                 'error' => $e->getMessage()
             ]);
 
-            return back()->with('error', 'Ralat semasa mencuba pembayaran semula. Sila cuba lagi.');
+            return back()->with('error', __('client_messages.msg_b14da15047d5'));
         }
     }
 
@@ -755,7 +757,7 @@ class CheckoutController extends Controller
                     return redirect($paymentResult['payment_url']);
                 } else {
                     DB::rollBack();
-                    return back()->with('error', 'Gagal membuat bil pembayaran. Sila cuba lagi.');
+                    return back()->with('error', __('client_messages.msg_0da8ffd4c594'));
                 }
             } elseif ($request->payment_method === 'stripe') {
                 // Try to reuse existing payment intent first, then create new one if needed
@@ -787,12 +789,12 @@ class CheckoutController extends Controller
                     ]);
                 } else {
                     DB::rollBack();
-                    return back()->with('error', 'Gagal membuat pembayaran Stripe. Sila cuba lagi.');
+                    return back()->with('error', __('client_messages.msg_71f926c2f106'));
                 }
             }
 
             DB::rollBack();
-            return back()->with('error', 'Kaedah pembayaran tidak sah.');
+            return back()->with('error', __('client_messages.msg_c638d4644643'));
 
         } catch (\Exception $e) {
             DB::rollBack();
@@ -803,7 +805,7 @@ class CheckoutController extends Controller
                 'error' => $e->getMessage()
             ]);
 
-            return back()->with('error', 'Ralat semasa mencuba pembayaran semula. Sila cuba lagi.');
+            return back()->with('error', __('client_messages.msg_b14da15047d5'));
         }
     }
 
@@ -817,7 +819,7 @@ class CheckoutController extends Controller
 
         if (!$billCode) {
             return redirect()->route('checkout.orders')
-                           ->with('error', 'Maklumat pembayaran tidak lengkap.');
+                           ->with('error', __('client_messages.msg_d2fee20df332'));
         }
 
         // Get order from database using bill code
@@ -866,7 +868,7 @@ class CheckoutController extends Controller
                 ]);
                 
                 return redirect()->route('checkout.orders')
-                               ->with('error', 'Pesanan tidak dijumpai.');
+                               ->with('error', __('client_messages.msg_2467b7180349'));
             }
         }
 
@@ -1006,7 +1008,7 @@ class CheckoutController extends Controller
                         $variation = \App\Models\ProductVariation::find($item->product_variation_id);
                         if ($variation) {
                             if ((int) $variation->stock_quantity < (int) $item->quantity) {
-                                throw new \Exception('Selected size is out of stock.');
+                                throw new \Exception(__('client_messages.variation_out_of_stock'));
                             }
                             $variation->decrement('stock_quantity', $item->quantity);
                             \Log::info('Stock reduced for variation', [
@@ -1021,7 +1023,7 @@ class CheckoutController extends Controller
                         $product = \App\Models\Product::find($item->product_id);
                         if ($product) {
                             if ((int) $product->calculated_stock < (int) $item->quantity) {
-                                throw new \Exception('This product is currently out of stock.');
+                                throw new \Exception(__('client_messages.product_out_of_stock'));
                             }
                             $product->decrement('stock_quantity', $item->quantity);
                             \Log::info('Stock reduced for product', [
@@ -1067,7 +1069,7 @@ class CheckoutController extends Controller
             // Handle response based on payment result
             if ($paymentResult['success'] && $paymentResult['paid']) {
                 return redirect()->route('checkout.success', $order->id)
-                               ->with('success', 'Pembayaran berjaya! Pesanan anda telah direkodkan.');
+                               ->with('success', __('client_messages.msg_afa6ca01566d'));
             } else {
                 // Payment failed - redirect to retry payment
                 return redirect()->route('checkout.show-retry-payment', $order->id)
@@ -1079,7 +1081,7 @@ class CheckoutController extends Controller
             \Log::error('Error processing payment: ' . $e->getMessage());
             
             return redirect()->route('checkout.orders')
-                           ->with('error', 'Ralat semasa memproses pesanan. Sila hubungi kami.');
+                           ->with('error', __('client_messages.msg_25e232757128'));
         }
     }
 
@@ -1133,7 +1135,7 @@ class CheckoutController extends Controller
             ]);
             
             return redirect()->route('checkout.orders')
-                           ->with('error', 'Pesanan tidak dijumpai.');
+                           ->with('error', __('client_messages.msg_2467b7180349'));
         }
 
         // Update order status to failed
@@ -1214,7 +1216,7 @@ class CheckoutController extends Controller
 
         if (!$paymentIntentId) {
             return redirect()->route('checkout.orders')
-                           ->with('error', 'Maklumat pembayaran tidak lengkap.');
+                           ->with('error', __('client_messages.msg_d2fee20df332'));
         }
 
         // Get order from database using payment intent ID
@@ -1252,7 +1254,7 @@ class CheckoutController extends Controller
             ]);
             
             return redirect()->route('checkout.orders')
-                           ->with('error', 'Pesanan tidak dijumpai.');
+                           ->with('error', __('client_messages.msg_2467b7180349'));
         }
 
         // Verify payment status with Stripe
@@ -1268,7 +1270,7 @@ class CheckoutController extends Controller
 
         if (!$paymentResult['success']) {
             return redirect()->route('checkout.orders')
-                           ->with('error', 'Gagal mengesahkan status pembayaran. Sila hubungi kami.');
+                           ->with('error', __('client_messages.msg_59d4a6a59469'));
         }
 
         if ($paymentResult['paid']) {
@@ -1317,7 +1319,7 @@ class CheckoutController extends Controller
                         $variation = \App\Models\ProductVariation::find($item->product_variation_id);
                         if ($variation) {
                             if ((int) $variation->stock_quantity < (int) $item->quantity) {
-                                throw new \Exception('Selected size is out of stock.');
+                                throw new \Exception(__('client_messages.variation_out_of_stock'));
                             }
                             $variation->decrement('stock_quantity', $item->quantity);
                             \Log::info('Stock reduced for variation', [
@@ -1332,7 +1334,7 @@ class CheckoutController extends Controller
                         $product = \App\Models\Product::find($item->product_id);
                         if ($product) {
                             if ((int) $product->calculated_stock < (int) $item->quantity) {
-                                throw new \Exception('This product is currently out of stock.');
+                                throw new \Exception(__('client_messages.product_out_of_stock'));
                             }
                             $product->decrement('stock_quantity', $item->quantity);
                             \Log::info('Stock reduced for product', [
@@ -1375,14 +1377,14 @@ class CheckoutController extends Controller
                 }
 
                 return redirect()->route('checkout.success', $order->id)
-                               ->with('success', 'Pembayaran berjaya! Pesanan anda telah direkodkan.');
+                               ->with('success', __('client_messages.msg_afa6ca01566d'));
 
             } catch (\Exception $e) {
                 DB::rollBack();
                 \Log::error('Error updating order after payment: ' . $e->getMessage());
                 
                 return redirect()->route('checkout.orders')
-                               ->with('error', 'Unable to process your order. Please check your cart and try again.');
+                               ->with('error', __('client_messages.msg_fd32d416ae56'));
             }
         } else {
             // Payment failed or user clicked back - preserve order for retry
@@ -1455,7 +1457,7 @@ class CheckoutController extends Controller
 
         if (!$paymentIntentId || !$clientSecret) {
             return redirect()->route('checkout.orders')
-                           ->with('error', 'Maklumat pembayaran tidak lengkap.');
+                           ->with('error', __('client_messages.msg_d2fee20df332'));
         }
 
         return view('client.checkout.stripe-payment', compact('paymentIntentId', 'clientSecret'));
@@ -1472,7 +1474,7 @@ class CheckoutController extends Controller
 
         // Only allow marking as delivered if order is shipped
         if ($order->status !== 'shipped') {
-            return back()->with('error', 'Pesanan hanya boleh ditandakan sebagai diterima jika statusnya adalah "Telah Dihantar".');
+            return back()->with('error', __('client_messages.msg_46e6fa3b933e'));
         }
 
         $order->update([
@@ -1480,7 +1482,7 @@ class CheckoutController extends Controller
             'delivered_at' => now()
         ]);
 
-        return back()->with('success', 'Pesanan berjaya ditandakan sebagai diterima. Terima kasih kerana membeli-belah dengan kami!');
+        return back()->with('success', __('client_messages.msg_f62d124f8d43'));
     }
 
     /**
@@ -1495,12 +1497,12 @@ class CheckoutController extends Controller
 
         // Check if order is eligible for invoice download
         if (($order->status === 'pending' && $order->payment_status === 'pending') || $order->payment_status === 'failed') {
-            return back()->with('error', 'Invois tidak tersedia untuk pesanan yang belum dibayar atau pembayaran gagal.');
+            return back()->with('error', __('client_messages.msg_07eb0905a87d'));
         }
 
         // Check if order is cancelled
         if ($order->status === 'cancelled') {
-            return back()->with('error', 'Invois tidak tersedia untuk pesanan yang telah dibatalkan.');
+            return back()->with('error', __('client_messages.msg_5bae937b7024'));
         }
 
         try {
@@ -1513,7 +1515,7 @@ class CheckoutController extends Controller
                     'order_id' => $orderId,
                     'user_id' => auth()->id()
                 ]);
-                return back()->with('error', 'Unable to download invoice. Please try again later.');
+                return back()->with('error', __('client_messages.msg_7ea1295213aa'));
             }
             
             // Check if file exists
@@ -1523,7 +1525,7 @@ class CheckoutController extends Controller
                     'user_id' => auth()->id(),
                     'filepath' => $pdfPath
                 ]);
-                return back()->with('error', 'Unable to download invoice. Please try again later.');
+                return back()->with('error', __('client_messages.msg_7ea1295213aa'));
             }
             
             // Get the filename from the path
@@ -1545,7 +1547,7 @@ class CheckoutController extends Controller
                 'user_id' => auth()->id()
             ]);
             
-            return back()->with('error', 'Unable to download invoice. Please try again later.');
+            return back()->with('error', __('client_messages.msg_7ea1295213aa'));
             
         }
     }
@@ -1562,12 +1564,12 @@ class CheckoutController extends Controller
 
         // Check if order is eligible for invoice viewing
         if (($order->status === 'pending' && $order->payment_status === 'pending') || $order->payment_status === 'failed') {
-            return back()->with('error', 'Invois tidak tersedia untuk pesanan yang belum dibayar atau pembayaran gagal.');
+            return back()->with('error', __('client_messages.msg_07eb0905a87d'));
         }
 
         // Check if order is cancelled
         if ($order->status === 'cancelled') {
-            return back()->with('error', 'Invois tidak tersedia untuk pesanan yang telah dibatalkan.');
+            return back()->with('error', __('client_messages.msg_5bae937b7024'));
         }
 
         try {
@@ -1580,7 +1582,7 @@ class CheckoutController extends Controller
                     'order_id' => $orderId,
                     'user_id' => auth()->id()
                 ]);
-                return back()->with('error', 'Unable to download invoice. Please try again later.');
+                return back()->with('error', __('client_messages.msg_7ea1295213aa'));
             }
             
             // Check if file exists
@@ -1590,7 +1592,7 @@ class CheckoutController extends Controller
                     'user_id' => auth()->id(),
                     'filepath' => $pdfPath
                 ]);
-                return back()->with('error', 'Unable to download invoice. Please try again later.');
+                return back()->with('error', __('client_messages.msg_7ea1295213aa'));
             }
             
             // Get the filename and determine content type
@@ -1611,7 +1613,7 @@ class CheckoutController extends Controller
                 'user_id' => auth()->id()
             ]);
             
-            return back()->with('error', 'Unable to download invoice. Please try again later.');
+            return back()->with('error', __('client_messages.msg_7ea1295213aa'));
         }
     }
 

@@ -1,18 +1,18 @@
 @extends('layouts.app')
 
-@section('title', 'Pesanan Saya - MyGooners')
-@section('meta_description', 'Lihat semua pesanan anda di MyGooners.')
+@section('title', __('Pesanan Saya - MyGooners'))
+@section('meta_description', __('Lihat semua pesanan anda di MyGooners.'))
 
 @section('content')
 <!-- Breadcrumb -->
 <div class="bg-gray-50 border-b border-gray-200">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
         <nav class="flex items-center space-x-2 text-sm text-gray-600">
-            <a href="{{ route('home') }}" class="hover:text-red-600 transition-colors">Utama</a>
+            <a href="{{ route('home') }}" class="hover:text-red-600 transition-colors">{{ __('Utama') }}</a>
             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
             </svg>
-            <span class="text-gray-900 font-medium">Pesanan Saya</span>
+            <span class="text-gray-900 font-medium">{{ __('Pesanan Saya') }}</span>
         </nav>
     </div>
 </div>
@@ -22,14 +22,12 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <div class="flex items-center justify-between">
             <div>
-                <h1 class="text-2xl font-bold text-gray-900">Pesanan Saya</h1>
-                <p class="text-gray-600 mt-1">Lihat dan uruskan semua pesanan anda</p>
+                <h1 class="text-2xl font-bold text-gray-900">{{ __('Pesanan Saya') }}</h1>
+                <p class="text-gray-600 mt-1">{{ __('Lihat dan uruskan semua pesanan anda') }}</p>
             </div>
             
             <a href="{{ route('shop.index') }}" 
-               class="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg font-medium transition-colors">
-                Teruskan Membeli
-            </a>
+               class="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg font-medium transition-colors">{{ __('Teruskan Membeli') }}</a>
         </div>
     </div>
 </div>
@@ -44,15 +42,15 @@
                 </svg>
             </div>
             <div class="flex-1">
-                <h3 class="text-sm font-medium text-blue-900 mb-1">Maklumat Penting Mengenai Pesanan</h3>
+                <h3 class="text-sm font-medium text-blue-900 mb-1">{{ __('Maklumat Penting Mengenai Pesanan') }}</h3>
                 <div class="text-sm text-blue-800 space-y-1">
-                    <p>• <strong>Pembatalan:</strong> Anda boleh membatalkan pesanan yang belum dibayar atau pesanan yang telah dibayar dalam tempoh 24 jam</p>
-                    <p>• <strong>Auto-Cancel:</strong> Pesanan yang belum dibayar akan dibatalkan secara automatik oleh sistem selepas 24 jam</p>
-                    <p>• <strong>Pembayaran Semula:</strong> Jika pembayaran gagal, anda boleh cuba bayar semula untuk pesanan yang sama</p>
-                    <p>• <strong>Status Pesanan:</strong> Ikuti perkembangan pesanan anda dari "Menunggu Pembayaran" hingga "Telah Diterima"</p>
-                    <p>• <strong>Tandakan Sebagai Diterima:</strong> Apabila anda menerima pesanan yang telah dihantar, anda boleh menandakannya sebagai diterima</p>
-                    <p>• <strong>Auto-Delivery:</strong> Pesanan yang telah dihantar akan ditandakan sebagai diterima secara automatik selepas 7 hari jika anda tidak menandakannya sendiri</p>
-                    <p>• <strong>Bantuan:</strong> Jika anda memerlukan bantuan, sila hubungi kami melalui emel atau telefon</p>
+                    <p>{{ __('•') }}<strong>{{ __('Pembatalan:') }}</strong> {{ __('Anda boleh membatalkan pesanan yang belum dibayar atau pesanan yang telah dibayar dalam tempoh 24 jam') }}</p>
+                    <p>{{ __('•') }}<strong>{{ __('Auto-Cancel:') }}</strong> {{ __('Pesanan yang belum dibayar akan dibatalkan secara automatik oleh sistem selepas 24 jam') }}</p>
+                    <p>{{ __('•') }}<strong>{{ __('Pembayaran Semula:') }}</strong> {{ __('Jika pembayaran gagal, anda boleh cuba bayar semula untuk pesanan yang sama') }}</p>
+                    <p>{{ __('•') }}<strong>{{ __('Status Pesanan:') }}</strong> {{ __('Ikuti perkembangan pesanan anda dari "Menunggu Pembayaran" hingga "Telah Diterima"') }}</p>
+                    <p>{{ __('•') }}<strong>{{ __('Tandakan Sebagai Diterima:') }}</strong> {{ __('Apabila anda menerima pesanan yang telah dihantar, anda boleh menandakannya sebagai diterima') }}</p>
+                    <p>{{ __('•') }}<strong>{{ __('Auto-Delivery:') }}</strong> {{ __('Pesanan yang telah dihantar akan ditandakan sebagai diterima secara automatik selepas 7 hari jika anda tidak menandakannya sendiri') }}</p>
+                    <p>{{ __('•') }}<strong>{{ __('Bantuan:') }}</strong> {{ __('Jika anda memerlukan bantuan, sila hubungi kami melalui emel atau telefon') }}</p>
                 </div>
             </div>
             <button onclick="toggleBanner()" class="flex-shrink-0 text-blue-600 hover:text-blue-800 transition-colors">
@@ -74,7 +72,7 @@
                 <div class="text-2xl font-bold text-gray-900 mb-1">
                     {{ array_sum($orderCounts) }}
                 </div>
-                <div class="text-sm text-gray-600">Semua Pesanan</div>
+                <div class="text-sm text-gray-600">{{ __('Semua Pesanan') }}</div>
             </a>
 
             <!-- Pending Orders Card -->
@@ -83,7 +81,7 @@
                 <div class="text-2xl font-bold text-yellow-600 mb-1">
                     {{ $orderCounts['pending'] ?? 0 }}
                 </div>
-                <div class="text-sm text-gray-600">Menunggu Pembayaran</div>
+                <div class="text-sm text-gray-600">{{ __('Menunggu Pembayaran') }}</div>
             </a>
 
             <!-- Processing Orders Card -->
@@ -92,7 +90,7 @@
                 <div class="text-2xl font-bold text-blue-600 mb-1">
                     {{ $orderCounts['processing'] ?? 0 }}
                 </div>
-                <div class="text-sm text-gray-600">Sedang Diproses</div>
+                <div class="text-sm text-gray-600">{{ __('Sedang Diproses') }}</div>
             </a>
 
             <!-- Shipped Orders Card -->
@@ -101,7 +99,7 @@
                 <div class="text-2xl font-bold text-purple-600 mb-1">
                     {{ $orderCounts['shipped'] ?? 0 }}
                 </div>
-                <div class="text-sm text-gray-600">Telah Dihantar</div>
+                <div class="text-sm text-gray-600">{{ __('Telah Dihantar') }}</div>
             </a>
 
             <!-- Delivered Orders Card -->
@@ -110,7 +108,7 @@
                 <div class="text-2xl font-bold text-green-600 mb-1">
                     {{ $orderCounts['delivered'] ?? 0 }}
                 </div>
-                <div class="text-sm text-gray-600">Telah Diterima</div>
+                <div class="text-sm text-gray-600">{{ __('Telah Diterima') }}</div>
             </a>
 
             <!-- Cancelled/Refunded Orders Card -->
@@ -119,7 +117,7 @@
                 <div class="text-2xl font-bold text-red-600 mb-1">
                     {{ ($orderCounts['cancelled'] ?? 0) + ($orderCounts['refunded'] ?? 0) }}
                 </div>
-                <div class="text-sm text-gray-600">Dibatalkan/Dikembalikan</div>
+                <div class="text-sm text-gray-600">{{ __('Dibatalkan/Dikembalikan') }}</div>
             </a>
         </div>
     </div>
@@ -135,32 +133,30 @@
                     <h2 class="text-xl font-bold text-gray-900">
                         @switch($status)
                             @case('pending')
-                                Pesanan Menunggu Pembayaran
+                                {{ __('Pesanan Menunggu Pembayaran') }}
                                 @break
                             @case('processing')
-                                Pesanan Sedang Diproses
+                                {{ __('Pesanan Sedang Diproses') }}
                                 @break
                             @case('shipped')
-                                Pesanan Telah Dihantar
+                                {{ __('Pesanan Telah Dihantar') }}
                                 @break
                             @case('delivered')
-                                Pesanan Telah Diterima
+                                {{ __('Pesanan Telah Diterima') }}
                                 @break
                             @case('cancelled')
-                                Pesanan Dibatalkan/Dikembalikan
+                                {{ __('Pesanan Dibatalkan/Dikembalikan') }}
                                 @break
                             @default
-                                Pesanan {{ ucfirst($status) }}
+                                {{ trans('account_page.orders_with_status', ['status' => ucfirst($status)]) }}
                         @endswitch
                     </h2>
                     <span class="px-3 py-1 text-sm font-medium rounded-full bg-gray-100 text-gray-800">
-                        {{ $orders->total() }} pesanan
+                        {{ trans('account_page.order_count', ['count' => $orders->total()]) }}
                     </span>
                 </div>
                 <a href="{{ route('checkout.orders') }}" 
-                   class="text-red-600 hover:text-red-700 text-sm font-medium transition-colors">
-                    Lihat Semua Pesanan
-                </a>
+                   class="text-red-600 hover:text-red-700 text-sm font-medium transition-colors">{{ __('Lihat Semua Pesanan') }}</a>
             </div>
         @endif
 
@@ -171,7 +167,7 @@
                         <div class="flex items-center justify-between">
                             <div class="flex items-center space-x-4">
                                 <div>
-                                    <h3 class="text-lg font-bold text-gray-900">Pesanan #{{ $order->order_number }}</h3>
+                                    <h3 class="text-lg font-bold text-gray-900">{{ trans('account_page.order_number', ['number' => $order->order_number]) }}</h3>
                                     <p class="text-sm text-gray-600">{{ $order->created_at->format('d/m/Y H:i') }}</p>
                                 </div>
                             </div>
@@ -181,26 +177,26 @@
                                     <span class="px-3 py-1 text-sm font-medium rounded-full {{ $order->getStatusBadgeClass() }}">
                                         @switch($order->status)
                                             @case('pending')
-                                                Menunggu Pembayaran
+                                                {{ __('Menunggu Pembayaran') }}
                                                 @break
                                             @case('processing')
-                                                Sedang Diproses
+                                                {{ __('Sedang Diproses') }}
                                                 @break
                                             @case('shipped')
-                                                Telah Dihantar
+                                                {{ __('Telah Dihantar') }}
                                                 @break
                                             @case('delivered')
                                                 @if($order->wasAutoDelivered())
-                                                    Telah Diterima (Auto)
+                                                    {{ __('Telah Diterima (Auto)') }}
                                                 @else
-                                                    Telah Diterima
+                                                    {{ __('Telah Diterima') }}
                                                 @endif
                                                 @break
                                             @case('cancelled')
-                                                Dibatalkan
+                                                {{ __('Dibatalkan') }}
                                                 @break
                                             @case('refunded')
-                                                Dikembalikan
+                                                {{ __('Dikembalikan') }}
                                                 @break
                                             @default
                                                 {{ ucfirst($order->status) }}
@@ -210,16 +206,16 @@
                                     <span class="px-3 py-1 text-sm font-medium rounded-full {{ $order->getPaymentStatusBadgeClass() }}">
                                         @switch($order->payment_status)
                                             @case('pending')
-                                                Menunggu Pembayaran
+                                                {{ __('Menunggu Pembayaran') }}
                                                 @break
                                             @case('paid')
-                                                Telah Dibayar
+                                                {{ __('Telah Dibayar') }}
                                                 @break
                                             @case('failed')
-                                                Gagal
+                                                {{ __('Gagal') }}
                                                 @break
                                             @case('refunded')
-                                                Dikembalikan
+                                                {{ __('Dikembalikan') }}
                                                 @break
                                             @default
                                                 {{ ucfirst($order->payment_status) }}
@@ -260,7 +256,7 @@
                                         @if($item->variation_name)
                                             <p class="text-xs text-gray-500">{{ $item->variation_name }}</p>
                                         @endif
-                                        <p class="text-xs text-gray-500">Kuantiti: {{ $item->quantity }}</p>
+                                        <p class="text-xs text-gray-500">{{ trans('account_page.quantity', ['qty' => $item->quantity]) }}</p>
                                     </div>
                                     
                                     <div class="text-right">
@@ -289,20 +285,20 @@
                             <div class="flex items-center space-x-3">
                                 <a href="{{ route('checkout.show', $order->id) }}" 
                                    class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-                                    Lihat Butiran
+                                    {{ __('Lihat Butiran') }}
                                 </a>
                                 
                                 @if($order->status === 'pending' && $order->payment_status === 'pending')
                                     <a href="{{ route('checkout.show-retry-payment', $order->id) }}" 
                                        class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-                                         Bayar Sekarang
+                                         {{ __('Bayar Sekarang') }}
                                      </a>
                                  @endif
  
                                 @if($order->payment_status === 'failed' && !in_array($order->status, ['cancelled', 'refunded']))
                                     <a href="{{ route('checkout.show-retry-payment', $order->id) }}" 
                                        class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-                                         Cuba Bayar Semula
+                                         {{ __('Cuba Bayar Semula') }}
                                      </a>
                                  @endif
  
@@ -310,15 +306,15 @@
                                     <button type="button" 
                                             onclick="openMarkDeliveredModal('{{ $order->id }}', '{{ $order->order_number }}')"
                                             class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-                                        ✅ Tandakan Sebagai Diterima
+                                        {{ __('✅ Tandakan Sebagai Diterima') }}
                                     </button>
                                                                     @if($order->isAutoDeliveryCountdownActive())
                                     <div class="text-xs text-orange-600 mt-1">
-                                        ⚠️ Pesanan akan ditandakan sebagai diterima secara automatik dalam {{ $order->getFormattedAutoDeliveryCountdown() }}
+                                        {{ trans('account_page.auto_delivery_countdown', ['countdown' => $order->getFormattedAutoDeliveryCountdown()]) }}
                                     </div>
                                 @elseif($order->isAutoDeliveryOverdue())
                                     <div class="text-xs text-red-600 mt-1">
-                                        ⚠️ Pesanan sepatutnya ditandakan sebagai diterima secara automatik
+                                        {{ __('⚠️ Pesanan sepatutnya ditandakan sebagai diterima secara automatik') }}
                                     </div>
                                 @endif
                                 @endif
@@ -327,33 +323,27 @@
                                     @if($order->canRequestRefund())
                                         <a href="{{ route('checkout.refunds.create', $order->id) }}" 
                                            class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-                                            Mohon Refund
+                                            {{ __('Mohon Refund') }}
                                         </a>
                                         <div class="text-xs text-green-600 mt-1">
                                             ⏰ Anda mempunyai {{ $order->getFormattedRefundCountdown() }} untuk memohon refund
                                         </div>
                                     @elseif($order->hasPendingRefund())
-                                        <span class="bg-yellow-100 text-yellow-800 px-3 py-2 rounded-lg text-sm font-medium">
-                                            ⏳ Refund Menunggu Semakan
-                                        </span>
+                                        <span class="bg-yellow-100 text-yellow-800 px-3 py-2 rounded-lg text-sm font-medium">{{ __('⏳ Refund Menunggu Semakan') }}</span>
                                     @elseif($order->hasActiveRefund())
-                                        <span class="bg-blue-100 text-blue-800 px-3 py-2 rounded-lg text-sm font-medium">
-                                            📋 Refund Sedang Diproses
-                                        </span>
+                                        <span class="bg-blue-100 text-blue-800 px-3 py-2 rounded-lg text-sm font-medium">{{ __('📋 Refund Sedang Diproses') }}</span>
                                     @else
-                                        <span class="bg-gray-100 text-gray-600 px-3 py-2 rounded-lg text-sm font-medium">
-                                            ⏰ Tempoh refund telah tamat
-                                        </span>
+                                        <span class="bg-gray-100 text-gray-600 px-3 py-2 rounded-lg text-sm font-medium">{{ __('⏰ Tempoh refund telah tamat') }}</span>
                                     @endif
                                 @endif
 
                                 @if(in_array($order->status, ['pending', 'processing']) && 
                                     ($order->payment_status !== 'paid' || 
-                                     ($order->payment_status === 'paid' && $order->created_at->diffInHours(now()) <= 24)))
+                                     ($order->payment_status === 'paid' && $order->created_at->diffInHours(now())<= 24)))
                                     <button type="button" 
                                             onclick="openCancelModal('{{ $order->id }}', '{{ $order->order_number }}')"
                                             class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-                                        Batalkan Pesanan
+                                        {{ __('Batalkan Pesanan') }}
                                     </button>
                                 @endif
                             </div>
@@ -383,73 +373,67 @@
                 @if($status)
                     @switch($status)
                         @case('pending')
-                            Tiada Pesanan Menunggu Pembayaran
+                            {{ __('Tiada Pesanan Menunggu Pembayaran') }}
                             @break
                         @case('processing')
-                            Tiada Pesanan Sedang Diproses
+                            {{ __('Tiada Pesanan Sedang Diproses') }}
                             @break
                         @case('shipped')
-                            Tiada Pesanan Telah Dihantar
+                            {{ __('Tiada Pesanan Telah Dihantar') }}
                             @break
                         @case('delivered')
-                            Tiada Pesanan Telah Diterima
+                            {{ __('Tiada Pesanan Telah Diterima') }}
                             @break
                         @case('cancelled')
-                            Tiada Pesanan Dibatalkan/Dikembalikan
+                            {{ __('Tiada Pesanan Dibatalkan/Dikembalikan') }}
                             @break
                         @case('refunded')
-                            Tiada Pesanan Dikembalikan
+                            {{ __('Tiada Pesanan Dikembalikan') }}
                             @break
                         @default
-                            Tiada Pesanan {{ ucfirst($status) }}
+                            {{ trans('account_page.no_orders_with_status', ['status' => ucfirst($status)]) }}
                     @endswitch
                 @else
-                    Anda Belum Ada Pesanan
+                    {{ __('Anda Belum Ada Pesanan') }}
                 @endif
             </h2>
             <p class="text-gray-600 mb-8">
                 @if($status)
                     @switch($status)
                         @case('pending')
-                            Tiada pesanan dengan status "Menunggu Pembayaran" ditemui.
+                            {{ __('Tiada pesanan dengan status "Menunggu Pembayaran" ditemui.') }}
                             @break
                         @case('processing')
-                            Tiada pesanan dengan status "Sedang Diproses" ditemui.
+                            {{ __('Tiada pesanan dengan status "Sedang Diproses" ditemui.') }}
                             @break
                         @case('shipped')
-                            Tiada pesanan dengan status "Telah Dihantar" ditemui.
+                            {{ __('Tiada pesanan dengan status "Telah Dihantar" ditemui.') }}
                             @break
                         @case('delivered')
-                            Tiada pesanan dengan status "Telah Diterima" ditemui.
+                            {{ __('Tiada pesanan dengan status "Telah Diterima" ditemui.') }}
                             @break
                         @case('cancelled')
-                            Tiada pesanan dengan status "Dibatalkan/Dikembalikan" ditemui.
+                            {{ __('Tiada pesanan dengan status "Dibatalkan/Dikembalikan" ditemui.') }}
                             @break
                         @case('refunded')
-                            Tiada pesanan dengan status "Dikembalikan" ditemui.
+                            {{ __('Tiada pesanan dengan status "Dikembalikan" ditemui.') }}
                             @break
                         @default
-                            Tiada pesanan dengan status "{{ ucfirst($status) }}" ditemui.
+                            {{ trans('account_page.no_orders_status_found', ['status' => ucfirst($status)]) }}
                     @endswitch
                 @else
-                    Mulakan membeli-belah untuk melihat pesanan anda di sini.
+                    {{ __('Mulakan membeli-belah untuk melihat pesanan anda di sini.') }}
                 @endif
             </p>
             <div class="space-x-4">
                 <a href="{{ route('shop.index') }}" 
-                   class="inline-block bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded-lg font-bold transition-colors">
-                    Mulakan Membeli
-                </a>
+                   class="inline-block bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded-lg font-bold transition-colors">{{ __('Mulakan Membeli') }}</a>
                 @if($status)
                     <a href="{{ route('checkout.orders') }}" 
-                       class="inline-block border-2 border-gray-300 text-gray-700 hover:bg-gray-50 px-8 py-3 rounded-lg font-bold transition-colors">
-                        Lihat Semua Pesanan
-                    </a>
+                       class="inline-block border-2 border-gray-300 text-gray-700 hover:bg-gray-50 px-8 py-3 rounded-lg font-bold transition-colors">{{ __('Lihat Semua Pesanan') }}</a>
                 @else
                     <a href="{{ route('home') }}" 
-                       class="inline-block border-2 border-gray-300 text-gray-700 hover:bg-gray-50 px-8 py-3 rounded-lg font-bold transition-colors">
-                        Kembali ke Utama
-                    </a>
+                       class="inline-block border-2 border-gray-300 text-gray-700 hover:bg-gray-50 px-8 py-3 rounded-lg font-bold transition-colors">{{ __('Kembali ke Utama') }}</a>
                 @endif
             </div>
         </div>
@@ -465,27 +449,21 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
                 </svg>
             </div>
-            <h3 class="text-lg font-medium text-gray-900 mb-2">Batalkan Pesanan</h3>
+            <h3 class="text-lg font-medium text-gray-900 mb-2">{{ __('Batalkan Pesanan') }}</h3>
             <div class="mt-2 px-7 py-3">
                 <p class="text-sm text-gray-500 mb-4">
-                    Adakah anda pasti mahu membatalkan pesanan <span id="modalOrderNumber" class="font-semibold text-gray-700"></span>?
+                    {{ trans('account_page.confirm_cancel_prefix') }} <span id="modalOrderNumber" class="font-semibold text-gray-700"></span>?
                 </p>
-                <p class="text-xs text-gray-400 mb-4">
-                    Tindakan ini tidak boleh dibatalkan. Pesanan akan ditandakan sebagai dibatalkan.
-                </p>
+                <p class="text-xs text-gray-400 mb-4">{{ __('Tindakan ini tidak boleh dibatalkan. Pesanan akan ditandakan sebagai dibatalkan.') }}</p>
             </div>
             <div class="flex items-center justify-center space-x-3">
                 <button id="cancelModalClose" 
-                        class="px-4 py-2 bg-gray-300 text-gray-700 text-sm font-medium rounded-md hover:bg-gray-400 transition-colors">
-                    Batal
-                </button>
+                        class="px-4 py-2 bg-gray-300 text-gray-700 text-sm font-medium rounded-md hover:bg-gray-400 transition-colors">{{ __('Batal') }}</button>
                 <form id="cancelOrderForm" method="POST" class="inline">
                     @csrf
                     <button type="submit" 
                             id="cancelSubmitBtn"
-                            class="px-4 py-2 bg-red-600 text-white text-sm font-medium rounded-md hover:bg-red-700 transition-colors">
-                        Ya, Batalkan Pesanan
-                    </button>
+                            class="px-4 py-2 bg-red-600 text-white text-sm font-medium rounded-md hover:bg-red-700 transition-colors">{{ __('Ya, Batalkan Pesanan') }}</button>
                 </form>
             </div>
         </div>
@@ -501,27 +479,21 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                 </svg>
             </div>
-            <h3 class="text-lg font-medium text-gray-900 mb-2">Tandakan Sebagai Diterima</h3>
+            <h3 class="text-lg font-medium text-gray-900 mb-2">{{ __('Tandakan Sebagai Diterima') }}</h3>
             <div class="mt-2 px-7 py-3">
                 <p class="text-sm text-gray-500 mb-4">
-                    Adakah anda pasti mahu menandakan pesanan <span id="markDeliveredOrderNumber" class="font-semibold text-gray-700"></span> sebagai diterima?
+                    {{ trans('account_page.confirm_mark_delivered_prefix') }} <span id="markDeliveredOrderNumber" class="font-semibold text-gray-700"></span> {{ trans('account_page.confirm_mark_delivered_suffix') }}
                 </p>
-                <p class="text-xs text-gray-400 mb-4">
-                    Pastikan anda telah menerima dan memeriksa semua item dalam pesanan ini.
-                </p>
+                <p class="text-xs text-gray-400 mb-4">{{ __('Pastikan anda telah menerima dan memeriksa semua item dalam pesanan ini.') }}</p>
             </div>
             <div class="flex items-center justify-center space-x-3">
                 <button id="markDeliveredModalClose" 
-                        class="px-4 py-2 bg-gray-300 text-gray-700 text-sm font-medium rounded-md hover:bg-gray-400 transition-colors">
-                    Batal
-                </button>
+                        class="px-4 py-2 bg-gray-300 text-gray-700 text-sm font-medium rounded-md hover:bg-gray-400 transition-colors">{{ __('Batal') }}</button>
                 <form id="markDeliveredForm" method="POST" class="inline">
                     @csrf
                     <button type="submit" 
                             id="markDeliveredSubmitBtn"
-                            class="px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-md hover:bg-green-700 transition-colors">
-                        Ya, Tandakan Sebagai Diterima
-                    </button>
+                            class="px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-md hover:bg-green-700 transition-colors">{{ __('Ya, Tandakan Sebagai Diterima') }}</button>
                 </form>
             </div>
         </div>
@@ -531,7 +503,6 @@
 <script>
     function openCancelModal(orderId, orderNumber) {
         document.getElementById('modalOrderNumber').textContent = orderNumber;
-        
         // Determine the correct route based on current page
         let cancelRoute;
         if (window.location.pathname.includes('direct-checkout')) {
@@ -546,7 +517,6 @@
 
     function openMarkDeliveredModal(orderId, orderNumber) {
         document.getElementById('markDeliveredOrderNumber').textContent = orderNumber;
-        
         // Determine the correct route based on current page
         let markDeliveredRoute;
         if (window.location.pathname.includes('direct-checkout')) {

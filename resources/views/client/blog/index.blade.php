@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Berita & Blog Arsenal - MyGooners')
-@section('meta_description', 'Kekal terkini dengan berita Arsenal terkini, laporan perlawanan, kemas kini pemindahan, dan analisis mendalam dari komuniti MyGooners.')
+@section('title', __('Berita & Blog Arsenal - MyGooners'))
+@section('meta_description', __('Kekal terkini dengan berita Arsenal terkini, laporan perlawanan, kemas kini pemindahan, dan analisis mendalam dari komuniti MyGooners.'))
 
 @section('content')
 
@@ -14,9 +14,9 @@
             <div class="w-full lg:w-80 flex-shrink-0">
                 <form action="{{ route('blog.index') }}" method="GET" class="relative">
                     <input type="text" 
-                           name="search" 
+                           name="search"
                            value="{{ $search }}" 
-                           placeholder="Cari artikel..." 
+                           placeholder="{{ __('Cari artikel...') }}" 
                            class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent">
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                         <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -34,7 +34,7 @@
                 <div class="flex items-center space-x-2">
                     <button type="button" 
                             class="p-2 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-600 hover:text-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0" 
-                            id="prevCategories" 
+                            id="prevCategories"
                             disabled>
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
@@ -43,9 +43,7 @@
                     <div class="overflow-hidden flex-1 min-w-0">
                         <div class="flex space-x-2 transition-transform duration-300 ease-in-out" id="categoryScroll">
                             <a href="{{ route('blog.index') }}" 
-                               class="flex-shrink-0 px-3 py-2 rounded-full text-sm font-medium transition-colors {{ !$category ? 'bg-arsenal text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' }}">
-                                Semua Kategori
-                            </a>
+                               class="flex-shrink-0 px-3 py-2 rounded-full text-sm font-medium transition-colors {{ !$category ? 'bg-arsenal text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' }}">{{ __('Semua Kategori') }}</a>
                             @foreach($categories as $index => $cat)
                                 <a href="{{ route('blog.category', strtolower(str_replace(' ', '-', $cat))) }}" 
                                    class="flex-shrink-0 px-3 py-2 rounded-full text-sm font-medium transition-colors {{ strtolower($category) === strtolower(str_replace(' ', '-', $cat)) ? 'bg-arsenal text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' }}"
@@ -74,8 +72,8 @@
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
     <div class="mb-8">
         <div>
-            <h2 class="text-3xl font-bold text-gray-900 mb-2">Pilihan Pembaca</h2>
-            <p class="text-gray-600">Artikel paling popular dan banyak dibaca</p>
+            <h2 class="text-3xl font-bold text-gray-900 mb-2">{{ __('Pilihan Pembaca') }}</h2>
+            <p class="text-gray-600">{{ __('Artikel paling popular dan banyak dibaca') }}</p>
         </div>
     </div>
     
@@ -99,9 +97,7 @@
                             <span class="bg-red-600 text-white px-2 py-1 rounded-full text-xs font-bold min-w-[28px] text-center">
                                 #1
                             </span>
-                            <span class="bg-yellow-400 text-gray-900 px-3 py-1 rounded-full text-sm font-bold">
-                                UTAMA
-                            </span>
+                            <span class="bg-yellow-400 text-gray-900 px-3 py-1 rounded-full text-sm font-bold">{{ __('UTAMA') }}</span>
                         </div>
                     </div>
                     <div class="p-6 flex flex-col flex-grow">
@@ -128,15 +124,15 @@
                                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path>
                                 </svg>
                                 <span>{{ $topViewedArticle->published_at->diffForHumans() }}</span>
-                                <span class="mx-2">•</span>
+                                <span class="mx-2">{{ __('•') }}</span>
                                 <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
                                     <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path>
                                     <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"></path>
                                 </svg>
-                                {{ number_format($topViewedArticle->views_count) }} tontonan
+                                {{ number_format($topViewedArticle->views_count) }} {{ __('tontonan') }}
                             </div>
                             <a href="{{ route('blog.show', $topViewedArticle->slug) }}" class="text-red-600 hover:text-red-700 font-medium transition-colors">
-                                Baca Lagi →
+                                {{ __('Baca Lagi →') }}
                             </a>
                         </div>
                     </div>
@@ -148,8 +144,8 @@
                         <svg class="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                         </svg>
-                        <h3 class="text-xl font-semibold text-gray-900 mb-2">Tiada Artikel Popular</h3>
-                        <p class="text-gray-600">Artikel popular akan muncul di sini tidak lama lagi.</p>
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2">{{ __('Tiada Artikel Popular') }}</h3>
+                        <p class="text-gray-600">{{ __('Artikel popular akan muncul di sini tidak lama lagi.') }}</p>
                 </div>
             </div>
             @endif
@@ -160,7 +156,7 @@
             <!-- Recent Articles List -->
             <div class="bg-white rounded-xl shadow-lg overflow-hidden flex flex-col h-full">
                 <div class="p-4 border-b border-gray-200">
-                    <h3 class="text-lg font-bold text-gray-900">Artikel Popular Lain</h3>
+                    <h3 class="text-lg font-bold text-gray-900">{{ __('Artikel Popular Lain') }}</h3>
                 </div>
         <div class="flex flex-col flex-grow">
                     @if($topViewedArticles->count() > 0)
@@ -193,12 +189,12 @@
                                                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path>
                                                 </svg>
                                                 <span>{{ $article->published_at->diffForHumans() }}</span>
-                                                <span class="mx-2">•</span>
+                                                <span class="mx-2">{{ __('•') }}</span>
                                         <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
                                             <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path>
                                             <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"></path>
                                         </svg>
-                                                <span>{{ number_format($article->views_count) }} tontonan</span>
+                                                <span>{{ number_format($article->views_count) }} {{ __('tontonan') }}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -207,13 +203,11 @@
                                     </div>
                     @else
                         <div class="p-6 flex-grow flex items-center justify-center">
-                            <p class="text-gray-600 text-sm text-center">Tiada artikel tambahan untuk dipaparkan.</p>
+                            <p class="text-gray-600 text-sm text-center">{{ __('Tiada artikel tambahan untuk dipaparkan.') }}</p>
                         </div>
                     @endif
                     <div class="p-4 bg-gray-50 mt-auto">
-                        <a href="{{ route('blog.index') }}" class="text-red-600 hover:text-red-700 font-medium text-sm">
-                            Lihat Semua Artikel →
-                        </a>
+                        <a href="{{ route('blog.index') }}" class="text-red-600 hover:text-red-700 font-medium text-sm">{{ __('Lihat Semua Artikel →') }}</a>
                     </div>
                 </div>
             </div>
@@ -249,9 +243,7 @@
                                 <span class="bg-red-600 text-white px-3 py-1 rounded-full text-sm font-medium">
                                     {{ $featuredArticle->category }}
                                 </span>
-                                <span class="bg-yellow-400 text-gray-900 px-3 py-1 rounded-full text-sm font-bold ml-3">
-                                    UTAMA
-                                </span>
+                                <span class="bg-yellow-400 text-gray-900 px-3 py-1 rounded-full text-sm font-bold ml-3">{{ __('UTAMA') }}</span>
                             </div>
                             <h2 class="text-3xl font-bold text-gray-900 mb-4">
                                 <a href="{{ route('blog.show', $featuredArticle->slug) }}" 
@@ -269,22 +261,22 @@
                                             <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>
                                         </svg>
                                         <span class="font-medium text-gray-700">{{ $featuredArticle->author->name }}</span>
-                                        <span class="mx-2">•</span>
+                                        <span class="mx-2">{{ __('•') }}</span>
                                     @endif
                                     <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
                                         <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path>
                                     </svg>
                                     {{ $featuredArticle->published_at->diffForHumans() }}
-                                    <span class="mx-2">•</span>
+                                    <span class="mx-2">{{ __('•') }}</span>
                                     <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
                                         <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path>
                                         <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"></path>
                                     </svg>
-                                    {{ number_format($featuredArticle->views_count) }} tontonan
+                                    {{ number_format($featuredArticle->views_count) }} {{ __('tontonan') }}
                                 </div>
                                 <a href="{{ route('blog.show', $featuredArticle->slug) }}" 
                                    class="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg font-medium transition-colors">
-                                    Baca Artikel
+                                    {{ __('Baca Artikel') }}
                                 </a>
                             </div>
                         </div>
@@ -314,9 +306,7 @@
                                 {{ $article->category }}
                             </span>
                             @if($article->is_featured)
-                                <span class="bg-yellow-400 text-gray-900 px-3 py-1 rounded-full text-sm font-bold">
-                                    UTAMA
-                                </span>
+                                <span class="bg-yellow-400 text-gray-900 px-3 py-1 rounded-full text-sm font-bold">{{ __('UTAMA') }}</span>
                             @endif
                         </div>
                         @if($article->youtube_video_id)
@@ -341,12 +331,12 @@
                                 <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path>
                             </svg>
                             <span>{{ $article->published_at->diffForHumans() }}</span>
-                            <span class="mx-2">•</span>
+                            <span class="mx-2">{{ __('•') }}</span>
                             <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
                                 <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path>
                                 <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"></path>
                             </svg>
-                            {{ number_format($article->views_count) }}
+                            {{ __('blog_page.views_count', ['count' => number_format($article->views_count)]) }}
                         </div>
                         <div class="flex flex-wrap gap-1">
                             @foreach(array_slice($article->tags, 0, 3) as $tag)
@@ -372,19 +362,17 @@
             <svg class="w-12 h-12 sm:w-16 sm:h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
             </svg>
-            <h3 class="text-lg sm:text-xl font-medium text-gray-900 mb-2">Tiada artikel dijumpai</h3>
+            <h3 class="text-lg sm:text-xl font-medium text-gray-900 mb-2">{{ __('Tiada artikel dijumpai') }}</h3>
             <p class="text-sm sm:text-base text-gray-600 mb-6 px-4">
                 @if($search)
-                    Tiada artikel sepadan dengan carian anda untuk "{{ $search }}"
+                    {{ __('blog_page.no_articles_search', ['search' => $search]) }}
                 @elseif($category)
-                    Tiada artikel dijumpai dalam kategori "{{ $category }}"
+                    {{ __('blog_page.no_articles_category', ['category' => $category]) }}
                 @else
-                    Tiada artikel telah diterbitkan lagi
+                    {{ __('Tiada artikel telah diterbitkan lagi') }}
                 @endif
             </p>
-            <a href="{{ route('blog.index') }}" class="text-red-600 hover:text-red-700 font-medium">
-                ← Lihat semua artikel
-            </a>
+            <a href="{{ route('blog.index') }}" class="text-red-600 hover:text-red-700 font-medium">{{ __('← Lihat semua artikel') }}</a>
         </div>
     @endif
 </div>
@@ -393,13 +381,11 @@
 @endsection
 
 @push('scripts')
-<script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const prevBtn = document.getElementById('prevCategories');
     const nextBtn = document.getElementById('nextCategories');
     const categoryScroll = document.getElementById('categoryScroll');
-    
     if (prevBtn && nextBtn && categoryScroll) {
         const categoryLinks = categoryScroll.querySelectorAll('a');
         const visibleCount = 6;
@@ -409,13 +395,11 @@ document.addEventListener('DOMContentLoaded', function() {
         function showCategories(page) {
             const start = page * visibleCount + 1; // +1 to skip "Semua Kategori"
             const end = start + visibleCount;
-            
             // Always show "Semua Kategori"
             categoryLinks[0].style.display = '';
-            
             // Show/hide other categories based on current page
             for (let i = 1; i < categoryLinks.length; i++) {
-                if (i >= start && i < end) {
+                if (i >= start && i< end) {
                     categoryLinks[i].style.display = '';
                 } else {
                     categoryLinks[i].style.display = 'none';
@@ -445,7 +429,6 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Initialize
         showCategories(0);
-        
         // Handle window resize
         let resizeTimeout;
         window.addEventListener('resize', function() {
