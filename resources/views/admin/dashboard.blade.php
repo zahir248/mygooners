@@ -34,20 +34,6 @@
         position: relative;
         height: 300px;
     }
-    .notification {
-        position: fixed;
-        top: 1rem;
-        right: 1rem;
-        z-index: 50;
-        padding: 1rem;
-        border-radius: 0.5rem;
-        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-        transform: translateX(100%);
-        transition: transform 0.3s ease;
-    }
-    .notification.show {
-        transform: translateX(0);
-    }
     .loading {
         opacity: 0.6;
         pointer-events: none;
@@ -551,11 +537,11 @@ function refreshStats() {
             document.getElementById('total-products').textContent = data.total_products.toLocaleString();
             
             // Show success message
-            showNotification(@json(__('Statistik telah dikemas kini')), 'success');
+            showAdminNotification(@json(__('Statistik telah dikemas kini')), 'success');
         })
         .catch(error => {
             console.error('Error refreshing stats:', error);
-            showNotification(@json(__('Ralat semasa mengemas kini statistik')), 'error');
+            showAdminNotification(@json(__('Ralat semasa mengemas kini statistik')), 'error');
         })
         .finally(() => {
             // Remove loading state
@@ -566,31 +552,6 @@ function refreshStats() {
 
 // Auto-refresh every 30 seconds
 setInterval(refreshStats, 30000);
-
-// Notification function
-function showNotification(message, type = 'info') {
-    const notification = document.createElement('div');
-    notification.className = `notification ${
-        type === 'success' ? 'bg-green-500 text-white' : 
-        type === 'error' ? 'bg-red-500 text-white' : 
-        'bg-blue-500 text-white'
-    }`;
-    notification.textContent = message;
-    
-    document.body.appendChild(notification);
-    
-    // Trigger animation
-    setTimeout(() => {
-        notification.classList.add('show');
-    }, 100);
-    
-    setTimeout(() => {
-        notification.classList.remove('show');
-        setTimeout(() => {
-            notification.remove();
-        }, 300);
-    }, 3000);
-}
 
 // Add loading states to action buttons
 document.addEventListener('DOMContentLoaded', function() {
@@ -618,7 +579,7 @@ document.addEventListener('DOMContentLoaded', function() {
 window.addEventListener('error', function(e) {
     if (e.message.includes('Chart')) {
         console.error('Chart error:', e);
-        showNotification(@json(__('Ralat memuatkan graf')), 'error');
+        showAdminNotification(@json(__('Ralat memuatkan graf')), 'error');
     }
 });
 </script>

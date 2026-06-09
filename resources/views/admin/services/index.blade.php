@@ -435,7 +435,7 @@ function submitStatusForm() {
     const selectedStatus = form.querySelector('input[name="status"]:checked');
     
     if (!selectedStatus) {
-        alert(window.adminMessages.select_new_status);
+        showAdminNotification(window.adminMessages.select_new_status, 'error');
         return;
     }
     

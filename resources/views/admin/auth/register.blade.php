@@ -75,18 +75,6 @@
                     </div>
                 </div>
 
-                <!-- Validation Errors -->
-                @if ($errors->any())
-                    <div class="mb-4">
-                        <div class="font-medium text-red-600 mb-2">{{ __('Sila betulkan kesilapan berikut:') }}</div>
-                        <ul class="text-sm text-red-600 bg-red-50 border border-red-200 rounded p-3 space-y-1">
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
-
                 <form class="space-y-6" method="POST" action="{{ route('admin.register') }}">
                     @csrf
 
@@ -249,5 +237,8 @@
             </p>
         </div>
     </div>
+    @php($authFlashErrorHeading = __('Sila betulkan kesilapan berikut:'))
+    @include('admin.partials.notification-script')
+    @include('admin.partials.auth-flash-messages')
 </body>
 </html> 

@@ -474,18 +474,18 @@ document.addEventListener('DOMContentLoaded', function() {
                                             title: file.name
                                         });
                                     } else {
-                                        alert(window.adminMessages.upload_invalid_response);
+                                        showAdminNotification(window.adminMessages.upload_invalid_response, 'error');
                                     }
                                 } catch (e) {
                                     console.error('JSON parse error:', e);
                                 }
                             } else {
-                                alert(window.adminMessages.upload_failed_status.replace(':status', String(xhr.status)));
+                                showAdminNotification(window.adminMessages.upload_failed_status.replace(':status', String(xhr.status)), 'error');
                             }
                         };
                         
                         xhr.onerror = function () {
-                            alert(window.adminMessages.upload_network_error);
+                            showAdminNotification(window.adminMessages.upload_network_error, 'error');
                         };
                         
                         xhr.send(formData);

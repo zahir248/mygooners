@@ -452,11 +452,8 @@ function openServicesModal(sellerId, sellerName) {
         })
         .catch(error => {
             console.error('Error loading services:', error);
-            document.getElementById('servicesModalContent').innerHTML = `
-                <div class="text-center py-8">
-                    <p class="text-sm text-red-500">{{ __('Ralat memuatkan perkhidmatan') }}</p>
-                </div>
-            `;
+            closeServicesModal();
+            showAdminNotification(@json(__('Ralat memuatkan perkhidmatan')), 'error');
         });
 }
 

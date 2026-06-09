@@ -126,31 +126,6 @@
     </div>
 </div>
 
-<!-- Validation Modal -->
-<div id="validationModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden z-50">
-    <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
-        <div class="mt-3">
-            <div class="flex items-center justify-center w-12 h-12 mx-auto bg-red-100 rounded-full">
-                <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
-                </svg>
-            </div>
-            <div class="mt-4 text-center">
-                <h3 class="text-lg font-medium text-gray-900">{{ __('Perhatian') }}</h3>
-                <div class="mt-2 px-7 py-3">
-                    <p id="validationMessage" class="text-sm text-gray-500">
-                        <!-- Validation message will be inserted here -->
-                    </p>
-                </div>
-            </div>
-            <div class="flex justify-center px-4 py-3">
-                <button onclick="closeValidationModal()" 
-                        class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">{{ __('OK') }}</button>
-            </div>
-        </div>
-    </div>
-</div>
-
 <!-- Send Newsletter Modal -->
 <div id="sendModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden z-50">
     <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
@@ -199,7 +174,7 @@ function openPreviewModal() {
     const content = document.getElementById('content').value;
     
     if (!subject || !content) {
-        showValidationModal(window.adminMessages.fill_subject_content);
+        showAdminNotification(window.adminMessages.fill_subject_content, 'error');
         return;
     }
     
@@ -241,7 +216,7 @@ function openSendModal() {
     const content = document.getElementById('content').value;
     
     if (!subject || !content) {
-        showValidationModal(window.adminMessages.fill_subject_content);
+        showAdminNotification(window.adminMessages.fill_subject_content, 'error');
         return;
     }
     
@@ -254,15 +229,6 @@ function closeSendModal() {
 
 function submitNewsletter() {
     document.getElementById('newsletterForm').submit();
-}
-
-function showValidationModal(message) {
-    document.getElementById('validationMessage').textContent = message;
-    document.getElementById('validationModal').classList.remove('hidden');
-}
-
-function closeValidationModal() {
-    document.getElementById('validationModal').classList.add('hidden');
 }
 
 // Close modals when clicking outside
@@ -278,18 +244,11 @@ document.getElementById('sendModal').addEventListener('click', function(e) {
     }
 });
 
-document.getElementById('validationModal').addEventListener('click', function(e) {
-    if (e.target === this) {
-        closeValidationModal();
-    }
-});
-
 // Close modals with Escape key
 document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') {
         closePreviewModal();
         closeSendModal();
-        closeValidationModal();
     }
 });
 </script>

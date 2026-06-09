@@ -650,12 +650,12 @@ function addVariation() {
                 populateEditVariationModal(data.variation, data.images || []);
                 document.getElementById('editVariationModal').classList.remove('hidden');
             } else {
-                showNotification(window.adminProductMessages.error_load_variation, 'error');
+                showAdminNotification(window.adminProductMessages.error_load_variation, 'error');
             }
         })
         .catch(error => {
             console.error('Error:', error);
-            showNotification(window.adminProductMessages.error_load_variation, 'error');
+            showAdminNotification(window.adminProductMessages.error_load_variation, 'error');
         });
     }
 
@@ -727,12 +727,12 @@ function addVariation() {
         const stockQuantity = formData.get('stock_quantity');
         
         if (name && !name.trim()) {
-            showNotification(window.adminProductMessages.error_empty_variation_name, 'error');
+            showAdminNotification(window.adminProductMessages.error_empty_variation_name, 'error');
             return;
         }
         
         if (stockQuantity && (isNaN(parseInt(stockQuantity)) || parseInt(stockQuantity) < 0)) {
-            showNotification(window.adminProductMessages.error_invalid_stock, 'error');
+            showAdminNotification(window.adminProductMessages.error_invalid_stock, 'error');
             return;
         }
         
@@ -741,7 +741,7 @@ function addVariation() {
         const price = parseFloat(formData.get('price'));
         
         if (salePrice && price && salePrice >= price) {
-            showNotification(window.adminProductMessages.error_sale_price_lower, 'error');
+            showAdminNotification(window.adminProductMessages.error_sale_price_lower, 'error');
             return;
         }
         
@@ -775,12 +775,12 @@ function addVariation() {
             if (!response.ok || !data.success) {
                 throw new Error(data.message || window.adminProductMessages.error_update_variation);
             }
-            showNotification(data.message || window.adminProductMessages.success_update_variation, 'success');
+            showAdminNotification(data.message || window.adminProductMessages.success_update_variation, 'success');
             closeEditVariationModal();
             window.location.reload();
         })
         .catch(error => {
-            showNotification(error.message || window.adminProductMessages.error_update_variation, 'error');
+            showAdminNotification(error.message || window.adminProductMessages.error_update_variation, 'error');
         });
     }
 
@@ -874,105 +874,6 @@ function addVariation() {
         stockInput.classList.toggle('cursor-not-allowed', hasVariation);
     }
 
-    function showNotification(message, type = 'info') {
-        // Create notification element matching admin layout style exactly
-        const notification = document.createElement('div');
-        notification.className = `fixed top-4 right-4 z-50 max-w-sm w-full`;
-        
-        if (type === 'success') {
-            // Exact same design as admin layout success message
-            notification.innerHTML = `
-                <div class="bg-green-50 border-l-4 border-green-400 p-4 m-4">
-                    <div class="flex">
-                        <div class="flex-shrink-0">
-                            <svg class="h-5 w-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-                            </svg>
-                        </div>
-                        <div class="ml-3">
-                            <p class="text-sm text-green-700">${message}</p>
-                        </div>
-                        <div class="ml-auto pl-3">
-                            <div class="-mx-1.5 -my-1.5">
-                                <button onclick="this.parentElement.parentElement.parentElement.parentElement.remove()" 
-                                        class="inline-flex text-green-700 rounded-md p-1.5 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
-                                    <span class="sr-only">{{ __('Dismiss') }}</span>
-                                    <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `;
-        } else if (type === 'error') {
-            // Error message design - same as admin layout error message
-            notification.innerHTML = `
-                <div class="bg-red-50 border-l-4 border-red-400 p-4 m-4">
-                    <div class="flex">
-                        <div class="flex-shrink-0">
-                            <svg class="h-5 w-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
-                            </svg>
-                        </div>
-                        <div class="ml-3">
-                            <p class="text-sm text-red-700">${message}</p>
-                        </div>
-                        <div class="ml-auto pl-3">
-                            <div class="-mx-1.5 -my-1.5">
-                                <button onclick="this.parentElement.parentElement.parentElement.parentElement.remove()" 
-                                        class="inline-flex text-red-700 rounded-md p-1.5 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
-                                    <span class="sr-only">{{ __('Dismiss') }}</span>
-                                    <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `;
-        } else {
-            // Info message design
-            notification.innerHTML = `
-                <div class="bg-blue-50 border-l-4 border-blue-400 p-4 m-4">
-                    <div class="flex">
-                        <div class="flex-shrink-0">
-                            <svg class="h-5 w-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
-                            </svg>
-                        </div>
-                        <div class="ml-3">
-                            <p class="text-sm text-blue-700">${message}</p>
-                        </div>
-                        <div class="ml-auto pl-3">
-                            <div class="-mx-1.5 -my-1.5">
-                                <button onclick="this.parentElement.parentElement.parentElement.parentElement.remove()" 
-                                        class="inline-flex text-blue-700 rounded-md p-1.5 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
-                                    <span class="sr-only">{{ __('Dismiss') }}</span>
-                                    <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `;
-        }
-        
-        // Add to page
-        document.body.appendChild(notification);
-        
-        // Remove after 5 seconds
-        setTimeout(() => {
-            if (notification.parentElement) {
-                notification.remove();
-            }
-        }, 5000);
-    }
-
     function confirmDeleteVariation(variationId, variationName) {
         document.getElementById('deleteVariationConfirmText').textContent =
             window.adminProductMessages.delete_confirm.replace(':name', variationName);
@@ -1005,11 +906,11 @@ function addVariation() {
                 throw new Error(data.message || window.adminProductMessages.error_update_variation);
             }
             closeDeleteVariationModal();
-            showNotification(data.message || window.adminProductMessages.success_delete_variation, 'success');
+            showAdminNotification(data.message || window.adminProductMessages.success_delete_variation, 'success');
             window.location.reload();
         })
         .catch(error => {
-            showNotification(error.message || window.adminProductMessages.error_update_variation, 'error');
+            showAdminNotification(error.message || window.adminProductMessages.error_update_variation, 'error');
         });
     }
 

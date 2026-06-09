@@ -23,12 +23,6 @@
 </div>
 
 <!-- Debug Info (temporary) -->
-@if(session('debug_info'))
-    <div class="mx-4 mb-4 p-4 bg-yellow-100 border border-yellow-400 rounded-lg">
-        <h4 class="font-bold text-yellow-800 mb-2">{{ __('Debug Info:') }}</h4>
-        <pre class="text-sm text-yellow-700">{{ json_encode(session('debug_info'), JSON_PRETTY_PRINT) }}</pre>
-    </div>
-@endif
 
 <!-- Filters and Search -->
 <div class="mx-4 bg-white shadow rounded-lg mb-6">
@@ -502,7 +496,7 @@ function submitStatusForm() {
     const selectedStatus = form.querySelector('input[name="status"]:checked');
     
     if (!selectedStatus) {
-        alert(window.adminMessages.select_new_status);
+        showAdminNotification(window.adminMessages.select_new_status, 'error');
         return;
     }
     

@@ -231,7 +231,7 @@ function validateForm() {
     const status = document.getElementById('status').value;
     
     if (!title || !description || !category || !price || !stockQuantity || !status) {
-        alert(window.adminMessages.fill_required_fields);
+        showAdminNotification(window.adminMessages.fill_required_fields, 'error');
         return false;
     }
     
@@ -248,7 +248,7 @@ function validateForm() {
         });
         
         if (variations.length > 0 && !hasValidVariation) {
-            alert(window.adminMessages.fill_variant_name);
+            showAdminNotification(window.adminMessages.fill_variant_name, 'error');
             return false;
         }
     }

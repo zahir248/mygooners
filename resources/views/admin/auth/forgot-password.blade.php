@@ -64,37 +64,6 @@
 
         <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
             <div class="bg-white py-8 px-4 shadow-lg sm:rounded-lg sm:px-10 border border-gray-200">
-                <!-- Session Status -->
-                @if (session('status'))
-                    <div class="mb-4 font-medium text-sm text-green-600 bg-green-50 border border-green-200 rounded p-3">
-                        {{ session('status') }}
-                    </div>
-                @endif
-
-                @if (session('success'))
-                    <div class="mb-4 font-medium text-sm text-green-600 bg-green-50 border border-green-200 rounded p-3">
-                        {{ session('success') }}
-                    </div>
-                @endif
-
-                @if (session('error'))
-                    <div class="mb-4 font-medium text-sm text-red-600 bg-red-50 border border-red-200 rounded p-3">
-                        {{ session('error') }}
-                    </div>
-                @endif
-
-                <!-- Validation Errors -->
-                @if ($errors->any())
-                    <div class="mb-4">
-                        <div class="font-medium text-red-600 mb-2">{{ __('Aduh! Ada yang tidak kena.') }}</div>
-                        <ul class="text-sm text-red-600 bg-red-50 border border-red-200 rounded p-3 space-y-1">
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
-
                 <form class="space-y-6" method="POST" action="{{ route('admin.password.email') }}">
                     @csrf
                     <div>
@@ -150,5 +119,7 @@
             </p>
         </div>
     </div>
+    @include('admin.partials.notification-script')
+    @include('admin.partials.auth-flash-messages')
 </body>
 </html>

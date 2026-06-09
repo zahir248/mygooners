@@ -650,7 +650,8 @@ function openServiceModal(serviceId) {
         })
         .catch(error => {
             console.error('Error fetching service details:', error);
-            document.getElementById('serviceModalLoading').innerHTML = '<p class="text-red-500">{{ __('Ralat memuat data perkhidmatan') }}</p>';
+            closeServiceModal();
+            showAdminNotification(@json(__('Ralat memuat data perkhidmatan')), 'error');
         });
 }
 
