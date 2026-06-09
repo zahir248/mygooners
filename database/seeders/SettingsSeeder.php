@@ -45,8 +45,15 @@ class SettingsSeeder extends Seeder
                 'key' => 'maintenance_mode',
                 'value' => 'false',
                 'type' => 'boolean',
-                'group' => 'general',
+                'group' => 'maintenance',
                 'description' => 'Enable maintenance mode'
+            ],
+            [
+                'key' => 'fpl_module_enabled',
+                'value' => 'false',
+                'type' => 'boolean',
+                'group' => 'maintenance',
+                'description' => 'Enable or disable Fantasy Premier League module across the website'
             ]
         ];
 

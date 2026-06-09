@@ -223,7 +223,7 @@
         </div>
     </div>
     
-    @if($order->fpl_manager_name && $order->fpl_team_name)
+    @if(fpl_module_enabled() && $order->fpl_manager_name && $order->fpl_team_name)
         <!-- Fantasy Premier League Section -->
         <div class="bg-white rounded-xl shadow-lg overflow-hidden mt-8">
             <div class="px-6 py-4 border-b border-gray-200">

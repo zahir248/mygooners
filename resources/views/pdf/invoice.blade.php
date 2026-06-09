@@ -472,7 +472,7 @@
                 </div>
             </div>
 
-            @if($order->fpl_manager_name && $order->fpl_team_name)
+            @if(fpl_module_enabled() && $order->fpl_manager_name && $order->fpl_team_name)
                 <div class="fpl-section">
                     <div class="fpl-title">Fantasy Premier League</div>
                     <div class="payment-grid">

@@ -181,7 +181,7 @@
             </div>
         @endif
 
-        @if($order->fpl_manager_name && $order->fpl_team_name)
+        @if(fpl_module_enabled() && $order->fpl_manager_name && $order->fpl_team_name)
             <div class="address-section">
                 <div class="address-title">{{ trans('email.fpl_section') }}</div>
                 <div>

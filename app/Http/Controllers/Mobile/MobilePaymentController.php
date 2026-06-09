@@ -191,8 +191,10 @@ class MobilePaymentController extends Controller
                 'billing_state' => $validated['billing']['state'],
                 'billing_postal_code' => $validated['billing']['postal_code'],
                 'billing_country' => $validated['billing']['country'],
-                'fpl_manager_name' => $validated['fpl_manager_name'] ?? null,
-                'fpl_team_name' => $validated['fpl_team_name'] ?? null,
+                ...fpl_order_fields(
+                    $validated['fpl_manager_name'] ?? null,
+                    $validated['fpl_team_name'] ?? null
+                ),
                 'notes' => $validated['notes'] ?? null,
             ]);
 

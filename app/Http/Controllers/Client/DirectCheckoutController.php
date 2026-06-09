@@ -139,7 +139,7 @@ class DirectCheckoutController extends Controller
     public function store(Request $request)
     {
         // Validate request
-        $request->validate([
+        $request->validate(array_merge([
             'shipping_detail_id' => 'nullable|exists:shipping_details,id',
             'shipping_name' => 'required_without:shipping_detail_id|string|max:255',
             'shipping_email' => 'required_without:shipping_detail_id|email|max:255',
@@ -159,12 +159,10 @@ class DirectCheckoutController extends Controller
             'billing_postal_code' => 'required_without:billing_detail_id|string|max:10',
             'billing_country' => 'required_without:billing_detail_id|string|max:255',
             'payment_method' => 'required|in:toyyibpay,stripe',
-            'fpl_manager_name' => 'required|string|max:255',
-            'fpl_team_name' => 'required|string|max:255',
             'notes' => 'nullable|string',
             'save_shipping_detail' => 'boolean',
             'save_billing_detail' => 'boolean',
-        ]);
+        ], fpl_validation_rules()));
 
         // Get checkout data from session
         $checkoutData = session('direct_checkout');
@@ -298,8 +296,7 @@ class DirectCheckoutController extends Controller
                 'tax' => $checkoutData['tax'],
                 'total' => $checkoutData['total'],
                 'payment_method' => $request->payment_method,
-                'fpl_manager_name' => $request->fpl_manager_name,
-                'fpl_team_name' => $request->fpl_team_name,
+                ...fpl_order_fields($request->fpl_manager_name, $request->fpl_team_name),
                 'shipping_data' => $shippingData,
                 'billing_data' => $billingData,
                 'notes' => $request->notes,
@@ -360,8 +357,7 @@ class DirectCheckoutController extends Controller
                     'billing_state' => $billingData['billing_state'],
                     'billing_postal_code' => $billingData['billing_postal_code'],
                     'billing_country' => $billingData['billing_country'],
-                    'fpl_manager_name' => $request->fpl_manager_name,
-                    'fpl_team_name' => $request->fpl_team_name,
+                    ...fpl_order_fields($request->fpl_manager_name, $request->fpl_team_name),
                     'notes' => $request->notes,
                 ]);
 
@@ -992,8 +988,10 @@ class DirectCheckoutController extends Controller
                             'billing_state' => $pendingCheckout['billing_data']['billing_state'],
                             'billing_postal_code' => $pendingCheckout['billing_data']['billing_postal_code'],
                             'billing_country' => $pendingCheckout['billing_data']['billing_country'],
-                            'fpl_manager_name' => $pendingCheckout['fpl_manager_name'],
-                            'fpl_team_name' => $pendingCheckout['fpl_team_name'],
+                            ...fpl_order_fields(
+                                $pendingCheckout['fpl_manager_name'] ?? null,
+                                $pendingCheckout['fpl_team_name'] ?? null
+                            ),
                             'notes' => $pendingCheckout['notes'],
                         ]);
 
@@ -1108,8 +1106,10 @@ class DirectCheckoutController extends Controller
                             'billing_state' => $pendingCheckout['billing_data']['billing_state'],
                             'billing_postal_code' => $pendingCheckout['billing_data']['billing_postal_code'],
                             'billing_country' => $pendingCheckout['billing_data']['billing_country'],
-                            'fpl_manager_name' => $pendingCheckout['fpl_manager_name'],
-                            'fpl_team_name' => $pendingCheckout['fpl_team_name'],
+                            ...fpl_order_fields(
+                                $pendingCheckout['fpl_manager_name'] ?? null,
+                                $pendingCheckout['fpl_team_name'] ?? null
+                            ),
                             'notes' => $pendingCheckout['notes'],
                         ]);
 

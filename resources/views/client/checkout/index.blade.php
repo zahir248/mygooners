@@ -373,6 +373,7 @@
                     </div>
                 </div>
                 
+                @if(fpl_module_enabled())
                 <!-- Fantasy Premier League Section -->
                 <div class="bg-white rounded-xl shadow-lg overflow-hidden mb-8">
                     <div class="px-6 py-4 border-b border-gray-200">
@@ -423,6 +424,7 @@
                         </div>
                     </div>
                 </div>
+                @endif
                 
                 <!-- Payment Method -->
                 <div class="bg-white rounded-xl shadow-lg overflow-hidden mb-8">

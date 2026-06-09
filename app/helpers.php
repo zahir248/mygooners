@@ -10,6 +10,44 @@ if (!function_exists('setting')) {
     }
 }
 
+if (!function_exists('fpl_module_enabled')) {
+    function fpl_module_enabled(): bool
+    {
+        return (bool) setting('fpl_module_enabled', false);
+    }
+}
+
+if (!function_exists('fpl_validation_rules')) {
+    function fpl_validation_rules(): array
+    {
+        if (!fpl_module_enabled()) {
+            return [];
+        }
+
+        return [
+            'fpl_manager_name' => 'required|string|max:255',
+            'fpl_team_name' => 'required|string|max:255',
+        ];
+    }
+}
+
+if (!function_exists('fpl_order_fields')) {
+    function fpl_order_fields(?string $managerName = null, ?string $teamName = null): array
+    {
+        if (!fpl_module_enabled()) {
+            return [
+                'fpl_manager_name' => null,
+                'fpl_team_name' => null,
+            ];
+        }
+
+        return [
+            'fpl_manager_name' => $managerName,
+            'fpl_team_name' => $teamName,
+        ];
+    }
+}
+
 if (!function_exists('malayDiffForHumans')) {
     /**
      * Get human-readable time difference in Malay

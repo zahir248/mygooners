@@ -315,7 +315,7 @@
                         </div>
                     @endif
                     
-                    @if($order->fpl_manager_name && $order->fpl_team_name)
+                    @if(fpl_module_enabled() && $order->fpl_manager_name && $order->fpl_team_name)
                         <div>
                             <span class="text-gray-600 text-sm">{{ __('FPL Manager') }}</span>
                             <p class="font-medium">{{ $order->fpl_manager_name }}</p>

@@ -14,11 +14,26 @@ class SettingsController extends Controller
      */
     public function index()
     {
-        $settings = Setting::orderBy('group')->orderBy('key')->get();
-        
-        // Group settings by their group
+        $groupOrder = ['general', 'maintenance', 'payment'];
+
+        $settings = Setting::all()
+            ->sortBy(function ($setting) use ($groupOrder) {
+                $groupIndex = array_search($setting->group, $groupOrder, true);
+                $maintenanceOrder = [
+                    'maintenance_mode' => 0,
+                    'fpl_module_enabled' => 1,
+                ];
+
+                return [
+                    $groupIndex === false ? 99 : $groupIndex,
+                    $maintenanceOrder[$setting->key] ?? 50,
+                    $setting->key,
+                ];
+            })
+            ->values();
+
         $groupedSettings = $settings->groupBy('group');
-        
+
         return view('admin.settings.index', compact('groupedSettings'));
     }
 
@@ -113,8 +128,15 @@ class SettingsController extends Controller
                 'key' => 'maintenance_mode',
                 'value' => 'false',
                 'type' => 'boolean',
-                'group' => 'general',
+                'group' => 'maintenance',
                 'description' => 'Enable maintenance mode'
+            ],
+            [
+                'key' => 'fpl_module_enabled',
+                'value' => 'false',
+                'type' => 'boolean',
+                'group' => 'maintenance',
+                'description' => 'Enable or disable Fantasy Premier League module across the website'
             ]
         ];
 

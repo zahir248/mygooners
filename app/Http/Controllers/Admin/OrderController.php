@@ -215,9 +215,9 @@ class OrderController extends Controller
 
         $callback = function() use ($orders) {
             $file = fopen('php://output', 'w');
-            
-            // CSV headers - Enhanced with complete details
-            fputcsv($file, [
+            $fplEnabled = fpl_module_enabled();
+
+            $headers = [
                 'Order Number',
                 'Order Date',
                 'Order Status',
@@ -234,14 +234,22 @@ class OrderController extends Controller
                 'Complete Shipping Address',
                 'Complete Billing Address',
                 'Order Notes',
-                'FPL Manager Name',
-                'FPL Team Name',
+            ];
+
+            if ($fplEnabled) {
+                $headers[] = 'FPL Manager Name';
+                $headers[] = 'FPL Team Name';
+            }
+
+            $headers = array_merge($headers, [
                 'Tracking Number',
                 'Shipping Courier',
                 'Shipped Date',
                 'Delivered Date',
-                'Item Details'
+                'Item Details',
             ]);
+
+            fputcsv($file, $headers);
 
             foreach ($orders as $order) {
                 // Build complete addresses
@@ -264,7 +272,7 @@ class OrderController extends Controller
                 // Build item details
                 $itemDetails = $this->buildItemDetails($order->items);
 
-                fputcsv($file, [
+                $row = [
                     $order->order_number,
                     $order->created_at->format('Y-m-d H:i:s'),
                     $order->status,
@@ -281,14 +289,22 @@ class OrderController extends Controller
                     $shippingAddress,
                     $billingAddress,
                     $order->notes ?? '',
-                    $order->fpl_manager_name ?? '',
-                    $order->fpl_team_name ?? '',
+                ];
+
+                if ($fplEnabled) {
+                    $row[] = $order->fpl_manager_name ?? '';
+                    $row[] = $order->fpl_team_name ?? '';
+                }
+
+                $row = array_merge($row, [
                     $order->tracking_number ?? '',
                     $order->shipping_courier ?? '',
                     $order->shipped_at ? $order->shipped_at->format('Y-m-d H:i:s') : '',
                     $order->delivered_at ? $order->delivered_at->format('Y-m-d H:i:s') : '',
-                    $itemDetails
+                    $itemDetails,
                 ]);
+
+                fputcsv($file, $row);
             }
 
             fclose($file);
