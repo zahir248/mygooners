@@ -13,7 +13,7 @@ if (!function_exists('setting')) {
 if (!function_exists('fpl_module_enabled')) {
     function fpl_module_enabled(): bool
     {
-        return (bool) setting('fpl_module_enabled', false);
+        return ! (bool) setting('fpl_maintenance_mode', true);
     }
 }
 

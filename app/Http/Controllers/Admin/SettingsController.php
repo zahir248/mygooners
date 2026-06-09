@@ -21,7 +21,7 @@ class SettingsController extends Controller
                 $groupIndex = array_search($setting->group, $groupOrder, true);
                 $maintenanceOrder = [
                     'maintenance_mode' => 0,
-                    'fpl_module_enabled' => 1,
+                    'fpl_maintenance_mode' => 1,
                 ];
 
                 return [
@@ -132,11 +132,11 @@ class SettingsController extends Controller
                 'description' => 'Enable maintenance mode'
             ],
             [
-                'key' => 'fpl_module_enabled',
-                'value' => 'false',
+                'key' => 'fpl_maintenance_mode',
+                'value' => 'true',
                 'type' => 'boolean',
                 'group' => 'maintenance',
-                'description' => 'Enable or disable Fantasy Premier League module across the website'
+                'description' => 'Hide Fantasy Premier League module across the website'
             ]
         ];
 
