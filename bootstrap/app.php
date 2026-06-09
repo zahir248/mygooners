@@ -20,8 +20,13 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
 
         $middleware->web(append: [
+            \App\Http\Middleware\CheckMaintenanceMode::class,
             \App\Http\Middleware\SetAdminLocale::class,
             \App\Http\Middleware\SetClientLocale::class,
+        ]);
+
+        $middleware->api(append: [
+            \App\Http\Middleware\CheckMaintenanceMode::class,
         ]);
 
         // Run after Authenticate so locale comes from the logged-in user's preference.

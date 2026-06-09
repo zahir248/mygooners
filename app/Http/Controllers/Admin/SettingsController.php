@@ -37,11 +37,10 @@ class SettingsController extends Controller
         ]);
 
         foreach ($request->settings as $settingData) {
-            // Handle boolean settings - if value is not set, it means checkbox is unchecked
-            $value = $settingData['type'] === 'boolean' 
-                ? ($settingData['value'] ?? 'false')
+            $value = $settingData['type'] === 'boolean'
+                ? (filter_var($settingData['value'] ?? false, FILTER_VALIDATE_BOOLEAN) ? 'true' : 'false')
                 : ($settingData['value'] ?? '');
-            
+
             Setting::set(
                 $settingData['key'],
                 $value,

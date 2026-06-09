@@ -75,41 +75,41 @@
                                     <div class="lg:col-span-2">
                                         @if($setting->type === 'boolean')
                                             <div class="flex items-center">
-                                                <input type="hidden" name="settings[{{ $loop->index }}][key]" value="{{ $setting->key }}">
-                                                <input type="hidden" name="settings[{{ $loop->index }}][type]" value="{{ $setting->type }}">
-                                                <input type="hidden" name="settings[{{ $loop->index }}][group]" value="{{ $setting->group }}">
-                                                <input type="hidden" name="settings[{{ $loop->index }}][description]" value="{{ $setting->description }}">
+                                                <input type="hidden" name="settings[{{ $setting->key }}][key]" value="{{ $setting->key }}">
+                                                <input type="hidden" name="settings[{{ $setting->key }}][type]" value="{{ $setting->type }}">
+                                                <input type="hidden" name="settings[{{ $setting->key }}][group]" value="{{ $setting->group }}">
+                                                <input type="hidden" name="settings[{{ $setting->key }}][description]" value="{{ $setting->description }}">
                                                 
                                                 <!-- Hidden input to always send a value -->
-                                                <input type="hidden" name="settings[{{ $loop->index }}][value]" value="false">
+                                                <input type="hidden" name="settings[{{ $setting->key }}][value]" value="false">
                                                 
                                                 <input type="checkbox" 
-                                                       name="settings[{{ $loop->index }}][value]" 
+                                                       name="settings[{{ $setting->key }}][value]" 
                                                        value="true"
-                                                       {{ $setting->value == 'true' ? 'checked' : '' }}
+                                                       {{ filter_var($setting->value, FILTER_VALIDATE_BOOLEAN) ? 'checked' : '' }}
                                                        class="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300 rounded">
                                                 <span class="ml-2 text-sm text-gray-700">{{ __('Aktif') }}</span>
                                             </div>
                                         @elseif($setting->type === 'integer')
                                             <input type="number" 
-                                                   name="settings[{{ $loop->index }}][value]" 
+                                                   name="settings[{{ $setting->key }}][value]" 
                                                    value="{{ $setting->value }}"
                                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500">
                                             
-                                            <input type="hidden" name="settings[{{ $loop->index }}][key]" value="{{ $setting->key }}">
-                                            <input type="hidden" name="settings[{{ $loop->index }}][type]" value="{{ $setting->type }}">
-                                            <input type="hidden" name="settings[{{ $loop->index }}][group]" value="{{ $setting->group }}">
-                                            <input type="hidden" name="settings[{{ $loop->index }}][description]" value="{{ $setting->description }}">
+                                            <input type="hidden" name="settings[{{ $setting->key }}][key]" value="{{ $setting->key }}">
+                                            <input type="hidden" name="settings[{{ $setting->key }}][type]" value="{{ $setting->type }}">
+                                            <input type="hidden" name="settings[{{ $setting->key }}][group]" value="{{ $setting->group }}">
+                                            <input type="hidden" name="settings[{{ $setting->key }}][description]" value="{{ $setting->description }}">
                                         @else
                                             <input type="text" 
-                                                   name="settings[{{ $loop->index }}][value]" 
+                                                   name="settings[{{ $setting->key }}][value]" 
                                                    value="{{ $setting->value }}"
                                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500">
                                             
-                                            <input type="hidden" name="settings[{{ $loop->index }}][key]" value="{{ $setting->key }}">
-                                            <input type="hidden" name="settings[{{ $loop->index }}][type]" value="{{ $setting->type }}">
-                                            <input type="hidden" name="settings[{{ $loop->index }}][group]" value="{{ $setting->group }}">
-                                            <input type="hidden" name="settings[{{ $loop->index }}][description]" value="{{ $setting->description }}">
+                                            <input type="hidden" name="settings[{{ $setting->key }}][key]" value="{{ $setting->key }}">
+                                            <input type="hidden" name="settings[{{ $setting->key }}][type]" value="{{ $setting->type }}">
+                                            <input type="hidden" name="settings[{{ $setting->key }}][group]" value="{{ $setting->group }}">
+                                            <input type="hidden" name="settings[{{ $setting->key }}][description]" value="{{ $setting->description }}">
                                         @endif
                                     </div>
                                 </div>

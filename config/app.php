@@ -54,6 +54,14 @@ return [
 
     'url' => env('APP_URL', 'http://localhost'),
 
+    'mobile_app' => [
+        'android_url' => env(
+            'MOBILE_APP_ANDROID_URL',
+            'https://github.com/zahir248/mygooners-mobile/releases/download/V.1.0/MyGooners.apk'
+        ),
+        'ios_url' => env('MOBILE_APP_IOS_URL'),
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | Application Timezone

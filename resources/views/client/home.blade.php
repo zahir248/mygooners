@@ -651,5 +651,86 @@
         </div>
     </section>
 
+    <!-- Mobile App Promo Section -->
+    <section class="mb-16">
+        <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-900 via-gray-900 to-red-800 shadow-xl">
+            <div class="absolute -top-24 -right-24 h-64 w-64 rounded-full bg-red-600/20 blur-3xl"></div>
+            <div class="absolute -bottom-24 -left-24 h-64 w-64 rounded-full bg-yellow-400/10 blur-3xl"></div>
+
+            <div class="relative grid grid-cols-1 items-center gap-10 p-8 lg:grid-cols-2 lg:gap-12 lg:p-12">
+                <div>
+                    <span class="mb-4 inline-flex items-center rounded-full bg-red-600/20 px-4 py-1 text-sm font-semibold text-red-200">
+                        {{ __('home_page.mobile_app.badge') }}
+                    </span>
+
+                    <h2 class="mb-4 text-3xl font-bold text-white md:text-4xl">
+                        {{ __('home_page.mobile_app.title') }}
+                    </h2>
+
+                    <p class="mb-6 text-lg leading-relaxed text-gray-200">
+                        {{ __('home_page.mobile_app.description') }}
+                    </p>
+
+                    <ul class="mb-8 space-y-3 text-gray-100">
+                        <li class="flex items-start gap-3">
+                            <span class="mt-1 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-red-600 text-sm font-bold text-white">✓</span>
+                            <span>{{ __('home_page.mobile_app.features.browse') }}</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="mt-1 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-red-600 text-sm font-bold text-white">✓</span>
+                            <span>{{ __('home_page.mobile_app.features.orders') }}</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="mt-1 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-red-600 text-sm font-bold text-white">✓</span>
+                            <span>{{ __('home_page.mobile_app.features.payments') }}</span>
+                        </li>
+                    </ul>
+
+                    @php
+                        $androidUrl = config('app.mobile_app.android_url');
+                        $iosUrl = config('app.mobile_app.ios_url');
+                    @endphp
+
+                    <div class="flex flex-col gap-4 sm:flex-row sm:flex-wrap">
+                        @if($androidUrl)
+                            <a href="{{ $androidUrl }}"
+                               download="MyGooners.apk"
+                               class="inline-flex items-center justify-center gap-3 rounded-xl bg-white px-6 py-3 font-semibold text-gray-900 transition-colors hover:bg-gray-100">
+                                <svg class="h-7 w-7" viewBox="0 0 24 24" fill="#3DDC84" aria-hidden="true">
+                                    <path d="M17.6 9.48l1.84-3.18c.16-.31.04-.69-.26-.85-.29-.15-.65-.06-.83.22l-1.88 3.24a11.463 11.463 0 0 0-8.94 0L5.65 5.67c-.19-.28-.54-.37-.83-.22-.3.16-.42.54-.26.85l1.84 3.18C4.4 11.21 3 13.97 3 17h18c0-3.03-1.4-5.79-3.4-7.52zM7 15.25c-.69 0-1.25-.56-1.25-1.25s.56-1.25 1.25-1.25 1.25.56 1.25 1.25-.56 1.25-1.25 1.25zm10 0c-.69 0-1.25-.56-1.25-1.25s.56-1.25 1.25-1.25 1.25.56 1.25 1.25-.56 1.25-1.25 1.25z"/>
+                                </svg>
+                                <span>{{ __('home_page.mobile_app.download_android') }}</span>
+                            </a>
+                        @endif
+
+                        @if($iosUrl)
+                            <a href="{{ $iosUrl }}"
+                               target="_blank"
+                               rel="noopener noreferrer"
+                               class="inline-flex items-center justify-center gap-3 rounded-xl border border-white/30 bg-white/10 px-6 py-3 font-semibold text-white transition-colors hover:bg-white/20">
+                                <svg class="h-6 w-6" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                    <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.22-1.99 1.09-3.14-1.05.04-2.31.7-3.06 1.53-.67.73-1.26 1.9-1.04 3.02 1.1.09 2.23-.56 3.01-1.41z"/>
+                                </svg>
+                                <span>{{ __('home_page.mobile_app.download_app_store') }}</span>
+                            </a>
+                        @endif
+
+                        @if(!$androidUrl && !$iosUrl)
+                            <span class="inline-flex items-center justify-center rounded-xl bg-white px-6 py-3 font-semibold text-gray-900">
+                                {{ __('home_page.mobile_app.coming_soon') }}
+                            </span>
+                        @endif
+                    </div>
+                </div>
+
+                <div class="flex justify-center lg:justify-end">
+                    <img src="{{ asset('images/smartphone-mockup.png') }}"
+                         alt="{{ __('home_page.mobile_app.mockup_alt') }}"
+                         class="h-auto w-full max-w-sm drop-shadow-2xl lg:max-w-md xl:max-w-lg">
+                </div>
+            </div>
+        </div>
+    </section>
+
 </div>
 @endsection 
