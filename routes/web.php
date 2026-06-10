@@ -609,6 +609,8 @@ Route::prefix('service-reviews')->group(function () {
         Route::get('/', [AdminUserController::class, 'index'])->name('admin.users.index');
         Route::get('/create', [AdminUserController::class, 'create'])->name('admin.users.create');
         Route::post('/', [AdminUserController::class, 'store'])->name('admin.users.store');
+        Route::get('/{id}/edit', [AdminUserController::class, 'edit'])->name('admin.users.edit');
+        Route::put('/{id}', [AdminUserController::class, 'update'])->name('admin.users.update');
         Route::get('/{id}', [AdminUserController::class, 'show'])->name('admin.users.show');
         Route::post('/{id}/verify', [AdminUserController::class, 'verify'])->name('admin.users.verify');
         Route::post('/{id}/suspend', [AdminUserController::class, 'suspend'])->name('admin.users.suspend');

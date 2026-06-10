@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
@@ -52,6 +54,74 @@ class UserController extends Controller
         $userServices = $user->services()->latest()->get();
 
         return view('admin.users.show', compact('user', 'userServices'));
+    }
+
+    public function edit($id)
+    {
+        $user = User::findOrFail($id);
+
+        if (! $this->canEditUser($user)) {
+            return redirect()->route('admin.users.index')
+                ->with('error', __('flash.user_edit_forbidden'));
+        }
+
+        $assignableRoles = $this->assignableRoles();
+
+        return view('admin.users.edit', compact('user', 'assignableRoles'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+
+        if (! $this->canEditUser($user)) {
+            return redirect()->route('admin.users.index')
+                ->with('error', __('flash.user_edit_forbidden'));
+        }
+
+        $assignableRoles = $this->assignableRoles();
+
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => ['required', 'email', 'max:255', Rule::unique('users', 'email')->ignore($user->id)],
+            'phone' => 'nullable|string|max:30',
+            'location' => 'nullable|string|max:255',
+            'bio' => 'nullable|string|max:1000',
+            'role' => ['required', Rule::in($assignableRoles)],
+            'status' => 'required|in:active,suspended,pending',
+            'is_verified' => 'nullable|boolean',
+            'password' => 'nullable|string|min:8|confirmed',
+        ]);
+
+        if ($user->id === auth()->id() && auth()->user()->role === 'super_admin' && $validated['role'] !== 'super_admin') {
+            return back()->withErrors(['role' => __('flash.user_role_change_forbidden')])->withInput();
+        }
+
+        if ($user->id === auth()->id() && $validated['status'] === 'suspended') {
+            return back()->withErrors(['status' => __('flash.user_edit_forbidden')])->withInput();
+        }
+
+        if (! in_array($user->role, $assignableRoles) && $validated['role'] !== $user->role) {
+            return back()->withErrors(['role' => __('flash.user_role_change_forbidden')])->withInput();
+        }
+
+        $user->name = $validated['name'];
+        $user->email = $validated['email'];
+        $user->phone = $validated['phone'] ?? null;
+        $user->location = $validated['location'] ?? null;
+        $user->bio = $validated['bio'] ?? null;
+        $user->role = $validated['role'];
+        $user->status = $validated['status'];
+        $user->is_verified = $request->boolean('is_verified');
+
+        if ($request->filled('password')) {
+            $user->password = Hash::make($validated['password']);
+        }
+
+        $user->save();
+
+        return redirect()->route('admin.users.show', $user->id)
+            ->with('success', __('flash.user_updated'));
     }
 
     public function verify($id)
@@ -129,5 +199,32 @@ class UserController extends Controller
         $user->save();
 
         return redirect()->route('admin.users.index')->with('success', __('flash.user_created'));
+    }
+
+    private function canEditUser(User $user): bool
+    {
+        $actor = auth()->user();
+
+        if (! in_array($actor->role, ['admin', 'super_admin'], true)) {
+            return false;
+        }
+
+        if ($actor->role === 'super_admin') {
+            return true;
+        }
+
+        return ! in_array($user->role, ['super_admin', 'admin'], true);
+    }
+
+    /**
+     * @return list<string>
+     */
+    private function assignableRoles(): array
+    {
+        if (auth()->user()->role === 'super_admin') {
+            return ['user', 'writer', 'admin', 'super_admin'];
+        }
+
+        return ['user', 'writer'];
     }
 } 
