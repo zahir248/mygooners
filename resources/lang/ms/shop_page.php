@@ -34,7 +34,7 @@ return [
     'share_text' => 'Lihat barangan Arsenal ini: :title',
 
     'no_stock' => 'Kehabisan Stok',
-    'out_of_stock' => '✗ Kehabisan Stok',
+    'out_of_stock' => 'Kehabisan Stok',
     'in_stock_available' => '✓ Dalam Stok (:count tersedia)',
     'save_amount' => 'Jimat RM:amount',
     'selected_variant_price' => 'Harga Varian Terpilih:',

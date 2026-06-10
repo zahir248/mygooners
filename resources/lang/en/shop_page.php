@@ -34,7 +34,7 @@ return [
     'share_text' => 'Check out this Arsenal merchandise: :title',
 
     'no_stock' => 'Out of Stock',
-    'out_of_stock' => '✗ Out of Stock',
+    'out_of_stock' => 'Out of Stock',
     'in_stock_available' => '✓ In Stock (:count available)',
     'save_amount' => 'Save RM:amount',
     'selected_variant_price' => 'Selected Variant Price:',
