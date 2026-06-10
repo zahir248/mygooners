@@ -19,7 +19,7 @@ class AdminMiddleware
     {
         // Check if user is authenticated and has admin role
         if (!Auth::check()) {
-            return redirect()->route('login')->with('error', 'Please log in to access the admin area.');
+            return redirect()->route('admin.login')->with('error', 'Please log in to access the admin area.');
         }
 
         $user = Auth::user();
