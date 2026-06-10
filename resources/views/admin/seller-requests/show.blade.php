@@ -30,7 +30,7 @@
                                 @if(Str::startsWith($seller->profile_image, 'http'))
                                     <img class="h-16 w-16 rounded-full object-cover" src="{{ $seller->profile_image }}" alt="{{ $seller->name }}">
                                 @else
-                                    <img class="h-16 w-16 rounded-full object-cover" src="{{ asset('storage/' . $seller->profile_image) }}" alt="{{ $seller->name }}">
+                                    <img class="h-16 w-16 rounded-full object-cover" src="{{ route('profile.image', basename($seller->profile_image)) }}" alt="{{ $seller->name }}">
                                 @endif
                             @else
                                 <div class="h-16 w-16 rounded-full bg-gray-300 flex items-center justify-center">
