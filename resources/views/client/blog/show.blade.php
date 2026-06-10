@@ -362,7 +362,7 @@
             <!-- Tags -->
             @if($article->tags && is_array($article->tags) && count($article->tags) > 0)
                 <div class="mt-12 pt-8 border-t border-gray-200">
-                    <h3 class="text-sm font-medium text-gray-900 mb-4">{{ __('Tags') }}</h3>
+                    <h3 class="text-sm font-medium text-gray-900 mb-4">{{ __('client_ui.tags') }}</h3>
                     <div class="flex flex-wrap gap-2">
                         @foreach($article->tags as $tag)
                             <span class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1 rounded-full text-sm font-medium transition-colors cursor-pointer">

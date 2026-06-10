@@ -32,4 +32,16 @@ return [
 
     'share_title' => ':title - Arsenal Shop',
     'share_text' => 'Check out this Arsenal merchandise: :title',
+
+    'no_stock' => 'Out of Stock',
+    'out_of_stock' => '✗ Out of Stock',
+    'in_stock_available' => '✓ In Stock (:count available)',
+    'save_amount' => 'Save RM:amount',
+    'selected_variant_price' => 'Selected Variant Price:',
+    'product_price' => 'Product Price:',
+    'select_variant_or_base' => 'Select a variant or buy the base product',
+    'add_to_cart' => 'Add to Cart',
+    'buy_now' => 'Buy Now',
+    'notify_when_available' => 'Notify When Available',
+    'add_to_favourites_label' => 'Add to Favourites',
 ];

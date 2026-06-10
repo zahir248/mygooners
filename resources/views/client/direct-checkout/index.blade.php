@@ -539,7 +539,7 @@
                             @if($hasSale)
                                 <p class="text-sm font-medium text-red-600">RM{{ number_format($finalPrice * $quantity, 2) }}</p>
                                 <p class="text-xs text-gray-500 line-through">RM{{ number_format($originalPrice * $quantity, 2) }}</p>
-                                <p class="text-xs text-green-600">Jimat RM{{ number_format(($originalPrice - $finalPrice) * $quantity, 2) }}</p>
+                                <p class="text-xs text-green-600">{{ __('client_ui.save_amount', ['amount' => number_format(($originalPrice - $finalPrice) * $quantity, 2)]) }}</p>
                             @else
                                 <p class="text-sm font-medium text-gray-900">RM{{ number_format($subtotal, 2) }}</p>
                             @endif

@@ -536,7 +536,7 @@
                             @endif
                             @if($product->is_out_of_stock)
                                 <div class="absolute bottom-4 left-4">
-                                    <span class="bg-red-600 text-white px-3 py-1 rounded-full text-sm font-medium">{{ __('No Stock') }}</span>
+                                    <span class="bg-red-600 text-white px-3 py-1 rounded-full text-sm font-medium">{{ __('client_ui.no_stock') }}</span>
                                 </div>
                             @elseif($product->calculated_stock<= 5 && $product->calculated_stock > 0)
                                 <div class="absolute bottom-4 left-4">
@@ -621,7 +621,7 @@
                                                 <div class="flex items-center text-xs text-gray-500 mb-1">
                                                     <span class="bg-gray-100 text-gray-600 px-2 py-1 rounded-full text-xs">{{ $product->category ?: __('Produk') }}</span>
                                                     @if($product->sale_price)
-                                                        <span class="ml-2 bg-red-100 text-red-600 px-2 py-1 rounded-full text-xs">{{ __('SALE') }}</span>
+                                                        <span class="ml-2 bg-red-100 text-red-600 px-2 py-1 rounded-full text-xs">{{ __('client_ui.sale') }}</span>
                                                     @endif
                                                 </div>
                                                 <div class="text-xs text-gray-500">

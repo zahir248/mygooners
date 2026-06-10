@@ -57,7 +57,7 @@
                 
                 <!-- Rating -->
                 <div class="mb-6">
-                    <label class="block text-sm font-medium text-gray-700 mb-3">{{ __('Rating *') }}</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-3">{{ __('client_ui.rating_required') }}</label>
                     <div class="flex items-center space-x-2">
                         @for($i = 1; $i <= 5; $i++)
                             <input type="radio" name="rating" id="rating-{{ $i }}" value="{{ $i }}" 

@@ -1281,6 +1281,13 @@
             'cart_remove_error' => __('client_messages.cart_remove_error'),
             'cart_clear_error' => __('client_messages.cart_clear_error'),
             'cart_product_added' => __('client_messages.cart_product_added'),
+            'in_stock_available' => __('shop_page.in_stock_available', ['count' => ':count']),
+            'out_of_stock' => __('shop_page.out_of_stock'),
+            'save_amount' => __('shop_page.save_amount', ['amount' => ':amount']),
+            'select_variant_or_base' => __('shop_page.select_variant_or_base'),
+            'add_to_cart' => __('shop_page.add_to_cart'),
+            'buy_now' => __('shop_page.buy_now'),
+            'no_stock' => __('shop_page.no_stock'),
         ];
     @endphp
     <script>window.clientMessages = @json($clientJsMessages);</script>

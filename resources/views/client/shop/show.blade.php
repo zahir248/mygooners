@@ -333,43 +333,43 @@ use Illuminate\Support\Str;
                             @if($selectedVariation)
                                 <!-- Show selected variant price and stock -->
                                 <div class="mb-2">
-                                    <span class="text-sm text-gray-600">{{ __('Harga Varian Terpilih:') }}</span>
+                                    <span class="text-sm text-gray-600">{{ __('shop_page.selected_variant_price') }}</span>
                                 </div>
                                 @if($selectedVariation->sale_price)
                                     <span class="text-2xl sm:text-3xl lg:text-4xl font-bold text-red-600">RM{{ number_format($selectedVariation->sale_price, 2) }}</span>
                                     <span class="text-lg sm:text-xl lg:text-2xl text-gray-500 line-through">RM{{ number_format($selectedVariation->price, 2) }}</span>
                                 <span class="bg-red-100 text-red-800 px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-bold">
-                                        Jimat RM{{ number_format($selectedVariation->price - $selectedVariation->sale_price, 2) }}
+                                        {{ __('shop_page.save_amount', ['amount' => number_format($selectedVariation->price - $selectedVariation->sale_price, 2)]) }}
                                 </span>
                             @else
                                     <span class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900">RM{{ number_format($selectedVariation->price, 2) }}</span>
                                 @endif
                                 <div class="mt-2">
                                     @if($selectedVariation->stock_quantity > 0)
-                                        <span class="text-green-600 font-medium text-sm sm:text-base">✓ Dalam Stok ({{ $selectedVariation->stock_quantity }} tersedia)</span>
+                                        <span class="text-green-600 font-medium text-sm sm:text-base">{{ __('shop_page.in_stock_available', ['count' => $selectedVariation->stock_quantity]) }}</span>
                                     @else
-                                        <span class="text-red-600 font-medium text-sm sm:text-base">{{ __('✗ Kehabisan Stok') }}</span>
+                                        <span class="text-red-600 font-medium text-sm sm:text-base">{{ __('shop_page.out_of_stock') }}</span>
                             @endif
                                 </div>
                         @else
                                 <!-- Show base product price and stock -->
                                 <div class="mb-2">
-                                    <span class="text-sm text-gray-600">{{ __('Harga Produk:') }}</span>
+                                    <span class="text-sm text-gray-600">{{ __('shop_page.product_price') }}</span>
                                 </div>
                                 @if($product->sale_price)
                                     <span class="text-2xl sm:text-3xl lg:text-4xl font-bold text-red-600">RM{{ number_format($product->sale_price, 2) }}</span>
                                     <span class="text-lg sm:text-xl lg:text-2xl text-gray-500 line-through">RM{{ number_format($product->price, 2) }}</span>
                                     <span class="bg-red-100 text-red-800 px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-bold">
-                                        Jimat RM{{ number_format($product->price - $product->sale_price, 2) }}
+                                        {{ __('shop_page.save_amount', ['amount' => number_format($product->price - $product->sale_price, 2)]) }}
                                     </span>
                                 @else
                                     <span class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900">RM{{ number_format($product->price, 2) }}</span>
                                 @endif
                                 <div class="mt-2">
                                     @if($product->calculated_stock > 0)
-                                        <span class="text-green-600 font-medium text-sm sm:text-base">✓ Dalam Stok ({{ $product->calculated_stock }} tersedia)</span>
+                                        <span class="text-green-600 font-medium text-sm sm:text-base">{{ __('shop_page.in_stock_available', ['count' => $product->calculated_stock]) }}</span>
                                     @else
-                                        <span class="text-red-600 font-medium text-sm sm:text-base">{{ __('✗ Kehabisan Stok') }}</span>
+                                        <span class="text-red-600 font-medium text-sm sm:text-base">{{ __('shop_page.out_of_stock') }}</span>
                                     @endif
                                 </div>
                             @endif
@@ -378,16 +378,16 @@ use Illuminate\Support\Str;
                                 <span class="text-2xl sm:text-3xl lg:text-4xl font-bold text-red-600">RM{{ number_format($product->sale_price, 2) }}</span>
                                 <span class="text-lg sm:text-xl lg:text-2xl text-gray-500 line-through">RM{{ number_format($product->price, 2) }}</span>
                                 <span class="bg-red-100 text-red-800 px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-bold">
-                                    Jimat RM{{ number_format($product->price - $product->sale_price, 2) }}
+                                    {{ __('shop_page.save_amount', ['amount' => number_format($product->price - $product->sale_price, 2)]) }}
                                 </span>
                             @else
                                 <span class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900">RM{{ number_format($product->price, 2) }}</span>
                             @endif
                             <div class="mt-2">
                                 @if($product->calculated_stock > 0)
-                                    <span class="text-green-600 font-medium text-sm sm:text-base">✓ Dalam Stok ({{ $product->calculated_stock }} tersedia)</span>
+                                    <span class="text-green-600 font-medium text-sm sm:text-base">{{ __('shop_page.in_stock_available', ['count' => $product->calculated_stock]) }}</span>
                                 @else
-                                    <span class="text-red-600 font-medium text-sm sm:text-base">{{ __('✗ Kehabisan Stok') }}</span>
+                                    <span class="text-red-600 font-medium text-sm sm:text-base">{{ __('shop_page.out_of_stock') }}</span>
                                 @endif
                             </div>
                         @endif
@@ -439,7 +439,7 @@ use Illuminate\Support\Str;
                                     <h4 class="font-medium text-gray-900 text-center">{{ $variation->name }}</h4>
                                 </div>
                                 @if($variation->stock_quantity<= 0)
-                                    <p class="text-center text-xs text-red-600 mt-2">{{ __('No Stock') }}</p>
+                                    <p class="text-center text-xs text-red-600 mt-2">{{ __('client_ui.no_stock') }}</p>
                                 @endif
                             </div>
                         @endforeach
@@ -458,7 +458,7 @@ use Illuminate\Support\Str;
                         <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
                         </svg>
-                        <span class="text-sm font-medium text-gray-700">{{ __('Tambah ke Kegemaran') }}</span>
+                        <span class="text-sm font-medium text-gray-700">{{ __('shop_page.add_to_favourites_label') }}</span>
                     </button>
                 </div>
             @endauth
@@ -490,20 +490,20 @@ use Illuminate\Support\Str;
                     @if($product->hasVariations())
                         <div class="flex flex-col sm:flex-row gap-3">
                             @if($everythingOutOfStock)
-                                <button class="flex-1 bg-gray-300 text-gray-600 py-3 sm:py-4 px-4 sm:px-6 rounded-lg font-bold text-base sm:text-lg cursor-not-allowed" disabled>{{ __('No Stock') }}</button>
-                                <button class="flex-1 border-2 border-gray-300 text-gray-600 py-3 sm:py-4 px-4 sm:px-6 rounded-lg font-bold text-base sm:text-lg cursor-not-allowed" disabled>{{ __('Maklumkan Apabila Tersedia') }}</button>
+                                <button class="flex-1 bg-gray-300 text-gray-600 py-3 sm:py-4 px-4 sm:px-6 rounded-lg font-bold text-base sm:text-lg cursor-not-allowed" disabled>{{ __('client_ui.no_stock') }}</button>
+                                <button class="flex-1 border-2 border-gray-300 text-gray-600 py-3 sm:py-4 px-4 sm:px-6 rounded-lg font-bold text-base sm:text-lg cursor-not-allowed" disabled>{{ __('shop_page.notify_when_available') }}</button>
                             @else
-                                <button id="add-to-cart-btn" onclick="addToCart()" class="flex-1 bg-arsenal hover:bg-arsenal text-white py-3 sm:py-4 px-4 sm:px-6 rounded-lg font-bold text-base sm:text-lg transition-colors">{{ __('Tambah ke Troli') }}</button>
-                                <button id="buy-now-btn" onclick="buyNow()" class="flex-1 border-2 border-red-600 text-red-600 hover:bg-red-600 hover:text-white py-3 sm:py-4 px-4 sm:px-6 rounded-lg font-bold text-base sm:text-lg transition-colors">{{ __('Beli Sekarang') }}</button>
+                                <button id="add-to-cart-btn" onclick="addToCart()" class="flex-1 bg-arsenal hover:bg-arsenal text-white py-3 sm:py-4 px-4 sm:px-6 rounded-lg font-bold text-base sm:text-lg transition-colors">{{ __('shop_page.add_to_cart') }}</button>
+                                <button id="buy-now-btn" onclick="buyNow()" class="flex-1 border-2 border-red-600 text-red-600 hover:bg-red-600 hover:text-white py-3 sm:py-4 px-4 sm:px-6 rounded-lg font-bold text-base sm:text-lg transition-colors">{{ __('shop_page.buy_now') }}</button>
                             @endif
                         </div>
                     @else
                         @if($product->calculated_stock > 0)
-                            <button onclick="addToCartSimple()" class="w-full bg-arsenal hover:bg-arsenal text-white py-3 sm:py-4 px-4 sm:px-6 rounded-lg font-bold text-base sm:text-lg transition-colors">{{ __('Tambah ke Troli') }}</button>
-                            <button onclick="buyNowSimple()" class="w-full border-2 border-red-600 text-red-600 hover:bg-red-600 hover:text-white py-3 sm:py-4 px-4 sm:px-6 rounded-lg font-bold text-base sm:text-lg transition-colors">{{ __('Beli Sekarang') }}</button>
+                            <button onclick="addToCartSimple()" class="w-full bg-arsenal hover:bg-arsenal text-white py-3 sm:py-4 px-4 sm:px-6 rounded-lg font-bold text-base sm:text-lg transition-colors">{{ __('shop_page.add_to_cart') }}</button>
+                            <button onclick="buyNowSimple()" class="w-full border-2 border-red-600 text-red-600 hover:bg-red-600 hover:text-white py-3 sm:py-4 px-4 sm:px-6 rounded-lg font-bold text-base sm:text-lg transition-colors">{{ __('shop_page.buy_now') }}</button>
                         @else
-                            <button class="w-full bg-gray-300 text-gray-600 py-3 sm:py-4 px-4 sm:px-6 rounded-lg font-bold text-base sm:text-lg cursor-not-allowed" disabled>{{ __('No Stock') }}</button>
-                            <button class="w-full border-2 border-gray-300 text-gray-600 py-3 sm:py-4 px-4 sm:px-6 rounded-lg font-bold text-base sm:text-lg cursor-not-allowed" disabled>{{ __('Maklumkan Apabila Tersedia') }}</button>
+                            <button class="w-full bg-gray-300 text-gray-600 py-3 sm:py-4 px-4 sm:px-6 rounded-lg font-bold text-base sm:text-lg cursor-not-allowed" disabled>{{ __('client_ui.no_stock') }}</button>
+                            <button class="w-full border-2 border-gray-300 text-gray-600 py-3 sm:py-4 px-4 sm:px-6 rounded-lg font-bold text-base sm:text-lg cursor-not-allowed" disabled>{{ __('shop_page.notify_when_available') }}</button>
                         @endif
                     @endif
                 </div>
@@ -543,7 +543,7 @@ use Illuminate\Support\Str;
             <!-- Tags -->
             @if($product->tags)
                 <div class="mt-4 sm:mt-6">
-                    <h3 class="text-base sm:text-lg font-semibold text-gray-900 mb-2 sm:mb-3">{{ __('Tags') }}</h3>
+                    <h3 class="text-base sm:text-lg font-semibold text-gray-900 mb-2 sm:mb-3">{{ __('client_ui.tags') }}</h3>
                     <div class="flex flex-wrap gap-2">
                         @foreach($product->tags as $tag)
                             <span class="bg-gray-100 text-gray-700 px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm">
@@ -795,7 +795,7 @@ use Illuminate\Support\Str;
                         @endif
                         @if($relatedProduct->sale_price)
                             <div class="absolute top-3 left-3">
-                                <span class="bg-red-600 text-white px-3 py-1 rounded-full text-sm font-bold">{{ __('SALE') }}</span>
+                                <span class="bg-red-600 text-white px-3 py-1 rounded-full text-sm font-bold">{{ __('client_ui.sale') }}</span>
                             </div>
                         @endif
                     </div>
@@ -919,6 +919,14 @@ document.addEventListener('keydown', function(e) {
 let selectedVariation = null;
 let productVariations = @json($product->activeVariationsWithComputedProperties);
 let isClearingSelection = false; // Flag to prevent selectVariation during clearing
+
+function shopInStock(count) {
+    return window.clientMessages.in_stock_available.replace(':count', count);
+}
+
+function shopSaveAmount(amount) {
+    return window.clientMessages.save_amount.replace(':amount', parseFloat(amount).toFixed(2));
+}
 
 // Debug: Log product variations
 console.log('Product variations loaded:', productVariations);
@@ -1247,10 +1255,10 @@ function updateProductPrice(variation) {
     // Update stock status
     if (stockStatus) {
         if (variation.stock_quantity > 0) {
-            stockStatus.textContent = `✓ Dalam Stok (${variation.stock_quantity} tersedia)`;
+            stockStatus.textContent = shopInStock(variation.stock_quantity);
             stockStatus.className = 'text-green-600 font-medium';
         } else {
-            stockStatus.textContent = @json(__('✗ Kehabisan Stok'));
+            stockStatus.textContent = window.clientMessages.out_of_stock;
             stockStatus.className = 'text-red-600 font-medium';
         }
         console.log('Updated stock status to:', stockStatus.textContent);
@@ -1260,17 +1268,17 @@ function updateProductPrice(variation) {
         const savings = originalPrice - finalPrice;
         const newHTML = `
             <div class="mb-2">
-                <span class="text-sm text-gray-600">{{ __('Harga Varian Terpilih:') }}</span>
+                <span class="text-sm text-gray-600">{{ __('shop_page.selected_variant_price') }}</span>
             </div>
             <span class="text-4xl font-bold text-red-600">RM${parseFloat(finalPrice).toFixed(2)}</span>
             <span class="text-2xl text-gray-500 line-through">RM${parseFloat(originalPrice).toFixed(2)}</span>
             <span class="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm font-bold">
-                Jimat RM${parseFloat(savings).toFixed(2)}
+                ${shopSaveAmount(savings)}
             </span>
             <div class="mt-2">
                 ${variation.stock_quantity > 0 ? 
-                    `<span class="text-green-600 font-medium">✓ Dalam Stok (${variation.stock_quantity} tersedia)</span>` :
-                    `<span class="text-red-600 font-medium">{{ __('✗ Kehabisan Stok') }}</span>`
+                    `<span class="text-green-600 font-medium">${shopInStock(variation.stock_quantity)}</span>` :
+                    `<span class="text-red-600 font-medium">{{ __('shop_page.out_of_stock') }}</span>`
                 }
             </div>
         `;
@@ -1279,13 +1287,13 @@ function updateProductPrice(variation) {
     } else {
         const newHTML = `
             <div class="mb-2">
-                <span class="text-sm text-gray-600">{{ __('Harga Varian Terpilih:') }}</span>
+                <span class="text-sm text-gray-600">{{ __('shop_page.selected_variant_price') }}</span>
             </div>
             <span class="text-4xl font-bold text-gray-900">RM${parseFloat(finalPrice).toFixed(2)}</span>
             <div class="mt-2">
                 ${variation.stock_quantity > 0 ? 
-                    `<span class="text-green-600 font-medium">✓ Dalam Stok (${variation.stock_quantity} tersedia)</span>` :
-                    `<span class="text-red-600 font-medium">{{ __('✗ Kehabisan Stok') }}</span>`
+                    `<span class="text-green-600 font-medium">${shopInStock(variation.stock_quantity)}</span>` :
+                    `<span class="text-red-600 font-medium">{{ __('shop_page.out_of_stock') }}</span>`
                 }
             </div>
         `;
@@ -1305,39 +1313,39 @@ function resetProductPrice() {
     
     // Reset stock status
     if (stockStatus) {
-        stockStatus.textContent = @json(__('Pilih varian atau beli produk asas'));
+        stockStatus.textContent = window.clientMessages.select_variant_or_base;
         stockStatus.className = 'text-gray-600';
     }
     @if($product->hasVariations())
         @if($product->sale_price)
             priceDisplay.innerHTML = `
                 <div class="mb-2">
-                    <span class="text-sm text-gray-600">{{ __('Harga Produk:') }}</span>
+                    <span class="text-sm text-gray-600">{{ __('shop_page.product_price') }}</span>
                 </div>
                 <span class="text-4xl font-bold text-red-600">RM{{ number_format($product->sale_price, 2) }}</span>
                 <span class="text-2xl text-gray-500 line-through">RM{{ number_format($product->price, 2) }}</span>
                 <span class="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm font-bold">
-                    Jimat RM{{ number_format($product->price - $product->sale_price, 2) }}
+                    {{ __('shop_page.save_amount', ['amount' => number_format($product->price - $product->sale_price, 2)]) }}
                 </span>
                 <div class="mt-2">
                     @if($product->calculated_stock > 0)
-                        <span class="text-green-600 font-medium">✓ Dalam Stok ({{ $product->calculated_stock }} tersedia)</span>
+                        <span class="text-green-600 font-medium">{{ __('shop_page.in_stock_available', ['count' => $product->calculated_stock]) }}</span>
                     @else
-                        <span class="text-red-600 font-medium">{{ __('✗ Kehabisan Stok') }}</span>
+                        <span class="text-red-600 font-medium">{{ __('shop_page.out_of_stock') }}</span>
                     @endif
                 </div>
             `;
         @else
             priceDisplay.innerHTML = `
                 <div class="mb-2">
-                    <span class="text-sm text-gray-600">{{ __('Harga Produk:') }}</span>
+                    <span class="text-sm text-gray-600">{{ __('shop_page.product_price') }}</span>
                 </div>
                 <span class="text-4xl font-bold text-gray-900">RM{{ number_format($product->price, 2) }}</span>
                 <div class="mt-2">
                     @if($product->calculated_stock > 0)
-                        <span class="text-green-600 font-medium">✓ Dalam Stok ({{ $product->calculated_stock }} tersedia)</span>
+                        <span class="text-green-600 font-medium">{{ __('shop_page.in_stock_available', ['count' => $product->calculated_stock]) }}</span>
                     @else
-                        <span class="text-red-600 font-medium">{{ __('✗ Kehabisan Stok') }}</span>
+                        <span class="text-red-600 font-medium">{{ __('shop_page.out_of_stock') }}</span>
                     @endif
                 </div>
             `;
@@ -1348,13 +1356,13 @@ function resetProductPrice() {
                 <span class="text-4xl font-bold text-red-600">RM{{ number_format($product->sale_price, 2) }}</span>
                 <span class="text-2xl text-gray-500 line-through">RM{{ number_format($product->price, 2) }}</span>
                 <span class="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm font-bold">
-                    Jimat RM{{ number_format($product->price - $product->sale_price, 2) }}
+                    {{ __('shop_page.save_amount', ['amount' => number_format($product->price - $product->sale_price, 2)]) }}
                 </span>
                 <div class="mt-2">
                     @if($product->calculated_stock > 0)
-                        <span class="text-green-600 font-medium">✓ Dalam Stok ({{ $product->calculated_stock }} tersedia)</span>
+                        <span class="text-green-600 font-medium">{{ __('shop_page.in_stock_available', ['count' => $product->calculated_stock]) }}</span>
                     @else
-                        <span class="text-red-600 font-medium">{{ __('✗ Kehabisan Stok') }}</span>
+                        <span class="text-red-600 font-medium">{{ __('shop_page.out_of_stock') }}</span>
                     @endif
                 </div>
             `;
@@ -1363,9 +1371,9 @@ function resetProductPrice() {
                 <span class="text-4xl font-bold text-gray-900">RM{{ number_format($product->price, 2) }}</span>
                 <div class="mt-2">
                     @if($product->calculated_stock > 0)
-                        <span class="text-green-600 font-medium">✓ Dalam Stok ({{ $product->calculated_stock }} tersedia)</span>
+                        <span class="text-green-600 font-medium">{{ __('shop_page.in_stock_available', ['count' => $product->calculated_stock]) }}</span>
                     @else
-                        <span class="text-red-600 font-medium">{{ __('✗ Kehabisan Stok') }}</span>
+                        <span class="text-red-600 font-medium">{{ __('shop_page.out_of_stock') }}</span>
                     @endif
                 </div>
             `;
@@ -1381,17 +1389,17 @@ function enableAddToCart() {
     if (selectedVariation) {
         // Variation selected
         if (selectedVariation.stock_quantity > 0) {
-            addToCartBtn.textContent = @json(__('Tambah ke Troli'));
+            addToCartBtn.textContent = window.clientMessages.add_to_cart;
             addToCartBtn.className = 'flex-1 bg-arsenal hover:bg-arsenal text-white py-4 px-6 rounded-lg font-bold text-lg transition-colors';
             addToCartBtn.disabled = false;
-            buyNowBtn.textContent = @json(__('Beli Sekarang'));
+            buyNowBtn.textContent = window.clientMessages.buy_now;
             buyNowBtn.className = 'flex-1 border-2 border-red-600 text-red-600 hover:bg-red-600 hover:text-white py-4 px-6 rounded-lg font-bold text-lg transition-colors';
             buyNowBtn.disabled = false;
         } else {
-            addToCartBtn.textContent = @json(__('Kehabisan Stok'));
+            addToCartBtn.textContent = window.clientMessages.no_stock;
             addToCartBtn.className = 'flex-1 bg-gray-300 text-gray-600 py-4 px-6 rounded-lg font-bold text-lg cursor-not-allowed';
             addToCartBtn.disabled = true;
-            buyNowBtn.textContent = @json(__('Kehabisan Stok'));
+            buyNowBtn.textContent = window.clientMessages.no_stock;
             buyNowBtn.className = 'flex-1 border-2 border-gray-300 text-gray-600 py-4 px-6 rounded-lg font-bold text-lg cursor-not-allowed';
             buyNowBtn.disabled = true;
         }
@@ -1399,17 +1407,17 @@ function enableAddToCart() {
         // No variation selected - check if base product has stock
         const baseProductStock = {{ $product->calculated_stock }};
         if (baseProductStock > 0) {
-            addToCartBtn.textContent = @json(__('Tambah ke Troli'));
+            addToCartBtn.textContent = window.clientMessages.add_to_cart;
             addToCartBtn.className = 'flex-1 bg-arsenal hover:bg-arsenal text-white py-4 px-6 rounded-lg font-bold text-lg transition-colors';
             addToCartBtn.disabled = false;
-            buyNowBtn.textContent = @json(__('Beli Sekarang'));
+            buyNowBtn.textContent = window.clientMessages.buy_now;
             buyNowBtn.className = 'flex-1 border-2 border-red-600 text-red-600 hover:bg-red-600 hover:text-white py-4 px-6 rounded-lg font-bold text-lg transition-colors';
             buyNowBtn.disabled = false;
         } else {
-            addToCartBtn.textContent = @json(__('Kehabisan Stok'));
+            addToCartBtn.textContent = window.clientMessages.no_stock;
             addToCartBtn.className = 'flex-1 bg-gray-300 text-gray-600 py-4 px-6 rounded-lg font-bold text-lg cursor-not-allowed';
             addToCartBtn.disabled = true;
-            buyNowBtn.textContent = @json(__('Kehabisan Stok'));
+            buyNowBtn.textContent = window.clientMessages.no_stock;
             buyNowBtn.className = 'flex-1 border-2 border-gray-300 text-gray-600 py-4 px-6 rounded-lg font-bold text-lg cursor-not-allowed';
             buyNowBtn.disabled = true;
         }
@@ -1419,10 +1427,10 @@ function enableAddToCart() {
 function disableAddToCart() {
     const addToCartBtn = document.getElementById('add-to-cart-btn');
     const buyNowBtn = document.getElementById('buy-now-btn');
-    addToCartBtn.textContent = @json(__('Tambah ke Troli'));
+    addToCartBtn.textContent = window.clientMessages.add_to_cart;
     addToCartBtn.className = 'flex-1 bg-arsenal hover:bg-arsenal text-white py-4 px-6 rounded-lg font-bold text-lg transition-colors';
     addToCartBtn.disabled = false;
-    buyNowBtn.textContent = @json(__('Beli Sekarang'));
+    buyNowBtn.textContent = window.clientMessages.buy_now;
     buyNowBtn.className = 'flex-1 border-2 border-red-600 text-red-600 hover:bg-red-600 hover:text-white py-4 px-6 rounded-lg font-bold text-lg transition-colors';
     buyNowBtn.disabled = false;
 }

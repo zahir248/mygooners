@@ -128,7 +128,7 @@
                 
                 @if($service->tags)
                     <div class="mt-6">
-                        <h3 class="text-lg font-semibold text-gray-900 mb-3">{{ __('Tags') }}</h3>
+                        <h3 class="text-lg font-semibold text-gray-900 mb-3">{{ __('client_ui.tags') }}</h3>
                         <div class="flex flex-wrap gap-2">
                             @foreach($service->tags as $tag)
                                 <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm">

@@ -230,7 +230,7 @@
                         @endforeach
                     </div>
                     <div class="p-4 bg-gray-50">
-                        <a href="{{ route('videos.index') }}" class="text-red-600 hover:text-red-700 font-medium text-sm">{{ __('View All Videos →') }}</a>
+                        <a href="{{ route('videos.index') }}" class="text-red-600 hover:text-red-700 font-medium text-sm">{{ __('videos_page.view_all_videos') }}</a>
                     </div>
                 </div>
             @endif

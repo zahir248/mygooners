@@ -92,7 +92,7 @@
                         <option value="popular" {{ $sort === 'popular' ? 'selected' : '' }}>{{ __('Paling Popular') }}</option>
                         <option value="price_low" {{ $sort === 'price_low' ? 'selected' : '' }}>{{ __('Harga: Rendah ke Tinggi') }}</option>
                         <option value="price_high" {{ $sort === 'price_high' ? 'selected' : '' }}>{{ __('Harga: Tinggi ke Rendah') }}</option>
-                        <option value="rating" {{ $sort === 'rating' ? 'selected' : '' }}>{{ __('Rating Tertinggi') }}</option>
+                        <option value="rating" {{ $sort === 'rating' ? 'selected' : '' }}>{{ __('shop_page.sort.rating') }}</option>
                     </select>
                 </div>
 
@@ -158,7 +158,7 @@
                         </div>
                         @if($product->is_out_of_stock)
                             <div class="absolute bottom-3 left-3">
-                                <span class="bg-red-600 text-white px-3 py-1 rounded-full text-sm font-medium">{{ __('No Stock') }}</span>
+                                <span class="bg-red-600 text-white px-3 py-1 rounded-full text-sm font-medium">{{ __('client_ui.no_stock') }}</span>
                             </div>
                         @elseif($product->calculated_stock<= 5)
                             <div class="absolute bottom-3 left-3">
@@ -222,7 +222,7 @@
                                     <svg class="w-4 h-4 text-white mr-2" fill="currentColor" viewBox="0 0 24 24">
                                         <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12L8.1 13h7.45c.75 0 1.41-.41 1.75-1.03L21.7 4H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/>
                                     </svg>
-                                    <span class="text-xs">{{ $product->is_out_of_stock ? __('No Stock') : __('shop_page.add') }}</span>
+                                    <span class="text-xs">{{ $product->is_out_of_stock ? __('client_ui.no_stock') : __('shop_page.add') }}</span>
                                 </button>
                                 <a href="{{ route('shop.show', $product->slug) }}" class="inline-block bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">{{ __('Lihat') }}</a>
                             </div>
